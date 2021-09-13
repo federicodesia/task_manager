@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
 
                             Text(
                               "Have a nice day!",
-                              style: cLightHeaderTextStyle,
+                              style: cLightTextStyle,
                             ),
                           ],
                         ),
@@ -119,9 +119,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                     indicator: TabIndicatorDecoration(),
                     indicatorPadding: EdgeInsets.symmetric(horizontal: cTabIndicatorPadding),
                     indicatorWeight: cTabIndicatorHeight,
-                    labelStyle: cTabLabelStyle,
-                    labelColor: cTabLabelColor,
-                    unselectedLabelColor: cTabUnselectedLabelColor,
+                    labelStyle: cLightTextStyle,
+                    labelColor: cTextColor,
+                    unselectedLabelColor: cTextColor.withOpacity(0.5),
                     tabs: List.generate(tabList.length, (index){
                       return Tab(
                         text: tabList[index].text

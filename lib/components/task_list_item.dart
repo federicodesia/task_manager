@@ -63,7 +63,7 @@ class _TaskListItemState extends State<TaskListItem>{
                         widget.task.title,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        style: cItemTitleStyle
+                        style: cTitleTextStyle
                       ),
                     ),
 
@@ -71,7 +71,7 @@ class _TaskListItemState extends State<TaskListItem>{
 
                     Text(
                       DateFormat('kk:mm a').format(widget.task.dateTime),
-                      style: cItemTitleStyle
+                      style: cTitleTextStyle
                     )
                   ],
                 ),
@@ -85,7 +85,7 @@ class _TaskListItemState extends State<TaskListItem>{
                       widget.task.description,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
-                      style: cItemDescriptionStyle
+                      style: cLightTextStyle
                     ),
                   ),
                 ),
