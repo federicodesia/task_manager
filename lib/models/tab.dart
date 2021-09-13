@@ -6,10 +6,3 @@ class MyTab{
 
   MyTab(this.text, this.content);
 }
-
-final List<MyTab> tabList = <MyTab>[
-  MyTab("Today", Container()),
-  MyTab("Tasks", Container()),
-  MyTab("Reminders", Container()),
-  MyTab("Notes", Container()),
-];

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/models/tab.dart';
 import 'components/tab_indicator.dart';
 import 'constants.dart';
+import 'tabs/today_tab.dart';
 
 void main() {
   Paint.enableDithering = true;
@@ -25,7 +26,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
 
+  // Tabs
   late TabController tabController;
+
+  final List<MyTab> tabList = <MyTab>[
+    MyTab("Today", TodayTab()),
+    MyTab("Tasks", Container()),
+    MyTab("Reminders", Container()),
+    MyTab("Notes", Container()),
+  ];
 
   @override
   void initState() {
@@ -133,9 +142,55 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                 return tabList[index].content;
               })
             ),
+          ),
+
+          Container(
+            padding: EdgeInsets.all(24.0),
+            decoration: BoxDecoration(
+              //color: Color(0xFF202128),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24.0),
+                topRight: Radius.circular(24.0),
+              )
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.home_rounded),
+                  color: Color(0xFFCCCED2),
+                  onPressed: () {},
+                ),
+
+                // Add button
+                Container(
+                  constraints: BoxConstraints.tightFor(width: 48.0, height: 48),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Icon(
+                      Icons.add_rounded,
+                      color: Colors.white,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFF7E41FF),
+                      padding: EdgeInsets.all(10.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                    ),
+                  ),
+                ),
+
+                IconButton(
+                  icon: Icon(Icons.settings_rounded),
+                  color: Color(0xFFCCCED2),
+                  onPressed: () {},
+                )
+              ],
+            ),
           )
         ],
-      )
+      ),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const double cPadding = 24.0;
-Color cBackgroundColor = Color(0xFF181920);
+Color cBackgroundColor = Color(0xFF1E1F25);
 
 String cDefaultFont = "Poppins";
 Color cTextColor = Color(0xFFFBFAFC);
@@ -38,4 +38,20 @@ TextStyle cTabLabelStyle = TextStyle(
     fontSize: 14.0,
     fontFamily: cDefaultFont,
     fontWeight: FontWeight.w400,
+);
+
+// Items
+
+TextStyle cItemTitleStyle = TextStyle(
+  fontSize: 14.0,
+  fontFamily: cDefaultFont,
+  fontWeight: FontWeight.w500,
+  color: cTextColor
+);
+
+TextStyle cItemDescriptionStyle = TextStyle(
+  fontSize: 14.0,
+  fontFamily: cDefaultFont,
+  fontWeight: FontWeight.w400,
+  color: cTextColor.withOpacity(0.75)
 );
