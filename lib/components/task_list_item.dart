@@ -27,11 +27,11 @@ class _TaskListItemState extends State<TaskListItem>{
                 borderRadius: BorderRadius.circular(4.0),
               ),
             ),
-            unselectedWidgetColor: Color(0xFF2C2F39)
+            unselectedWidgetColor: Color(0xFF2C2F39),
           ),
           child: Checkbox(
             value: _completed,
-            //fillColor: MaterialStateColor.resolveWith((states) => Color(0xFF7E41FF)),
+            activeColor: cPrimaryColor,
             onChanged: (bool? value) {
               setState(() {
                 _completed = !_completed;
@@ -47,9 +47,9 @@ class _TaskListItemState extends State<TaskListItem>{
             onPressed: () {},
             style: ElevatedButton.styleFrom(
               primary: Color(0xFF2A2E3D),
-              padding: EdgeInsets.all(18.0),
+              padding: EdgeInsets.all(cListItemPadding),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+                borderRadius: BorderRadius.circular(cBorderRadius),
               ),
             ),
             child: Column(

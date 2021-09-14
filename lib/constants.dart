@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 const double cPadding = 24.0;
-Color cBackgroundColor = Color(0xFF1E1F25);
+const double cBorderRadius = 18.0;
 
-// AppBar
-Color cAppBarFirstColor = Color(0xFF252041);
-Color cAppBarSecondColor = Color(0xFF1F222A);
-double cAppBarBorderRadius = 24.0;
+Color cBackgroundColor = Color(0xFF1E1F25);
+Color cPrimaryColor = Color(0xFF7E42FF);
+
+const double cButtonPadding = 10.0;
+const double cHeaderPadding = 16.0;
+const double cListItemPadding = 18.0;
+const double cListItemSpace = 12.0;
 
 // Text
 Color cTextColor = Color(0xFFFBFAFC);
@@ -32,8 +35,3 @@ TextStyle cHeaderTextStyle = cTextStyle.copyWith(
   fontSize: 20.0,
   fontWeight: FontWeight.w600
 );
-
-// TabIndicator
-double cTabIndicatorHeight = 3.0;
-double cTabIndicatorPadding = 6.0;
-Color cTabIndicatorColor = Color(0xFF434174);

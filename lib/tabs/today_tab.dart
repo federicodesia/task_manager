@@ -23,8 +23,7 @@ class _TodayTabState extends State<TodayTab>{
     Task(
       "Hangouts Sushi",
       "Lauch with Julia, fight this quarantine with humor",
-      DateTime.now(),
-      completed: true
+      DateTime.now()
     ),
   ];
 
@@ -50,7 +49,7 @@ class _TodayTabState extends State<TodayTab>{
           initialItemCount: tasks.length,
           itemBuilder: (context, index, animation){
             return Padding(
-              padding: EdgeInsets.only(bottom: 12.0),
+              padding: EdgeInsets.only(bottom: cListItemSpace),
               child: TaskListItem(tasks[index]),
             );
           },
@@ -67,7 +66,6 @@ class _TodayTabState extends State<TodayTab>{
       physics: BouncingScrollPhysics(),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: 16.0,
           horizontal: cPadding
         ),
         child: Column(

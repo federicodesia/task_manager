@@ -11,29 +11,26 @@ class TabIndicatorDecoration extends Decoration{
 class TabIndicatorPainter extends BoxPainter{
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+
     final tabWidth = configuration.size!.width;
     final tabHeight = configuration.size!.height;
 
     Rect rect = new Rect.fromCenter(
       center: Offset(
         offset.dx + tabWidth / 2,
-        tabHeight - cTabIndicatorHeight / 2
+        offset.dy + tabHeight / 2
       ),
       width: tabWidth,
-      height: cTabIndicatorHeight
+      height: tabHeight
     );
 
-    final Paint paint = Paint()
-      ..color = cTabIndicatorColor
-      ..style = PaintingStyle.fill;
+    final Paint paint = Paint();
+    paint.color = cPrimaryColor;
+    paint.style = PaintingStyle.fill;
 
     canvas.drawRRect(
-      RRect.fromRectAndCorners(
-        rect,
-        topRight: Radius.circular(8.0),
-        topLeft: Radius.circular(8.0),
-      ),
-      paint,
+      RRect.fromRectAndRadius(rect, Radius.circular(cBorderRadius)),
+      paint
     );
   }
 }
