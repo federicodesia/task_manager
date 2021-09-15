@@ -5,6 +5,7 @@ const double cBorderRadius = 18.0;
 
 Color cBackgroundColor = Color(0xFF1E1F25);
 const Color cPrimaryColor = Color(0xFF7E42FF);
+Color cRedColor = Color(0xFFD32F2F);
 
 const double cButtonSize = 48.0;
 const double cButtonPadding = 10.0;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/lists/list_header.dart';
+import 'package:task_manager/components/lists/rounded_dismissible.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/task.dart';
@@ -50,7 +51,14 @@ class _TodayTabState extends State<TodayTab>{
           itemBuilder: (context, index, animation){
             return Padding(
               padding: EdgeInsets.only(bottom: cListItemSpace),
-              child: TaskListItem(tasks[index]),
+              child: RoundedDismissible(
+                key: ValueKey<Task>(tasks[index]),
+                text: "Delete task",
+                icon: Icons.delete_rounded,
+                color: cRedColor,
+                child: TaskListItem(tasks[index]),
+                onDismissed: (direction) {},
+              ),
             );
           },
         )
