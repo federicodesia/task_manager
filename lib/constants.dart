@@ -4,12 +4,16 @@ const double cPadding = 24.0;
 const double cBorderRadius = 18.0;
 
 Color cBackgroundColor = Color(0xFF1E1F25);
-Color cPrimaryColor = Color(0xFF7E42FF);
+const Color cPrimaryColor = Color(0xFF7E42FF);
 
+const double cButtonSize = 48.0;
 const double cButtonPadding = 10.0;
+
 const double cHeaderPadding = 16.0;
 const double cListItemPadding = 18.0;
 const double cListItemSpace = 12.0;
+
+const double cBottomSheetBorderRadius = 28.0;
 
 // Text
 Color cTextColor = Color(0xFFFBFAFC);

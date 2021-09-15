@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/components/list_header.dart';
-import 'package:task_manager/components/task_list_item.dart';
+import 'package:task_manager/components/lists/list_header.dart';
+import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/task.dart';
 

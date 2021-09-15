@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/models/tab.dart';
+import 'bottom_sheets/modal_bottom_sheet.dart';
+import 'components/rounded_button.dart';
 import 'components/tab_indicator.dart';
 import 'constants.dart';
 import 'tabs/today_tab.dart';
@@ -30,10 +33,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
   late TabController tabController;
 
   final List<MyTab> tabList = <MyTab>[
-    MyTab("Today", TodayTab()),
-    MyTab("Tasks", Container()),
-    MyTab("Reminders", Container()),
-    MyTab("Notes", Container()),
+    MyTab("Today", TodayTab(), "Create a task", TaskBottomSheet()),
+    MyTab("Tasks", Container(), "", Container()),
+    MyTab("Reminders", Container(), "", Container()),
+    MyTab("Notes", Container(), "", Container()),
   ];
 
   @override
@@ -78,18 +81,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                       ),
 
                       // Profile
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(18.0),
-                        child: Container(
-                          height: 48,
-                          width: 48,
-                          color: Color(0xFF252A34),
-                          padding: EdgeInsets.all(cButtonPadding),
-                          child: Image.asset(
-                            "assets/icons/profile.png"
-                          ),
+                      RoundedButton(
+                        width: cButtonSize,
+                        color: Color(0xFF252A34),
+                        child: Image.asset(
+                          "assets/icons/profile.png"
                         ),
-                      )
+                        onPressed: () {},
+                      ),
                     ],
                   ),
 
@@ -129,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
               ),
             ),
 
+            // Tabs content
             Expanded(
               child: TabBarView(
                 controller: tabController,
@@ -162,22 +162,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                   ),
 
                   // Add button
-                  Container(
-                    constraints: BoxConstraints.tightFor(width: 48.0, height: 48),
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: Icon(
-                        Icons.add_rounded,
-                        color: Colors.white,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: cPrimaryColor,
-                        padding: EdgeInsets.all(cButtonPadding),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(cBorderRadius),
-                        ),
-                      ),
+                  RoundedButton(
+                    child: Icon(
+                      Icons.add_rounded,
+                      color: Colors.white,
                     ),
+                    width: cButtonSize,
+                    onPressed: () => ModalBottomSheet(
+                      title: tabList[tabController.index].botomSheetTitle,
+                      context: context,
+                      content: tabList[tabController.index].bottomSheet
+                    ).show(),
                   ),
 
                   IconButton(
