@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/lists/rounded_dismissible.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
+import 'package:task_manager/components/rounded_snack_bar.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/task.dart';
 
@@ -57,7 +58,16 @@ class _TodayTabState extends State<TodayTab>{
                 icon: Icons.delete_rounded,
                 color: cRedColor,
                 child: TaskListItem(tasks[index]),
-                onDismissed: (direction) {},
+                onDismissed: (direction) {
+                  RoundedSnackBar(
+                    context: context,
+                    text: "Task deleted",
+                    action: SnackBarAction(
+                      label: "Undo",
+                      onPressed: () {},
+                    )
+                  ).show();
+                },
               ),
             );
           },

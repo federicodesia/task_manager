@@ -46,7 +46,7 @@ class _TaskListItemState extends State<TaskListItem>{
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              primary: Color(0xFF2A2E3D),
+              primary: cListItemBackgroundColor,
               padding: EdgeInsets.all(cListItemPadding),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(cBorderRadius),
