@@ -4,23 +4,32 @@ import 'package:task_manager/constants.dart';
 class RoundedTextFormField extends StatelessWidget{
 
   final String label;
+  final String? initialValue;
   final TextInputType textInputType;
   final int minLines;
   final int maxLines;
   final TextInputAction textInputAction;
-  RoundedTextFormField(
-    this.label,
-    {
-      this.textInputType = TextInputType.text,
-      this.minLines = 1,
-      this.maxLines = 1,
-      this.textInputAction = TextInputAction.next
-    }
-  );
+  final FormFieldValidator<String>? validator;
+  final Function(String?)? onSaved;
+  
+  RoundedTextFormField({
+    required this.label,
+    this.initialValue,
+    this.textInputType = TextInputType.text,
+    this.minLines = 1,
+    this.maxLines = 1,
+    this.textInputAction = TextInputAction.next,
+    this.validator,
+    this.onSaved
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: initialValue,
+      validator: validator,
+      onSaved: onSaved,
+
       keyboardType: textInputType,
       minLines: minLines,
       maxLines: maxLines,

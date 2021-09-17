@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Task{
   final String title;
   final String description;
@@ -12,4 +10,13 @@ class Task{
     this.dateTime,
     { this.completed = false }
   );
+
+  Task copyWith({String? title, String? description, DateTime? dateTime, bool? completed}){
+    return Task(
+      title ?? this.title,
+      description ?? this.description,
+      dateTime ?? this.dateTime,
+      completed: completed ?? this.completed
+    );
+  }
 }

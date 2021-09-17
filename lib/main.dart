@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
-import 'package:task_manager/models/tab.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/blocs/task/task_bloc.dart';
+import 'package:task_manager/repositories/task_repository.dart';
 import 'bottom_sheets/modal_bottom_sheet.dart';
 import 'components/rounded_button.dart';
 import 'components/tab_indicator.dart';
 import 'constants.dart';
-import 'tabs/today_tab.dart';
+import 'tabs/tabs.dart';
 
 void main() {
   Paint.enableDithering = true;
@@ -15,9 +16,14 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<TaskBloc>(create: (context) => TaskBloc(taskRepository: TaskRepository())..add(TaskLoaded()))
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MyHomePage(),
+      ),
     );
   }
 }
@@ -29,15 +35,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
 
-  // Tabs
   late TabController tabController;
-
-  final List<MyTab> tabList = <MyTab>[
-    MyTab("Today", TodayTab(), "Create a task", TaskBottomSheet()),
-    MyTab("Tasks", Container(), "", Container()),
-    MyTab("Reminders", Container(), "", Container()),
-    MyTab("Notes", Container(), "", Container()),
-  ];
 
   @override
   void initState() {
@@ -118,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
 
                         tabs: List.generate(tabList.length, (index){
                           return Tab(
-                            text: tabList[index].text
+                            text: tabList[index].name
                           );
                         }),
                       ),
@@ -169,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                     ),
                     width: cButtonSize,
                     onPressed: () => ModalBottomSheet(
-                      title: tabList[tabController.index].botomSheetTitle,
+                      title: tabList[tabController.index].createTitle,
                       context: context,
                       content: tabList[tabController.index].bottomSheet
                     ).show(),

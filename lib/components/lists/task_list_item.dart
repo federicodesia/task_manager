@@ -6,7 +6,13 @@ import 'package:intl/intl.dart';
 class TaskListItem extends StatefulWidget{
 
   final Task task;
-  TaskListItem(this.task);
+  final Function()? onPressed;
+  final Function(bool value)? onChanged;
+  TaskListItem({
+    required this.task,
+    this.onPressed,
+    this.onChanged
+  });
 
   @override
   _TaskListItemState createState() => _TaskListItemState();
@@ -32,10 +38,11 @@ class _TaskListItemState extends State<TaskListItem>{
           child: Checkbox(
             value: _completed,
             activeColor: cPrimaryColor,
-            onChanged: (bool? value) {
+            onChanged: (value){
               setState(() {
                 _completed = !_completed;
               });
+              widget.onChanged!(value!);
             }
           ),
         ),
@@ -44,7 +51,7 @@ class _TaskListItemState extends State<TaskListItem>{
 
         Expanded(
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: widget.onPressed,
             style: ElevatedButton.styleFrom(
               primary: cListItemBackgroundColor,
               padding: EdgeInsets.all(cListItemPadding),
