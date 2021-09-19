@@ -45,7 +45,7 @@ class _TodayTabState extends State<TodayTab>{
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.symmetric(horizontal: cPadding),
             children: [
-              todayTasks.length > 0 ? ListHeader("Tasks") : Container(),
+              if(todayTasks.length > 0 ) ListHeader("Tasks"),
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -55,7 +55,7 @@ class _TodayTabState extends State<TodayTab>{
                 }
               ),
 
-              completedTasks.length > 0 ? ListHeader("Completed") : Container(),
+              if(completedTasks.length > 0 ) ListHeader("Completed"),
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
