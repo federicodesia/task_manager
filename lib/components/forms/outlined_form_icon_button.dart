@@ -5,8 +5,9 @@ class OutlinedFormIconButton extends StatelessWidget{
 
   final IconData icon;
   final String text;
+  final Color? outlineColor;
   final Function() onPressed;
-  OutlinedFormIconButton({required this.icon, required this.text, required this.onPressed});
+  OutlinedFormIconButton({required this.icon, required this.text, this.outlineColor, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,10 @@ class OutlinedFormIconButton extends StatelessWidget{
           horizontal: 16.0,
           vertical: 8.0
         ),
-        side: BorderSide(width: 1.0, color: Color(0xFF2B3039)),
+        side: BorderSide(
+          width: 1.0,
+          color: outlineColor ?? Color(0xFF2B3039)
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
         ),
