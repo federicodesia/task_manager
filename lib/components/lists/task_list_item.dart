@@ -77,7 +77,7 @@ class _TaskListItemState extends State<TaskListItem>{
                     SizedBox(width: 12.0),
 
                     Text(
-                      DateFormat('kk:mm a').format(widget.task.dateTime),
+                      DateFormat("HH:mm a").format(widget.task.dateTime),
                       style: cTitleTextStyle
                     )
                   ],
