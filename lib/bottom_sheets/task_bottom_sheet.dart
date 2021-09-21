@@ -88,7 +88,6 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                     text: _date == null ? "Select a date" : DateFormat("dd/MM/yyyy").format(_date!),
                     outlineColor: _dateState ? null : themeData.errorColor,
                     onPressed: () {
-                      FocusScope.of(context).requestFocus(new FocusNode());
                       ModalBottomSheet(
                         context: context,
                         title: "Select a date",
@@ -113,10 +112,9 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                 child: FormValidator(
                   widget: OutlinedFormIconButton(
                     icon: Icons.watch_later_rounded,
-                    text: _time == null ? "Select Time" : DateFormat("HH:mm a").format(_time!),
+                    text: _time == null ? "Select Time" : DateFormat("kk:mm a").format(_time!),
                     outlineColor: _timeState ? null : themeData.errorColor,
                     onPressed: () {
-                      FocusScope.of(context).requestFocus(new FocusNode());
                       ModalBottomSheet(
                         context: context,
                         title: "Select Time",
