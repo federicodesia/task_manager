@@ -4,9 +4,14 @@ import 'package:task_manager/components/rounded_button.dart';
 import '../constants.dart';
 
 class DatePickerBottomSheet extends StatelessWidget{
+
+  final DateTime initialDate;
   final ValueChanged<DateTime> onDateChanged;
 
-  DatePickerBottomSheet({required this.onDateChanged});
+  DatePickerBottomSheet({
+    required this.onDateChanged,
+    required this.initialDate
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +27,7 @@ class DatePickerBottomSheet extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: cPadding),
             child: CalendarDatePicker(
-              initialDate: DateTime.now(),
+              initialDate: initialDate,
               firstDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
               lastDate: DateTime.now().add(Duration(days: 365)),
               onDateChanged: onDateChanged

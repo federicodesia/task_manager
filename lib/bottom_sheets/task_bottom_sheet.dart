@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/date_picker_bottom_sheet.dart';
+import 'package:task_manager/bottom_sheets/time_picker_bottom_sheet.dart';
 import 'package:task_manager/components/forms/form_input_header.dart';
 import 'package:task_manager/components/forms/form_validator.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/components/forms/outlined_form_icon_button.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
 
 import 'modal_bottom_sheet.dart';
@@ -90,6 +92,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                         context: context,
                         title: "Select a date",
                         content: DatePickerBottomSheet(
+                          initialDate: _date ?? DateTime.now(),
                           onDateChanged: (date){
                             setState(() => _date = date);
                           },
@@ -111,7 +114,27 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                     icon: Icons.watch_later_rounded,
                     text: _time == null ? "Select Time" : DateFormat("kk:mm a").format(_time!),
                     outlineColor: _timeState ? null : themeData.errorColor,
-                    onPressed: () {}
+                    onPressed: () {
+                      ModalBottomSheet(
+                        context: context,
+                        title: "Select Time",
+                        content: TimePickerBottomSheet(
+                          initialTime: Duration(
+                            hours: _time != null ? _time!.hour : DateTime.now().hour,
+                            minutes: _time != null ? _time!.minute : DateTime.now().hour
+                          ),
+                          onTimeChanged: (duration){
+                            setState((){
+                              _time = copyDateTimeWith(
+                                DateTime.now(),
+                                hour: duration.inHours,
+                                minute: duration.inMinutes.remainder(60)
+                              );
+                            });
+                          },
+                        )
+                      ).show();
+                    }
                   ),
                   validator: (_){
                     setState(() => _timeState = _time != null);
@@ -133,7 +156,15 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
               if (_formKey.currentState!.validate()){
                 _formKey.currentState!.save();
 
-                Task _task = Task(_title, _description, DateTime.now());
+                Task _task = Task(
+                  _title,
+                  _description,
+                  copyDateTimeWith(
+                    _date!,
+                    hour: _time!.hour,
+                    minute: _time!.minute,
+                  )
+                );
 
                 if(widget.editTask != null) BlocProvider.of<TaskBloc>(context).add(TaskUpdated(
                   oldTask: widget.editTask!,
