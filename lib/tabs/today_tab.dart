@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
-import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
-import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
-import 'package:task_manager/components/lists/list_header.dart';
-import 'package:task_manager/components/lists/rounded_dismissible.dart';
-import 'package:task_manager/components/lists/task_list_item.dart';
-import 'package:task_manager/components/rounded_snack_bar.dart';
+import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/constants.dart';
-import 'package:task_manager/models/task.dart';
-import 'package:task_manager/tabs/tabs.dart';
 
 class TodayTab extends StatefulWidget{
 
@@ -27,8 +20,9 @@ class _TodayTabState extends State<TodayTab>{
   void initState() {
     super.initState();
   }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext buildContext) {
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state){
 
@@ -37,33 +31,22 @@ class _TodayTabState extends State<TodayTab>{
             return Center(child: Text("No content"));
           }
 
-          List<Task> todayTasks = List.from(state.tasks.where((task) => !task.completed && isToday(task.dateTime)));
-          List<Task> completedTasks = List.from(state.tasks.where((task) => task.completed && isToday(task.dateTime)));
-
           return ListView(
             shrinkWrap: true,
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.symmetric(horizontal: cPadding),
             children: [
-              if(todayTasks.length > 0 ) ListHeader("Tasks"),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: todayTasks.length,
-                itemBuilder: (context, index){
-                  return buildItem(todayTasks[index], context, index);
-                }
+              AnimatedTaskList(
+                headerTitle: "Tasks",
+                items: state.tasks.where((task) => !task.completed && isToday(task.dateTime)).toList(),
+                context: context,
               ),
 
-              if(completedTasks.length > 0 ) ListHeader("Completed"),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: completedTasks.length,
-                itemBuilder: (context, index){
-                  return buildItem(completedTasks[index], context, index);
-                }
-              ),
+              AnimatedTaskList(
+                headerTitle: "Completed",
+                items: state.tasks.where((task) => task.completed && isToday(task.dateTime)).toList(),
+                context: context,
+              )
             ],
           );
         }
@@ -72,44 +55,4 @@ class _TodayTabState extends State<TodayTab>{
       }
     );
   }
-}
-
-Widget buildItem(Task task, BuildContext context, int index){
-  return Padding(
-    padding: EdgeInsets.only(bottom: cListItemSpace),
-    child: RoundedDismissible(
-      key: ValueKey<Task>(task),
-      text: "Delete task",
-      icon: Icons.delete_rounded,
-      color: cRedColor,
-      child: TaskListItem(
-        task: task,
-        onPressed: (){
-          ModalBottomSheet(
-            title: tabList[0].editTitle,
-            context: context,
-            content: TaskBottomSheet(editTask: task)
-          ).show();
-        },
-        onChanged: (value) {
-          BlocProvider.of<TaskBloc>(context).add(TaskCompleted(task: task, value: value));
-        },
-      ),
-      onDismissed: (direction) {
-        Task tempTask = task;
-        BlocProvider.of<TaskBloc>(context).add(TaskDeleted(task));
-
-        RoundedSnackBar(
-          context: context,
-          text: "Task deleted",
-          action: SnackBarAction(
-            label: "Undo",
-            onPressed: () {
-              BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(tempTask, index));
-            },
-          )
-        ).show();
-      },
-    ),
-  );
 }

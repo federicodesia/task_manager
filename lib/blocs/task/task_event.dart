@@ -26,9 +26,3 @@ class TaskCompleted extends TaskEvent {
   final bool value;
   TaskCompleted({required this.task, required this.value});
 }
-
-class TaskUndoDeleted extends TaskEvent {
-  final Task task;
-  final int index;
-  TaskUndoDeleted(this.task, this.index);
-}

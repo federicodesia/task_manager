@@ -16,11 +16,13 @@ class TaskRepository{
     taskList.add(Task("Daily workout", "", DateTime.now()));
     taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now()));
     taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now()));
+    taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;
   }
 
   Future<List<Task>> saveTask(Task task) async {
     taskList.add(task);
+    taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;
   }
 
@@ -28,11 +30,13 @@ class TaskRepository{
     int index = taskList.indexOf(oldTask);
     taskList.removeAt(index);
     taskList.insert(index, taskUpdated);
+    taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;
   }
 
   Future<List<Task>> deleteTask(Task task) async {
     taskList.remove(task);
+    taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;
   }
 
@@ -40,11 +44,7 @@ class TaskRepository{
     int index = taskList.indexOf(task);
     taskList.removeAt(index);
     taskList.insert(taskList.length, task.copyWith(completed: value));
-    return taskList;
-  }
-
-  Future<List<Task>> undoDeleteTask(Task task, int index) async {
-    taskList.insert(index, task);
+    taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;
   }
 }

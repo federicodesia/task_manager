@@ -40,9 +40,5 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       final updatedTasks = await taskRepository.completedTask(event.task, event.value);
       yield TaskLoadSuccess(updatedTasks);
     }
-    else if(event is TaskUndoDeleted){
-      final updatedTasks = await taskRepository.undoDeleteTask(event.task, event.index);
-      yield TaskLoadSuccess(updatedTasks);
-    }
   }
 }

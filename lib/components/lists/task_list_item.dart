@@ -20,7 +20,7 @@ class TaskListItem extends StatefulWidget{
 
 class _TaskListItemState extends State<TaskListItem>{
 
-  late bool _completed = widget.task.completed;
+  //late bool _completed = widget.task.completed;
   
   @override
   Widget build(BuildContext context) {
@@ -36,12 +36,12 @@ class _TaskListItemState extends State<TaskListItem>{
             unselectedWidgetColor: Color(0xFF2C2F39),
           ),
           child: Checkbox(
-            value: _completed,
+            value: widget.task.completed,
             activeColor: cPrimaryColor,
             onChanged: (value){
-              setState(() {
+              /*setState(() {
                 _completed = !_completed;
-              });
+              });*/
               widget.onChanged!(value!);
             }
           ),
