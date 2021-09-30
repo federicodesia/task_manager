@@ -92,42 +92,48 @@ class BuildItemList extends StatelessWidget{
   @override
   Widget build(BuildContext buildContext) {
 
+    Task _task = BlocProvider.of<TaskBloc>(context).taskRepository.taskList.firstWhere((t) => t.title == task.title);
+    bool ignoring = _task.completed != task.completed;
+
     return BuildAnimation(
-      Padding(
-        padding: EdgeInsets.only(bottom: cListItemSpace),
-        child: RoundedDismissible(
-          key: UniqueKey(),
-          text: "Delete task",
-          icon: Icons.delete_rounded,
-          color: cRedColor,
-          child: TaskListItem(
-            task: task,
-            onPressed: (){
-              ModalBottomSheet(
-                title: tabList[0].editTitle,
+      IgnorePointer(
+        ignoring: ignoring,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: cListItemSpace),
+          child: RoundedDismissible(
+            key: UniqueKey(),
+            text: "Delete task",
+            icon: Icons.delete_rounded,
+            color: cRedColor,
+            child: TaskListItem(
+              task: task,
+              onPressed: (){
+                ModalBottomSheet(
+                  title: tabList[0].editTitle,
+                  context: context,
+                  content: TaskBottomSheet(editTask: task)
+                ).show();
+              },
+              onChanged: (value) {
+                BlocProvider.of<TaskBloc>(context).add(TaskCompleted(task: task, value: value));
+              },
+            ),
+            onDismissed: (_) {
+              Task tempTask = task;
+              BlocProvider.of<TaskBloc>(context).add(TaskDeleted(task));
+
+              RoundedSnackBar(
                 context: context,
-                content: TaskBottomSheet(editTask: task)
+                text: "Task deleted",
+                action: SnackBarAction(
+                  label: "Undo",
+                  onPressed: () {
+                    BlocProvider.of<TaskBloc>(context).add(TaskAdded(tempTask));
+                  },
+                )
               ).show();
             },
-            onChanged: (value) {
-              BlocProvider.of<TaskBloc>(context).add(TaskCompleted(task: task, value: value));
-            },
           ),
-          onDismissed: (_) {
-            Task tempTask = task;
-            BlocProvider.of<TaskBloc>(context).add(TaskDeleted(task));
-
-            RoundedSnackBar(
-              context: context,
-              text: "Task deleted",
-              action: SnackBarAction(
-                label: "Undo",
-                onPressed: () {
-                  BlocProvider.of<TaskBloc>(context).add(TaskAdded(tempTask));
-                },
-              )
-            ).show();
-          },
         ),
       ),
       animation
