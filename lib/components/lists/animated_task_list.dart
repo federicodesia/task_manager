@@ -1,4 +1,4 @@
-import 'package:automatic_animated_list/automatic_animated_list.dart';
+import 'package:declarative_animated_list/declarative_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
@@ -32,14 +32,20 @@ class AnimatedTaskList extends StatelessWidget{
           child: items.length > 0 ? ListHeader(headerTitle) : Container(),
         ),
 
-        AutomaticAnimatedList<Task>(
+        DeclarativeList(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           items: items,
           insertDuration: cAnimatedListDuration,
           removeDuration: cAnimatedListDuration,
-          keyingFunction: (Task task) => Key(task.title),
-          itemBuilder: (BuildContext context, Task task, Animation<double> animation){
+          itemBuilder: (BuildContext context, Task task, int index, Animation<double> animation){
+            return BuildItemList(
+              task: task,
+              animation: animation,
+              context: context,
+            );
+          },
+          removeBuilder: (BuildContext context, Task task, int index, Animation<double> animation){
             List<Task> tasks = BlocProvider.of<TaskBloc>(context).taskRepository.taskList;
             if(tasks.where((t) => t.title == task.title).length > 0){
               return BuildItemList(

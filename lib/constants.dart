@@ -19,7 +19,7 @@ const double cListItemPadding = 18.0;
 const double cListItemSpace = 12.0;
 
 // Animated List
-const Duration cAnimatedListDuration = Duration(milliseconds: 800);
+const Duration cAnimatedListDuration = Duration(milliseconds: 600);
 
 // BottomSheet
 const double cBottomSheetBorderRadius = 28.0;

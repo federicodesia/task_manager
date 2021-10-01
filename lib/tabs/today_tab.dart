@@ -4,6 +4,7 @@ import 'package:task_manager/blocs/task/task_bloc.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/models/task.dart';
 
 class TodayTab extends StatefulWidget{
 
@@ -27,9 +28,13 @@ class _TodayTabState extends State<TodayTab>{
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state){
 
+        Widget child;
+
         if(state is TaskLoadSuccess){
-          if(state.tasks.isEmpty){
-            return Center(
+          List<Task> tasksList = state.tasks.where((task) => isToday(task.dateTime)).toList();
+
+          if(tasksList.isEmpty){
+            child = Center(
               child: SingleChildScrollView(
                 padding: EdgeInsets.all(cPadding),
                 physics: BouncingScrollPhysics(),
@@ -42,28 +47,38 @@ class _TodayTabState extends State<TodayTab>{
               ),
             );
           }
+          else{
+            child = ListView(
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: cPadding),
+              children: [
+                AnimatedTaskList(
+                  headerTitle: "Tasks",
+                  items: tasksList.where((task) => !task.completed).toList(),
+                  context: context,
+                ),
 
-          return ListView(
-            shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: cPadding),
-            children: [
-              AnimatedTaskList(
-                headerTitle: "Tasks",
-                items: state.tasks.where((task) => !task.completed && isToday(task.dateTime)).toList(),
-                context: context,
-              ),
-
-              AnimatedTaskList(
-                headerTitle: "Completed",
-                items: state.tasks.where((task) => task.completed && isToday(task.dateTime)).toList(),
-                context: context,
-              )
-            ],
-          );
+                AnimatedTaskList(
+                  headerTitle: "Completed",
+                  items: tasksList.where((task) => task.completed).toList(),
+                  context: context,
+                )
+              ],
+            );
+          }
+        }
+        else{
+          child = Center(child: CircularProgressIndicator());
         }
 
-        return Center(child: CircularProgressIndicator());
+        return AnimatedSwitcher(
+          duration: Duration(milliseconds: 400),
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: child
+          ),
+        );
       }
     );
   }

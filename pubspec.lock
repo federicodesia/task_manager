@@ -8,13 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.1"
-  automatic_animated_list:
-    dependency: "direct main"
-    description:
-      name: automatic_animated_list
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   bloc:
     dependency: transitive
     description:
@@ -64,6 +57,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  declarative_animated_list:
+    dependency: "direct main"
+    description:
+      name: declarative_animated_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   fake_async:
     dependency: transitive
     description:
