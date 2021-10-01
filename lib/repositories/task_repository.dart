@@ -7,16 +7,16 @@ class TaskRepository{
   List<Task> taskList = [];
 
   Future<List<Task>> fetchTasks() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(milliseconds: 500));
     return List.of(_generateTaskList());
   }
 
   List<Task> _generateTaskList(){
-    taskList.add(Task("Wake up buddy", "", DateTime.now()));
-    taskList.add(Task("Daily workout", "", DateTime.now()));
-    taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now()));
-    taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now()));
-    taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
+    //taskList.add(Task("Wake up buddy", "", DateTime.now()));
+    //taskList.add(Task("Daily workout", "", DateTime.now()));
+    //taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now()));
+    //taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now()));
+    //taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;
   }
 

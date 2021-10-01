@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
+import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/constants.dart';
 
@@ -28,7 +29,18 @@ class _TodayTabState extends State<TodayTab>{
 
         if(state is TaskLoadSuccess){
           if(state.tasks.isEmpty){
-            return Center(child: Text("No content"));
+            return Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(cPadding),
+                physics: BouncingScrollPhysics(),
+                child: EmptySpace(
+                  svgImage: "assets/svg/completed_tasks.svg",
+                  svgHeight: MediaQuery.of(context).size.width * 0.4,
+                  header: "Start creating your first task",
+                  description: "Add tasks to organize your day, optimize your time and receive reminders!",
+                ),
+              ),
+            );
           }
 
           return ListView(
