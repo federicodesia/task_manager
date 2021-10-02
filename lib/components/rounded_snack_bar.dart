@@ -19,7 +19,7 @@ class RoundedSnackBar{
         behavior: SnackBarBehavior.floating,
         margin: EdgeInsets.all(cPadding).add(EdgeInsets.only(bottom: cSnackBarBottomMargin)),
         padding: EdgeInsets.fromLTRB(cPadding, 4.0, 6.0, 4.0),
-        backgroundColor: cListItemBackgroundColor,
+        backgroundColor: cCardBackgroundColor,
         elevation: 1.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(cSnackBarBorderRadius))

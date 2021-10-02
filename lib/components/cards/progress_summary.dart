@@ -28,7 +28,7 @@ class ProgressSummary extends StatelessWidget{
 
     return Container(
       decoration: BoxDecoration(
-        color: cListItemBackgroundColor,
+        color: cCardBackgroundColor,
         borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
       ),
       padding: EdgeInsets.all(cPadding),
@@ -66,11 +66,11 @@ class ProgressSummary extends StatelessWidget{
             lineWidth: 6.0,
             animation: true,
             animateFromLastPercent: true,
-            animationDuration: 500,
+            animationDuration: cAnimationDuration.inMilliseconds,
             percent: completed / total,
             center: Text(
               "${((completed / total) * 100).toStringAsFixed(0)}%",
-              style: cTitleTextStyle,
+              style: cSubtitleTextStyle,
             ),
             circularStrokeCap: CircularStrokeCap.round,
             backgroundColor: cPrimaryColor.withOpacity(0.5),

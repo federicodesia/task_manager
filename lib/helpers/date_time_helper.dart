@@ -21,3 +21,7 @@ DateTime copyDateTimeWith(
     microsecond ?? src.microsecond,
   );
 }
+
+bool isToday(DateTime dateTime){
+  return DateTime.now().difference(dateTime).inDays == 0;
+}

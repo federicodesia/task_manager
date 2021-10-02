@@ -152,7 +152,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
             width: double.infinity,
             child: Text(
               "Done",
-              style: cTitleTextStyle,
+              style: cSubtitleTextStyle,
             ),
             onPressed: (){
               if (_formKey.currentState!.validate()){

@@ -51,7 +51,7 @@ class RoundedTextFormField extends StatelessWidget{
         
         contentPadding: EdgeInsets.fromLTRB(16, 24, 16, 16),
         filled: true,
-        fillColor: Color(0xFF2A2E3D),
+        fillColor: cCardBackgroundColor,
       ),
     );
   }

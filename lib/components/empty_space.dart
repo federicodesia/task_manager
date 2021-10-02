@@ -30,7 +30,7 @@ class EmptySpace extends StatelessWidget{
         Text(
           header,
           textAlign: TextAlign.center,
-          style: cTitleTextStyle.copyWith(fontSize: 18.0),
+          style: cTitleTextStyle,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),

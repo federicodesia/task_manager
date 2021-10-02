@@ -5,6 +5,7 @@ import 'package:task_manager/components/cards/progress_summary.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
 
 class TodayTab extends StatefulWidget{
@@ -15,10 +16,6 @@ class TodayTab extends StatefulWidget{
 
 class _TodayTabState extends State<TodayTab>{
   
-  bool isToday(DateTime dateTime){
-    return DateTime.now().difference(dateTime).inDays == 0;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -29,23 +26,33 @@ class _TodayTabState extends State<TodayTab>{
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state){
 
+        Key key;
         Widget child;
 
         if(state is TaskLoadSuccess){
           List<Task> tasksList = state.tasks.where((task) => isToday(task.dateTime)).toList();
 
           if(tasksList.isEmpty){
+            key = Key("EmptySpace");
             child = Center(
-              child: EmptySpace(
-                svgImage: "assets/svg/completed_tasks.svg",
-                svgHeight: MediaQuery.of(context).size.width * 0.4,
-                header: "Start creating your first task",
-                description: "Add tasks to organize your day, optimize your time and receive reminders!",
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(cPadding),
+                physics: BouncingScrollPhysics(),
+                child: EmptySpace(
+                  svgImage: "assets/svg/completed_tasks.svg",
+                  svgHeight: MediaQuery.of(context).size.width * 0.4,
+                  header: "Start creating your first task",
+                  description: "Add tasks to organize your day, optimize your time and receive reminders!",
+                ),
               ),
             );
           }
           else{
-            child = Column(
+            key = Key("ListView");
+            child = ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(cPadding),
+              physics: BouncingScrollPhysics(),
               children: [
                 ProgressSummary(
                   header: "Today's progress summary",
@@ -73,16 +80,17 @@ class _TodayTabState extends State<TodayTab>{
           }
         }
         else{
+          key = Key("CircularProgressIndicator");
           child = Center(child: CircularProgressIndicator());
         }
 
         return AnimatedSwitcher(
-          duration: Duration(milliseconds: 400),
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.all(cPadding),
+          duration: cAnimationDuration,
+          child: Align(
+            key: key,
+            alignment: Alignment.topLeft,
             child: child
-          )
+          ),
         );
       }
     );

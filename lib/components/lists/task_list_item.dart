@@ -20,8 +20,6 @@ class TaskListItem extends StatefulWidget{
 
 class _TaskListItemState extends State<TaskListItem>{
 
-  //late bool _completed = widget.task.completed;
-  
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -33,15 +31,12 @@ class _TaskListItemState extends State<TaskListItem>{
                 borderRadius: BorderRadius.circular(4.0),
               ),
             ),
-            unselectedWidgetColor: Color(0xFF2C2F39),
+            unselectedWidgetColor: cCheckBoxUnselectedColor,
           ),
           child: Checkbox(
             value: widget.task.completed,
             activeColor: cPrimaryColor,
             onChanged: (value){
-              /*setState(() {
-                _completed = !_completed;
-              });*/
               widget.onChanged!(value!);
             }
           ),
@@ -53,7 +48,7 @@ class _TaskListItemState extends State<TaskListItem>{
           child: ElevatedButton(
             onPressed: widget.onPressed,
             style: ElevatedButton.styleFrom(
-              primary: cListItemBackgroundColor,
+              primary: cCardBackgroundColor,
               padding: EdgeInsets.all(cListItemPadding),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(cBorderRadius),
@@ -70,7 +65,7 @@ class _TaskListItemState extends State<TaskListItem>{
                         widget.task.title,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        style: cTitleTextStyle
+                        style: cSubtitleTextStyle
                       ),
                     ),
 
@@ -78,7 +73,7 @@ class _TaskListItemState extends State<TaskListItem>{
 
                     Text(
                       DateFormat("HH:mm a").format(widget.task.dateTime),
-                      style: cTitleTextStyle
+                      style: cSubtitleTextStyle
                     )
                   ],
                 ),

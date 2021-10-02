@@ -36,7 +36,7 @@ class OutlinedFormIconButton extends StatelessWidget{
         ),
         side: BorderSide(
           width: 1.0,
-          color: outlineColor ?? Color(0xFF2B3039)
+          color: outlineColor ?? cOutlinedButtonColor
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),

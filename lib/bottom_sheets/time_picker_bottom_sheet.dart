@@ -33,7 +33,7 @@ class TimePickerBottomSheet extends StatelessWidget{
             width: double.infinity,
             child: Text(
               "Select",
-              style: cTitleTextStyle,
+              style: cSubtitleTextStyle,
             ),
             onPressed: () {
               Navigator.of(context).pop();

@@ -44,10 +44,7 @@ class ModalBottomSheet{
 
                 Text(
                   title,
-                  style: cHeaderTextStyle.copyWith(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w500
-                  ),
+                  style: cTitleTextStyle,
                 ),
 
                 content,
