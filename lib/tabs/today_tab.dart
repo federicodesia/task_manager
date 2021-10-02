@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
+import 'package:task_manager/components/cards/progress_summary.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/constants.dart';
@@ -53,6 +54,16 @@ class _TodayTabState extends State<TodayTab>{
               physics: BouncingScrollPhysics(),
               padding: EdgeInsets.symmetric(horizontal: cPadding),
               children: [
+                ProgressSummary(
+                  header: "Today's progress summary",
+                  completed: tasksList.where((task) => task.completed).length,
+                  total: tasksList.length,
+                  initialDescription: "Let's start to complete! 🚀",
+                  finishedDescription: "You completed all the tasks! 🎉",
+                ),
+
+                SizedBox(height: cPadding - cHeaderPadding),
+                  
                 AnimatedTaskList(
                   headerTitle: "Tasks",
                   items: tasksList.where((task) => !task.completed).toList(),
