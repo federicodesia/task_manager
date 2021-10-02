@@ -128,12 +128,29 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
 
             // Tabs content
             Expanded(
-              child: TabBarView(
-                controller: tabController,
-                physics: BouncingScrollPhysics(),
-                children: List.generate(tabList.length, (index){
-                  return tabList[index].content;
-                })
+              child: Stack(
+                children: [
+                  TabBarView(
+                    controller: tabController,
+                    physics: BouncingScrollPhysics(),
+                    children: List.generate(tabList.length, (index){
+                      return tabList[index].content;
+                    })
+                  ),
+
+                  Container(
+                    height: 0,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: cBackgroundColor,
+                          spreadRadius: 16.0,
+                          blurRadius: 8.0,
+                        ),
+                      ],
+                    )
+                  )
+                ],
               ),
             ),
 
@@ -141,7 +158,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
             Container(
               padding: EdgeInsets.all(cPadding),
               decoration: BoxDecoration(
-                color: cBackgroundColor,
                 boxShadow: [
                   BoxShadow(
                     color: cBackgroundColor,

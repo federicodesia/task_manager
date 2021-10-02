@@ -36,23 +36,16 @@ class _TodayTabState extends State<TodayTab>{
 
           if(tasksList.isEmpty){
             child = Center(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.all(cPadding),
-                physics: BouncingScrollPhysics(),
-                child: EmptySpace(
-                  svgImage: "assets/svg/completed_tasks.svg",
-                  svgHeight: MediaQuery.of(context).size.width * 0.4,
-                  header: "Start creating your first task",
-                  description: "Add tasks to organize your day, optimize your time and receive reminders!",
-                ),
+              child: EmptySpace(
+                svgImage: "assets/svg/completed_tasks.svg",
+                svgHeight: MediaQuery.of(context).size.width * 0.4,
+                header: "Start creating your first task",
+                description: "Add tasks to organize your day, optimize your time and receive reminders!",
               ),
             );
           }
           else{
-            child = ListView(
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: cPadding),
+            child = Column(
               children: [
                 ProgressSummary(
                   header: "Today's progress summary",
@@ -85,10 +78,11 @@ class _TodayTabState extends State<TodayTab>{
 
         return AnimatedSwitcher(
           duration: Duration(milliseconds: 400),
-          child: Align(
-            alignment: Alignment.topLeft,
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            padding: EdgeInsets.all(cPadding),
             child: child
-          ),
+          )
         );
       }
     );
