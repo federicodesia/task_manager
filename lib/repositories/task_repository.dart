@@ -16,6 +16,7 @@ class TaskRepository{
     taskList.add(Task("Daily workout", "", DateTime.now()));
     taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now()));
     taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now()));
+    
     taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;
   }

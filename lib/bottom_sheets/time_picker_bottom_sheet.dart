@@ -9,8 +9,8 @@ class TimePickerBottomSheet extends StatelessWidget{
   final Function(Duration) onTimeChanged;
 
   TimePickerBottomSheet({
-    required this.onTimeChanged,
-    required this.initialTime
+    this.onTimeChanged,
+    this.initialTime
   });
 
   @override

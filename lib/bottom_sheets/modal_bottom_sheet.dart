@@ -6,7 +6,7 @@ class ModalBottomSheet{
   final String title;
   final BuildContext context;
   final Widget content;
-  ModalBottomSheet({required this.title, required this.context, required this.content});
+  ModalBottomSheet({this.title, this.context, this.content});
 
   void show(){
     showModalBottomSheet(

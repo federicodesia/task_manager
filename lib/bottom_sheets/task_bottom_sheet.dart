@@ -17,7 +17,7 @@ import 'package:task_manager/models/task.dart';
 import 'modal_bottom_sheet.dart';
 
 class TaskBottomSheet extends StatefulWidget{
-  final Task? editTask;
+  final Task editTask;
 
   TaskBottomSheet({this.editTask});
 
@@ -31,14 +31,28 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
 
   bool get _isEditing => widget.editTask != null;
 
-  late String _title = _isEditing ? widget.editTask!.title : "";
-  late String _description = _isEditing ? widget.editTask!.description : "";
+  String _title;
+  String _description;
 
-  bool _dateState = true;
-  late DateTime? _date = _isEditing ? widget.editTask!.dateTime : null;
+  bool _dateState;
+  DateTime _date;
   
-  bool _timeState = true;
-  late DateTime? _time = _isEditing ? widget.editTask!.dateTime : null;
+  bool _timeState;
+  DateTime _time;
+
+  @override
+  void initState() {
+    _title = _isEditing ? widget.editTask.title : "";
+    _description = _isEditing ? widget.editTask.description : "";
+
+    _dateState = true;
+    _date = _isEditing ? widget.editTask.dateTime : null;
+
+    _timeState = true;
+    _time = _isEditing ? widget.editTask.dateTime : null;
+
+    super.initState();
+  }
   
 
   @override
@@ -60,7 +74,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
               return null;
             },
             onSaved: (value){
-              _title = value!;
+              _title = value;
             },
           ),
 
@@ -72,7 +86,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
             maxLines: 3,
             textInputAction: TextInputAction.newline,
             onSaved: (value){
-              _description = value!;
+              _description = value;
             },
           ),
 
@@ -85,7 +99,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                 child: FormValidator(
                   widget: OutlinedFormIconButton(
                     icon: Icons.event_rounded,
-                    text: _date == null ? "Select a date" : DateFormat("dd/MM/yyyy").format(_date!),
+                    text: _date == null ? "Select a date" : DateFormat("dd/MM/yyyy").format(_date),
                     outlineColor: _dateState ? null : themeData.errorColor,
                     onPressed: () {
                       FocusScope.of(context).requestFocus(new FocusNode());
@@ -104,6 +118,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                   validator: (_){
                     setState(() => _dateState = _date != null);
                     if(_date == null) return "Please select a date";
+                    return "";
                   }
                 )
               ),
@@ -113,7 +128,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                 child: FormValidator(
                   widget: OutlinedFormIconButton(
                     icon: Icons.watch_later_rounded,
-                    text: _time == null ? "Select Time" : DateFormat("HH:mm a").format(_time!),
+                    text: _time == null ? "Select Time" : DateFormat("HH:mm a").format(_time),
                     outlineColor: _timeState ? null : themeData.errorColor,
                     onPressed: () {
                       FocusScope.of(context).requestFocus(new FocusNode());
@@ -122,8 +137,8 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                         title: "Select Time",
                         content: TimePickerBottomSheet(
                           initialTime: Duration(
-                            hours: _time != null ? _time!.hour : DateTime.now().hour,
-                            minutes: _time != null ? _time!.minute : DateTime.now().hour
+                            hours: _time != null ? _time.hour : DateTime.now().hour,
+                            minutes: _time != null ? _time.minute : DateTime.now().hour
                           ),
                           onTimeChanged: (duration){
                             setState((){
@@ -141,6 +156,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                   validator: (_){
                     setState(() => _timeState = _time != null);
                     if(_time == null) return "Please select a time";
+                    return "";
                   },
                 )
               ),
@@ -155,21 +171,21 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
               style: cSubtitleTextStyle,
             ),
             onPressed: (){
-              if (_formKey.currentState!.validate()){
-                _formKey.currentState!.save();
+              if (_formKey.currentState.validate()){
+                _formKey.currentState.save();
 
                 Task _task = Task(
                   _title,
                   _description,
                   copyDateTimeWith(
-                    _date!,
-                    hour: _time!.hour,
-                    minute: _time!.minute,
+                    _date,
+                    hour: _time.hour,
+                    minute: _time.minute,
                   )
                 );
 
                 if(widget.editTask != null) BlocProvider.of<TaskBloc>(context).add(TaskUpdated(
-                  oldTask: widget.editTask!,
+                  oldTask: widget.editTask,
                   taskUpdated: _task
                 ));
                 else BlocProvider.of<TaskBloc>(context).add(TaskAdded(_task));

@@ -3,7 +3,7 @@ import 'package:task_manager/constants.dart';
 
 class TabIndicatorDecoration extends Decoration{
   @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
+  BoxPainter createBoxPainter([VoidCallback onChanged]) {
     return TabIndicatorPainter();
   }
 }
@@ -12,8 +12,8 @@ class TabIndicatorPainter extends BoxPainter{
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
 
-    final tabWidth = configuration.size!.width;
-    final tabHeight = configuration.size!.height;
+    final tabWidth = configuration.size.width;
+    final tabHeight = configuration.size.height;
 
     Rect rect = new Rect.fromCenter(
       center: Offset(

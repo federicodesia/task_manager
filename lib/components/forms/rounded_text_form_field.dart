@@ -4,16 +4,16 @@ import 'package:task_manager/constants.dart';
 class RoundedTextFormField extends StatelessWidget{
 
   final String label;
-  final String? initialValue;
+  final String initialValue;
   final TextInputType textInputType;
   final int minLines;
   final int maxLines;
   final TextInputAction textInputAction;
-  final FormFieldValidator<String>? validator;
-  final Function(String?)? onSaved;
+  final FormFieldValidator<String> validator;
+  final Function(String) onSaved;
   
   RoundedTextFormField({
-    required this.label,
+    this.label,
     this.initialValue,
     this.textInputType = TextInputType.text,
     this.minLines = 1,

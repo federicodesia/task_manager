@@ -13,7 +13,7 @@ class TaskAdded extends TaskEvent {
 class TaskUpdated extends TaskEvent {
   final Task oldTask;
   final Task taskUpdated;
-  TaskUpdated({required this.oldTask, required this.taskUpdated});
+  TaskUpdated({this.oldTask, this.taskUpdated});
 }
 
 class TaskDeleted extends TaskEvent {
@@ -24,5 +24,5 @@ class TaskDeleted extends TaskEvent {
 class TaskCompleted extends TaskEvent {
   final Task task;
   final bool value;
-  TaskCompleted({required this.task, required this.value});
+  TaskCompleted({this.task, this.value});
 }

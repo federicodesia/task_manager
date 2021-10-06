@@ -18,7 +18,7 @@ class AnimatedTaskList extends StatelessWidget{
   final List<Task> items;
   final BuildContext context;
 
-  AnimatedTaskList({required this.headerTitle, required this.items, required this.context});
+  AnimatedTaskList({this.headerTitle, this.items, this.context});
 
   @override
   Widget build(BuildContext buildContext){
@@ -93,7 +93,7 @@ class BuildItemList extends StatelessWidget{
   final Animation<double> animation;
   final BuildContext context;
 
-  BuildItemList({required this.task, required this.animation, required this.context});
+  BuildItemList({this.task, this.animation, this.context});
 
   @override
   Widget build(BuildContext buildContext) {

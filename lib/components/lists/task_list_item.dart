@@ -6,10 +6,10 @@ import 'package:intl/intl.dart';
 class TaskListItem extends StatefulWidget{
 
   final Task task;
-  final Function()? onPressed;
-  final Function(bool value)? onChanged;
+  final Function() onPressed;
+  final Function(bool value) onChanged;
   TaskListItem({
-    required this.task,
+    this.task,
     this.onPressed,
     this.onChanged
   });
@@ -37,7 +37,7 @@ class _TaskListItemState extends State<TaskListItem>{
             value: widget.task.completed,
             activeColor: cPrimaryColor,
             onChanged: (value){
-              widget.onChanged!(value!);
+              widget.onChanged(value);
             }
           ),
         ),

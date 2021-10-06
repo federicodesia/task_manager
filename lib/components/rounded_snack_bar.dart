@@ -5,11 +5,11 @@ class RoundedSnackBar{
 
   final BuildContext context;
   final String text;
-  final SnackBarAction? action;
+  final SnackBarAction action;
 
   RoundedSnackBar({
-    required this.context,
-    required this.text,
+    this.context,
+    this.text,
     this.action
   });
 

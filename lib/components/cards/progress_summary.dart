@@ -7,13 +7,13 @@ class ProgressSummary extends StatelessWidget{
   final String header;
   final int completed;
   final int total;
-  final String? initialDescription;
-  final String? finishedDescription;
+  final String initialDescription;
+  final String finishedDescription;
 
   ProgressSummary({
-    required this.header,
-    required this.completed,
-    required this.total,
+    this.header,
+    this.completed,
+    this.total,
     this.initialDescription,
     this.finishedDescription
   });
@@ -22,8 +22,8 @@ class ProgressSummary extends StatelessWidget{
   Widget build(BuildContext context) {
 
     String _description;
-    if(completed == 0 && initialDescription != null) _description = initialDescription!;
-    else if(completed == total && finishedDescription != null) _description = finishedDescription!;
+    if(completed == 0 && initialDescription != null) _description = initialDescription;
+    else if(completed == total && finishedDescription != null) _description = finishedDescription;
     else _description = "$completed of $total completed 🎉";
 
     return Container(

@@ -11,7 +11,7 @@ class Task{
     { this.completed = false }
   );
 
-  Task copyWith({String? title, String? description, DateTime? dateTime, bool? completed}){
+  Task copyWith({String title, String description, DateTime dateTime, bool completed}){
     return Task(
       title ?? this.title,
       description ?? this.description,

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class FormValidator extends StatelessWidget{
 
   final Widget widget;
-  final String? Function(bool?)? validator;
+  final String Function(bool) validator;
   
   FormValidator({
-    required this.widget,
+    this.widget,
     this.validator
   });
 
@@ -33,7 +33,7 @@ class FormValidator extends StatelessWidget{
                 ),
                 child: Text(
                   state.errorText.toString(),
-                  style: themeData.textTheme.caption!.copyWith(color: themeData.errorColor),
+                  style: themeData.textTheme.caption.copyWith(color: themeData.errorColor),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

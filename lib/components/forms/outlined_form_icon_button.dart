@@ -5,9 +5,9 @@ class OutlinedFormIconButton extends StatelessWidget{
 
   final IconData icon;
   final String text;
-  final Color? outlineColor;
+  final Color outlineColor;
   final Function() onPressed;
-  OutlinedFormIconButton({required this.icon, required this.text, this.outlineColor, required this.onPressed});
+  OutlinedFormIconButton({this.icon, this.text, this.outlineColor, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

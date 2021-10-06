@@ -8,10 +8,10 @@ class MyTab{
   final Widget bottomSheet;
 
   MyTab({
-    required this.name,
-    required this.content,
-    required this.createTitle,
-    required this.editTitle,
-    required this.bottomSheet
+    this.name,
+    this.content,
+    this.createTitle,
+    this.editTitle,
+    this.bottomSheet
   });
 }

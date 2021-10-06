@@ -10,10 +10,10 @@ class EmptySpace extends StatelessWidget{
   final String description;
 
   const EmptySpace({
-    required this.svgImage,
-    required this.svgHeight,
-    required this.header,
-    required this.description,
+    this.svgImage,
+    this.svgHeight,
+    this.header,
+    this.description,
   });
   
   @override

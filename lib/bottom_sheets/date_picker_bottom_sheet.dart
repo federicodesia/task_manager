@@ -9,8 +9,8 @@ class DatePickerBottomSheet extends StatelessWidget{
   final ValueChanged<DateTime> onDateChanged;
 
   DatePickerBottomSheet({
-    required this.onDateChanged,
-    required this.initialDate
+    this.onDateChanged,
+    this.initialDate
   });
 
   @override
