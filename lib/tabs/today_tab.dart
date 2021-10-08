@@ -5,10 +5,9 @@ import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/progress_summary.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
+import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/constants.dart';
-import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
-import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/models/task.dart';
 
 class TodayTab extends StatefulWidget{
@@ -38,7 +37,7 @@ class _TodayTabState extends State<TodayTab>{
           List<Task> tasksList = state.tasks.where((task) => isToday(task.dateTime)).toList();
 
           if(tasksList.isEmpty){
-            child = CenteredWidget(
+            child = CenteredListWidget(
               child: EmptySpace(
                 svgImage: "assets/svg/completed_tasks.svg",
                 svgHeight: MediaQuery.of(context).orientation == Orientation.portrait ? 
@@ -80,7 +79,7 @@ class _TodayTabState extends State<TodayTab>{
           }
         }
         else{
-          child = CenteredWidget(
+          child = CenteredListWidget(
             child: CircularProgressIndicator(),
             context: widget.context
           );
@@ -90,49 +89,6 @@ class _TodayTabState extends State<TodayTab>{
           child: child,
         );
       }
-    );
-  }
-}
-
-class CenteredWidget extends StatefulWidget{
-  final Widget child;
-  final BuildContext context;
-
-  CenteredWidget({this.context, this.child});
-
-  @override
-  State<StatefulWidget> createState() => _CenteredWidgetState();
-}
-
-class _CenteredWidgetState extends State<CenteredWidget>{
-  double childHeight = 0.0;
-
-  @override
-  Widget build(BuildContext context) {
-    final availableHeight = MediaQuery.of(context).size.height -
-      AppBar().preferredSize.height -
-      MediaQuery.of(context).padding.top -
-      MediaQuery.of(context).padding.bottom -
-      BlocProvider.of<AppBarCubit>(context).state;
-
-    return SizedBox(
-      height: availableHeight > childHeight ? availableHeight : childHeight,
-      child: Center(
-        child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              WidgetSize(
-                onChange: (Size size) {
-                  setState(() => childHeight = size.height);
-                },
-                child: widget.child,
-              )
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
