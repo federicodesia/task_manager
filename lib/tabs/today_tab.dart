@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
+import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/progress_summary.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
@@ -14,13 +15,14 @@ class TodayTab extends StatefulWidget{
 
   final BuildContext context;
   const TodayTab(this.context);
-  
 
   @override
   _TodayTabState createState() => _TodayTabState();
 }
 
 class _TodayTabState extends State<TodayTab>{
+
+  Widget child;
   
   @override
   void initState() {
@@ -36,7 +38,7 @@ class _TodayTabState extends State<TodayTab>{
           List<Task> tasksList = state.tasks.where((task) => isToday(task.dateTime)).toList();
 
           if(tasksList.isEmpty){
-            return CenteredWidget(
+            child = CenteredWidget(
               child: EmptySpace(
                 svgImage: "assets/svg/completed_tasks.svg",
                 svgHeight: MediaQuery.of(context).orientation == Orientation.portrait ? 
@@ -49,7 +51,8 @@ class _TodayTabState extends State<TodayTab>{
             );
           }
           else{
-            return Column(
+            child = Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ProgressSummary(
                   header: "Today's progress summary",
@@ -77,20 +80,15 @@ class _TodayTabState extends State<TodayTab>{
           }
         }
         else{
-          return CenteredWidget(
+          child = CenteredWidget(
             child: CircularProgressIndicator(),
             context: widget.context
           );
         }
 
-        /*return AnimatedSwitcher(
-          duration: cAnimationDuration,
-          child: Align(
-            key: key,
-            alignment: Alignment.topLeft,
-            child: child
-          ),
-        );*/
+        return AlignedAnimatedSwitcher(
+          child: child,
+        );
       }
     );
   }

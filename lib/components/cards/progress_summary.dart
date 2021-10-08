@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/constants.dart';
 
 class ProgressSummary extends StatelessWidget{
@@ -44,15 +45,11 @@ class ProgressSummary extends StatelessWidget{
                 ),
                 SizedBox(height: 8.0),
 
-                AnimatedSwitcher(
-                  duration: Duration(milliseconds: 400),
-                  child: Align(
-                    key: UniqueKey(),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      _description,
-                      style: cLightTextStyle,
-                    ),
+                AlignedAnimatedSwitcher(
+                  child: Text(
+                    _description,
+                    key: Key(_description),
+                    style: cLightTextStyle,
                   ),
                 ),
               ],
