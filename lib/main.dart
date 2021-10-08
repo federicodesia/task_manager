@@ -2,7 +2,7 @@ import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
-import 'package:task_manager/components/widget_size.dart';
+import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/repositories/task_repository.dart';
 import 'components/rounded_button.dart';

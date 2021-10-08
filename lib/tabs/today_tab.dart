@@ -8,7 +8,7 @@ import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
-import 'package:task_manager/components/widget_size.dart';
+import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/models/task.dart';
 
 class TodayTab extends StatefulWidget{
