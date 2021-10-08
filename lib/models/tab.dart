@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MyTab{
   final String name;
-  final Widget content;
+  Widget content;
   final String createTitle;
   final String editTitle;
   final Widget bottomSheet;

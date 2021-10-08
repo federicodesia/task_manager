@@ -5,10 +5,16 @@ import 'package:task_manager/components/cards/progress_summary.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/components/widget_size.dart';
 import 'package:task_manager/models/task.dart';
 
 class TodayTab extends StatefulWidget{
+
+  final BuildContext context;
+  const TodayTab(this.context);
+  
 
   @override
   _TodayTabState createState() => _TodayTabState();
@@ -26,33 +32,24 @@ class _TodayTabState extends State<TodayTab>{
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state){
 
-        Key key;
-        Widget child;
-
         if(state is TaskLoadSuccess){
           List<Task> tasksList = state.tasks.where((task) => isToday(task.dateTime)).toList();
 
           if(tasksList.isEmpty){
-            key = Key("EmptySpace");
-            child = Center(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.all(cPadding),
-                physics: BouncingScrollPhysics(),
-                child: EmptySpace(
-                  svgImage: "assets/svg/completed_tasks.svg",
-                  svgHeight: MediaQuery.of(context).size.width * 0.4,
-                  header: "Start creating your first task",
-                  description: "Add tasks to organize your day, optimize your time and receive reminders!",
-                ),
+            return CenteredWidget(
+              child: EmptySpace(
+                svgImage: "assets/svg/completed_tasks.svg",
+                svgHeight: MediaQuery.of(context).orientation == Orientation.portrait ? 
+                          MediaQuery.of(context).size.width * 0.4 :
+                          MediaQuery.of(context).size.height * 0.4,
+                header: "Start creating your first task",
+                description: "Add tasks to organize your day, optimize your time and receive reminders!",
               ),
+              context: widget.context
             );
           }
           else{
-            key = Key("ListView");
-            child = ListView(
-              shrinkWrap: true,
-              padding: EdgeInsets.all(cPadding),
-              physics: BouncingScrollPhysics(),
+            return Column(
               children: [
                 ProgressSummary(
                   header: "Today's progress summary",
@@ -80,19 +77,64 @@ class _TodayTabState extends State<TodayTab>{
           }
         }
         else{
-          key = Key("CircularProgressIndicator");
-          child = Center(child: CircularProgressIndicator());
+          return CenteredWidget(
+            child: CircularProgressIndicator(),
+            context: widget.context
+          );
         }
 
-        return AnimatedSwitcher(
+        /*return AnimatedSwitcher(
           duration: cAnimationDuration,
           child: Align(
             key: key,
             alignment: Alignment.topLeft,
             child: child
           ),
-        );
+        );*/
       }
+    );
+  }
+}
+
+class CenteredWidget extends StatefulWidget{
+  final Widget child;
+  final BuildContext context;
+
+  CenteredWidget({this.context, this.child});
+
+  @override
+  State<StatefulWidget> createState() => _CenteredWidgetState();
+}
+
+class _CenteredWidgetState extends State<CenteredWidget>{
+  double childHeight = 0.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final availableHeight = MediaQuery.of(context).size.height -
+      AppBar().preferredSize.height -
+      MediaQuery.of(context).padding.top -
+      MediaQuery.of(context).padding.bottom -
+      BlocProvider.of<AppBarCubit>(context).state;
+
+    return SizedBox(
+      height: availableHeight > childHeight ? availableHeight : childHeight,
+      child: Center(
+        child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              WidgetSize(
+                onChange: (Size size) {
+                  setState(() => childHeight = size.height);
+                },
+                child: widget.child,
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
