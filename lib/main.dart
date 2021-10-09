@@ -52,25 +52,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       length: tabList.length,
       vsync: this,
     );
-    tabController.addListener(_onTabChange);
     
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    tabController.removeListener(_onTabChange);
-    super.dispose();
-  }
-
-  void _onTabChange(){
-    if(tabController.indexIsChanging){
-      pageController.animateTo(
-        tabController.index * MediaQuery.of(context).size.width,
-        duration: kTabScrollDuration,
-        curve: Curves.ease
-      );
-    }
   }
 
   @override
@@ -96,7 +79,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                       onChange: (Size size){
                         BlocProvider.of<AppBarCubit>(context).emit(size.height);
                       },
-                      child: buildAppBar(tabController, tabList)
+                      child: buildAppBar(
+                        tabController,
+                        (index){
+                          pageController.animateToPage(
+                            index,
+                            duration: kTabScrollDuration,
+                            curve: Curves.ease
+                          );
+                        },
+                        tabList
+                      )
                     )
                   ),
 
@@ -119,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                         );
                       },
                       onPageChanged: (index){
-                        if(!tabController.indexIsChanging){
+                        if(tabController.index != pageController.page){
                           tabController.animateTo(index);
                         }
                       },
@@ -136,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
   }
 }
 
-Widget buildAppBar(TabController tabController, List<MyTab> tabList){
+Widget buildAppBar(TabController tabController, Function(int) onTap, List<MyTab> tabList){
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -205,6 +198,7 @@ Widget buildAppBar(TabController tabController, List<MyTab> tabList){
                       text: tabList[index].name
                     );
                   }),
+                  onTap: onTap
                 ),
               ),
             )
