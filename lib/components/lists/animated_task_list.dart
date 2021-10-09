@@ -17,8 +17,9 @@ class AnimatedTaskList extends StatelessWidget{
   final String headerTitle;
   final List<Task> items;
   final BuildContext context;
+  final Function(Task) onUndoDismissed;
 
-  AnimatedTaskList({this.headerTitle, this.items, this.context});
+  AnimatedTaskList({this.headerTitle, this.items, this.context, this.onUndoDismissed});
 
   @override
   Widget build(BuildContext buildContext){
@@ -43,6 +44,7 @@ class AnimatedTaskList extends StatelessWidget{
               task: task,
               animation: animation,
               context: context,
+              onUndoDismissed: onUndoDismissed,
             );
           },
           removeBuilder: (BuildContext context, Task task, int index, Animation<double> animation){
@@ -52,6 +54,7 @@ class AnimatedTaskList extends StatelessWidget{
                 task: task,
                 animation: animation,
                 context: context,
+                onUndoDismissed: onUndoDismissed,
               );
             } 
             return Container();
@@ -92,8 +95,9 @@ class BuildItemList extends StatelessWidget{
   final Task task;
   final Animation<double> animation;
   final BuildContext context;
+  final Function(Task) onUndoDismissed;
 
-  BuildItemList({this.task, this.animation, this.context});
+  BuildItemList({this.task, this.animation, this.context, this.onUndoDismissed});
 
   @override
   Widget build(BuildContext buildContext) {
@@ -133,9 +137,7 @@ class BuildItemList extends StatelessWidget{
                 text: "Task deleted",
                 action: SnackBarAction(
                   label: "Undo",
-                  onPressed: () {
-                    BlocProvider.of<TaskBloc>(context).add(TaskAdded(tempTask));
-                  },
+                  onPressed: () => onUndoDismissed(tempTask)
                 )
               ).show();
             },

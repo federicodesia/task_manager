@@ -67,12 +67,14 @@ class _TodayTabState extends State<TodayTab>{
                   headerTitle: "Tasks",
                   items: tasksList.where((task) => !task.completed).toList(),
                   context: context,
+                  onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
                 ),
 
                 AnimatedTaskList(
                   headerTitle: "Completed",
                   items: tasksList.where((task) => task.completed).toList(),
                   context: context,
+                  onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
                 )
               ],
             );

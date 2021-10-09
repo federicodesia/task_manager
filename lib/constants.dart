@@ -22,7 +22,7 @@ const double cListItemPadding = 18.0;
 const double cListItemSpace = 12.0;
 
 // Animations
-const Duration cTransitionDuration = Duration(milliseconds: 400);
+const Duration cTransitionDuration = Duration(milliseconds: 300);
 const Duration cAnimationDuration = Duration(milliseconds: 500);
 const Duration cAnimatedListDuration = Duration(milliseconds: 600);
 
