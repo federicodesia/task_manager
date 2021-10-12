@@ -30,7 +30,7 @@ const Duration cAnimatedListDuration = Duration(milliseconds: 600);
 const double cBottomSheetBorderRadius = 28.0;
 
 // SnackBar
-const double cSnackBarBottomMargin = 64.0;
+Color cSnackBarBackgroundColor = Color(0xFF262833);
 const double cSnackBarBorderRadius = 12.0;
 
 // Text

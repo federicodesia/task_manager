@@ -17,9 +17,9 @@ class RoundedSnackBar{
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.all(cPadding).add(EdgeInsets.only(bottom: cSnackBarBottomMargin)),
+        margin: EdgeInsets.all(cPadding),
         padding: EdgeInsets.fromLTRB(cPadding, 4.0, 6.0, 4.0),
-        backgroundColor: cCardBackgroundColor,
+        backgroundColor: cSnackBarBackgroundColor,
         elevation: 1.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(cSnackBarBorderRadius))
