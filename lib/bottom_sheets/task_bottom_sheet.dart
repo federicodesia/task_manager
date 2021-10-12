@@ -118,7 +118,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                   validator: (_){
                     setState(() => _dateState = _date != null);
                     if(_date == null) return "Please select a date";
-                    return "";
+                    return null;
                   }
                 )
               ),
@@ -156,7 +156,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                   validator: (_){
                     setState(() => _timeState = _time != null);
                     if(_time == null) return "Please select a time";
-                    return "";
+                    return null;
                   },
                 )
               ),

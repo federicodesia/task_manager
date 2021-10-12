@@ -5,10 +5,9 @@ import 'package:task_manager/blocs/task/task_bloc.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/repositories/task_repository.dart';
-import 'components/rounded_button.dart';
-import 'components/tab_indicator.dart';
+import 'components/main/app_bar.dart';
+import 'components/main/floating_action_button.dart';
 import 'constants.dart';
-import 'models/tab.dart';
 import 'tabs/tabs.dart';
 
 void main() {
@@ -41,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
 
   PageController pageController;
   TabController tabController;
+  int currentTab = 0;
 
   @override
   void initState() {
@@ -60,65 +60,77 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
   Widget build(BuildContext context) {
 
   return Scaffold(
+    floatingActionButton: MyFloatingActionButton(
+      currentTab: currentTab,
+      buildContext: context,
+    ),
+    
     backgroundColor: cBackgroundColor,
     body: SafeArea(
       child: LayoutBuilder(
-        builder: (context, constraints){
+        builder: (_, constraints){
 
           return BlocBuilder<AppBarCubit, double>(
-            builder: (context, state) {
-              return CustomScrollView(
-                physics: BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics()
-                ),
-                slivers: [
-                  SliverAppBar(
-                    backgroundColor: cBackgroundColor,
-                    collapsedHeight: state,
-                    flexibleSpace: WidgetSize(
-                      onChange: (Size size){
-                        BlocProvider.of<AppBarCubit>(context).emit(size.height);
-                      },
-                      child: buildAppBar(
-                        tabController,
-                        (index){
-                          pageController.animateToPage(
-                            index,
-                            duration: kTabScrollDuration,
-                            curve: Curves.ease
-                          );
-                        },
-                        tabList
-                      )
-                    )
-                  ),
+            builder: (_, state) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: CustomScrollView(
+                      physics: BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()
+                      ),
+                      slivers: [
+                        SliverAppBar(
+                          backgroundColor: cBackgroundColor,
+                          collapsedHeight: state,
+                          flexibleSpace: WidgetSize(
+                            onChange: (Size size){
+                              BlocProvider.of<AppBarCubit>(context).emit(size.height);
+                            },
+                            child: MyAppBar(
+                              tabController: tabController,
+                              onTap: (index){
+                                pageController.animateToPage(
+                                  index,
+                                  duration: kTabScrollDuration,
+                                  curve: Curves.ease
+                                );
+                              },
+                              tabList: tabList
+                            )
+                          )
+                        ),
 
-                  SliverToBoxAdapter(
-                    child: ExpandablePageView.builder(
-                      controller: pageController,
-                      physics: BouncingScrollPhysics(),
-                      itemCount: tabList.length,
-                      itemBuilder: (context, index){
-                        
-                        return ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minHeight: (constraints.maxHeight - state).clamp(0, constraints.maxHeight)
-                          ),
-                          child: SingleChildScrollView(
+                        SliverToBoxAdapter(
+                          child: ExpandablePageView.builder(
+                            controller: pageController,
                             physics: BouncingScrollPhysics(),
-                            padding: EdgeInsets.all(cPadding),
-                            child: tabList[index].content
+                            itemCount: tabList.length,
+                            itemBuilder: (context, index){
+                              
+                              return ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minHeight: (constraints.maxHeight - state).clamp(0, constraints.maxHeight)
+                                ),
+                                child: SingleChildScrollView(
+                                  physics: BouncingScrollPhysics(),
+                                  padding: EdgeInsets.all(cPadding),
+                                  child: tabList[index].content
+                                ),
+                              );
+                            },
+                            onPageChanged: (index){
+                              setState(() => currentTab = index);
+                              if(tabController.index != pageController.page){
+                                tabController.animateTo(index);
+                              }
+                            },
                           ),
-                        );
-                      },
-                      onPageChanged: (index){
-                        if(tabController.index != pageController.page){
-                          tabController.animateTo(index);
-                        }
-                      },
+                        ),
+                      ]
                     ),
                   ),
-                ]
+                ],
               );
             },
           );
@@ -127,84 +139,4 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
     ),
   );
   }
-}
-
-Widget buildAppBar(TabController tabController, Function(int) onTap, List<MyTab> tabList){
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Padding(
-        padding: EdgeInsets.all(cPadding),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-
-                // Header
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Hello 👋",
-                      style: cHeaderTextStyle,
-                    ),
-
-                    Text(
-                      "Have a nice day!",
-                      style: cLightTextStyle,
-                    ),
-                  ],
-                ),
-
-                // Profile
-                RoundedButton(
-                  width: cButtonSize,
-                  color: Color(0xFF252A34),
-                  child: Image.asset(
-                    "assets/icons/profile.png"
-                  ),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-
-            SizedBox(height: cPadding),
-
-            // Tabs
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Theme(
-                data: ThemeData(
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                ),
-                child: TabBar(
-                  controller: tabController,
-                  isScrollable: true,
-                  physics: BouncingScrollPhysics(),
-
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicator: TabIndicatorDecoration(),
-                  labelPadding: EdgeInsets.symmetric(horizontal: cPadding),
-                  
-                  labelStyle: cLightTextStyle,
-                  labelColor: cTextColor,
-                  unselectedLabelColor: cLightTextColor,
-
-                  tabs: List.generate(tabList.length, (index){
-                    return Tab(
-                      text: tabList[index].name
-                    );
-                  }),
-                  onTap: onTap
-                ),
-              ),
-            )
-          ],
-        ),
-      )
-    ],
-  );
 }
