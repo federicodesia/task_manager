@@ -1,35 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/models/bottom_navigation_bar_item.dart';
 
 import '../../constants.dart';
 
-class MyBottomNavigationBarIcon{
-  final String icon;
-  final String selectedIcon;
-
-  MyBottomNavigationBarIcon({this.icon, this.selectedIcon});
-}
-
-List<MyBottomNavigationBarIcon> icons = [
-  MyBottomNavigationBarIcon(
-    icon: "home_outlined",
-    selectedIcon: "home_filled",
-  ),
-  MyBottomNavigationBarIcon(
-    icon: "calendar_outlined",
-    selectedIcon: "calendar_filled",
-  ),
-  MyBottomNavigationBarIcon(
-    icon: "notification_outlined",
-    selectedIcon: "notification_filled",
-  ),
-  MyBottomNavigationBarIcon(
-    icon: "settings_outlined",
-    selectedIcon: "settings_filled",
-  )
-];
-
 class MyBottomNavigationBar extends StatefulWidget{
-  MyBottomNavigationBar();
+  final int initialSelectedIndex;
+  MyBottomNavigationBar({this.initialSelectedIndex = 0});
 
   @override
   _MyBottomNavigationBarState createState() => _MyBottomNavigationBarState();
@@ -37,7 +13,14 @@ class MyBottomNavigationBar extends StatefulWidget{
 
 class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>{
 
-  int selectedIndex = 0;
+  int selectedIndex;
+
+  @override
+  void initState() {
+    selectedIndex = widget.initialSelectedIndex;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +28,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>{
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          height: 2.0,
+          height: cBottomNavigationBarSeparatorHeight,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
@@ -65,12 +48,12 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>{
         ),
 
         Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(cBottomNavigationBarPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(icons.length, (index){
-              return MyBottomNavigationBarItem(
-                icons: icons[index],
+            children: List.generate(bottomNavigationBarItems.length, (index){
+              return MyBottomNavigationBarIcon(
+                item: bottomNavigationBarItems[index],
                 isSelected: selectedIndex == index,
                 onPressed: () {
                   setState(() => selectedIndex = index);
@@ -84,13 +67,13 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>{
   }
 }
 
-class MyBottomNavigationBarItem extends StatelessWidget{
+class MyBottomNavigationBarIcon extends StatelessWidget{
 
-  final MyBottomNavigationBarIcon icons;
+  final MyBottomNavigationBarItem item;
   final bool isSelected;
   final Function() onPressed;
 
-  MyBottomNavigationBarItem({this.icons, this.isSelected, this.onPressed});
+  MyBottomNavigationBarIcon({this.item, this.isSelected, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -98,26 +81,28 @@ class MyBottomNavigationBarItem extends StatelessWidget{
       alignment: Alignment.bottomCenter,
       children: [
         IconButton(
-          iconSize: 22.0,
+          iconSize: cBottomNavigationBarIconSize,
           icon: SizedBox(
-            height: 22.0,
-            width: 22.0,
+            height: cBottomNavigationBarIconSize,
+            width: cBottomNavigationBarIconSize,
             child: AnimatedSwitcher(
-              duration: cTransitionDuration,
+              duration: Duration(milliseconds: 200),
+              switchOutCurve: Curves.fastOutSlowIn,
+              switchInCurve: Curves.fastOutSlowIn,
               child: Opacity(
                 key: UniqueKey(),
-                opacity: isSelected ? 0.95 : 0.5,
-                child: Image.asset("assets/icons/${isSelected ? icons.selectedIcon : icons.icon}.png")
+                opacity: isSelected ? 0.9 : 0.5,
+                child: Image.asset("assets/icons/${isSelected ? item.selectedIcon : item.icon}.png")
               )
             ),
           ),
-          splashRadius: 24.0,
+          splashRadius: cBottomNavigationBarIconSize,
           color: isSelected ? Colors.white.withOpacity(0.9) : Colors.white.withOpacity(0.5),
           onPressed: onPressed,
         ),
 
         AnimatedContainer(
-          duration: cTransitionDuration,
+          duration: Duration(milliseconds: 300),
           height: 5.0,
           width: 5.0,
           decoration: BoxDecoration(

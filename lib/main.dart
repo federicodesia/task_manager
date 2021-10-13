@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
+import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/repositories/task_repository.dart';
 import 'components/main/app_bar.dart';
 import 'components/main/bottom_navigation_bar.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<TaskBloc>(create: (context) => TaskBloc(taskRepository: TaskRepository())..add(TaskLoaded())),
         BlocProvider<AppBarCubit>(create: (context) => AppBarCubit()..emit(500)),
+        BlocProvider<AvailableSpaceCubit>(create: (context) => AvailableSpaceCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -71,7 +73,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
     body: SafeArea(
       child: LayoutBuilder(
         builder: (_, constraints){
-
+          BlocProvider.of<AvailableSpaceCubit>(context).emit(constraints.maxHeight);
+          
           return BlocBuilder<AppBarCubit, double>(
             builder: (_, state) {
               return Column(

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
+import 'package:task_manager/cubits/available_space_cubit.dart';
+
+import '../../constants.dart';
 
 class CenteredListWidget extends StatefulWidget{
   final Widget child;
@@ -18,11 +21,8 @@ class _CenteredListWidgetState extends State<CenteredListWidget>{
 
   @override
   Widget build(BuildContext context) {
-    final availableHeight = MediaQuery.of(context).size.height -
-      AppBar().preferredSize.height -
-      MediaQuery.of(context).padding.top -
-      MediaQuery.of(context).padding.bottom -
-      BlocProvider.of<AppBarCubit>(context).state;
+    final availableHeight = BlocProvider.of<AvailableSpaceCubit>(context).state -
+      BlocProvider.of<AppBarCubit>(context).state - cPadding * 2;
 
     return SizedBox(
       height: availableHeight > childHeight ? availableHeight : childHeight,

@@ -13,6 +13,11 @@ Color cCardBackgroundColor = Color(0xFF2A2E3D);
 Color cOutlinedButtonColor = Color(0xFF2B3039);
 Color cCheckBoxUnselectedColor = Color(0xFF2C2F39);
 
+// Bottom Navigation Bar
+const double cBottomNavigationBarSeparatorHeight = 2.0;
+const double cBottomNavigationBarPadding = 12.0;
+const double cBottomNavigationBarIconSize = 22.0;
+
 // Buttons
 const double cButtonSize = 48.0;
 const double cButtonPadding = 10.0;
