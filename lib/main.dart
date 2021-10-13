@@ -6,6 +6,7 @@ import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/repositories/task_repository.dart';
 import 'components/main/app_bar.dart';
+import 'components/main/bottom_navigation_bar.dart';
 import 'components/main/floating_action_button.dart';
 import 'constants.dart';
 import 'tabs/tabs.dart';
@@ -64,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       currentTab: currentTab,
       buildContext: context,
     ),
+    bottomNavigationBar: MyBottomNavigationBar(),
     
     backgroundColor: cBackgroundColor,
     body: SafeArea(
