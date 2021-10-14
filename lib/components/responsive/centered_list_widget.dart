@@ -7,10 +7,9 @@ import 'package:task_manager/cubits/available_space_cubit.dart';
 import '../../constants.dart';
 
 class CenteredListWidget extends StatefulWidget{
+  
   final Widget child;
-  final BuildContext context;
-
-  CenteredListWidget({this.context, this.child});
+  CenteredListWidget({this.child});
 
   @override
   _CenteredListWidgetState createState() => _CenteredListWidgetState();

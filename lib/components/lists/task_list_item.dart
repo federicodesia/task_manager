@@ -8,6 +8,7 @@ class TaskListItem extends StatefulWidget{
   final Task task;
   final Function() onPressed;
   final Function(bool value) onChanged;
+  
   TaskListItem({
     this.task,
     this.onPressed,

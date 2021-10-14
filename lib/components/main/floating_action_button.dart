@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
-import 'package:task_manager/tabs/tabs.dart';
+import 'package:task_manager/models/tab.dart';
 
 import '../../constants.dart';
 
 class MyFloatingActionButton extends StatelessWidget {
 
   final int currentTab;
-  final BuildContext buildContext;
+  final IconData icon;
   
   MyFloatingActionButton({
     this.currentTab,
-    this.buildContext
+    this.icon = Icons.add_rounded
   });
 
   @override
@@ -25,13 +25,11 @@ class MyFloatingActionButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
         ),
-        child: Icon(
-          Icons.add_rounded,
-        ),
+        child: Icon(icon),
         onPressed: () {
           ModalBottomSheet(
             title: tabList[currentTab].createTitle,
-            context: buildContext,
+            context: context,
             content: tabList[currentTab].bottomSheet,
           ).show();
         },

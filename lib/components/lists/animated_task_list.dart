@@ -6,8 +6,8 @@ import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/lists/rounded_dismissible.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
+import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/models/task.dart';
-import 'package:task_manager/tabs/tabs.dart';
 
 import '../../constants.dart';
 import '../rounded_snack_bar.dart';

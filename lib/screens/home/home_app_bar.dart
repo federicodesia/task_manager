@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/models/tab.dart';
 
 import '../../constants.dart';
-import '../rounded_button.dart';
-import '../tab_indicator.dart';
+import '../../components/rounded_button.dart';
+import '../../components/tab_indicator.dart';
 
-class MyAppBar extends StatelessWidget{
+class HomeAppBar extends StatelessWidget{
 
   final TabController tabController;
   final Function(int) onTap;
   final List<MyTab> tabList;
 
-  MyAppBar({this.tabController, this.onTap, this.tabList});
+  HomeAppBar({this.tabController, this.onTap, this.tabList});
 
   @override
   Widget build(BuildContext context) {

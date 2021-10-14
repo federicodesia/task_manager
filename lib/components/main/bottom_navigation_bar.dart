@@ -4,8 +4,14 @@ import 'package:task_manager/models/bottom_navigation_bar_item.dart';
 import '../../constants.dart';
 
 class MyBottomNavigationBar extends StatefulWidget{
+
   final int initialSelectedIndex;
-  MyBottomNavigationBar({this.initialSelectedIndex = 0});
+  final Function(int) onChange;
+
+  MyBottomNavigationBar({
+    this.initialSelectedIndex = 0,
+    this.onChange
+  });
 
   @override
   _MyBottomNavigationBarState createState() => _MyBottomNavigationBarState();
@@ -57,6 +63,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>{
                 isSelected: selectedIndex == index,
                 onPressed: () {
                   setState(() => selectedIndex = index);
+                  widget.onChange(selectedIndex);
                 }
               );
             }),
