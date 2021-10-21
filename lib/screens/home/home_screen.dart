@@ -2,6 +2,10 @@ import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
+import 'package:task_manager/components/cards/category_card.dart';
+import 'package:task_manager/components/header.dart';
+import 'package:task_manager/components/tab_indicator.dart';
+import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/screens/home/home_app_bar.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
@@ -70,45 +74,106 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                             onChange: (Size size){
                               BlocProvider.of<AppBarCubit>(context).emit(size.height);
                             },
-                            child: HomeAppBar(
-                              tabController: tabController,
-                              onTap: (index){
-                                pageController.animateToPage(
-                                  index,
-                                  duration: kTabScrollDuration,
-                                  curve: Curves.ease
-                                );
-                              },
-                              tabList: tabList
-                            )
+                            child: HomeAppBar()
                           )
                         ),
 
                         SliverToBoxAdapter(
-                          child: ExpandablePageView.builder(
-                            controller: pageController,
-                            physics: BouncingScrollPhysics(),
-                            itemCount: tabList.length,
-                            itemBuilder: (context, index){
-                              
-                              return ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  minHeight: (constraints.maxHeight - state).clamp(0, constraints.maxHeight)
+                          child: Column(
+                            children: [
+                              SizedBox(height: cPadding - cHeaderPadding),
+                              Header(
+                                text: "Categories",
+                                rightText: "See all",
+                              ),
+                              SizedBox(height: cPadding),
+
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                physics: BouncingScrollPhysics(),
+                                padding: EdgeInsets.symmetric(horizontal: cPadding),
+                                child: Row(
+                                  children: List.generate(categoryList.length, (index){
+                                    return Container(
+                                      width: 148.0,
+                                      margin: EdgeInsets.only(right: index == categoryList.length - 1 ? 0.0 : 12.0),
+                                      child: CategoryCard(
+                                        category: categoryList[index]
+                                      ),
+                                    );
+                                  }),
                                 ),
-                                child: SingleChildScrollView(
-                                  physics: BouncingScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(cPadding, 12.0, cPadding, cPadding),
-                                  child: tabList[index].content
+                              ),
+
+                              SizedBox(height: cPadding),
+
+                              // Tabs
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: cPadding),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Theme(
+                                    data: ThemeData(
+                                      highlightColor: Colors.transparent,
+                                      splashColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                    ),
+                                    child: TabBar(
+                                      controller: tabController,
+                                      isScrollable: true,
+                                      physics: BouncingScrollPhysics(),
+
+                                      indicatorSize: TabBarIndicatorSize.tab,
+                                      indicator: TabIndicatorDecoration(),
+                                      labelPadding: EdgeInsets.symmetric(horizontal: cPadding),
+                                      
+                                      labelStyle: cLightTextStyle,
+                                      labelColor: cTextColor,
+                                      unselectedLabelColor: cLightTextColor,
+
+                                      tabs: List.generate(tabList.length, (index){
+                                        return Tab(
+                                          text: tabList[index].name
+                                        );
+                                      }),
+                                      onTap: (index){
+                                        pageController.animateToPage(
+                                          index,
+                                          duration: kTabScrollDuration,
+                                          curve: Curves.ease
+                                        );
+                                      }
+                                    ),
+                                  ),
                                 ),
-                              );
-                            },
-                            onPageChanged: (index){
-                              setState(() => currentTab = index);
-                              if(tabController.index != pageController.page){
-                                tabController.animateTo(index);
-                              }
-                            },
-                          )
+                              ),
+
+                              ExpandablePageView.builder(
+                                controller: pageController,
+                                physics: BouncingScrollPhysics(),
+                                itemCount: tabList.length,
+                                itemBuilder: (context, index){
+                                  
+                                  return ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minHeight: (constraints.maxHeight - state).clamp(0, constraints.maxHeight)
+                                    ),
+                                    child: SingleChildScrollView(
+                                      physics: BouncingScrollPhysics(),
+                                      padding: EdgeInsets.fromLTRB(cPadding, 12.0, cPadding, cPadding),
+                                      child: tabList[index].content
+                                    ),
+                                  );
+                                },
+                                onPageChanged: (index){
+                                  setState(() => currentTab = index);
+                                  if(tabController.index != pageController.page){
+                                    tabController.animateTo(index);
+                                  }
+                                },
+                              )
+                            ],
+                          ),
                         ),
                       ]
                     ),

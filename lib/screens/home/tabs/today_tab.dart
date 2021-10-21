@@ -51,7 +51,7 @@ class _TodayTabState extends State<TodayTab>{
             child = Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ProgressSummary(
+                /*ProgressSummary(
                   header: "Today's progress summary",
                   completed: tasksList.where((task) => task.completed).length,
                   total: tasksList.length,
@@ -59,7 +59,7 @@ class _TodayTabState extends State<TodayTab>{
                   finishedDescription: "You completed all the tasks! 🎉",
                 ),
 
-                SizedBox(height: cPadding - cHeaderPadding),
+                SizedBox(height: cPadding - cHeaderPadding),*/
                   
                 AnimatedTaskList(
                   headerTitle: "Tasks",

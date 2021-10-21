@@ -12,7 +12,7 @@ class ListHeader extends StatelessWidget{
       padding: EdgeInsets.symmetric(vertical: cHeaderPadding),
       child: Text(
         text,
-        style: cTextStyle
+        style: cTitleTextStyle.copyWith(fontSize: 14.0)
       ),
     );
   }

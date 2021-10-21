@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<MainContextCubit>(create: (context) => MainContextCubit()),
         BlocProvider<TaskBloc>(create: (context) => TaskBloc(taskRepository: TaskRepository())..add(TaskLoaded())),
-        BlocProvider<AppBarCubit>(create: (context) => AppBarCubit()..emit(500)),
+        BlocProvider<AppBarCubit>(create: (context) => AppBarCubit()..emit(1000)),
         BlocProvider<AvailableSpaceCubit>(create: (context) => AvailableSpaceCubit()),
       ],
       child: MaterialApp(
