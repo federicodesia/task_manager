@@ -20,7 +20,7 @@ class _CenteredListWidgetState extends State<CenteredListWidget>{
 
   @override
   Widget build(BuildContext context) {
-    final availableHeight = BlocProvider.of<AvailableSpaceCubit>(context).state -
+    final availableHeight = BlocProvider.of<AvailableSpaceCubit>(context).state - 
       BlocProvider.of<AppBarCubit>(context).state - cPadding * 2;
 
     return SizedBox(

@@ -18,35 +18,38 @@ class EmptySpace extends StatelessWidget{
   
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: svgHeight,
-          child: SvgPicture.asset(svgImage)
-        ),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: cPadding),
+      child: Column(
+        children: [
+          SizedBox(
+            height: svgHeight,
+            child: SvgPicture.asset(svgImage)
+          ),
 
-        SizedBox(height: 48.0),
+          SizedBox(height: 48.0),
 
-        Text(
-          header,
-          textAlign: TextAlign.center,
-          style: cTitleTextStyle,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        SizedBox(height: 16.0),
-
-        FractionallySizedBox(
-          widthFactor: 0.9,
-          child: Text(
-            description,
+          Text(
+            header,
             textAlign: TextAlign.center,
-            style: cLightTextStyle,
-            maxLines: 4,
+            style: cTitleTextStyle,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-        )
-      ],
+          SizedBox(height: 16.0),
+
+          FractionallySizedBox(
+            widthFactor: 0.9,
+            child: Text(
+              description,
+              textAlign: TextAlign.center,
+              style: cLightTextStyle,
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
