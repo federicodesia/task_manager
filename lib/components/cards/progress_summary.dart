@@ -73,8 +73,8 @@ class ProgressSummary extends StatelessWidget{
               style: cSubtitleTextStyle,
             ),
             circularStrokeCap: CircularStrokeCap.round,
-            backgroundColor: cPrimaryColor.withOpacity(0.5),
-            progressColor: cPrimaryColor,
+            backgroundColor: cChartBackgroundColor.withOpacity(0.35),
+            progressColor: cChartBackgroundColor,
           )
         ],
       )

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/screens/home/tabs/today_tab.dart';
+import 'package:task_manager/screens/home/tabs/week_tab.dart';
 
 class MyTab{
   final String name;
@@ -31,8 +32,8 @@ List<MyTab> tabList = <MyTab>[
   ),
 
   MyTab(
-    name: "Upcoming",
-    content: Container(),
+    name: "Week",
+    content: WeekTab(),
     createTitle: "",
     editTitle: "",
     bottomSheet: Container()

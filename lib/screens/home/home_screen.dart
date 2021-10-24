@@ -1,6 +1,7 @@
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/category_card.dart';
 import 'package:task_manager/components/header.dart';
@@ -129,8 +130,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                                         physics: BouncingScrollPhysics(),
 
                                         indicatorSize: TabBarIndicatorSize.tab,
-                                        indicator: TabIndicatorDecoration(),
-                                        labelPadding: EdgeInsets.symmetric(horizontal: cPadding),
+                                        indicatorWeight: 0.0,
+                                        
+                                        indicator: DotIndicator(
+                                          color: cPrimaryColor,
+                                          distanceFromCenter: 20.0
+                                        ),
+                                        labelPadding: EdgeInsets.only(right: 32.0),
+                                        indicatorPadding: EdgeInsets.only(right: 32.0),
+
+                                        /*indicator: TabIndicatorDecoration(),
+                                        labelPadding: EdgeInsets.symmetric(horizontal: cPadding),*/
                                         
                                         labelStyle: cLightTextStyle,
                                         labelColor: cTextColor,
