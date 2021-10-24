@@ -7,7 +7,6 @@ import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/constants.dart';
-import 'package:task_manager/cubits/main_context_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
 

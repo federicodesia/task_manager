@@ -5,7 +5,6 @@ import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/category_card.dart';
 import 'package:task_manager/components/header.dart';
-import 'package:task_manager/components/tab_indicator.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/screens/home/home_app_bar.dart';

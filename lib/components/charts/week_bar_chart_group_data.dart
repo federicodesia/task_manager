@@ -15,7 +15,7 @@ BarChartGroupData weekBarChartGroupData({
         colors: [cChartPrimaryColor],
         backDrawRodData: BackgroundBarChartRodData(
           show: true,
-          y: height + backgroundHeight,
+          y: backgroundHeight,
           colors: [cChartBackgroundColor],
         )
       ),

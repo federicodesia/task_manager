@@ -3,16 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
-import 'package:task_manager/components/cards/progress_summary.dart';
 import 'package:task_manager/components/charts/week_bar_chart_group_data.dart';
-import 'package:task_manager/components/empty_space.dart';
-import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/constants.dart';
-import 'package:task_manager/cubits/main_context_cubit.dart';
-import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
-import 'dart:math';
 
 class WeekTab extends StatefulWidget{
 
@@ -37,7 +31,14 @@ class _WeekTabState extends State<WeekTab>{
       builder: (_, state){
 
         if(state is TaskLoadSuccess){
-          List<Task> tasksList = state.tasks;
+
+          List<Task> weekTasksList = state.tasks.where((task){
+            final weekday = DateTime.now().weekday - 1;
+            final difference = task.dateTime.difference(DateTime.now()).inDays;
+            return difference >= weekday * -1 && difference < 7 - weekday;
+          }).toList();
+
+          int completedWeekTasks = weekTasksList.where((task) => task.completed).length;
 
           child = Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,7 +53,7 @@ class _WeekTabState extends State<WeekTab>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Tasks in the last 7 days",
+                      "Tasks in this week",
                       style: cLightTextStyle,
                     ),
                     SizedBox(height: 12.0),
@@ -79,10 +80,11 @@ class _WeekTabState extends State<WeekTab>{
                           ),
 
                           barGroups: List.generate(7, (index){
+                            final weekdayTasksList = weekTasksList.where((task) => task.dateTime.weekday - 1 == index);
                             return weekBarChartGroupData(
                               index: index,
-                              height: new Random().nextInt(14 - 5) + 5.0,
-                              backgroundHeight: new Random().nextInt(3 -1) + 1.0
+                              height: weekdayTasksList.where((task) => task.completed).length.toDouble(),
+                              backgroundHeight: weekdayTasksList.length.toDouble()
                             );
                           })
                         ),
@@ -96,7 +98,7 @@ class _WeekTabState extends State<WeekTab>{
                     Row(
                       children: [
                         Text(
-                          "0 Completed",
+                          "$completedWeekTasks Completed",
                           style: cTextStyle.copyWith(
                             fontWeight: FontWeight.w500,
                             color: cChartPrimaryColor
@@ -104,7 +106,7 @@ class _WeekTabState extends State<WeekTab>{
                         ),
                         SizedBox(width: 18.0),
                         Text(
-                          "0 Remaining",
+                          "${weekTasksList.length - completedWeekTasks} Remaining",
                           style: cTextStyle.copyWith(
                             fontWeight: FontWeight.w500,
                             color: cChartBackgroundColor
