@@ -1,20 +1,24 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/charts/week_bar_chart_group_data.dart';
+import 'package:task_manager/components/lists/animated_task_list.dart';
+import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/task.dart';
+import 'package:task_manager/models/tasks_group_date.dart';
 
-class WeekTab extends StatefulWidget{
+class UpcomingTab extends StatefulWidget{
 
   @override
-  _WeekTabState createState() => _WeekTabState();
+  _UpcomingTabState createState() => _UpcomingTabState();
 }
 
-class _WeekTabState extends State<WeekTab>{
+class _UpcomingTabState extends State<UpcomingTab>{
 
   Widget child;
   List<String> weekDays = ["M", "T", "W", "T", "F", "S", "S"];
@@ -32,13 +36,51 @@ class _WeekTabState extends State<WeekTab>{
 
         if(state is TaskLoadSuccess){
 
-          List<Task> weekTasksList = state.tasks.where((task){
+          List<Task> tasksList = state.tasks;
+
+          List<Task> weekTasksList = tasksList.where((task){
             final weekday = DateTime.now().weekday - 1;
             final difference = task.dateTime.difference(DateTime.now()).inDays;
             return difference >= weekday * -1 && difference < 7 - weekday;
           }).toList();
 
           int completedWeekTasks = weekTasksList.where((task) => task.completed).length;
+
+          List<TaskGroupDate> taskGroups = [];
+
+          if(tasksList.length > 0){
+            taskGroups.add(
+              TaskGroupDate(
+                dateTime: tasksList.first.dateTime,
+                tasks: []
+              )
+            );
+
+            for(int i = 0; i < tasksList.length; i++){
+              final group = taskGroups.last;
+              final groupDate = group.dateTime;
+
+              final task = tasksList[i];
+              final taskDate = task.dateTime;
+
+              if(taskDate.day == groupDate.day
+                && taskDate.month == groupDate.month
+                && taskDate.year == groupDate.year){
+                group.tasks.add(task);
+              }
+              else if(taskGroups.length - 1 == 3) break;
+              else{
+                taskGroups.add(
+                  TaskGroupDate(
+                    dateTime: taskDate,
+                    tasks: [
+                      task
+                    ]
+                  )
+                );
+              }
+            }
+          }
 
           child = Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -88,7 +130,7 @@ class _WeekTabState extends State<WeekTab>{
                             );
                           })
                         ),
-                        swapAnimationDuration: Duration(milliseconds: 150),
+                        swapAnimationDuration: cAnimationDuration,
                         swapAnimationCurve: Curves.linear,
                       ),
                     ),
@@ -116,6 +158,31 @@ class _WeekTabState extends State<WeekTab>{
                     )
                   ],
                 ),
+              ),
+              
+              SizedBox(height: 12.0),
+              Column(
+                children: List.generate(taskGroups.length - 1, (groupIndex){
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListHeader(groupIndex == 0 ? "Tomorrow" : DateFormat('EEEE dd').format(taskGroups[groupIndex + 1].dateTime)),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: taskGroups[groupIndex].tasks.length,
+                        itemBuilder: (context, taskIndex){
+                          return BuildItemList(
+                            task: taskGroups[groupIndex].tasks[taskIndex],
+                            animation: null,
+                            context: context,
+                            onUndoDismissed: (task) {},
+                          );
+                        }
+                      )
+                    ],
+                  );
+                }),
               )
             ],
           );

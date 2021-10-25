@@ -16,6 +16,21 @@ class TaskRepository{
     taskList.add(Task("Daily workout", "", DateTime.now()));
     taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now()));
     taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now()));
+
+    taskList.add(Task("Wake up buddyy", "", DateTime.now().add(Duration(days: 1, hours: 1))));
+    taskList.add(Task("Daily workout", "", DateTime.now().add(Duration(days: 1, hours: 1))));
+    taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 1, hours: 1))));
+    taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 1, hours: 1))));
+
+    taskList.add(Task("Wake up buddy", "", DateTime.now().add(Duration(days: 2, hours: 1))));
+    taskList.add(Task("Daily workout", "", DateTime.now().add(Duration(days: 2, hours: 1))));
+    taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 2, hours: 1))));
+    taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 2, hours: 1))));
+
+    taskList.add(Task("Wake up buddy", "", DateTime.now().add(Duration(days: 3, hours: 1))));
+    taskList.add(Task("Daily workout", "", DateTime.now().add(Duration(days: 3, hours: 1))));
+    taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 3, hours: 1))));
+    taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 3, hours: 1))));
     
     taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;
