@@ -13,6 +13,7 @@ import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
+import 'package:uuid/uuid.dart';
 
 import 'modal_bottom_sheet.dart';
 
@@ -31,6 +32,8 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
 
   bool get _isEditing => widget.editTask != null;
 
+  String _uuid;
+
   String _title;
   String _description;
 
@@ -42,6 +45,8 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
 
   @override
   void initState() {
+    _uuid = _isEditing ? widget.editTask.uuid : Uuid().v4();
+
     _title = _isEditing ? widget.editTask.title : "";
     _description = _isEditing ? widget.editTask.description : "";
 
@@ -175,6 +180,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                 _formKey.currentState.save();
 
                 Task _task = Task(
+                  _uuid,
                   _title,
                   _description,
                   copyDateTimeWith(

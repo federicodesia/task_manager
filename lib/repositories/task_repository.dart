@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:task_manager/models/task.dart';
+import 'package:uuid/uuid.dart';
 
 class TaskRepository{
 
@@ -12,25 +13,25 @@ class TaskRepository{
   }
 
   List<Task> _generateTaskList(){
-    taskList.add(Task("Wake up buddy", "", DateTime.now()));
-    taskList.add(Task("Daily workout", "", DateTime.now()));
-    taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now()));
-    taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now()));
+    taskList.add(Task(Uuid().v4(), "Wake up buddy", "", DateTime.now()));
+    taskList.add(Task(Uuid().v4(),"Daily workout", "", DateTime.now()));
+    taskList.add(Task(Uuid().v4(),"Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now()));
+    taskList.add(Task(Uuid().v4(),"Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now()));
 
-    taskList.add(Task("Wake up buddyy", "", DateTime.now().add(Duration(days: 1, hours: 1))));
-    taskList.add(Task("Daily workout", "", DateTime.now().add(Duration(days: 1, hours: 1))));
-    taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 1, hours: 1))));
-    taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 1, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Wake up buddyy", "", DateTime.now().add(Duration(days: 1, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Daily workout", "", DateTime.now().add(Duration(days: 1, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 1, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 1, hours: 1))));
 
-    taskList.add(Task("Wake up buddy", "", DateTime.now().add(Duration(days: 2, hours: 1))));
-    taskList.add(Task("Daily workout", "", DateTime.now().add(Duration(days: 2, hours: 1))));
-    taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 2, hours: 1))));
-    taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 2, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Wake up buddy", "", DateTime.now().add(Duration(days: 2, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Daily workout", "", DateTime.now().add(Duration(days: 2, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 2, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 2, hours: 1))));
 
-    taskList.add(Task("Wake up buddy", "", DateTime.now().add(Duration(days: 3, hours: 1))));
-    taskList.add(Task("Daily workout", "", DateTime.now().add(Duration(days: 3, hours: 1))));
-    taskList.add(Task("Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 3, hours: 1))));
-    taskList.add(Task("Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 3, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Wake up buddy", "", DateTime.now().add(Duration(days: 3, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Daily workout", "", DateTime.now().add(Duration(days: 3, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 3, hours: 1))));
+    taskList.add(Task(Uuid().v4(),"Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 3, hours: 1))));
     
     taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;
@@ -43,9 +44,8 @@ class TaskRepository{
   }
 
   Future<List<Task>> updateTask(Task oldTask, Task taskUpdated) async {
-    int index = taskList.indexOf(oldTask);
-    taskList.removeAt(index);
-    taskList.insert(index, taskUpdated);
+    taskList.remove(oldTask);
+    taskList.add(taskUpdated);
     taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;
   }
@@ -57,9 +57,9 @@ class TaskRepository{
   }
 
   Future<List<Task>> completedTask(Task task, bool value) async {
-    int index = taskList.indexOf(task);
-    taskList.removeAt(index);
-    taskList.insert(taskList.length, task.copyWith(completed: value));
+    taskList.remove(task);
+    taskList.add(task.copyWith(completed: value));
+
     taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;
   }

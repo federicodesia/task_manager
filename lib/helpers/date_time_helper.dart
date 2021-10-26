@@ -22,6 +22,7 @@ DateTime copyDateTimeWith(
   );
 }
 
-bool isToday(DateTime dateTime){
-  return DateTime.now().difference(dateTime).inDays == 0;
+int dateDifference(DateTime date) {
+  DateTime now = DateTime.now();
+  return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
 }

@@ -9,6 +9,7 @@ import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/models/tasks_group_date.dart';
 
@@ -162,11 +163,21 @@ class _UpcomingTabState extends State<UpcomingTab>{
               
               SizedBox(height: 12.0),
               Column(
-                children: List.generate(taskGroups.length - 1, (groupIndex){
+                children: List.generate(taskGroups.length - 1, (_groupIndex){
+                  // Ignore today tasks
+                  int groupIndex = _groupIndex + 1;
+
+                  DateTime nowDateTime = DateTime.now();
+                  DateTime groupDateTime = taskGroups[groupIndex].dateTime;
+                  String header;
+                  if(dateDifference(groupDateTime) == 1) header = "Tomorrow";
+                  else if(groupDateTime.year != nowDateTime.year) header = DateFormat('E, dd MMM y').format(groupDateTime);
+                  else header = DateFormat('E, dd MMM').format(groupDateTime);
+                  
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ListHeader(groupIndex == 0 ? "Tomorrow" : DateFormat('EEEE dd').format(taskGroups[groupIndex + 1].dateTime)),
+                      ListHeader(header),
                       ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
