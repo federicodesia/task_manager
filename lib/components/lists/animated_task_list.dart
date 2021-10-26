@@ -39,6 +39,7 @@ class AnimatedTaskList extends StatelessWidget{
           items: items,
           insertDuration: cAnimatedListDuration,
           removeDuration: cAnimatedListDuration,
+          equalityCheck: (Task a, Task b) => (a.uuid == b.uuid),
           itemBuilder: (BuildContext context, Task task, int index, Animation<double> animation){
             return BuildItemList(
               task: task,
@@ -49,7 +50,7 @@ class AnimatedTaskList extends StatelessWidget{
           },
           removeBuilder: (BuildContext context, Task task, int index, Animation<double> animation){
             List<Task> tasks = BlocProvider.of<TaskBloc>(context).taskRepository.taskList;
-            if(tasks.where((t) => t.title == task.title).length > 0){
+            if(tasks.contains((t) => t.uuid == task.uuid)){
               return BuildItemList(
                 task: task,
                 animation: animation,
@@ -102,7 +103,7 @@ class BuildItemList extends StatelessWidget{
   @override
   Widget build(BuildContext buildContext) {
 
-    Task _task = BlocProvider.of<TaskBloc>(context).taskRepository.taskList.firstWhere((t) => t.title == task.title);
+    Task _task = BlocProvider.of<TaskBloc>(context).taskRepository.taskList.firstWhere((t) => t.uuid == task.uuid);
     bool ignoring = _task.completed != task.completed;
     
     final widget = IgnorePointer(
