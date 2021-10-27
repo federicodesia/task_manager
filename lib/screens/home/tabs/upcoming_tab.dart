@@ -6,7 +6,6 @@ import 'package:task_manager/blocs/task/task_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/charts/week_bar_chart_group_data.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
-import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
@@ -23,11 +22,6 @@ class _UpcomingTabState extends State<UpcomingTab>{
 
   Widget child;
   List<String> weekDays = ["M", "T", "W", "T", "F", "S", "S"];
-  
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext buildContext) {
@@ -52,28 +46,21 @@ class _UpcomingTabState extends State<UpcomingTab>{
           if(tasksList.length > 0){
             taskGroups.add(
               TaskGroupDate(
-                dateTime: tasksList.first.dateTime,
+                dateTime: getDate(tasksList.first.dateTime),
                 tasks: []
               )
             );
 
             for(int i = 0; i < tasksList.length; i++){
-              final group = taskGroups.last;
-              final groupDate = group.dateTime;
+              Task task = tasksList[i];
+              TaskGroupDate group = taskGroups.last;
 
-              final task = tasksList[i];
-              final taskDate = task.dateTime;
-
-              if(taskDate.day == groupDate.day
-                && taskDate.month == groupDate.month
-                && taskDate.year == groupDate.year){
-                group.tasks.add(task);
-              }
+              if(dateDifference(task.dateTime, taskGroups.last.dateTime) == 0) group.tasks.add(task);
               else if(taskGroups.length - 1 == 3) break;
               else{
                 taskGroups.add(
                   TaskGroupDate(
-                    dateTime: taskDate,
+                    dateTime: getDate(task.dateTime),
                     tasks: [
                       task
                     ]
@@ -162,38 +149,29 @@ class _UpcomingTabState extends State<UpcomingTab>{
               ),
               
               SizedBox(height: 12.0),
-              Column(
-                children: List.generate(taskGroups.length - 1, (_groupIndex){
+
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: taskGroups.length - 1,
+                itemBuilder: (_, _groupIndex){
                   // Ignore today tasks
                   int groupIndex = _groupIndex + 1;
 
                   DateTime nowDateTime = DateTime.now();
                   DateTime groupDateTime = taskGroups[groupIndex].dateTime;
                   String header;
-                  if(dateDifference(groupDateTime) == 1) header = "Tomorrow";
+                  if(dateDifference(groupDateTime, nowDateTime) == 1) header = "Tomorrow";
                   else if(groupDateTime.year != nowDateTime.year) header = DateFormat('E, dd MMM y').format(groupDateTime);
                   else header = DateFormat('E, dd MMM').format(groupDateTime);
-                  
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListHeader(header),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: taskGroups[groupIndex].tasks.length,
-                        itemBuilder: (context, taskIndex){
-                          return BuildItemList(
-                            task: taskGroups[groupIndex].tasks[taskIndex],
-                            animation: null,
-                            context: context,
-                            onUndoDismissed: (task) {},
-                          );
-                        }
-                      )
-                    ],
+
+                  return AnimatedTaskList(
+                    headerTitle: header,
+                    items: taskGroups[groupIndex].tasks,
+                    context: context,
+                    onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
                   );
-                }),
+                }
               )
             ],
           );

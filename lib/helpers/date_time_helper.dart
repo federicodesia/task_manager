@@ -22,7 +22,10 @@ DateTime copyDateTimeWith(
   );
 }
 
-int dateDifference(DateTime date) {
-  DateTime now = DateTime.now();
-  return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
+int dateDifference(DateTime a, DateTime b) {
+  return DateTime(a.year, a.month, a.day).difference(DateTime(b.year, b.month, b.day)).inDays;
+}
+
+DateTime getDate(DateTime dateTime) {
+  return DateTime(dateTime.year, dateTime.month, dateTime.day);
 }

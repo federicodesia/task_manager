@@ -50,7 +50,7 @@ class AnimatedTaskList extends StatelessWidget{
           },
           removeBuilder: (BuildContext context, Task task, int index, Animation<double> animation){
             List<Task> tasks = BlocProvider.of<TaskBloc>(context).taskRepository.taskList;
-            if(tasks.contains((t) => t.uuid == task.uuid)){
+            if(tasks.where((Task t) => t.uuid == task.uuid).isNotEmpty){
               return BuildItemList(
                 task: task,
                 animation: animation,
@@ -127,7 +127,6 @@ class BuildItemList extends StatelessWidget{
             onChanged: (value) {
               BlocProvider.of<TaskBloc>(context).add(TaskCompleted(task: task, value: value));
             },
-            onChangedDelay: animation == null,
           ),
           onDismissed: (_) {
             Task tempTask = task;

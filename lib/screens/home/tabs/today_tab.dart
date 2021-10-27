@@ -32,7 +32,7 @@ class _TodayTabState extends State<TodayTab>{
       builder: (_, state){
 
         if(state is TaskLoadSuccess){
-          List<Task> tasksList = state.tasks.where((task) => dateDifference(task.dateTime) == 0).toList();
+          List<Task> tasksList = state.tasks.where((task) => dateDifference(task.dateTime, DateTime.now()) == 0).toList();
 
           if(tasksList.isEmpty){
             child = CenteredListWidget(

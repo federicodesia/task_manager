@@ -15,7 +15,7 @@ class Task{
 
   Task copyWith({String title, String description, DateTime dateTime, bool completed}){
     return Task(
-      uuid,
+      this.uuid,
       title ?? this.title,
       description ?? this.description,
       dateTime ?? this.dateTime,

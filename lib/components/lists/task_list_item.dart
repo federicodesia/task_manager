@@ -8,13 +8,11 @@ class TaskListItem extends StatefulWidget{
   final Task task;
   final Function() onPressed;
   final Function(bool value) onChanged;
-  final bool onChangedDelay;
   
   TaskListItem({
     this.task,
     this.onPressed,
     this.onChanged,
-    this.onChangedDelay = false
   });
 
   @override
@@ -22,15 +20,6 @@ class TaskListItem extends StatefulWidget{
 }
 
 class _TaskListItemState extends State<TaskListItem>{
-
-  bool _completed;
-  bool _ignoring = false;
-
-  @override
-  void initState() {
-    _completed = widget.task.completed;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,26 +34,10 @@ class _TaskListItemState extends State<TaskListItem>{
             ),
             unselectedWidgetColor: cCheckBoxUnselectedColor,
           ),
-          child: IgnorePointer(
-            ignoring: _ignoring,
-            child: Checkbox(
-              value: _completed,
-              activeColor: cPrimaryColor,
-              onChanged: (value){
-
-                setState((){
-                  _completed = value;
-                  if(widget.onChangedDelay){
-                    _ignoring = true;
-                    Future.delayed(Duration(milliseconds: 300), (){
-                      widget.onChanged(value);
-                      _ignoring = false;
-                    });
-                  }
-                  else widget.onChanged(value);
-                });
-              }
-            ),
+          child: Checkbox(
+            value: widget.task.completed,
+            activeColor: cPrimaryColor,
+            onChanged: (value) => widget.onChanged(value)
           ),
         ),
 
