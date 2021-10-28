@@ -28,6 +28,8 @@ class ProgressSummary extends StatelessWidget{
     else if(completed == total && finishedDescription != null) _description = finishedDescription;
     else _description = "$completed of $total completed 🎉";
 
+    double _percent = total > 0 ? completed / total : 0.0;
+
     return Container(
       decoration: BoxDecoration(
         color: cCardBackgroundColor,
@@ -71,9 +73,9 @@ class ProgressSummary extends StatelessWidget{
             animation: true,
             animateFromLastPercent: true,
             animationDuration: cAnimationDuration.inMilliseconds,
-            percent: completed / total,
+            percent: _percent,
             center: Text(
-              "${((completed / total) * 100).toStringAsFixed(0)}%",
+              "${(_percent * 100).toStringAsFixed(0)}%",
               style: cSubtitleTextStyle,
             ),
             circularStrokeCap: CircularStrokeCap.round,

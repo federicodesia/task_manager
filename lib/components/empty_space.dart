@@ -22,12 +22,11 @@ class EmptySpace extends StatelessWidget{
       padding: EdgeInsets.symmetric(vertical: cPadding),
       child: Column(
         children: [
-          SizedBox(
+          if(svgImage != null) Container(
             height: svgHeight,
+            padding: EdgeInsets.only(bottom: 32.0),
             child: SvgPicture.asset(svgImage)
           ),
-
-          SizedBox(height: 48.0),
 
           Text(
             header,

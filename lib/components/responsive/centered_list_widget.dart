@@ -9,7 +9,12 @@ import '../../constants.dart';
 class CenteredListWidget extends StatefulWidget{
   
   final Widget child;
-  CenteredListWidget({this.child});
+  final double subtractHeight;
+
+  CenteredListWidget({
+    this.child,
+    this.subtractHeight = 0.0
+  });
 
   @override
   _CenteredListWidgetState createState() => _CenteredListWidgetState();
@@ -21,7 +26,7 @@ class _CenteredListWidgetState extends State<CenteredListWidget>{
   @override
   Widget build(BuildContext context) {
     final availableHeight = BlocProvider.of<AvailableSpaceCubit>(context).state - 
-      BlocProvider.of<AppBarCubit>(context).state - cPadding * 2;
+      BlocProvider.of<AppBarCubit>(context).state - cPadding * 2 - widget.subtractHeight;
 
     return SizedBox(
       height: availableHeight > childHeight ? availableHeight : childHeight,

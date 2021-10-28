@@ -4,11 +4,15 @@ import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/charts/week_bar_chat.dart';
+import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
+import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/models/tasks_group_date.dart';
+
+import '../../../constants.dart';
 
 class UpcomingTab extends StatefulWidget{
 
@@ -19,7 +23,7 @@ class UpcomingTab extends StatefulWidget{
 class _UpcomingTabState extends State<UpcomingTab>{
 
   Widget child;
-  
+  double weekBarChartHeight = 0.0;
 
   @override
   Widget build(BuildContext buildContext) {
@@ -65,41 +69,68 @@ class _UpcomingTabState extends State<UpcomingTab>{
             }
           }
 
-          child = Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              WeekBarChart(
-                header: "Tasks in this week",
-                weekTasksList: weekTasksList,
+          if(weekTasksList.isEmpty && taskGroups.isEmpty){
+            child = CenteredListWidget(
+              child: EmptySpace(
+                svgImage: "assets/svg/completed_tasks.svg",
+                svgHeight: MediaQuery.of(context).orientation == Orientation.portrait ? 
+                          MediaQuery.of(context).size.width * 0.4 :
+                          MediaQuery.of(context).size.height * 0.4,
+                header: "You haven't tasks for later!",
+                description: "Add tasks to organize your day, optimize your time and receive reminders!",
               ),
-              
-              SizedBox(height: 12.0),
+            );
+          }
+          else{
+            child = Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                WidgetSize(
+                  onChange: (Size size){
+                    setState(() => weekBarChartHeight = size.height);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 12.0),
+                    child: WeekBarChart(
+                      header: "Tasks in this week",
+                      weekTasksList: weekTasksList,
+                    ),
+                  ),
+                ),
 
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: taskGroups.length - 1,
-                itemBuilder: (_, _groupIndex){
-                  // Ignore today tasks
-                  int groupIndex = _groupIndex + 1;
+                if(taskGroups.length - 1 > 0) ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: taskGroups.length - 1,
+                  itemBuilder: (_, _groupIndex){
+                    // Ignore today tasks
+                    int groupIndex = _groupIndex + 1;
 
-                  DateTime nowDateTime = DateTime.now();
-                  DateTime groupDateTime = taskGroups[groupIndex].dateTime;
-                  String header;
-                  if(dateDifference(groupDateTime, nowDateTime) == 1) header = "Tomorrow";
-                  else if(groupDateTime.year != nowDateTime.year) header = DateFormat('E, dd MMM y').format(groupDateTime);
-                  else header = DateFormat('E, dd MMM').format(groupDateTime);
+                    DateTime nowDateTime = DateTime.now();
+                    DateTime groupDateTime = taskGroups[groupIndex].dateTime;
+                    String header;
+                    if(dateDifference(groupDateTime, nowDateTime) == 1) header = "Tomorrow";
+                    else if(groupDateTime.year != nowDateTime.year) header = DateFormat('E, dd MMM y').format(groupDateTime);
+                    else header = DateFormat('E, dd MMM').format(groupDateTime);
 
-                  return AnimatedTaskList(
-                    headerTitle: header,
-                    items: taskGroups[groupIndex].tasks,
-                    context: context,
-                    onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
-                  );
-                }
-              )
-            ],
-          );
+                    return AnimatedTaskList(
+                      headerTitle: header,
+                      items: taskGroups[groupIndex].tasks,
+                      context: context,
+                      onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
+                    );
+                  }
+                )
+                else CenteredListWidget(
+                  subtractHeight: weekBarChartHeight,
+                  child: EmptySpace(
+                    header: "You haven't tasks for later!",
+                    description: "Add tasks to organize your day, optimize your time and receive reminders!",
+                  ),
+                )
+              ],
+            );
+          }
         }
         else{
           child = CenteredListWidget(
