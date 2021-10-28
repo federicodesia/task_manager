@@ -6,6 +6,7 @@ import 'package:task_manager/blocs/task/task_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/charts/week_bar_chart_group_data.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
+import 'package:task_manager/components/responsive/animated_widget_size.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
@@ -85,6 +86,8 @@ class _UpcomingTabState extends State<UpcomingTab>{
                     Text(
                       "Tasks in this week",
                       style: cLightTextStyle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 12.0),
 
@@ -125,25 +128,59 @@ class _UpcomingTabState extends State<UpcomingTab>{
                     
                     SizedBox(height: 12.0),
 
-                    Row(
+                    Stack(
                       children: [
-                        Text(
-                          "$completedWeekTasks Completed",
-                          style: cTextStyle.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: cChartPrimaryColor
-                          ),
+                        Row(
+                          children: [
+                            AlignedAnimatedSwitcher(
+                              child: Text(
+                                "$completedWeekTasks Completed",
+                                key: Key("$completedWeekTasks Completed"),
+                                style: cTextStyle.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  color: cChartPrimaryColor
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            )
+                          ],
                         ),
-                        SizedBox(width: 18.0),
-                        Text(
-                          "${weekTasksList.length - completedWeekTasks} Remaining",
-                          style: cTextStyle.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: cChartBackgroundColor
-                          ),
-                        ),
+
+                        Row(
+                          children: [
+                            // Invisible text to prevent repositioning of the  
+                            // following text with variable character width fonts.
+                            Opacity(
+                              opacity: 0,
+                              child: Text(
+                                "100 Completed",
+                                style: cTextStyle.copyWith(fontWeight: FontWeight.w500),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+
+                            SizedBox(width: 8.0),
+                            Expanded(
+                              child: AlignedAnimatedSwitcher(
+                                duration: cAnimationDuration,
+                                child: Text(
+                                  "${weekTasksList.length - completedWeekTasks} Remaining",
+                                  key: Key("${weekTasksList.length - completedWeekTasks} Remaining"),
+                                  style: cTextStyle.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    color: cChartBackgroundColor
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),

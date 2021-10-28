@@ -43,6 +43,8 @@ class ProgressSummary extends StatelessWidget{
                 Text(
                   header,
                   style: cTitleTextStyle.copyWith(fontSize: 15.0),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 8.0),
 
@@ -52,6 +54,8 @@ class ProgressSummary extends StatelessWidget{
                       _description,
                       key: Key(_description),
                       style: cLightTextStyle,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),

@@ -21,12 +21,16 @@ class Header extends StatelessWidget{
             child: Text(
               text,
               style: cTitleTextStyle.copyWith(fontSize: 14.0),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
 
           Text(
             rightText ?? "",
             style: cLightTextStyle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           )
         ],
       ),
