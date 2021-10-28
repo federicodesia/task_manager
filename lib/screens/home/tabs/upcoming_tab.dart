@@ -67,6 +67,11 @@ class _UpcomingTabState extends State<UpcomingTab>{
                 );
               }
             }
+
+            // Ignore today tasks
+            if(dateDifference(taskGroups.first.dateTime, DateTime.now()) == 0){
+              taskGroups.remove(taskGroups.first);
+            }
           }
 
           if(weekTasksList.isEmpty && taskGroups.isEmpty){
@@ -98,14 +103,12 @@ class _UpcomingTabState extends State<UpcomingTab>{
                   ),
                 ),
 
-                if(taskGroups.length - 1 > 0) ListView.builder(
+                if(taskGroups.length > 0) ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: taskGroups.length - 1,
-                  itemBuilder: (_, _groupIndex){
-                    // Ignore today tasks
-                    int groupIndex = _groupIndex + 1;
-
+                  itemCount: taskGroups.length,
+                  itemBuilder: (_, groupIndex){
+                    
                     DateTime nowDateTime = DateTime.now();
                     DateTime groupDateTime = taskGroups[groupIndex].dateTime;
                     String header;
