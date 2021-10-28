@@ -1,14 +1,11 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/task/task_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
-import 'package:task_manager/components/charts/week_bar_chart_group_data.dart';
+import 'package:task_manager/components/charts/week_bar_chat.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
-import 'package:task_manager/components/responsive/animated_widget_size.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
-import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/models/tasks_group_date.dart';
@@ -22,7 +19,7 @@ class UpcomingTab extends StatefulWidget{
 class _UpcomingTabState extends State<UpcomingTab>{
 
   Widget child;
-  List<String> weekDays = ["M", "T", "W", "T", "F", "S", "S"];
+  
 
   @override
   Widget build(BuildContext buildContext) {
@@ -40,10 +37,7 @@ class _UpcomingTabState extends State<UpcomingTab>{
             return difference >= weekday * -1 && difference < 7 - weekday;
           }).toList();
 
-          int completedWeekTasks = weekTasksList.where((task) => task.completed).length;
-
           List<TaskGroupDate> taskGroups = [];
-
           if(tasksList.length > 0){
             taskGroups.add(
               TaskGroupDate(
@@ -74,115 +68,9 @@ class _UpcomingTabState extends State<UpcomingTab>{
           child = Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: cCardBackgroundColor,
-                  borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
-                ),
-                padding: EdgeInsets.all(cPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Tasks in this week",
-                      style: cLightTextStyle,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: 12.0),
-
-                    SizedBox(
-                      height: 100,
-                      child: BarChart(
-                        BarChartData(
-                          alignment: BarChartAlignment.spaceBetween,
-                          gridData: FlGridData(show: false),
-                          borderData: FlBorderData(show: false),
-
-                          titlesData: FlTitlesData(
-                            leftTitles: SideTitles(showTitles: false),
-                            topTitles: SideTitles(showTitles: false),
-                            rightTitles: SideTitles(showTitles: false),
-
-                            bottomTitles: SideTitles(
-                              showTitles: true,
-                              margin: 12.0,
-                              getTextStyles: (context, value) => cLightTextStyle,
-                              getTitles: (double value) => weekDays[value.toInt()],
-                            )
-                          ),
-
-                          barGroups: List.generate(7, (index){
-                            final weekdayTasksList = weekTasksList.where((task) => task.dateTime.weekday - 1 == index);
-                            return weekBarChartGroupData(
-                              index: index,
-                              height: weekdayTasksList.where((task) => task.completed).length.toDouble(),
-                              backgroundHeight: weekdayTasksList.length.toDouble()
-                            );
-                          })
-                        ),
-                        swapAnimationDuration: cAnimationDuration,
-                        swapAnimationCurve: Curves.linear,
-                      ),
-                    ),
-                    
-                    SizedBox(height: 12.0),
-
-                    Stack(
-                      children: [
-                        Row(
-                          children: [
-                            AlignedAnimatedSwitcher(
-                              child: Text(
-                                "$completedWeekTasks Completed",
-                                key: Key("$completedWeekTasks Completed"),
-                                style: cTextStyle.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  color: cChartPrimaryColor
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            )
-                          ],
-                        ),
-
-                        Row(
-                          children: [
-                            // Invisible text to prevent repositioning of the  
-                            // following text with variable character width fonts.
-                            Opacity(
-                              opacity: 0,
-                              child: Text(
-                                "100 Completed",
-                                style: cTextStyle.copyWith(fontWeight: FontWeight.w500),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-
-                            SizedBox(width: 8.0),
-                            Expanded(
-                              child: AlignedAnimatedSwitcher(
-                                duration: cAnimationDuration,
-                                child: Text(
-                                  "${weekTasksList.length - completedWeekTasks} Remaining",
-                                  key: Key("${weekTasksList.length - completedWeekTasks} Remaining"),
-                                  style: cTextStyle.copyWith(
-                                    fontWeight: FontWeight.w500,
-                                    color: cChartBackgroundColor
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+              WeekBarChart(
+                header: "Tasks in this week",
+                weekTasksList: weekTasksList,
               ),
               
               SizedBox(height: 12.0),
