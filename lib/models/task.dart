@@ -1,24 +1,24 @@
 class Task{
   final String uuid;
   final String title;
-  final String description;
+  final String? description;
   final DateTime dateTime;
   final bool completed;
 
-  Task(
-    this.uuid,
-    this.title,
+  Task({ 
+    required this.uuid,
+    required this.title,
     this.description,
-    this.dateTime,
-    { this.completed = false }
-  );
+    required this.dateTime,
+    this.completed = false 
+  });
 
-  Task copyWith({String title, String description, DateTime dateTime, bool completed}){
+  Task copyWith({String? title, String? description, DateTime? dateTime, bool? completed}){
     return Task(
-      this.uuid,
-      title ?? this.title,
-      description ?? this.description,
-      dateTime ?? this.dateTime,
+      uuid: this.uuid,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      dateTime: dateTime ?? this.dateTime,
       completed: completed ?? this.completed
     );
   }

@@ -10,13 +10,13 @@ class ModalBottomSheet{
   final Widget content;
 
   ModalBottomSheet({
-    this.title,
-    this.context,
-    this.content
+    required this.title,
+    required this.context,
+    required this.content
   });
 
   void show(){
-    BuildContext mainContext = BlocProvider.of<MainContextCubit>(context).state;
+    BuildContext mainContext = BlocProvider.of<MainContextCubit>(context).state!;
 
     showModalBottomSheet(
       isScrollControlled: true,

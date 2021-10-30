@@ -8,9 +8,9 @@ class RoundedSnackBar{
   final SnackBarAction action;
 
   RoundedSnackBar({
-    this.context,
-    this.text,
-    this.action
+    required this.context,
+    required this.text,
+    required this.action
   });
 
   void show(){

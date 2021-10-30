@@ -8,7 +8,7 @@ class AlignedAnimatedSwitcher extends StatefulWidget{
   final Duration duration;
 
   AlignedAnimatedSwitcher({
-    this.child,
+    required this.child,
     this.alignment = Alignment.topLeft,
     this.duration = cTransitionDuration
   });
@@ -23,11 +23,11 @@ class _AlignedAnimatedSwitcherState extends State<AlignedAnimatedSwitcher>{
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: widget.duration,
-      layoutBuilder: (Widget currentChild, List<Widget> previousChildren) {
+      layoutBuilder: (Widget? currentChild, List<Widget> previousChildren) {
         return Stack(
           children: <Widget>[
             ...previousChildren,
-            if (currentChild != null) currentChild,
+            if(currentChild != null) currentChild,
           ],
           alignment: widget.alignment,
         );

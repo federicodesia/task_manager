@@ -12,11 +12,11 @@ class MyTab{
   final bool floatingActionButton;
 
   MyTab({
-    this.name,
-    this.content,
-    this.createTitle,
-    this.editTitle,
-    this.bottomSheet,
+    required this.name,
+    required this.content,
+    required this.createTitle,
+    required this.editTitle,
+    required this.bottomSheet,
     this.floatingActionButton = false
   });
 }

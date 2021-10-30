@@ -19,7 +19,12 @@ class AnimatedTaskList extends StatelessWidget{
   final BuildContext context;
   final Function(Task) onUndoDismissed;
 
-  AnimatedTaskList({this.headerTitle, this.items, this.context, this.onUndoDismissed});
+  AnimatedTaskList({
+    required this.headerTitle,
+    required this.items,
+    required this.context,
+    required this.onUndoDismissed
+  });
 
   @override
   Widget build(BuildContext buildContext){
@@ -28,7 +33,10 @@ class AnimatedTaskList extends StatelessWidget{
         AnimatedSwitcher(
           duration: cAnimatedListDuration,
           transitionBuilder: (widget, animation){
-            return BuildAnimation(widget, animation);
+            return BuildAnimation(
+              animation: animation,
+              child: widget,
+            );
           },
           child: items.length > 0 ? ListHeader(headerTitle) : Container(),
         ),
@@ -41,21 +49,27 @@ class AnimatedTaskList extends StatelessWidget{
           removeDuration: cAnimatedListDuration,
           equalityCheck: (Task a, Task b) => (a.uuid == b.uuid),
           itemBuilder: (BuildContext context, Task task, int index, Animation<double> animation){
-            return BuildItemList(
-              task: task,
+            return BuildAnimation(
               animation: animation,
-              context: context,
-              onUndoDismissed: onUndoDismissed,
+              child: BuildItemList(
+                task: task,
+                animation: animation,
+                context: context,
+                onUndoDismissed: onUndoDismissed,
+              ),
             );
           },
           removeBuilder: (BuildContext context, Task task, int index, Animation<double> animation){
             List<Task> tasks = BlocProvider.of<TaskBloc>(context).taskRepository.taskList;
             if(tasks.where((Task t) => t.uuid == task.uuid).isNotEmpty){
-              return BuildItemList(
-                task: task,
+              return BuildAnimation(
                 animation: animation,
-                context: context,
-                onUndoDismissed: onUndoDismissed,
+                child: BuildItemList(
+                  task: task,
+                  animation: animation,
+                  context: context,
+                  onUndoDismissed: onUndoDismissed,
+                ),
               );
             } 
             return Container();
@@ -67,10 +81,13 @@ class AnimatedTaskList extends StatelessWidget{
 }
 
 class BuildAnimation extends StatelessWidget{
-  final Widget child;
   final Animation<double> animation;
+  final Widget child;
 
-  BuildAnimation(this.child, this.animation);
+  BuildAnimation({
+    required this.animation,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +115,12 @@ class BuildItemList extends StatelessWidget{
   final BuildContext context;
   final Function(Task) onUndoDismissed;
 
-  BuildItemList({this.task, this.animation, this.context, this.onUndoDismissed});
+  BuildItemList({
+    required this.task,
+    required this.animation,
+    required this.context,
+    required this.onUndoDismissed
+  });
 
   @override
   Widget build(BuildContext buildContext) {
@@ -106,7 +128,7 @@ class BuildItemList extends StatelessWidget{
     Task _task = BlocProvider.of<TaskBloc>(context).taskRepository.taskList.firstWhere((t) => t.uuid == task.uuid);
     bool ignoring = _task.completed != task.completed;
     
-    final widget = IgnorePointer(
+    return IgnorePointer(
       ignoring: ignoring,
       child: Padding(
         padding: EdgeInsets.only(bottom: cListItemSpace),
@@ -125,7 +147,12 @@ class BuildItemList extends StatelessWidget{
               ).show();
             },
             onChanged: (value) {
-              BlocProvider.of<TaskBloc>(context).add(TaskCompleted(task: task, value: value));
+              BlocProvider.of<TaskBloc>(context).add(
+                TaskCompleted(
+                  task: task,
+                  value: value!
+                )
+              );
             },
           ),
           onDismissed: (_) {
@@ -144,13 +171,5 @@ class BuildItemList extends StatelessWidget{
         ),
       ),
     );
-
-    if(animation != null){
-      return BuildAnimation(
-        widget,
-        animation
-      );
-    }
-    return widget;
   }
 }

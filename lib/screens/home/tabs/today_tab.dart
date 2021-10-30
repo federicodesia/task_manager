@@ -19,7 +19,7 @@ class TodayTab extends StatefulWidget{
 
 class _TodayTabState extends State<TodayTab>{
 
-  Widget child;
+  late Widget child;
   double progressSummaryHeight = 0.0;
   
   @override

@@ -23,8 +23,8 @@ class HomeScreen extends StatefulWidget{
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
 
-  PageController pageController;
-  TabController tabController;
+  late PageController pageController;
+  late TabController tabController;
   int currentTab = 0;
   
   @override

@@ -13,8 +13,8 @@ class WeekBarChart extends StatelessWidget{
 
   WeekBarChart({
     this.chartHeight = 100,
-    this.header,
-    this.weekTasksList
+    required this.header,
+    required this.weekTasksList
   });
 
   final List<String> weekDays = ["M", "T", "W", "T", "F", "S", "S"];

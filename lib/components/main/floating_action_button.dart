@@ -10,7 +10,7 @@ class MyFloatingActionButton extends StatelessWidget {
   final IconData icon;
   
   MyFloatingActionButton({
-    this.currentTab,
+    required this.currentTab,
     this.icon = Icons.add_rounded
   });
 

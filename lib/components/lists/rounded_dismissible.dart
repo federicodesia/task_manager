@@ -11,12 +11,12 @@ class RoundedDismissible extends StatelessWidget{
   final DismissDirectionCallback onDismissed;
 
   RoundedDismissible({
-    this.key,
-    this.text,
-    this.icon,
-    this.color,
-    this.child,
-    this.onDismissed
+    required this.key,
+    required this.text,
+    required this.icon,
+    required this.color,
+    required this.child,
+    required this.onDismissed
   });
 
   @override

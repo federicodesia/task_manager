@@ -22,7 +22,7 @@ class UpcomingTab extends StatefulWidget{
 
 class _UpcomingTabState extends State<UpcomingTab>{
 
-  Widget child;
+  late Widget child;
   double weekBarChartHeight = 0.0;
 
   @override
@@ -90,7 +90,7 @@ class _UpcomingTabState extends State<UpcomingTab>{
             child = Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                WidgetSize(
+                if(weekTasksList.isNotEmpty) WidgetSize(
                   onChange: (Size size){
                     setState(() => weekBarChartHeight = size.height);
                   },

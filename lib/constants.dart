@@ -10,7 +10,7 @@ const Color cPrimaryColor = Color(0xFF7E42FF);
 Color cRedColor = Color(0xFFD32F2F);
 
 Color cCardBackgroundColor = Color(0xFF272735);
-Color cOutlinedButtonColor = Color(0xFF2B3039);
+const Color cOutlinedButtonColor = Color(0xFF2B3039);
 Color cCheckBoxUnselectedColor = Color(0xFF2C2F39);
 
 Color cChartPrimaryColor = Color(0xFFF5A1FD);

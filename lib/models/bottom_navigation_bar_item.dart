@@ -7,9 +7,9 @@ class MyBottomNavigationBarItem{
   final Widget child;
 
   MyBottomNavigationBarItem({
-    this.icon,
-    this.selectedIcon,
-    this.child
+    required this.icon,
+    required this.selectedIcon,
+    required this.child
   });
 }
 

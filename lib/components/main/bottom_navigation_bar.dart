@@ -10,7 +10,7 @@ class MyBottomNavigationBar extends StatefulWidget{
 
   MyBottomNavigationBar({
     this.initialSelectedIndex = 0,
-    this.onChange
+    required this.onChange
   });
 
   @override
@@ -19,14 +19,7 @@ class MyBottomNavigationBar extends StatefulWidget{
 
 class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>{
 
-  int selectedIndex;
-
-  @override
-  void initState() {
-    selectedIndex = widget.initialSelectedIndex;
-
-    super.initState();
-  }
+  late int selectedIndex = widget.initialSelectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +73,11 @@ class MyBottomNavigationBarIcon extends StatelessWidget{
   final bool isSelected;
   final Function() onPressed;
 
-  MyBottomNavigationBarIcon({this.item, this.isSelected, this.onPressed});
+  MyBottomNavigationBarIcon({
+    required this.item,
+    required this.isSelected,
+    required this.onPressed
+  });
 
   @override
   Widget build(BuildContext context) {

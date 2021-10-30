@@ -2,8 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import '../../constants.dart';
 
 BarChartGroupData weekBarChartGroupData({
-  int index,
-  double height,
+  required int index,
+  required double height,
   double backgroundHeight = 0.0
   }) {
 

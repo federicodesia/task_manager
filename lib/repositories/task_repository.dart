@@ -13,25 +13,25 @@ class TaskRepository{
   }
 
   List<Task> _generateTaskList(){
-    taskList.add(Task(Uuid().v4(), "Wake up buddy", "", DateTime.now()));
-    taskList.add(Task(Uuid().v4(),"Daily workout", "", DateTime.now()));
-    taskList.add(Task(Uuid().v4(),"Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now()));
-    taskList.add(Task(Uuid().v4(),"Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now()));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Wake up buddy", description: "", dateTime: DateTime.now()));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Daily workout", description: "", dateTime: DateTime.now()));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Shrink project kick off", description: "Skype call, kick off with Elena and Andrew from Shrink", dateTime: DateTime.now()));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Hangouts Sushi", description: "Lauch with Julia, fight this quarantine with humor", dateTime: DateTime.now()));
 
-    taskList.add(Task(Uuid().v4(),"Wake up buddyy", "", DateTime.now().add(Duration(days: 1, hours: 1))));
-    taskList.add(Task(Uuid().v4(),"Daily workout", "", DateTime.now().add(Duration(days: 1, hours: 1))));
-    taskList.add(Task(Uuid().v4(),"Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 1, hours: 1))));
-    taskList.add(Task(Uuid().v4(),"Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 1, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Wake up buddyy", description: "", dateTime: DateTime.now().add(Duration(days: 1, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Daily workout", description: "", dateTime: DateTime.now().add(Duration(days: 1, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Shrink project kick off", description: "Skype call, kick off with Elena and Andrew from Shrink", dateTime: DateTime.now().add(Duration(days: 1, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Hangouts Sushi", description: "Lauch with Julia, fight this quarantine with humor", dateTime: DateTime.now().add(Duration(days: 1, hours: 1))));
 
-    taskList.add(Task(Uuid().v4(),"Wake up buddy", "", DateTime.now().add(Duration(days: 2, hours: 1))));
-    taskList.add(Task(Uuid().v4(),"Daily workout", "", DateTime.now().add(Duration(days: 2, hours: 1))));
-    taskList.add(Task(Uuid().v4(),"Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 2, hours: 1))));
-    taskList.add(Task(Uuid().v4(),"Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 2, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Wake up buddy", description: "", dateTime: DateTime.now().add(Duration(days: 2, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Daily workout", description: "", dateTime: DateTime.now().add(Duration(days: 2, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Shrink project kick off", description: "Skype call, kick off with Elena and Andrew from Shrink", dateTime: DateTime.now().add(Duration(days: 2, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Hangouts Sushi", description: "Lauch with Julia, fight this quarantine with humor", dateTime: DateTime.now().add(Duration(days: 2, hours: 1))));
 
-    taskList.add(Task(Uuid().v4(),"Wake up buddy", "", DateTime.now().add(Duration(days: 3, hours: 1))));
-    taskList.add(Task(Uuid().v4(),"Daily workout", "", DateTime.now().add(Duration(days: 3, hours: 1))));
-    taskList.add(Task(Uuid().v4(),"Shrink project kick off", "Skype call, kick off with Elena and Andrew from Shrink", DateTime.now().add(Duration(days: 3, hours: 1))));
-    taskList.add(Task(Uuid().v4(),"Hangouts Sushi", "Lauch with Julia, fight this quarantine with humor", DateTime.now().add(Duration(days: 3, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Wake up buddy", description: "", dateTime: DateTime.now().add(Duration(days: 3, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Daily workout", description: "", dateTime: DateTime.now().add(Duration(days: 3, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Shrink project kick off", description: "Skype call, kick off with Elena and Andrew from Shrink", dateTime: DateTime.now().add(Duration(days: 3, hours: 1))));
+    taskList.add(Task(uuid: Uuid().v4(), title: "Hangouts Sushi", description: "Lauch with Julia, fight this quarantine with humor", dateTime: DateTime.now().add(Duration(days: 3, hours: 1))));
     
     taskList.sort((a,b) => a.dateTime.compareTo(b.dateTime));
     return taskList;

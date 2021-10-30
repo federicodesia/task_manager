@@ -5,7 +5,7 @@ import 'package:task_manager/models/category.dart';
 class CategoryCard extends StatelessWidget{
 
   final Category category;
-  CategoryCard({this.category});
+  CategoryCard({required this.category});
 
   @override
   Widget build(BuildContext context) {

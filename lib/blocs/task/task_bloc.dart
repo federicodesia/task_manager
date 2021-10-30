@@ -11,7 +11,7 @@ part 'task_state.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   final TaskRepository taskRepository;
-  TaskBloc({this.taskRepository}) : super(TaskLoadInProgress());
+  TaskBloc({required this.taskRepository}) : super(TaskLoadInProgress());
 
   @override
   Stream<TaskState> mapEventToState(TaskEvent event) async* {

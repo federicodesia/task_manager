@@ -18,8 +18,8 @@ import 'package:uuid/uuid.dart';
 import 'modal_bottom_sheet.dart';
 
 class TaskBottomSheet extends StatefulWidget{
-  final Task editTask;
-
+  
+  final Task? editTask;
   TaskBottomSheet({this.editTask});
 
   @override
@@ -32,32 +32,16 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
 
   bool get _isEditing => widget.editTask != null;
 
-  String _uuid;
+  late String _uuid = _isEditing ? widget.editTask!.uuid : Uuid().v4();
 
-  String _title;
-  String _description;
+  late String _title = _isEditing ? widget.editTask!.title : "";
+  late String? _description = _isEditing ? widget.editTask!.description : "";
 
-  bool _dateState;
-  DateTime _date;
+  late bool _dateState = true;
+  late DateTime? _date = _isEditing ? widget.editTask!.dateTime : null;
   
-  bool _timeState;
-  DateTime _time;
-
-  @override
-  void initState() {
-    _uuid = _isEditing ? widget.editTask.uuid : Uuid().v4();
-
-    _title = _isEditing ? widget.editTask.title : "";
-    _description = _isEditing ? widget.editTask.description : "";
-
-    _dateState = true;
-    _date = _isEditing ? widget.editTask.dateTime : null;
-
-    _timeState = true;
-    _time = _isEditing ? widget.editTask.dateTime : null;
-
-    super.initState();
-  }
+  late bool _timeState = true;
+  late DateTime? _time = _isEditing ? widget.editTask!.dateTime : null;
   
 
   @override
@@ -79,7 +63,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
               return null;
             },
             onSaved: (value){
-              _title = value;
+              _title = value!;
             },
           ),
 
@@ -104,7 +88,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                 child: FormValidator(
                   widget: OutlinedFormIconButton(
                     icon: Icons.event_rounded,
-                    text: _date == null ? "Select a date" : DateFormat("dd/MM/yyyy").format(_date),
+                    text: _date == null ? "Select a date" : DateFormat("dd/MM/yyyy").format(_date!),
                     outlineColor: _dateState ? null : themeData.errorColor,
                     onPressed: () {
                       FocusScope.of(context).requestFocus(new FocusNode());
@@ -133,7 +117,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                 child: FormValidator(
                   widget: OutlinedFormIconButton(
                     icon: Icons.watch_later_rounded,
-                    text: _time == null ? "Select Time" : DateFormat("HH:mm a").format(_time),
+                    text: _time == null ? "Select Time" : DateFormat("HH:mm a").format(_time!),
                     outlineColor: _timeState ? null : themeData.errorColor,
                     onPressed: () {
                       FocusScope.of(context).requestFocus(new FocusNode());
@@ -142,8 +126,8 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                         title: "Select Time",
                         content: TimePickerBottomSheet(
                           initialTime: Duration(
-                            hours: _time != null ? _time.hour : DateTime.now().hour,
-                            minutes: _time != null ? _time.minute : DateTime.now().hour
+                            hours: _time != null ? _time!.hour : DateTime.now().hour,
+                            minutes: _time != null ? _time!.minute : DateTime.now().hour
                           ),
                           onTimeChanged: (duration){
                             setState((){
@@ -176,22 +160,22 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
               style: cSubtitleTextStyle,
             ),
             onPressed: (){
-              if (_formKey.currentState.validate()){
-                _formKey.currentState.save();
+              if (_formKey.currentState!.validate()){
+                _formKey.currentState!.save();
 
                 Task _task = Task(
-                  _uuid,
-                  _title,
-                  _description,
-                  copyDateTimeWith(
-                    _date,
-                    hour: _time.hour,
-                    minute: _time.minute,
+                  uuid: _uuid,
+                  title: _title,
+                  description: _description,
+                  dateTime: copyDateTimeWith(
+                    _date!,
+                    hour: _time!.hour,
+                    minute: _time!.minute,
                   )
                 );
 
                 if(widget.editTask != null) BlocProvider.of<TaskBloc>(context).add(TaskUpdated(
-                  oldTask: widget.editTask,
+                  oldTask: widget.editTask!,
                   taskUpdated: _task
                 ));
                 else BlocProvider.of<TaskBloc>(context).add(TaskAdded(_task));

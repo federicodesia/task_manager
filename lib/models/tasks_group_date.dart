@@ -5,7 +5,7 @@ class TaskGroupDate{
   final List<Task> tasks;
 
   TaskGroupDate({
-    this.dateTime,
-    this.tasks
+    required this.dateTime,
+    required this.tasks
   });
 }

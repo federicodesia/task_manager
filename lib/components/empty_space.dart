@@ -4,16 +4,16 @@ import 'package:task_manager/constants.dart';
 
 class EmptySpace extends StatelessWidget{
 
-  final String svgImage;
-  final double svgHeight;
+  final String? svgImage;
+  final double? svgHeight;
   final String header;
   final String description;
 
   const EmptySpace({
     this.svgImage,
     this.svgHeight,
-    this.header,
-    this.description,
+    required this.header,
+    required this.description,
   });
   
   @override
@@ -25,7 +25,7 @@ class EmptySpace extends StatelessWidget{
           if(svgImage != null) Container(
             height: svgHeight,
             padding: EdgeInsets.only(bottom: 32.0),
-            child: SvgPicture.asset(svgImage)
+            child: SvgPicture.asset(svgImage!)
           ),
 
           Text(

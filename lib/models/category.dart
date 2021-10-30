@@ -8,7 +8,7 @@ class Category{
   final List<Task> tasks;
 
   Category({
-    this.name,
+    required this.name,
     this.color = const Color(0xFFFC76A1),
     this.icon = Icons.category_rounded,
     this.tasks = const []

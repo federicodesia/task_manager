@@ -12,7 +12,7 @@ class CenteredListWidget extends StatefulWidget{
   final double subtractHeight;
 
   CenteredListWidget({
-    this.child,
+    required this.child,
     this.subtractHeight = 0.0
   });
 

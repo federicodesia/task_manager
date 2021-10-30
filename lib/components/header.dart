@@ -4,10 +4,10 @@ import 'package:task_manager/constants.dart';
 class Header extends StatelessWidget{
 
   final String text;
-  final String rightText;
+  final String? rightText;
 
   Header({
-    this.text,
+    required this.text,
     this.rightText
   });
 

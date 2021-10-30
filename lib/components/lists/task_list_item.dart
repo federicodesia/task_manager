@@ -7,12 +7,12 @@ class TaskListItem extends StatefulWidget{
 
   final Task task;
   final Function() onPressed;
-  final Function(bool value) onChanged;
+  final Function(bool?) onChanged;
   
   TaskListItem({
-    this.task,
-    this.onPressed,
-    this.onChanged,
+    required this.task,
+    required this.onPressed,
+    required this.onChanged,
   });
 
   @override
@@ -83,7 +83,7 @@ class _TaskListItemState extends State<TaskListItem>{
                   child: Padding(
                     padding: EdgeInsets.only(top: 8.0),
                     child: Text(
-                      widget.task.description,
+                      widget.task.description!,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       style: cLightTextStyle
