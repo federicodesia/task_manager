@@ -83,7 +83,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                SizedBox(height: cPadding - cHeaderPadding),
                                 Header(
                                   text: "Categories",
                                   rightText: "See all",

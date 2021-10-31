@@ -1,0 +1,53 @@
+import 'package:flutter/material.dart';
+
+import '../../constants.dart';
+import '../../components/rounded_button.dart';
+
+class CalendarAppBar extends StatelessWidget{
+
+  CalendarAppBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: EdgeInsets.all(cPadding),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+
+              // Header
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Sunday 31",
+                    style: cHeaderTextStyle,
+                  ),
+
+                  Text(
+                    "10 tasks",
+                    style: cLightTextStyle,
+                  ),
+                ],
+              ),
+
+              // Profile
+              RoundedButton(
+                width: cButtonSize,
+                color: Color(0xFF252A34),
+                child: Icon(
+                  Icons.event_note_outlined,
+                  color: Color(0xFFFF5EAC).withOpacity(0.75),
+                ),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
