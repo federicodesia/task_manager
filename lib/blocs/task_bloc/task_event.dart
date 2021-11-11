@@ -11,13 +11,8 @@ class TaskAdded extends TaskEvent {
 }
 
 class TaskUpdated extends TaskEvent {
-  final Task oldTask;
-  final Task taskUpdated;
-
-  TaskUpdated({
-    required this.oldTask,
-    required this.taskUpdated
-  });
+  final Task task;
+  TaskUpdated(this.task);
 }
 
 class TaskDeleted extends TaskEvent {

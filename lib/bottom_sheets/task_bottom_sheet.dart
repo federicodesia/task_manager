@@ -174,10 +174,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                   )
                 );
 
-                if(widget.editTask != null) BlocProvider.of<TaskBloc>(context).add(TaskUpdated(
-                  oldTask: widget.editTask!,
-                  taskUpdated: _task
-                ));
+                if(widget.editTask != null) BlocProvider.of<TaskBloc>(context).add(TaskUpdated(_task));
                 else BlocProvider.of<TaskBloc>(context).add(TaskAdded(_task));
                 
                 Navigator.pop(context);

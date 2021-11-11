@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:task_manager/models/task.dart';
@@ -11,34 +9,29 @@ part 'task_state.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   final TaskRepository taskRepository;
-  TaskBloc({required this.taskRepository}) : super(TaskLoadInProgress());
+  TaskBloc({required this.taskRepository}) : super(TaskLoadInProgress()){
 
-  @override
-  Stream<TaskState> mapEventToState(TaskEvent event) async* {
-    
-    if(event is TaskLoaded){
-      try {
+    on<TaskLoaded>((event, emit) async{
+      try{
         final tasks = await taskRepository.fetchTasks();
-        yield TaskLoadSuccess(tasks);
-      } catch (_) {
-        yield TaskLoadFailure();
+        emit(TaskLoadSuccess(tasks));
       }
-    }
-    else if(event is TaskAdded){
-      final updatedTasks = await taskRepository.saveTask(event.task);
-      yield TaskLoadSuccess(updatedTasks);
-    }
-    else if(event is TaskUpdated){
-      final updatedTasks = await taskRepository.updateTask(event.oldTask, event.taskUpdated);
-      yield TaskLoadSuccess(updatedTasks);
-    }
-    else if(event is TaskDeleted){
-      final updatedTasks = await taskRepository.deleteTask(event.task);
-      yield TaskLoadSuccess(updatedTasks);
-    }
-    else if(event is TaskCompleted){
-      final updatedTasks = await taskRepository.completedTask(event.task, event.value);
-      yield TaskLoadSuccess(updatedTasks);
-    }
+      catch(_){
+        emit(TaskLoadFailure());
+      }
+    });
+
+    on<TaskAdded>((event, emit) => emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks..add(event.task))));
+
+    on<TaskUpdated>((event, emit) => emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks.map((task){
+      return task.uuid == event.task.uuid ? event.task : task;
+    }).toList())));
+
+    on<TaskDeleted>((event, emit) => emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks
+      .where((task) => task.uuid != event.task.uuid).toList())));
+    
+    on<TaskCompleted>((event, emit) => emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks.map((task){
+      return task.uuid == event.task.uuid ? task.copyWith(completed: event.value) : task;
+    }).toList())));
   }
 }
