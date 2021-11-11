@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:task_manager/blocs/task/task_bloc.dart';
+import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/charts/week_bar_chat.dart';
 import 'package:task_manager/components/empty_space.dart';
@@ -11,8 +11,6 @@ import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/models/tasks_group_date.dart';
-
-import '../../../constants.dart';
 
 class UpcomingTab extends StatefulWidget{
 

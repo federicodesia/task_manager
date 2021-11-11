@@ -5,7 +5,13 @@ import '../../components/rounded_button.dart';
 
 class CalendarAppBar extends StatelessWidget{
 
-  CalendarAppBar();
+  final String header;
+  final String description;
+  
+  CalendarAppBar({
+    required this.header,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +29,12 @@ class CalendarAppBar extends StatelessWidget{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Sunday 31",
+                    header,
                     style: cHeaderTextStyle,
                   ),
 
                   Text(
-                    "10 tasks",
+                    description,
                     style: cLightTextStyle,
                   ),
                 ],

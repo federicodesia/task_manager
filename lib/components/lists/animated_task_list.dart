@@ -1,7 +1,7 @@
 import 'package:declarative_animated_list/declarative_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_manager/blocs/task/task_bloc.dart';
+import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/lists/rounded_dismissible.dart';

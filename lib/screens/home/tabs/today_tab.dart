@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_manager/blocs/task/task_bloc.dart';
+import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/progress_summary.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
-import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
 
