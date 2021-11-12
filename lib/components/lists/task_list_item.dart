@@ -83,7 +83,7 @@ class _TaskListItemState extends State<TaskListItem>{
                   child: Padding(
                     padding: EdgeInsets.only(top: 8.0),
                     child: Text(
-                      widget.task.description!,
+                      widget.task.description,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       style: cLightTextStyle

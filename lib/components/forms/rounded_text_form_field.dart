@@ -11,6 +11,8 @@ class RoundedTextFormField extends StatelessWidget{
   final TextInputAction textInputAction;
   final String? Function(String?)? validator;
   final Function(String?)? onSaved;
+  final Function(String)? onChanged;
+  final String? errorText;
   
   RoundedTextFormField({
     this.label,
@@ -20,7 +22,9 @@ class RoundedTextFormField extends StatelessWidget{
     this.maxLines = 1,
     this.textInputAction = TextInputAction.next,
     this.validator,
-    this.onSaved
+    this.onSaved,
+    this.onChanged,
+    this.errorText
   });
 
   @override
@@ -29,6 +33,7 @@ class RoundedTextFormField extends StatelessWidget{
       initialValue: initialValue,
       validator: validator,
       onSaved: onSaved,
+      onChanged: onChanged,
 
       keyboardType: textInputType,
       minLines: minLines,

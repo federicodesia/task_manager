@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class FormValidator extends StatelessWidget{
 
-  final Widget widget;
-  final String? Function(bool?)? validator;
+  final Widget Function(FormFieldState<DateTime>) widget;
+  final String? Function(DateTime?)? validator;
   
   FormValidator({
     required this.widget,
@@ -16,11 +16,11 @@ class FormValidator extends StatelessWidget{
     ThemeData themeData = Theme.of(context);
 
     return FormField(
-      builder: (FormFieldState<bool> state){
+      builder: (FormFieldState<DateTime> state){
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            widget,
+            widget(state),
             
             AnimatedCrossFade(
               duration: Duration(milliseconds: 300),
