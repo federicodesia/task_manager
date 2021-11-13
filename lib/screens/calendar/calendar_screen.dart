@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
+import 'package:task_manager/components/calendar/calendar_month_picker.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
@@ -79,32 +80,15 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                   children: [
 
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: cPadding),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Icon(
-                                            Icons.chevron_left_rounded,
-                                            color: Colors.white.withOpacity(0.5),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                            child: Text(
-                                              (calendarState is CalendarLoadSuccess) ? DateFormat('MMMM y').format(calendarState.date) : "",
-                                              style: cTitleTextStyle.copyWith(fontSize: 14.0),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                          Icon(
-                                            Icons.chevron_right_rounded,
-                                            color: Colors.white.withOpacity(0.5),
-                                          )
-                                        ],
+                                      padding: EdgeInsets.symmetric(horizontal: cPadding),
+                                      child: CalendarMonthPicker(
+                                        startDate: DateTime(DateTime.now().year, DateTime.now().month - 1),
+                                        endDate: DateTime(DateTime.now().year, DateTime.now().month + 2),
+                                        initialDate: DateTime.now(),
                                       ),
                                     ),
 
-                                    SizedBox(height: cPadding),
+                                    SizedBox(height: 8.0),
 
                                     // Tabs
                                     Align(
