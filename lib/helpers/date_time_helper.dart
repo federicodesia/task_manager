@@ -29,3 +29,9 @@ int dateDifference(DateTime a, DateTime b) {
 DateTime getDate(DateTime dateTime) {
   return DateTime(dateTime.year, dateTime.month, dateTime.day);
 }
+
+int daysInMonth(DateTime date){
+  DateTime thisMonth = DateTime(date.year, date.month, 0);
+  DateTime nextMonth = DateTime(date.year, date.month + 1, 0);
+  return nextMonth.difference(thisMonth).inDays;
+}

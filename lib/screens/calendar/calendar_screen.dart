@@ -7,6 +7,7 @@ import 'package:task_manager/components/lists/animated_task_list.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
 
 import '../../constants.dart';
@@ -28,7 +29,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   void initState() {
     tabController = TabController(
       vsync: this,
-      length: 7
+      length: daysInMonth(DateTime.now()),
+      initialIndex: DateTime.now().day
     );
 
     super.initState();
@@ -63,10 +65,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                               flexibleSpace: WidgetSize(
                                 onChange: (Size size) => BlocProvider.of<AppBarCubit>(context).emit(size.height),
                                 child: CalendarAppBar(
-                                  header: DateFormat('EEEE d').format(
-                                    (calendarState is CalendarLoadSuccess) ? calendarState.date : DateTime.now()
-                                  ),
-                                  description: (calendarState is CalendarLoadSuccess) ? "${calendarState.tasks.length} tasks" : ""
+                                  header: "Calendar",
+                                  description: "Let's organize!"
                                 )
                               )
                             ),
@@ -77,6 +77,34 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: cPadding),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Icon(
+                                            Icons.chevron_left_rounded,
+                                            color: Colors.white.withOpacity(0.5),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                            child: Text(
+                                              (calendarState is CalendarLoadSuccess) ? DateFormat('MMMM y').format(calendarState.date) : "",
+                                              style: cTitleTextStyle.copyWith(fontSize: 14.0),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.chevron_right_rounded,
+                                            color: Colors.white.withOpacity(0.5),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+
+                                    SizedBox(height: cPadding),
 
                                     // Tabs
                                     Align(
@@ -102,11 +130,15 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                             bottomRightRadius: 18.0,
                                             color: cPrimaryColor
                                           ),
-                                          labelPadding: EdgeInsets.all(cListItemPadding),
+                                          labelPadding: EdgeInsets.symmetric(
+                                            horizontal: 12.0,
+                                            vertical: 16.0
+                                          ),
                                           padding: EdgeInsets.symmetric(horizontal: cPadding),
 
-                                          tabs: List.generate(7, (index){
-                                            DateTime dateTime = DateTime.now().add(Duration(days: index));
+                                          tabs: List.generate(daysInMonth(DateTime.now()), (index){
+                                            DateTime now = DateTime.now();
+                                            DateTime dateTime = DateTime(now.year, now.month).add(Duration(days: index));
 
                                             return Tab(
                                               height: tabHeight ?? 100.0,
@@ -127,12 +159,26 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                                     ),
                                                     SizedBox(height: 4.0),
 
-                                                    Text(
-                                                      DateFormat('E').format(dateTime),
-                                                      style: cLightTextStyle.copyWith(
-                                                        fontSize: 13.0,
-                                                        color: index == currentTab ? cTextColor : cLightTextColor
-                                                      ),
+                                                    Stack(
+                                                      alignment: Alignment.center,
+                                                      children: [
+                                                        // Text to avoid the width change generated by the names of the days.
+                                                        Opacity(
+                                                          opacity: 0.0,
+                                                          child: Text(
+                                                            "aaaa",
+                                                            style: cLightTextStyle.copyWith(fontSize: 13.0),
+                                                          ),
+                                                        ),
+
+                                                        Text(
+                                                          DateFormat('E').format(dateTime),
+                                                          style: cLightTextStyle.copyWith(
+                                                            fontSize: 13.0,
+                                                            color: index == currentTab ? cTextColor : cLightTextColor
+                                                          ),
+                                                        )
+                                                      ],
                                                     ),
                                                   ],
                                                 ),
@@ -141,16 +187,19 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                           }),
                                           onTap: (index) {
                                             setState(() => currentTab = index);
+                                            DateTime now = DateTime.now();
                                             BlocProvider.of<CalendarBloc>(context).add(
-                                              CalendarSelectedDateUpdated(DateTime.now().add(Duration(days: index)))
+                                              CalendarSelectedDateUpdated(DateTime(now.year, now.month).add(Duration(days: index)))
                                             );
                                           }
                                         ),
                                       ),
                                     ),
 
+                                    SizedBox(height: cPadding - cHeaderPadding),
+
                                     Padding(
-                                      padding: EdgeInsets.all(cPadding),
+                                      padding: EdgeInsets.symmetric(horizontal: cPadding),
                                       child: AnimatedTaskList(
                                         headerTitle: "Tasks",
                                         items: (calendarState is CalendarLoadSuccess) ? calendarState.tasks : [],

@@ -44,9 +44,8 @@ class CalendarAppBar extends StatelessWidget{
               RoundedButton(
                 width: cButtonSize,
                 color: Color(0xFF252A34),
-                child: Icon(
-                  Icons.event_note_outlined,
-                  color: Color(0xFFFF5EAC).withOpacity(0.75),
+                child: Image.asset(
+                  "assets/icons/profile.png"
                 ),
                 onPressed: () {},
               ),
