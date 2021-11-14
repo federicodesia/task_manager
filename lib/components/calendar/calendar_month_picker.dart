@@ -8,11 +8,13 @@ class CalendarMonthPicker extends StatefulWidget{
   final DateTime startDate;
   final DateTime endDate;
   final DateTime initialDate;
+  final Function(DateTime)? onChanged;
 
   CalendarMonthPicker({
     required this.startDate,
     required this.endDate,
-    required this.initialDate
+    required this.initialDate,
+    this.onChanged
   });
 
   @override
@@ -110,7 +112,10 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
                     ),
                   ),
                 );
-              }
+              },
+              onPageChanged: (index){
+                if(widget.onChanged != null) widget.onChanged!(monthList[index]);
+              },
             ),
           ),
         ),

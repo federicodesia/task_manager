@@ -21,27 +21,19 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
         add(TasksUpdated((taskBloc.state as TaskLoadSuccess).tasks));
       }
     });
-  }
 
-  @override
-  Stream<CalendarState> mapEventToState(CalendarEvent event) async* {
+    on<CalendarDateUpdated>((event, emit) => emit(CalendarLoadSuccess(
+      date: event.date,
+      tasks: _filterTasksByDate((taskBloc.state as TaskLoadSuccess).tasks, event.date)
+    )));
 
-    if(taskBloc.state is TaskLoadSuccess){
-      if(event is CalendarSelectedDateUpdated){
-        yield CalendarLoadSuccess(
-          date: event.date,
-          tasks: _filterTasksByDate((taskBloc.state as TaskLoadSuccess).tasks, event.date)
-        );
-      }
-
-      else if(taskBloc.state is TaskLoadSuccess){
-        DateTime date = (state is CalendarLoadSuccess) ? (state as CalendarLoadSuccess).date : DateTime.now();
-        yield CalendarLoadSuccess(
-          date: date,
-          tasks: _filterTasksByDate((taskBloc.state as TaskLoadSuccess).tasks, date)
-        );
-      }
-    }
+    on<TasksUpdated>((event, emit){
+      DateTime date = (state is CalendarLoadSuccess) ? (state as CalendarLoadSuccess).date : DateTime.now();
+      emit(CalendarLoadSuccess(
+        date: date,
+        tasks: _filterTasksByDate((taskBloc.state as TaskLoadSuccess).tasks, date)
+      ));
+    });
   }
 
   List<Task> _filterTasksByDate(List<Task> tasks, DateTime date){

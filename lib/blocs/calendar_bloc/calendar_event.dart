@@ -3,9 +3,14 @@ part of 'calendar_bloc.dart';
 @immutable
 abstract class CalendarEvent {}
 
-class CalendarSelectedDateUpdated extends CalendarEvent {
+class CalendarMonthUpdated extends CalendarEvent {
   final DateTime date;
-  CalendarSelectedDateUpdated(this.date);
+  CalendarMonthUpdated(this.date);
+}
+
+class CalendarDateUpdated extends CalendarEvent {
+  final DateTime date;
+  CalendarDateUpdated(this.date);
 }
 
 class TasksUpdated extends CalendarEvent {
