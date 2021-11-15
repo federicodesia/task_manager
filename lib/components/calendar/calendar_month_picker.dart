@@ -2,18 +2,17 @@ import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 
 class CalendarMonthPicker extends StatefulWidget{
 
-  final DateTime startDate;
-  final DateTime endDate;
-  final DateTime initialDate;
+  final List<DateTime> months;
+  final DateTime initialMonth;
   final Function(DateTime)? onChanged;
 
   CalendarMonthPicker({
-    required this.startDate,
-    required this.endDate,
-    required this.initialDate,
+    required this.months,
+    required this.initialMonth,
     this.onChanged
   });
 
@@ -24,34 +23,18 @@ class CalendarMonthPicker extends StatefulWidget{
 class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
 
   late PageController pageController;
-  double currentPage = 0.0;
-
-  List<DateTime> monthList = [];
+  late List<DateTime> monthList = widget.months;
+  late double currentPage;
   
   @override
   void initState() {
-    
-    DateTime startDate = widget.startDate;
-    DateTime endDate = widget.endDate;
+    int initialPage = monthList.indexOf(copyDateTimeWith(getDate(widget.initialMonth), day: 1));
+    initialPage = initialPage != -1 ? initialPage : 0;
 
-    DateTime iterator;
-    DateTime limit;
-
-    if (startDate.isBefore(endDate))
-    {
-        iterator = DateTime(startDate.year, startDate.month);
-        limit = endDate;
-        
-        while (iterator.isBefore(limit))
-        {
-          monthList.add(DateTime(iterator.year, iterator.month));
-          iterator = DateTime(iterator.year, iterator.month + 1);
-
-          print(monthList.last.toString());
-        }
-    }
-
-    pageController = PageController();
+    currentPage = initialPage.toDouble();
+    pageController = PageController(
+      initialPage: initialPage
+    );
     pageController.addListener(onScroll);
 
     super.initState();

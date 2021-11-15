@@ -8,6 +8,7 @@ import 'package:task_manager/cubits/main_context_cubit.dart';
 import 'package:task_manager/repositories/task_repository.dart';
 import 'components/main/bottom_navigation_bar.dart';
 import 'constants.dart';
+import 'helpers/date_time_helper.dart';
 import 'models/bottom_navigation_bar_item.dart';
 
 void main() {
@@ -26,9 +27,12 @@ class MyApp extends StatelessWidget {
         BlocProvider<AvailableSpaceCubit>(create: (context) => AvailableSpaceCubit()),
 
         BlocProvider<CalendarBloc>(
-          create: (context) => CalendarBloc(
-            taskBloc: BlocProvider.of<TaskBloc>(context),
-          ),
+          create: (context) => CalendarBloc(taskBloc: BlocProvider.of<TaskBloc>(context))
+          ..add(CalendarLoaded(
+            startMonth: DateTime(DateTime.now().year, DateTime.now().month - 1),
+            endMonth: DateTime(DateTime.now().year, DateTime.now().month + 2),
+            selectedDate: getDate(DateTime.now())
+          )),
         )
       ],
       child: MaterialApp(

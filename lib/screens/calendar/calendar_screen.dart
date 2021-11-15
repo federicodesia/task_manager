@@ -6,6 +6,7 @@ import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:task_manager/components/calendar/calendar_card.dart';
 import 'package:task_manager/components/calendar/calendar_month_picker.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
+import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
@@ -23,20 +24,8 @@ class CalendarScreen extends StatefulWidget{
 
 class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStateMixin{
 
-  late TabController tabController;
   int currentTab = 0;
   double? tabHeight;
-  
-  @override
-  void initState() {
-    tabController = TabController(
-      vsync: this,
-      length: daysInMonth(DateTime.now()),
-      initialIndex: DateTime.now().day
-    );
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context){
@@ -52,6 +41,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
 
               return BlocBuilder<CalendarBloc, CalendarState>(
                 builder: (_, calendarState){
+
                   return Column(
                     children: [
                       Expanded(
@@ -76,95 +66,60 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                             SliverToBoxAdapter(
                               child: WidgetSize(
                                 onChange: (Size size) => BlocProvider.of<AvailableSpaceCubit>(context).emit(constraints.maxHeight - size.height),
-                                child: Column(
+                                child: (calendarState is CalendarLoadSuccess) ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
 
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: cPadding),
                                       child: CalendarMonthPicker(
-                                        startDate: DateTime(DateTime.now().year, DateTime.now().month - 1),
-                                        endDate: DateTime(DateTime.now().year, DateTime.now().month + 2),
-                                        initialDate: DateTime.now(),
-                                        onChanged: (dateTime){
-                                          print(dateTime);
+                                        months: calendarState.months,
+                                        initialMonth: DateTime.now(),
+                                        onChanged: (date){
+                                          BlocProvider.of<CalendarBloc>(context).add(CalendarMonthUpdated(date));
                                         },
                                       ),
                                     ),
 
                                     SizedBox(height: 8.0),
 
-                                    // Tabs
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Theme(
-                                        data: ThemeData(
-                                          highlightColor: Colors.transparent,
-                                          splashColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                        ),
-                                        child: TabBar(
-                                          controller: tabController,
-                                          isScrollable: true,
-                                          physics: PageScrollPhysics(),
-
-                                          indicatorSize: TabBarIndicatorSize.tab,
-                                          indicatorWeight: 0.0,
-                                          
-                                          indicator: RectangularIndicator(
-                                            topLeftRadius: 18.0,
-                                            topRightRadius: 18.0,
-                                            bottomLeftRadius: 18.0,
-                                            bottomRightRadius: 18.0,
-                                            color: cPrimaryColor
-                                          ),
-                                          labelPadding: EdgeInsets.symmetric(
-                                            horizontal: 12.0,
-                                            vertical: 16.0
-                                          ),
-                                          padding: EdgeInsets.symmetric(horizontal: cPadding),
-
-                                          tabs: List.generate(daysInMonth(DateTime.now()), (index){
-                                            DateTime now = DateTime.now();
-                                            DateTime dateTime = DateTime(now.year, now.month).add(Duration(days: index));
-
-                                            return Tab(
-                                              height: tabHeight ?? 100.0,
-                                              child: WidgetSize(
-                                                onChange: (Size size){
-                                                  setState(() => tabHeight = size.height);
-                                                },
-                                                child: CalendarCard(
-                                                  dateTime: dateTime,
-                                                  isSelected: index == currentTab,
-                                                ),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      padding: EdgeInsets.symmetric(horizontal: cPadding),
+                                      physics: BouncingScrollPhysics(),
+                                      child: Row(
+                                        children: List.generate(calendarState.days.length, (index){
+                                          return WidgetSize(
+                                            onChange: (Size size){
+                                              setState(() => tabHeight = size.height);
+                                            },
+                                            child: GestureDetector(
+                                              child: CalendarCard(
+                                                dateTime: calendarState.days[index],
+                                                isSelected: calendarState.days[index].compareTo(calendarState.selectedDay) == 0,
                                               ),
-                                            );
-                                          }),
-                                          onTap: (index) {
-                                            //setState(() => currentTab = index);
-                                            DateTime now = DateTime.now();
-                                            BlocProvider.of<CalendarBloc>(context).add(
-                                              CalendarDateUpdated(DateTime(now.year, now.month).add(Duration(days: index)))
-                                            );
-                                          }
-                                        ),
+                                              onTap: (){
+                                                BlocProvider.of<CalendarBloc>(context).add(CalendarDateUpdated(calendarState.days[index]));
+                                              },
+                                            ),
+                                          );
+                                        }),
                                       ),
                                     ),
 
                                     SizedBox(height: cPadding - cHeaderPadding),
 
-                                    Padding(
+                                    calendarState.tasks.isNotEmpty ? Padding(
                                       padding: EdgeInsets.symmetric(horizontal: cPadding),
                                       child: AnimatedTaskList(
                                         headerTitle: "Tasks",
-                                        items: (calendarState is CalendarLoadSuccess) ? calendarState.tasks : [],
+                                        items: calendarState.tasks,
                                         context: context,
                                         onUndoDismissed: (Task task) {}
                                       ),
-                                    )
+                                    ) : Container()
                                   ],
-                                )
+                                ) : CenteredListWidget(child: CircularProgressIndicator())
                               ),
                             ),
                           ]
