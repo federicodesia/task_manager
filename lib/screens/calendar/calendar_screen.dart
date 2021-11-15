@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -24,8 +25,9 @@ class CalendarScreen extends StatefulWidget{
 
 class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStateMixin{
 
+  ScrollController scrollController = ScrollController();
   int currentTab = 0;
-  double? tabHeight;
+  double? tabWidth;
 
   @override
   Widget build(BuildContext context){
@@ -84,22 +86,37 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                     SizedBox(height: 8.0),
 
                                     SingleChildScrollView(
+                                      controller: scrollController,
                                       scrollDirection: Axis.horizontal,
                                       padding: EdgeInsets.symmetric(horizontal: cPadding),
                                       physics: BouncingScrollPhysics(),
                                       child: Row(
                                         children: List.generate(calendarState.days.length, (index){
+                                          DateTime day = calendarState.days[index];
+
                                           return WidgetSize(
-                                            onChange: (Size size){
-                                              setState(() => tabHeight = size.height);
-                                            },
-                                            child: GestureDetector(
-                                              child: CalendarCard(
-                                                dateTime: calendarState.days[index],
-                                                isSelected: calendarState.days[index].compareTo(calendarState.selectedDay) == 0,
-                                              ),
-                                              onTap: (){
-                                                BlocProvider.of<CalendarBloc>(context).add(CalendarDateUpdated(calendarState.days[index]));
+                                            onChange: (Size size) => setState(() => tabWidth = size.width),
+                                            child: CalendarCard(
+                                              dateTime: day,
+                                              isSelected: day.compareTo(calendarState.selectedDay) == 0,
+                                              onTap: () {
+                                                BlocProvider.of<CalendarBloc>(context).add(CalendarDateUpdated(day));
+
+                                                int itemsOnScreen = (MediaQuery.of(context).size.width - cPadding) ~/ tabWidth!;
+                                                double offset;
+
+                                                if(itemsOnScreen / 2 < index + 1){
+                                                  if(calendarState.days.length - index > itemsOnScreen / 2)
+                                                    offset = index * tabWidth! - (itemsOnScreen / 2) * tabWidth! + tabWidth! / 2;
+                                                  else offset = scrollController.position.maxScrollExtent;
+                                                }
+                                                else offset = scrollController.position.minScrollExtent;
+
+                                                scrollController.animateTo(
+                                                  offset,
+                                                  duration: cAnimationDuration,
+                                                  curve: Curves.easeInOut
+                                                );
                                               },
                                             ),
                                           );
