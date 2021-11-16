@@ -107,7 +107,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
 
                                                 if(itemsOnScreen / 2 < index + 1){
                                                   if(calendarState.days.length - index > itemsOnScreen / 2)
-                                                    offset = index * tabWidth! - (itemsOnScreen / 2) * tabWidth! + tabWidth! / 2;
+                                                    offset = index * tabWidth! - ((itemsOnScreen - 1) / 2) * tabWidth! + tabWidth! / 2 - cPadding;
                                                   else offset = scrollController.position.maxScrollExtent;
                                                 }
                                                 else offset = scrollController.position.minScrollExtent;
