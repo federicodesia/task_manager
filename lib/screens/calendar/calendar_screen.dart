@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:task_manager/components/calendar/calendar_card.dart';
 import 'package:task_manager/components/calendar/calendar_month_picker.dart';
@@ -11,7 +9,6 @@ import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
-import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
 
 import '../../constants.dart';
@@ -25,9 +22,28 @@ class CalendarScreen extends StatefulWidget{
 
 class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStateMixin{
 
+  bool scrolledToInitialOffset = false;
   ScrollController scrollController = ScrollController();
   int currentTab = 0;
   double? tabWidth;
+
+  void scrollToIndex(int days, int index){
+    int itemsOnScreen = (MediaQuery.of(context).size.width - cPadding) ~/ tabWidth!;
+    double offset;
+
+    if(itemsOnScreen / 2 < index + 1){
+      if(days - index > itemsOnScreen / 2)
+        offset = index * tabWidth! - ((itemsOnScreen - 1) / 2) * tabWidth! + tabWidth! / 2 - cPadding;
+      else offset = scrollController.position.maxScrollExtent;
+    }
+    else offset = scrollController.position.minScrollExtent;
+
+    scrollController.animateTo(
+      offset,
+      duration: cAnimationDuration,
+      curve: Curves.easeInOut
+    );
+  }
 
   @override
   Widget build(BuildContext context){
@@ -95,28 +111,21 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                           DateTime day = calendarState.days[index];
 
                                           return WidgetSize(
-                                            onChange: (Size size) => setState(() => tabWidth = size.width),
+                                            onChange: (Size size){
+                                              setState(() {
+                                                tabWidth = size.width;
+                                                if(!scrolledToInitialOffset){
+                                                  scrollToIndex(calendarState.days.length, calendarState.selectedDay.day - 1);
+                                                  scrolledToInitialOffset = true;
+                                                }
+                                              });
+                                            },
                                             child: CalendarCard(
                                               dateTime: day,
                                               isSelected: day.compareTo(calendarState.selectedDay) == 0,
                                               onTap: () {
                                                 BlocProvider.of<CalendarBloc>(context).add(CalendarDateUpdated(day));
-
-                                                int itemsOnScreen = (MediaQuery.of(context).size.width - cPadding) ~/ tabWidth!;
-                                                double offset;
-
-                                                if(itemsOnScreen / 2 < index + 1){
-                                                  if(calendarState.days.length - index > itemsOnScreen / 2)
-                                                    offset = index * tabWidth! - ((itemsOnScreen - 1) / 2) * tabWidth! + tabWidth! / 2 - cPadding;
-                                                  else offset = scrollController.position.maxScrollExtent;
-                                                }
-                                                else offset = scrollController.position.minScrollExtent;
-
-                                                scrollController.animateTo(
-                                                  offset,
-                                                  duration: cAnimationDuration,
-                                                  curve: Curves.easeInOut
-                                                );
+                                                scrollToIndex(calendarState.days.length, index);
                                               },
                                             ),
                                           );
