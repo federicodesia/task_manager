@@ -18,7 +18,8 @@ class CalendarCard extends StatelessWidget{
   Widget build(BuildContext context) {
 
     return GestureDetector(
-      child: Container(
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 150),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(18.0)),
           color: isSelected ? cPrimaryColor : Colors.transparent

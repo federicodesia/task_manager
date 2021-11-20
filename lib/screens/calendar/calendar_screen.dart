@@ -5,6 +5,7 @@ import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:task_manager/components/calendar/calendar_card.dart';
 import 'package:task_manager/components/calendar/calendar_month_picker.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
+import 'package:task_manager/components/lists/snap_bounce_scroll_physics.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
@@ -24,25 +25,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
 
   bool scrolledToInitialOffset = false;
   ScrollController scrollController = ScrollController();
-  int currentTab = 0;
   double? tabWidth;
 
-  void scrollToIndex(int days, int index){
-    int itemsOnScreen = (MediaQuery.of(context).size.width - cPadding) ~/ tabWidth!;
-    double offset;
-
-    if(itemsOnScreen / 2 < index + 1){
-      if(days - index > itemsOnScreen / 2)
-        offset = index * tabWidth! - ((itemsOnScreen - 1) / 2) * tabWidth! + tabWidth! / 2 - cPadding;
-      else offset = scrollController.position.maxScrollExtent;
-    }
-    else offset = scrollController.position.minScrollExtent;
-
-    scrollController.animateTo(
-      offset,
-      duration: cAnimationDuration,
-      curve: Curves.easeInOut
-    );
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -101,36 +88,53 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
 
                                     SizedBox(height: 8.0),
 
-                                    SingleChildScrollView(
-                                      controller: scrollController,
-                                      scrollDirection: Axis.horizontal,
-                                      padding: EdgeInsets.symmetric(horizontal: cPadding),
-                                      physics: BouncingScrollPhysics(),
-                                      child: Row(
-                                        children: List.generate(calendarState.days.length, (index){
-                                          DateTime day = calendarState.days[index];
+                                    NotificationListener<ScrollEndNotification>(
+                                      child: SingleChildScrollView(
+                                        controller: scrollController,
+                                        scrollDirection: Axis.horizontal,
+                                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 2 - (tabWidth ?? 100.0) / 2),
+                                        physics: tabWidth != null ? SnapBounceScrollPhysics(
+                                          itemWidth: tabWidth!
+                                        ) : BouncingScrollPhysics(),
+                                        child: Row(
+                                          children: List.generate(calendarState.days.length, (index){
+                                            DateTime day = calendarState.days[index];
 
-                                          return WidgetSize(
-                                            onChange: (Size size){
-                                              setState(() {
-                                                tabWidth = size.width;
-                                                if(!scrolledToInitialOffset){
-                                                  scrollToIndex(calendarState.days.length, calendarState.selectedDay.day - 1);
-                                                  scrolledToInitialOffset = true;
-                                                }
-                                              });
-                                            },
-                                            child: CalendarCard(
-                                              dateTime: day,
-                                              isSelected: day.compareTo(calendarState.selectedDay) == 0,
-                                              onTap: () {
-                                                BlocProvider.of<CalendarBloc>(context).add(CalendarDateUpdated(day));
-                                                scrollToIndex(calendarState.days.length, index);
+                                            return WidgetSize(
+                                              onChange: (Size size){
+                                                setState(() {
+                                                  tabWidth = size.width;
+                                                  if(!scrolledToInitialOffset){
+                                                    scrollController.animateTo(
+                                                      (calendarState.selectedDay.day - 1) * size.width,
+                                                      duration: cAnimationDuration,
+                                                      curve: Curves.ease
+                                                    );
+                                                    scrolledToInitialOffset = true;
+                                                  }
+                                                });
                                               },
-                                            ),
-                                          );
-                                        }),
+                                              child: CalendarCard(
+                                                dateTime: day,
+                                                isSelected: day.compareTo(calendarState.selectedDay) == 0,
+                                                onTap: () {
+                                                  BlocProvider.of<CalendarBloc>(context).add(CalendarDateUpdated(day));
+                                                  scrollController.animateTo(
+                                                    index * (tabWidth ?? 100),
+                                                    duration: cAnimationDuration,
+                                                    curve: Curves.ease
+                                                  );
+                                                },
+                                              ),
+                                            );
+                                          }),
+                                        ),
                                       ),
+                                      onNotification: (notification){
+                                        DateTime day = calendarState.days[scrollController.position.pixels ~/ (tabWidth ?? 100)];
+                                        BlocProvider.of<CalendarBloc>(context).add(CalendarDateUpdated(day));
+                                        return true;
+                                      }
                                     ),
 
                                     SizedBox(height: cPadding - cHeaderPadding),
