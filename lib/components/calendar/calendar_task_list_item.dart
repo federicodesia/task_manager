@@ -10,12 +10,10 @@ class CalendarTaskListItem extends StatefulWidget{
 
   final Task task;
   final Function() onPressed;
-  final Function(bool?) onChanged;
   
   CalendarTaskListItem({
     required this.task,
     required this.onPressed,
-    required this.onChanged,
   });
 
   @override

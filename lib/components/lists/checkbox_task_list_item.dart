@@ -3,23 +3,23 @@ import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:intl/intl.dart';
 
-class TaskListItem extends StatefulWidget{
+class CheckboxTaskListItem extends StatefulWidget{
 
   final Task task;
   final Function() onPressed;
   final Function(bool?) onChanged;
   
-  TaskListItem({
+  CheckboxTaskListItem({
     required this.task,
     required this.onPressed,
     required this.onChanged,
   });
 
   @override
-  _TaskListItemState createState() => _TaskListItemState();
+  _CheckboxTaskListItemState createState() => _CheckboxTaskListItemState();
 }
 
-class _TaskListItemState extends State<TaskListItem>{
+class _CheckboxTaskListItemState extends State<CheckboxTaskListItem>{
 
   @override
   Widget build(BuildContext context) {

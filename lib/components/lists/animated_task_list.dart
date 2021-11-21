@@ -6,7 +6,7 @@ import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/calendar/calendar_task_list_item.dart';
 import 'package:task_manager/components/lists/rounded_dismissible.dart';
-import 'package:task_manager/components/lists/task_list_item.dart';
+import 'package:task_manager/components/lists/checkbox_task_list_item.dart';
 import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/models/task.dart';
 
@@ -14,27 +14,33 @@ import '../../constants.dart';
 import '../rounded_snack_bar.dart';
 import 'list_header.dart';
 
+enum TaskListItemType{
+  Checkbox,
+  Calendar
+}
+
 class AnimatedTaskList extends StatelessWidget{
   final String? headerTitle;
+  final TaskListItemType type;
   final List<Task> items;
   final BuildContext context;
-  final Function(Task) onUndoDismissed;
 
   AnimatedTaskList({
     this.headerTitle,
+    required this.type,
     required this.items,
     required this.context,
-    required this.onUndoDismissed
   });
 
   @override
   Widget build(BuildContext buildContext){
+
     return Column(
       children: [
         if(headerTitle != null) AnimatedSwitcher(
           duration: cAnimatedListDuration,
           transitionBuilder: (widget, animation){
-            return BuildAnimation(
+            return TaskListItemAnimation(
               animation: animation,
               child: widget,
             );
@@ -50,13 +56,12 @@ class AnimatedTaskList extends StatelessWidget{
           removeDuration: cAnimatedListDuration,
           equalityCheck: (Task a, Task b) => (a.uuid == b.uuid),
           itemBuilder: (BuildContext context, Task task, int index, Animation<double> animation){
-            return BuildAnimation(
+            return TaskListItemAnimation(
               animation: animation,
-              child: BuildItemList(
+              child: TaskListItem(
                 task: task,
-                animation: animation,
+                type: type,
                 context: context,
-                onUndoDismissed: onUndoDismissed,
               ),
             );
           },
@@ -64,13 +69,12 @@ class AnimatedTaskList extends StatelessWidget{
             return BlocBuilder<TaskBloc, TaskState>(
               builder: (_, state){
                 return (state as TaskLoadSuccess).tasks.where((t) => t.uuid == task.uuid).isNotEmpty ?
-                  BuildAnimation(
+                  TaskListItemAnimation(
                     animation: animation,
-                    child: BuildItemList(
+                    child: TaskListItem(
                       task: task,
-                      animation: animation,
+                      type: type,
                       context: context,
-                      onUndoDismissed: onUndoDismissed,
                     ),
                   )
                 : Container();
@@ -83,11 +87,11 @@ class AnimatedTaskList extends StatelessWidget{
   }
 }
 
-class BuildAnimation extends StatelessWidget{
+class TaskListItemAnimation extends StatelessWidget{
   final Animation<double> animation;
   final Widget child;
 
-  BuildAnimation({
+  TaskListItemAnimation({
     required this.animation,
     required this.child,
   });
@@ -112,21 +116,45 @@ class BuildAnimation extends StatelessWidget{
   }
 }
 
-class BuildItemList extends StatelessWidget{
+class TaskListItem extends StatelessWidget{
   final Task task;
-  final Animation<double> animation;
+  final TaskListItemType type;
   final BuildContext context;
-  final Function(Task) onUndoDismissed;
 
-  BuildItemList({
+  TaskListItem({
     required this.task,
-    required this.animation,
+    required this.type,
     required this.context,
-    required this.onUndoDismissed
   });
 
   @override
   Widget build(BuildContext buildContext) {
+
+    final Function() onPressed = ModalBottomSheet(
+      title: tabList[0].editTitle,
+      context: context,
+      content: TaskBottomSheet(editTask: task)
+    ).show;
+
+    final Widget item;
+    switch(type){
+      case TaskListItemType.Calendar:
+        item = CalendarTaskListItem(
+          task: task,
+          onPressed: onPressed,
+        );
+        break;
+      
+      case TaskListItemType.Checkbox:
+        item = CheckboxTaskListItem(
+          task: task,
+          onPressed: onPressed,
+          onChanged: (value) => BlocProvider.of<TaskBloc>(context).add(
+            TaskCompleted(task: task, value: value!)
+          ),
+        );
+        break;
+    }
 
     return Padding(
       padding: EdgeInsets.only(bottom: cListItemSpace),
@@ -135,24 +163,7 @@ class BuildItemList extends StatelessWidget{
         text: "Delete task",
         icon: Icons.delete_rounded,
         color: cRedColor,
-        child: CalendarTaskListItem(
-          task: task,
-          onPressed: (){
-            ModalBottomSheet(
-              title: tabList[0].editTitle,
-              context: context,
-              content: TaskBottomSheet(editTask: task)
-            ).show();
-          },
-          onChanged: (value) {
-            BlocProvider.of<TaskBloc>(context).add(
-              TaskCompleted(
-                task: task,
-                value: value!
-              )
-            );
-          },
-        ),
+        child: item,
         onDismissed: (_) {
           Task tempTask = task;
           BlocProvider.of<TaskBloc>(context).add(TaskDeleted(task));
@@ -162,7 +173,7 @@ class BuildItemList extends StatelessWidget{
             text: "Task deleted",
             action: SnackBarAction(
               label: "Undo",
-              onPressed: () => onUndoDismissed(tempTask)
+              onPressed: () => BlocProvider.of<TaskBloc>(context).add(TaskAdded(tempTask))
             )
           ).show();
         },

@@ -117,8 +117,8 @@ class _UpcomingTabState extends State<UpcomingTab>{
                     return AnimatedTaskList(
                       headerTitle: header,
                       items: taskGroups[groupIndex].tasks,
-                      context: context,
-                      onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
+                      type: TaskListItemType.Checkbox,
+                      context: context
                     );
                   }
                 )

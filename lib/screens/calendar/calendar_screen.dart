@@ -217,8 +217,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                                         padding: EdgeInsets.only(top: 4.0),
                                                         child: AnimatedTaskList(
                                                           items: group.tasks,
-                                                          context: context,
-                                                          onUndoDismissed: (Task task) {}
+                                                          type: TaskListItemType.Calendar,
+                                                          context: context
                                                         ),
                                                       )
                                                     ],
