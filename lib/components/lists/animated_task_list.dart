@@ -24,16 +24,18 @@ class AnimatedTaskList extends StatelessWidget{
   final TaskListItemType type;
   final List<Task> items;
   final BuildContext context;
+  final Function(Task) onUndoDismissed;
 
   AnimatedTaskList({
     this.headerTitle,
     required this.type,
     required this.items,
     required this.context,
+    required this.onUndoDismissed
   });
 
   @override
-  Widget build(BuildContext buildContext){
+  Widget build(BuildContext _){
 
     return Column(
       children: [
@@ -62,6 +64,7 @@ class AnimatedTaskList extends StatelessWidget{
                 task: task,
                 type: type,
                 context: context,
+                onUndoDismissed: onUndoDismissed,
               ),
             );
           },
@@ -75,6 +78,7 @@ class AnimatedTaskList extends StatelessWidget{
                       task: task,
                       type: type,
                       context: context,
+                      onUndoDismissed: onUndoDismissed,
                     ),
                   )
                 : Container();
@@ -120,15 +124,17 @@ class TaskListItem extends StatelessWidget{
   final Task task;
   final TaskListItemType type;
   final BuildContext context;
+  final Function(Task) onUndoDismissed;
 
   TaskListItem({
     required this.task,
     required this.type,
     required this.context,
+    required this.onUndoDismissed
   });
 
   @override
-  Widget build(BuildContext buildContext) {
+  Widget build(BuildContext _) {
 
     final Function() onPressed = ModalBottomSheet(
       title: tabList[0].editTitle,
@@ -173,7 +179,7 @@ class TaskListItem extends StatelessWidget{
             text: "Task deleted",
             action: SnackBarAction(
               label: "Undo",
-              onPressed: () => BlocProvider.of<TaskBloc>(context).add(TaskAdded(tempTask))
+              onPressed: () => onUndoDismissed(tempTask)
             )
           ).show();
         },

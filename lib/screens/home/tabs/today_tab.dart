@@ -77,6 +77,7 @@ class _TodayTabState extends State<TodayTab>{
                       items: todayTasks.where((task) => !task.completed).toList(),
                       type: TaskListItemType.Checkbox,
                       context: context,
+                      onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
                     ),
 
                     AnimatedTaskList(
@@ -84,6 +85,7 @@ class _TodayTabState extends State<TodayTab>{
                       items: completedTasks,
                       type: TaskListItemType.Checkbox,
                       context: context,
+                      onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
                     )
                   ],
                 )

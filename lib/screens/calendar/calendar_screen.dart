@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
+import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/components/calendar/calendar_card.dart';
 import 'package:task_manager/components/calendar/calendar_month_picker.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
@@ -218,7 +219,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                                         child: AnimatedTaskList(
                                                           items: group.tasks,
                                                           type: TaskListItemType.Calendar,
-                                                          context: context
+                                                          context: context,
+                                                          onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
                                                         ),
                                                       )
                                                     ],

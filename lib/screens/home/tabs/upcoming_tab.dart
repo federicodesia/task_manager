@@ -118,7 +118,8 @@ class _UpcomingTabState extends State<UpcomingTab>{
                       headerTitle: header,
                       items: taskGroups[groupIndex].tasks,
                       type: TaskListItemType.Checkbox,
-                      context: context
+                      context: context,
+                      onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
                     );
                   }
                 )
