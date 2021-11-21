@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
+import 'package:task_manager/components/calendar/calendar_task_list_item.dart';
 import 'package:task_manager/components/lists/rounded_dismissible.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/models/tab.dart';
@@ -14,13 +15,13 @@ import '../rounded_snack_bar.dart';
 import 'list_header.dart';
 
 class AnimatedTaskList extends StatelessWidget{
-  final String headerTitle;
+  final String? headerTitle;
   final List<Task> items;
   final BuildContext context;
   final Function(Task) onUndoDismissed;
 
   AnimatedTaskList({
-    required this.headerTitle,
+    this.headerTitle,
     required this.items,
     required this.context,
     required this.onUndoDismissed
@@ -30,7 +31,7 @@ class AnimatedTaskList extends StatelessWidget{
   Widget build(BuildContext buildContext){
     return Column(
       children: [
-        AnimatedSwitcher(
+        if(headerTitle != null) AnimatedSwitcher(
           duration: cAnimatedListDuration,
           transitionBuilder: (widget, animation){
             return BuildAnimation(
@@ -38,8 +39,8 @@ class AnimatedTaskList extends StatelessWidget{
               child: widget,
             );
           },
-          child: items.length > 0 ? ListHeader(headerTitle) : Container(),
-        ),
+          child: items.length > 0 ? ListHeader(headerTitle!) : Container(),
+        ) ,
 
         DeclarativeList(
           shrinkWrap: true,
@@ -134,7 +135,7 @@ class BuildItemList extends StatelessWidget{
         text: "Delete task",
         icon: Icons.delete_rounded,
         color: cRedColor,
-        child: TaskListItem(
+        child: CalendarTaskListItem(
           task: task,
           onPressed: (){
             ModalBottomSheet(
