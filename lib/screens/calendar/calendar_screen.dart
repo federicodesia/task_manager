@@ -141,8 +141,6 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                       }
                                     ),
 
-                                    SizedBox(height: cPadding - cHeaderPadding),
-
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: cPadding),
                                       child: DeclarativeAnimatedList(
@@ -158,7 +156,9 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                           );
                                         },
                                       )
-                                    )
+                                    ),
+
+                                    SizedBox(height: cPadding),
                                   ],
                                 ) : CenteredListWidget(child: CircularProgressIndicator())
                               ),

@@ -20,7 +20,7 @@ class CalendarGroupHour extends StatelessWidget{
   Widget build(BuildContext _) {
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 14.0),
+      padding: EdgeInsets.only(top: 24.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -66,6 +66,7 @@ class AnimatedTaskList extends StatelessWidget{
                 type: type,
                 context: context,
                 onUndoDismissed: onUndoDismissed,
+                bottomPadding: index != items.length - 1,
               ),
             );
           },
@@ -80,6 +81,7 @@ class AnimatedTaskList extends StatelessWidget{
                       type: type,
                       context: context,
                       onUndoDismissed: onUndoDismissed,
+                      bottomPadding: index != items.length - 1,
                     ),
                   )
                 : Container();
@@ -97,12 +99,14 @@ class TaskListItem extends StatelessWidget{
   final TaskListItemType type;
   final BuildContext context;
   final Function(Task) onUndoDismissed;
+  final bool bottomPadding;
 
   TaskListItem({
     required this.task,
     required this.type,
     required this.context,
-    required this.onUndoDismissed
+    required this.onUndoDismissed,
+    required this.bottomPadding
   });
 
   @override
@@ -135,7 +139,7 @@ class TaskListItem extends StatelessWidget{
     }
 
     return Padding(
-      padding: EdgeInsets.only(bottom: cListItemSpace),
+      padding: EdgeInsets.only(bottom: bottomPadding ? cListItemSpace : 0.0),
       child: RoundedDismissible(
         key: UniqueKey(),
         text: "Delete task",
