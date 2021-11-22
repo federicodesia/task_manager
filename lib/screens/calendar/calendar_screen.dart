@@ -12,6 +12,7 @@ import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/tasks_group_hour.dart';
 
 import '../../constants.dart';
@@ -85,7 +86,20 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                         months: calendarState.months,
                                         initialMonth: DateTime.now(),
                                         onChanged: (date){
+                                          int previousIndex = scrollController.offset ~/ tabWidth!;
+                                          int previousLenght = calendarState.days.length;
+                                          int nowLenght = daysInMonth(date);
                                           BlocProvider.of<CalendarBloc>(context).add(CalendarMonthUpdated(date));
+                                          
+                                          int index;
+                                          if(previousIndex > previousLenght - 1) index = nowLenght - 1;
+                                          else index = previousIndex.clamp(0, nowLenght - 1);
+
+                                          scrollController.animateTo(
+                                            index * tabWidth! - 0.001,
+                                            duration: cAnimationDuration,
+                                            curve: Curves.ease
+                                          );
                                         },
                                       ),
                                     ),
