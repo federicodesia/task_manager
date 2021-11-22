@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/category.dart';
@@ -22,7 +20,7 @@ class CalendarTaskListItem extends StatefulWidget{
 
 class _CalendarTaskListItemState extends State<CalendarTaskListItem>{
 
-  final category = categoryList[Random().nextInt(categoryList.length - 1)];
+  final category = categoryList[0];
 
   @override
   Widget build(BuildContext context) {

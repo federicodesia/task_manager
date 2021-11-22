@@ -5,6 +5,7 @@ import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/calendar/calendar_task_list_item.dart';
+import 'package:task_manager/components/lists/list_item_animation.dart';
 import 'package:task_manager/components/lists/rounded_dismissible.dart';
 import 'package:task_manager/components/lists/checkbox_task_list_item.dart';
 import 'package:task_manager/models/tab.dart';
@@ -42,7 +43,7 @@ class AnimatedTaskList extends StatelessWidget{
         if(headerTitle != null) AnimatedSwitcher(
           duration: cAnimatedListDuration,
           transitionBuilder: (widget, animation){
-            return TaskListItemAnimation(
+            return ListItemAnimation(
               animation: animation,
               child: widget,
             );
@@ -58,7 +59,7 @@ class AnimatedTaskList extends StatelessWidget{
           removeDuration: cAnimatedListDuration,
           equalityCheck: (Task a, Task b) => (a.uuid == b.uuid),
           itemBuilder: (BuildContext context, Task task, int index, Animation<double> animation){
-            return TaskListItemAnimation(
+            return ListItemAnimation(
               animation: animation,
               child: TaskListItem(
                 task: task,
@@ -72,7 +73,7 @@ class AnimatedTaskList extends StatelessWidget{
             return BlocBuilder<TaskBloc, TaskState>(
               builder: (_, state){
                 return (state as TaskLoadSuccess).tasks.where((t) => t.uuid == task.uuid).isNotEmpty ?
-                  TaskListItemAnimation(
+                  ListItemAnimation(
                     animation: animation,
                     child: TaskListItem(
                       task: task,
@@ -87,35 +88,6 @@ class AnimatedTaskList extends StatelessWidget{
           },
         ),
       ],
-    );
-  }
-}
-
-class TaskListItemAnimation extends StatelessWidget{
-  final Animation<double> animation;
-  final Widget child;
-
-  TaskListItemAnimation({
-    required this.animation,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: animation,
-          curve: Interval(0.75, 1.0, curve: Curves.easeInOut),
-        ),
-      ),
-      child: SizeTransition(
-        sizeFactor: CurvedAnimation(
-          parent: animation,
-          curve: Curves.fastOutSlowIn
-        ),
-        child: child,
-      )
     );
   }
 }

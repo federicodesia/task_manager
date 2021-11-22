@@ -1,19 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
-import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/components/calendar/calendar_card.dart';
+import 'package:task_manager/components/calendar/calendar_group_hour.dart';
 import 'package:task_manager/components/calendar/calendar_month_picker.dart';
-import 'package:task_manager/components/lists/animated_task_list.dart';
+import 'package:task_manager/components/lists/declarative_animated_list.dart';
+import 'package:task_manager/components/lists/list_item_animation.dart';
 import 'package:task_manager/components/lists/snap_bounce_scroll_physics.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
-import 'package:task_manager/helpers/date_time_helper.dart';
-import 'package:task_manager/models/task.dart';
 import 'package:task_manager/models/tasks_group_hour.dart';
 
 import '../../constants.dart';
@@ -51,24 +49,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               return BlocBuilder<CalendarBloc, CalendarState>(
                 builder: (_, calendarState){
 
-                  List<Task> tasksList = (calendarState is CalendarLoadSuccess) ? calendarState.tasks : []; 
-                  tasksList.sort((a, b) => a.dateTime.compareTo(b.dateTime));
-
-                  List<TaskGroupHour> taskGroups = [];
-                  
-                  if(tasksList.length > 0){
-                    for(int i = tasksList.first.dateTime.hour; i <= tasksList.last.dateTime.hour; i++){
-                      taskGroups.add(
-                        TaskGroupHour(
-                          hour: copyDateTimeWith(
-                            tasksList.first.dateTime,
-                            hour: i
-                          ),
-                          tasks: tasksList.where((task) => task.dateTime.hour == i).toList()
-                        )
-                      );
-                    }
-                  }
+                  List<TaskGroupHour> groups = (calendarState is CalendarLoadSuccess) ? calendarState.groups : [];
 
                   return Column(
                     children: [
@@ -162,76 +143,22 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
 
                                     SizedBox(height: cPadding - cHeaderPadding),
 
-                                    calendarState.tasks.isNotEmpty ? Padding(
+                                    Padding(
                                       padding: EdgeInsets.symmetric(horizontal: cPadding),
-                                      child: Column(
-                                        children: List.generate(taskGroups.length, (index){
-                                          TaskGroupHour group = taskGroups[index];
-
-                                          return Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 14.0),
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Stack(
-                                                  children: [
-                                                    Text(
-                                                      DateFormat("HH:00").format(group.hour).toLowerCase(),
-                                                      style: cLightTextStyle.copyWith(fontWeight: FontWeight.w300),
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow.ellipsis,
-                                                    ),
-
-                                                    Opacity(
-                                                      opacity: 0,
-                                                      child: Text(
-                                                        "12:00 ",
-                                                        style: cLightTextStyle.copyWith(fontWeight: FontWeight.w300),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow.ellipsis,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-
-                                                SizedBox(width: 12.0),
-
-                                                Expanded(
-                                                  child: Column(
-                                                    children: [
-                                                      Stack(
-                                                        alignment: Alignment.center,
-                                                        children: [
-                                                          Container(
-                                                            height: 1,
-                                                            color: Colors.white.withOpacity(0.08),
-                                                          ),
-
-                                                          Opacity(
-                                                            opacity: 0,
-                                                            child: Text("a", style: cLightTextStyle),
-                                                          )
-                                                        ],
-                                                      ),
-
-                                                      if(group.tasks.isNotEmpty) Padding(
-                                                        padding: EdgeInsets.only(top: 4.0),
-                                                        child: AnimatedTaskList(
-                                                          items: group.tasks,
-                                                          type: TaskListItemType.Calendar,
-                                                          context: context,
-                                                          onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
+                                      child: DeclarativeAnimatedList(
+                                        items: groups,
+                                        equalityCheck: (TaskGroupHour a, TaskGroupHour b) => a.hour.hour == b.hour.hour,
+                                        itemBuilder: (BuildContext context, TaskGroupHour group, int index, Animation<double> animation){
+                                          return ListItemAnimation(
+                                            animation: animation,
+                                            child: CalendarGroupHour(
+                                              group: group,
+                                              context: context,
                                             ),
                                           );
-                                        }),
+                                        },
                                       )
-                                    ) : Container()
+                                    )
                                   ],
                                 ) : CenteredListWidget(child: CircularProgressIndicator())
                               ),
