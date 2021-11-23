@@ -7,6 +7,8 @@ import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/charts/week_bar_chat.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_task_list.dart';
+import 'package:task_manager/components/lists/declarative_animated_list.dart';
+import 'package:task_manager/components/lists/list_item_animation.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
@@ -64,28 +66,30 @@ class _UpcomingTabState extends State<UpcomingTab>{
                   ),
                 ),
 
-                if(groupsList.length > 0) ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: groupsList.length,
-                  itemBuilder: (_, groupIndex){
-                    
+                if(groupsList.isNotEmpty) DeclarativeAnimatedList(
+                  items: groupsList,
+                  equalityCheck: (TaskGroupDate a, TaskGroupDate b) => dateDifference(a.dateTime, b.dateTime) == 0,
+                  itemBuilder: (BuildContext context, TaskGroupDate group, int index, Animation<double> animation){
+
                     DateTime nowDateTime = DateTime.now();
-                    DateTime groupDateTime = groupsList[groupIndex].dateTime;
+                    DateTime groupDateTime = group.dateTime;
 
                     String header;
                     if(dateDifference(groupDateTime, nowDateTime) == 1) header = "Tomorrow";
                     else if(groupDateTime.year != nowDateTime.year) header = DateFormat('E, dd MMM y').format(groupDateTime);
                     else header = DateFormat('E, dd MMM').format(groupDateTime);
 
-                    return AnimatedTaskList(
-                      headerTitle: header,
-                      items: groupsList[groupIndex].tasks,
-                      type: TaskListItemType.Checkbox,
-                      context: context,
-                      onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
+                    return ListItemAnimation(
+                      animation: animation,
+                      child: AnimatedTaskList(
+                        headerTitle: header,
+                        items: group.tasks,
+                        type: TaskListItemType.Checkbox,
+                        context: context,
+                        onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
+                      )
                     );
-                  }
+                  },
                 )
                 else CenteredListWidget(
                   subtractHeight: weekBarChartHeight,
