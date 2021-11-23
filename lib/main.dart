@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
+import 'package:task_manager/blocs/upcoming_bloc/upcoming_bloc.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/cubits/main_context_cubit.dart';
@@ -26,6 +27,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<AppBarCubit>(create: (context) => AppBarCubit()..emit(1000.0)),
         BlocProvider<AvailableSpaceCubit>(create: (context) => AvailableSpaceCubit()),
 
+        BlocProvider<UpcomingBloc>(create: (context) => UpcomingBloc(
+          taskBloc: BlocProvider.of<TaskBloc>(context)
+        )..add(UpcomingLoaded())),
+
         BlocProvider<CalendarBloc>(
           create: (context) => CalendarBloc(taskBloc: BlocProvider.of<TaskBloc>(context))
           ..add(CalendarLoaded(
@@ -33,7 +38,7 @@ class MyApp extends StatelessWidget {
             endMonth: DateTime(DateTime.now().year, DateTime.now().month + 2),
             selectedDate: getDate(DateTime.now())
           )),
-        )
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

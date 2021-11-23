@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
+import 'package:task_manager/blocs/upcoming_bloc/upcoming_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/charts/week_bar_chat.dart';
 import 'package:task_manager/components/empty_space.dart';
@@ -26,53 +27,15 @@ class _UpcomingTabState extends State<UpcomingTab>{
   @override
   Widget build(BuildContext buildContext) {
     
-    return BlocBuilder<TaskBloc, TaskState>(
+    return BlocBuilder<UpcomingBloc, UpcomingState>(
       builder: (_, state){
 
-        if(state is TaskLoadSuccess){
+        if(state is UpcomingLoadSuccess){
 
-          List<Task> tasksList = state.tasks;
+          List<Task> weekTasksList = state.weekTasks;
+          List<TaskGroupDate> groupsList = state.groups;
 
-          List<Task> weekTasksList = tasksList.where((task){
-            final weekday = DateTime.now().weekday - 1;
-            final difference = task.dateTime.difference(DateTime.now()).inDays;
-            return difference >= weekday * -1 && difference < 7 - weekday;
-          }).toList();
-
-          List<TaskGroupDate> taskGroups = [];
-          if(tasksList.length > 0){
-            taskGroups.add(
-              TaskGroupDate(
-                dateTime: getDate(tasksList.first.dateTime),
-                tasks: []
-              )
-            );
-
-            for(int i = 0; i < tasksList.length; i++){
-              Task task = tasksList[i];
-              TaskGroupDate group = taskGroups.last;
-
-              if(dateDifference(task.dateTime, taskGroups.last.dateTime) == 0) group.tasks.add(task);
-              else if(taskGroups.length - 1 == 3) break;
-              else{
-                taskGroups.add(
-                  TaskGroupDate(
-                    dateTime: getDate(task.dateTime),
-                    tasks: [
-                      task
-                    ]
-                  )
-                );
-              }
-            }
-
-            // Ignore today tasks
-            if(dateDifference(taskGroups.first.dateTime, DateTime.now()) == 0){
-              taskGroups.remove(taskGroups.first);
-            }
-          }
-
-          if(weekTasksList.isEmpty && taskGroups.isEmpty){
+          if(weekTasksList.isEmpty && groupsList.isEmpty){
             child = CenteredListWidget(
               child: EmptySpace(
                 svgImage: "assets/svg/completed_tasks.svg",
@@ -101,14 +64,15 @@ class _UpcomingTabState extends State<UpcomingTab>{
                   ),
                 ),
 
-                if(taskGroups.length > 0) ListView.builder(
+                if(groupsList.length > 0) ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: taskGroups.length,
+                  itemCount: groupsList.length,
                   itemBuilder: (_, groupIndex){
                     
                     DateTime nowDateTime = DateTime.now();
-                    DateTime groupDateTime = taskGroups[groupIndex].dateTime;
+                    DateTime groupDateTime = groupsList[groupIndex].dateTime;
+
                     String header;
                     if(dateDifference(groupDateTime, nowDateTime) == 1) header = "Tomorrow";
                     else if(groupDateTime.year != nowDateTime.year) header = DateFormat('E, dd MMM y').format(groupDateTime);
@@ -116,7 +80,7 @@ class _UpcomingTabState extends State<UpcomingTab>{
 
                     return AnimatedTaskList(
                       headerTitle: header,
-                      items: taskGroups[groupIndex].tasks,
+                      items: groupsList[groupIndex].tasks,
                       type: TaskListItemType.Checkbox,
                       context: context,
                       onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
