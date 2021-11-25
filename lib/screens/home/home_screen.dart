@@ -5,9 +5,9 @@ import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/category_card.dart';
 import 'package:task_manager/components/header.dart';
+import 'package:task_manager/components/main/app_bar.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/tab.dart';
-import 'package:task_manager/screens/home/home_app_bar.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
@@ -73,7 +73,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                           collapsedHeight: state,
                           flexibleSpace: WidgetSize(
                             onChange: (Size size) => BlocProvider.of<AppBarCubit>(context).emit(size.height),
-                            child: HomeAppBar()
+                            child: MyAppBar(
+                              header: "Hello 👋",
+                              description: "Have a nice day!",
+                              onButtonPressed: () {},
+                            )
                           )
                         ),
 

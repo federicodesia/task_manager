@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/components/rounded_button.dart';
 
 import '../../constants.dart';
-import '../../components/rounded_button.dart';
 
-class CalendarAppBar extends StatelessWidget{
+class MyAppBar extends StatelessWidget {
 
   final String header;
   final String description;
+  final Function() onButtonPressed;
   
-  CalendarAppBar({
+  MyAppBar({
     required this.header,
     required this.description,
+    required this.onButtonPressed
   });
 
   @override
@@ -31,11 +33,15 @@ class CalendarAppBar extends StatelessWidget{
                   Text(
                     header,
                     style: cHeaderTextStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
 
                   Text(
                     description,
                     style: cLightTextStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
@@ -47,7 +53,7 @@ class CalendarAppBar extends StatelessWidget{
                 child: Image.asset(
                   "assets/icons/profile.png"
                 ),
-                onPressed: () {},
+                onPressed: onButtonPressed,
               ),
             ],
           ),

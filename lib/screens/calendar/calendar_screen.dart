@@ -8,6 +8,7 @@ import 'package:task_manager/components/calendar/calendar_month_picker.dart';
 import 'package:task_manager/components/lists/declarative_animated_list.dart';
 import 'package:task_manager/components/lists/list_item_animation.dart';
 import 'package:task_manager/components/lists/snap_bounce_scroll_physics.dart';
+import 'package:task_manager/components/main/app_bar.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
@@ -16,7 +17,6 @@ import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/tasks_group_hour.dart';
 
 import '../../constants.dart';
-import 'calendar_app_bar.dart';
 
 class CalendarScreen extends StatefulWidget{
 
@@ -66,9 +66,10 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                               collapsedHeight: appBarState,
                               flexibleSpace: WidgetSize(
                                 onChange: (Size size) => BlocProvider.of<AppBarCubit>(context).emit(size.height),
-                                child: CalendarAppBar(
+                                child: MyAppBar(
                                   header: "Calendar",
-                                  description: "Let's organize!"
+                                  description: "Let's organize!",
+                                  onButtonPressed: () {},
                                 )
                               )
                             ),
