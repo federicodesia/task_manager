@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                           backgroundColor: cBackgroundColor,
                           collapsedHeight: state,
                           flexibleSpace: WidgetSize(
-                            onChange: (Size size) => BlocProvider.of<AppBarCubit>(context).emit(size.height),
+                            onChange: (Size size) => context.read<AppBarCubit>().setHeight(size.height),
                             child: MyAppBar(
                               header: "Hello 👋",
                               description: "Have a nice day!",
@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
 
                         SliverToBoxAdapter(
                           child: WidgetSize(
-                            onChange: (Size size) => BlocProvider.of<AvailableSpaceCubit>(context).emit(constraints.maxHeight - size.height),
+                            onChange: (Size size) => context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [

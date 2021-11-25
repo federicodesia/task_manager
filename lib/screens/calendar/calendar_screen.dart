@@ -65,7 +65,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                               backgroundColor: cBackgroundColor,
                               collapsedHeight: appBarState,
                               flexibleSpace: WidgetSize(
-                                onChange: (Size size) => BlocProvider.of<AppBarCubit>(context).emit(size.height),
+                                onChange: (Size size) => context.read<AppBarCubit>().setHeight(size.height),
                                 child: MyAppBar(
                                   header: "Calendar",
                                   description: "Let's organize!",
@@ -76,7 +76,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
 
                             SliverToBoxAdapter(
                               child: WidgetSize(
-                                onChange: (Size size) => BlocProvider.of<AvailableSpaceCubit>(context).emit(constraints.maxHeight - size.height),
+                                onChange: (Size size) => context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height),
                                 child: (calendarState is CalendarLoadSuccess) ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [

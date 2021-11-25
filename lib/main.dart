@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<MainContextCubit>(create: (context) => MainContextCubit()),
         BlocProvider<TaskBloc>(create: (context) => TaskBloc(taskRepository: TaskRepository())..add(TaskLoaded())),
-        BlocProvider<AppBarCubit>(create: (context) => AppBarCubit()..emit(1000.0)),
+        BlocProvider<AppBarCubit>(create: (context) => AppBarCubit()..setHeight(1000.0)),
         BlocProvider<AvailableSpaceCubit>(create: (context) => AvailableSpaceCubit()),
 
         BlocProvider<UpcomingBloc>(create: (context) => UpcomingBloc(
@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage>{
 
   @override
   void initState() {
-    BlocProvider.of<MainContextCubit>(context).emit(context);
+    context.read<MainContextCubit>().setContext(context);
     super.initState();
   }
   
