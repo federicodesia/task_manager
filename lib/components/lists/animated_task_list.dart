@@ -8,7 +8,6 @@ import 'package:task_manager/components/calendar/calendar_task_list_item.dart';
 import 'package:task_manager/components/lists/list_item_animation.dart';
 import 'package:task_manager/components/lists/rounded_dismissible.dart';
 import 'package:task_manager/components/lists/checkbox_task_list_item.dart';
-import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/models/task.dart';
 
 import '../../constants.dart';
@@ -113,7 +112,7 @@ class TaskListItem extends StatelessWidget{
   Widget build(BuildContext _) {
 
     final Function() onPressed = ModalBottomSheet(
-      title: tabList[0].editTitle,
+      title: "Edit task",
       context: context,
       content: TaskBottomSheet(editTask: task)
     ).show;

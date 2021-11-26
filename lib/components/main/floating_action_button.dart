@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
-import 'package:task_manager/models/tab.dart';
+import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 
 import '../../constants.dart';
 
@@ -28,9 +28,9 @@ class MyFloatingActionButton extends StatelessWidget {
         child: Icon(icon),
         onPressed: () {
           ModalBottomSheet(
-            title: tabList[currentTab].createTitle,
+            title: "Create a task",
             context: context,
-            content: tabList[currentTab].bottomSheet,
+            content: TaskBottomSheet(),
           ).show();
         },
       ),
