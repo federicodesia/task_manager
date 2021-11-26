@@ -16,6 +16,15 @@ class Category{
 
   int completedTasksCount() => tasks.where((task) => task.completed).length;
   bool allTaskCompleted() => completedTasksCount() == tasks.length;
+
+  Category copyWith({String? name, Color? color, IconData? icon, List<Task>? tasks}){
+    return Category(
+      name: this.name,
+      color: color ?? this.color,
+      icon: icon ?? this.icon,
+      tasks: tasks ?? this.tasks
+    );
+  }
 }
 
 List<Category> categoryList = <Category>[

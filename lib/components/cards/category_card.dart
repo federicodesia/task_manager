@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
+import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/category.dart';
 
@@ -19,12 +21,22 @@ class CategoryCard extends StatelessWidget{
       else _description = "$remainingTasks Tasks";
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: cCardBackgroundColor,
-        borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
+    return ElevatedButton(
+      onPressed: () {},
+      onLongPress: () {
+        ModalBottomSheet(
+          title: "Edit category",
+          context: context,
+          content: CategoryBottomSheet(editCategory: category)
+        ).show();
+      },
+      style: ElevatedButton.styleFrom(
+        primary: cCardBackgroundColor,
+        padding: EdgeInsets.all(cPadding),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(cBorderRadius),
+        ),
       ),
-      padding: EdgeInsets.all(cPadding),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
