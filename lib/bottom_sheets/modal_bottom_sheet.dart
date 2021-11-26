@@ -33,11 +33,11 @@ class ModalBottomSheet{
         return Container(
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.75
+            maxHeight: MediaQuery.of(context).size.height * 0.95
           ),
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.fromLTRB(cPadding, 16.0, cPadding, cPadding),
+            padding: EdgeInsets.fromLTRB(0, 16.0, 0, cPadding),
             child: Column(
               children: [
                 Container(

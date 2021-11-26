@@ -38,14 +38,14 @@ class OutlinedFormIconButton extends StatelessWidget{
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.symmetric(
           horizontal: 16.0,
-          vertical: 8.0
+          vertical: 10.0
         ),
         side: BorderSide(
           width: 1.0,
           color: outlineColor ?? cOutlinedButtonColor
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(cBorderRadius),
         ),
       ),
     );

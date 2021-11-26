@@ -15,36 +15,39 @@ class DatePickerBottomSheet extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.dark().copyWith(
-        colorScheme: ColorScheme.dark(
-          primary: cPrimaryColor,
-          surface: cBackgroundColor,
-        ),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: cPadding),
-            child: CalendarDatePicker(
-              initialDate: initialDate,
-              firstDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-              lastDate: DateTime.now().add(Duration(days: 365)),
-              onDateChanged: onDateChanged
-            ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: cPadding),
+      child: Theme(
+        data: ThemeData.dark().copyWith(
+          colorScheme: ColorScheme.dark(
+            primary: cPrimaryColor,
+            surface: cBackgroundColor,
           ),
-          RoundedButton(
-            width: double.infinity,
-            child: Text(
-              "Select",
-              style: cSubtitleTextStyle,
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: cPadding),
+              child: CalendarDatePicker(
+                initialDate: initialDate,
+                firstDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+                lastDate: DateTime.now().add(Duration(days: 365)),
+                onDateChanged: onDateChanged
+              ),
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          )
-        ],
-      )
+            RoundedButton(
+              width: double.infinity,
+              child: Text(
+                "Select",
+                style: cSubtitleTextStyle,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        )
+      ),
     );
   }
 }

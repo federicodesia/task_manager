@@ -19,27 +19,30 @@ class TimePickerBottomSheet extends StatelessWidget{
       data: CupertinoThemeData(
         brightness: Brightness.dark
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: cPadding),
-            child: CupertinoTimerPicker(
-              mode: CupertinoTimerPickerMode.hm,
-              initialTimerDuration: initialTime,
-              onTimerDurationChanged: onTimeChanged
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: cPadding),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: cPadding),
+              child: CupertinoTimerPicker(
+                mode: CupertinoTimerPickerMode.hm,
+                initialTimerDuration: initialTime,
+                onTimerDurationChanged: onTimeChanged
+              ),
             ),
-          ),
-          RoundedButton(
-            width: double.infinity,
-            child: Text(
-              "Select",
-              style: cSubtitleTextStyle,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          )
-        ],
+            RoundedButton(
+              width: double.infinity,
+              child: Text(
+                "Select",
+                style: cSubtitleTextStyle,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ),
       )
     );
   }
