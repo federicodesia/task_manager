@@ -33,9 +33,6 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool formValidated = false;
   late Task task = widget.editTask ?? Task(uuid: Uuid().v4());
-  
-  ScrollController scrollController = ScrollController();
-  Category? selectedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -167,14 +164,13 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
               return categoryState is CategoryLoadSuccess ? Align(
                 alignment: Alignment.centerLeft,
                 child: SingleChildScrollView(
-                  controller: scrollController,
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
                   padding: EdgeInsets.symmetric(horizontal: cPadding),
                   child: Row(
                     children: List.generate(categoryState.categories.length, (index){
                       Category category = categoryState.categories[index];
-                      bool isSelected = selectedCategory == category;
+                      bool isSelected = task.categoryUuid == category.uuid;
                       bool lastItem = index == categoryState.categories.length - 1;
 
                       return GestureDetector(
@@ -198,8 +194,8 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                         ),
                         onTap: () {
                           setState(() {
-                            if(category == selectedCategory) selectedCategory = null;
-                            else selectedCategory = category;
+                            if(category.uuid == task.categoryUuid) task = task.copyWith(categoryUuid: null);
+                            else task = task.copyWith(categoryUuid: category.uuid);
                           });
                         },
                       );

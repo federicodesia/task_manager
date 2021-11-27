@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/components/forms/form_input_header.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_button.dart';
@@ -40,7 +42,6 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
   bool formValidated = false;
   late Category category = widget.editCategory ?? Category(uuid: Uuid().v4());
 
-  Color selectedColor = colors.first;
   double? colorWidth;
 
   @override
@@ -85,7 +86,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                       runSpacing: 2.0,
                       children: List.generate(colors.length, (index){
                         Color color = colors[index];
-                        bool isSelected = selectedColor == color;
+                        bool isSelected = category.color == color;
 
                         return GestureDetector(
                           child: WidgetSize(
@@ -111,7 +112,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                             ),
                           ),
                           onTap: () {
-                            setState(() => selectedColor = color);
+                            setState(() => category = category.copyWith(color: color));
                           },
                         );
                       }),
@@ -136,6 +137,9 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                 setState(() => formValidated = true);
                 if (formKey.currentState!.validate()){
                   formKey.currentState!.save();
+
+                  if(widget.editCategory != null) BlocProvider.of<CategoryBloc>(context).add(CategoryUpdated(category));
+                  else BlocProvider.of<CategoryBloc>(context).add(CategoryAdded(category));
 
                   Navigator.pop(context);
                 }

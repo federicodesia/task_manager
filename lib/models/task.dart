@@ -30,10 +30,10 @@ class Task{
     this.time = dateTime;
   }
 
-  Task copyWith({String? categoryUuid, String? title, String? description, DateTime? date, DateTime? time, bool? completed}){
+  Task copyWith({String? categoryUuid = "", String? title, String? description, DateTime? date, DateTime? time, bool? completed}){
     return Task(
       uuid: this.uuid,
-      categoryUuid: categoryUuid ?? this.categoryUuid,
+      categoryUuid: categoryUuid == "" ? this.categoryUuid : categoryUuid,
       title: title ?? this.title,
       description: description ?? this.description,
       date: date ?? this.date,

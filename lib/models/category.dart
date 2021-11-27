@@ -22,7 +22,7 @@ class Category{
   Category copyWith({String? name, Color? color, IconData? icon, List<Task>? tasks}){
     return Category(
       uuid: this.uuid,
-      name: this.name,
+      name: name ?? this.name,
       color: color ?? this.color,
       icon: icon ?? this.icon,
       tasks: tasks ?? this.tasks
