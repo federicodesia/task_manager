@@ -2,11 +2,11 @@ import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
+import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/category_card.dart';
 import 'package:task_manager/components/header.dart';
 import 'package:task_manager/components/main/app_bar.dart';
-import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
@@ -93,24 +93,30 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                                 ),
                                 SizedBox(height: cPadding),
 
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    physics: BouncingScrollPhysics(),
-                                    padding: EdgeInsets.symmetric(horizontal: cPadding),
-                                    child: Row(
-                                      children: List.generate(categoryList.length, (index){
-                                        return Container(
-                                          width: 148.0,
-                                          margin: EdgeInsets.only(right: index == categoryList.length - 1 ? 0.0 : 12.0),
-                                          child: CategoryCard(
-                                            category: categoryList[index]
-                                          ),
-                                        );
-                                      }),
-                                    ),
-                                  ),
+                                BlocBuilder<CategoryBloc, CategoryState>(
+                                  builder: (_, categoryState){
+                                    return categoryState is CategoryLoadSuccess ? Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        physics: BouncingScrollPhysics(),
+                                        padding: EdgeInsets.symmetric(horizontal: cPadding),
+                                        child: Row(
+                                          children: List.generate(categoryState.categories.length, (index){
+                                            bool lastItem = index == categoryState.categories.length - 1;
+
+                                            return Container(
+                                              width: 148.0,
+                                              margin: EdgeInsets.only(right: lastItem ? 0.0 : 12.0),
+                                              child: CategoryCard(
+                                                category: categoryState.categories[index]
+                                              ),
+                                            );
+                                          }),
+                                        ),
+                                      ),
+                                    ) : Container();
+                                  },
                                 ),
 
                                 SizedBox(height: cPadding),

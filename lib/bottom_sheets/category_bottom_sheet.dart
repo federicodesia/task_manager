@@ -6,6 +6,7 @@ import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/category.dart';
+import 'package:uuid/uuid.dart';
 
 List<Color> colors = [
   Color(0xFF0063AE),
@@ -37,7 +38,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool formValidated = false;
-  late Category category = widget.editCategory ?? Category(name: "");
+  late Category category = widget.editCategory ?? Category(uuid: Uuid().v4());
 
   Color selectedColor = colors.first;
   double? colorWidth;

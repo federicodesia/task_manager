@@ -1,4 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
@@ -20,7 +23,8 @@ class CalendarTaskListItem extends StatefulWidget{
 
 class _CalendarTaskListItemState extends State<CalendarTaskListItem>{
 
-  final category = categoryList[0];
+  late Category? category = (BlocProvider.of<CategoryBloc>(context).state as CategoryLoadSuccess).categories
+    .firstWhereOrNull((category) => category.uuid == widget.task.categoryUuid);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,7 @@ class _CalendarTaskListItemState extends State<CalendarTaskListItem>{
               width: 6.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                color: category.color.withOpacity(0.75)
+                color: category != null ? category!.color.withOpacity(0.75) : Colors.white.withOpacity(0.25)
               )
             ),
             SizedBox(width: 16.0),
@@ -55,7 +59,7 @@ class _CalendarTaskListItemState extends State<CalendarTaskListItem>{
                     children: [
                       Expanded(
                         child: Text(
-                          category.name,
+                          category != null ? category!.name : "General",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: cLightTextStyle.copyWith(fontWeight: FontWeight.w400, fontSize: 13.0)

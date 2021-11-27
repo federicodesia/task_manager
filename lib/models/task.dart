@@ -2,6 +2,7 @@ import 'package:task_manager/helpers/date_time_helper.dart';
 
 class Task{
   final String uuid;
+  final String? categoryUuid;
   final String title;
   final String description;
   DateTime? date;
@@ -10,6 +11,7 @@ class Task{
 
   Task({ 
     required this.uuid,
+    this.categoryUuid,
     this.title = "",
     this.description = "",
     this.date,
@@ -28,9 +30,10 @@ class Task{
     this.time = dateTime;
   }
 
-  Task copyWith({String? title, String? description, DateTime? date, DateTime? time, bool? completed}){
+  Task copyWith({String? categoryUuid, String? title, String? description, DateTime? date, DateTime? time, bool? completed}){
     return Task(
       uuid: this.uuid,
+      categoryUuid: categoryUuid ?? this.categoryUuid,
       title: title ?? this.title,
       description: description ?? this.description,
       date: date ?? this.date,

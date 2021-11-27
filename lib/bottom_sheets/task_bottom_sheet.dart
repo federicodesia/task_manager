@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/date_picker_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/time_picker_bottom_sheet.dart';
@@ -161,47 +162,52 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
             ),
           ),
 
-          Align(
-            alignment: Alignment.centerLeft,
-            child: SingleChildScrollView(
-              controller: scrollController,
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: cPadding),
-              child: Row(
-                children: List.generate(categoryList.length, (index){
-                  Category category = categoryList[index];
-                  bool isSelected = selectedCategory == category;
+          BlocBuilder<CategoryBloc, CategoryState>(
+            builder: (_, categoryState){
+              return categoryState is CategoryLoadSuccess ? Align(
+                alignment: Alignment.centerLeft,
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: cPadding),
+                  child: Row(
+                    children: List.generate(categoryState.categories.length, (index){
+                      Category category = categoryState.categories[index];
+                      bool isSelected = selectedCategory == category;
+                      bool lastItem = index == categoryState.categories.length - 1;
 
-                  return GestureDetector(
-                    child: AnimatedContainer(
-                      duration: Duration(milliseconds: 150),
-                      padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-                      margin: EdgeInsets.only(right: index == categoryList.length - 1 ? 0.0 : 8.0),
+                      return GestureDetector(
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 150),
+                          padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+                          margin: EdgeInsets.only(right: lastItem ? 0.0 : 8.0),
 
-                      decoration: BoxDecoration(
-                        color: isSelected ? Color.alphaBlend(
-                          category.color.withOpacity(0.1),
-                          cBackgroundColor
-                        ) : cCardBackgroundColor,
-                        borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
-                      ),
+                          decoration: BoxDecoration(
+                            color: isSelected ? Color.alphaBlend(
+                              category.color.withOpacity(0.1),
+                              cBackgroundColor
+                            ) : cCardBackgroundColor,
+                            borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
+                          ),
 
-                      child: Text(
-                        category.name,
-                        style: cLightTextStyle.copyWith(color: isSelected ? category.color : null)
-                      )
-                    ),
-                    onTap: () {
-                      setState(() {
-                        if(category == selectedCategory) selectedCategory = null;
-                        else selectedCategory = category;
-                      });
-                    },
-                  );
-                }),
-              ),
-            ),
+                          child: Text(
+                            category.name,
+                            style: cLightTextStyle.copyWith(color: isSelected ? category.color : null)
+                          )
+                        ),
+                        onTap: () {
+                          setState(() {
+                            if(category == selectedCategory) selectedCategory = null;
+                            else selectedCategory = category;
+                          });
+                        },
+                      );
+                    }),
+                  ),
+                ),
+              ) : Container();
+            }
           ),
 
           SizedBox(height: 48.0),
