@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
@@ -12,13 +13,22 @@ part 'calendar_state.dart';
 
 class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   final TaskBloc taskBloc;
-  late StreamSubscription todosSubscription;
+  final CategoryBloc categoryBloc;
+  late StreamSubscription tasksSubscription;
+  late StreamSubscription categoriesSubscription;
 
   CalendarBloc({
-    required this.taskBloc
+    required this.taskBloc,
+    required this.categoryBloc
   }) : super(CalendarLoadInProgress()) {
-    todosSubscription = taskBloc.stream.listen((state) {
+    tasksSubscription = taskBloc.stream.listen((state) {
       if(state is TaskLoadSuccess) {
+        add(TasksUpdated((taskBloc.state as TaskLoadSuccess).tasks));
+      }
+    });
+
+    categoriesSubscription = categoryBloc.stream.listen((state) {
+      if(state is CategoryLoadSuccess) {
         add(TasksUpdated((taskBloc.state as TaskLoadSuccess).tasks));
       }
     });
@@ -103,7 +113,8 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
 
   @override
   Future<void> close() {
-    todosSubscription.cancel();
+    tasksSubscription.cancel();
+    categoriesSubscription.cancel();
     return super.close();
   }
 }

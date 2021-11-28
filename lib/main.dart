@@ -35,8 +35,10 @@ class MyApp extends StatelessWidget {
         )..add(UpcomingLoaded())),
 
         BlocProvider<CalendarBloc>(
-          create: (context) => CalendarBloc(taskBloc: BlocProvider.of<TaskBloc>(context))
-          ..add(CalendarLoaded(
+          create: (context) => CalendarBloc(
+            taskBloc: BlocProvider.of<TaskBloc>(context),
+            categoryBloc: BlocProvider.of<CategoryBloc>(context)
+          )..add(CalendarLoaded(
             startMonth: DateTime(DateTime.now().year, DateTime.now().month - 1),
             endMonth: DateTime(DateTime.now().year, DateTime.now().month + 2),
             selectedDate: getDate(DateTime.now())
