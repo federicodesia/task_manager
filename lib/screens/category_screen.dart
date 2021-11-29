@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
+import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
+import 'package:task_manager/bottom_sheets/results_bottom_sheet.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/models/category.dart';
@@ -137,7 +139,13 @@ class _CategoryScreenState extends State<CategoryScreen>{
                                   Icons.tune_rounded,
                                   color: Colors.white.withOpacity(0.75)
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  ModalBottomSheet(
+                                    title: "Results", 
+                                    context: context, 
+                                    content: ResultsBottomSheet()
+                                  ).show();
+                                },
                               )
                             ],
                           ),
