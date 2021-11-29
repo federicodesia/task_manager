@@ -25,10 +25,15 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<MainContextCubit>(create: (context) => MainContextCubit()),
-        BlocProvider<CategoryBloc>(create: (context) => CategoryBloc(categoryRepository: CategoryRepository())..add(CategoryLoaded())),
         BlocProvider<TaskBloc>(create: (context) => TaskBloc(taskRepository: TaskRepository())..add(TaskLoaded())),
+        
         BlocProvider<AppBarCubit>(create: (context) => AppBarCubit()..setHeight(1000.0)),
         BlocProvider<AvailableSpaceCubit>(create: (context) => AvailableSpaceCubit()),
+
+        BlocProvider<CategoryBloc>(create: (context) => CategoryBloc(
+          categoryRepository: CategoryRepository(),
+          taskBloc: BlocProvider.of<TaskBloc>(context)
+        )..add(CategoryLoaded())),
 
         BlocProvider<UpcomingBloc>(create: (context) => UpcomingBloc(
           taskBloc: BlocProvider.of<TaskBloc>(context)

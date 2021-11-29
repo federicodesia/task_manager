@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/category.dart';
+import 'package:task_manager/screens/category_screen.dart';
 
 class CategoryCard extends StatelessWidget{
 
@@ -12,17 +14,10 @@ class CategoryCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    String _description;
-    if(category.tasks.length == 0) _description = "Nothing yet!";
-    else if(category.allTaskCompleted()) _description = "All done!";
-    else{
-      int remainingTasks = category.tasks.length - category.completedTasksCount();
-      if(remainingTasks == 1) _description = "$remainingTasks Task";
-      else _description = "$remainingTasks Tasks";
-    }
-
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryScreen(categoryUuid: category.uuid)));
+      },
       onLongPress: () {
         ModalBottomSheet(
           title: "Edit category",
@@ -41,21 +36,6 @@ class CategoryCard extends StatelessWidget{
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: cButtonSize,
-            padding: EdgeInsets.all(cButtonPadding),
-            decoration: BoxDecoration(
-              color: category.color,
-              borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
-            ),
-            child: Icon(
-              category.icon,
-              color: Colors.white,
-            ),
-          ),
-
-          SizedBox(height: cPadding),
-
           Text(
             category.name,
             style: cHeaderTextStyle.copyWith(fontSize: 15.0),
@@ -64,11 +44,20 @@ class CategoryCard extends StatelessWidget{
           ),
 
           SizedBox(height: 2.0),
+
           Text(
-            _description,
+            "${category.tasks.length} tasks",
             style: cLightTextStyle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 10.0),
+          
+          LinearPercentIndicator(
+            padding: EdgeInsets.zero,
+            progressColor: category.color,
+            backgroundColor: Colors.white.withOpacity(0.25),
+            percent: category.tasks.length > 0 ? (category.tasks.where((task) => task.completed).length / category.tasks.length) : 0,
           )
         ],
       )

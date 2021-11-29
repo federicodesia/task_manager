@@ -19,3 +19,8 @@ class CategoryDeleted extends CategoryEvent {
   final Category category;
   CategoryDeleted(this.category);
 }
+
+class TasksUpdated extends CategoryEvent {
+  final List<Task> tasks;
+  TasksUpdated(this.tasks);
+}
