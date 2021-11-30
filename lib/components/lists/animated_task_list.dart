@@ -72,18 +72,21 @@ class AnimatedTaskList extends StatelessWidget{
           removeBuilder: (BuildContext context, Task task, int index, Animation<double> animation){
             return BlocBuilder<TaskBloc, TaskState>(
               builder: (_, state){
-                return (state as TaskLoadSuccess).tasks.where((t) => t.uuid == task.uuid).isNotEmpty ?
-                  ListItemAnimation(
-                    animation: animation,
-                    child: TaskListItem(
-                      task: task,
-                      type: type,
-                      context: context,
-                      onUndoDismissed: onUndoDismissed,
-                      bottomPadding: index != items.length - 1,
-                    ),
-                  )
-                : Container();
+                if(state is TaskLoadSuccess){
+                  return state.tasks.where((t) => t.uuid == task.uuid).isNotEmpty ?
+                    ListItemAnimation(
+                      animation: animation,
+                      child: TaskListItem(
+                        task: task,
+                        type: type,
+                        context: context,
+                        onUndoDismissed: onUndoDismissed,
+                        bottomPadding: index != items.length - 1,
+                      ),
+                    )
+                  : Container();
+                }
+                return Container();
               }
             );
           },

@@ -21,17 +21,33 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       }
     });
 
-    on<TaskAdded>((event, emit) => emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks..add(event.task))));
+    on<TaskAdded>((event, emit){
+      if(state is TaskLoadSuccess){
+        emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks..add(event.task)));
+      }
+    });
 
-    on<TaskUpdated>((event, emit) => emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks.map((task){
-      return task.uuid == event.task.uuid ? event.task : task;
-    }).toList())));
+    on<TaskUpdated>((event, emit){
+      if(state is TaskLoadSuccess){
+        emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks.map((task){
+          return task.uuid == event.task.uuid ? event.task : task;
+        }).toList()));
+      }
+    });
 
-    on<TaskDeleted>((event, emit) => emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks
-      .where((task) => task.uuid != event.task.uuid).toList())));
-    
-    on<TaskCompleted>((event, emit) => emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks.map((task){
-      return task.uuid == event.task.uuid ? task.copyWith(completed: event.value) : task;
-    }).toList())));
+    on<TaskDeleted>((event, emit){
+      if(state is TaskLoadSuccess){
+        emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks
+          .where((task) => task.uuid != event.task.uuid).toList()));
+      }
+    });
+
+    on<TaskCompleted>((event, emit){
+      if(state is TaskLoadSuccess){
+        emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks.map((task){
+          return task.uuid == event.task.uuid ? task.copyWith(completed: event.value) : task;
+        }).toList()));
+      }
+    });
   }
 }

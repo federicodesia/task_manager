@@ -23,13 +23,14 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   }) : super(CalendarLoadInProgress()) {
     tasksSubscription = taskBloc.stream.listen((state) {
       if(state is TaskLoadSuccess) {
-        add(TasksUpdated((taskBloc.state as TaskLoadSuccess).tasks));
+        add(TasksUpdated(state.tasks));
       }
     });
 
     categoriesSubscription = categoryBloc.stream.listen((state) {
-      if(state is CategoryLoadSuccess) {
-        add(TasksUpdated((taskBloc.state as TaskLoadSuccess).tasks));
+      TaskState taskBlocState = taskBloc.state;
+      if(taskBlocState is TaskLoadSuccess) {
+        add(TasksUpdated(taskBlocState.tasks));
       }
     });
 
@@ -58,27 +59,33 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       );
     });
 
-    on<CalendarMonthUpdated>((event, emit) => emit(
-      (state as CalendarLoadSuccess).copyWith(
-        selectedMonth: event.month,
-        days: _getDaysOfMonth(event.month)
-      )
-    ));
-
-    on<CalendarDateUpdated>((event, emit){
-      emit(
-        (state as CalendarLoadSuccess).copyWith(
-          selectedDay: event.date,
-          groups: _getGroupsByDate((taskBloc.state as TaskLoadSuccess).tasks, event.date)
-        )
-      );
+    on<CalendarMonthUpdated>((event, emit){
+      if(state is CalendarLoadSuccess){
+        emit((state as CalendarLoadSuccess).copyWith(
+          selectedMonth: event.month,
+          days: _getDaysOfMonth(event.month)
+        ));
+      }
     });
 
-    on<TasksUpdated>((event, emit) => emit(
-      (state as CalendarLoadSuccess).copyWith(
-        groups: _getGroupsByDate((taskBloc.state as TaskLoadSuccess).tasks, (state as CalendarLoadSuccess).selectedDay)
-      )
-    ));
+    on<CalendarDateUpdated>((event, emit){
+      TaskState taskBlocState = taskBloc.state;
+      if(state is CalendarLoadSuccess && taskBlocState is TaskLoadSuccess){
+        emit((state as CalendarLoadSuccess).copyWith(
+          selectedDay: event.date,
+          groups: _getGroupsByDate(taskBlocState.tasks, event.date)
+        ));
+      }
+    });
+
+    on<TasksUpdated>((event, emit){
+      TaskState taskBlocState = taskBloc.state;
+      if(state is CalendarLoadSuccess && taskBlocState is TaskLoadSuccess){
+        emit((state as CalendarLoadSuccess).copyWith(
+          groups: _getGroupsByDate(taskBlocState.tasks, (state as CalendarLoadSuccess).selectedDay)
+        ));
+      }
+    });
   }
 
   List<TaskGroupHour> _getGroupsByDate(List<Task> tasks, DateTime date){

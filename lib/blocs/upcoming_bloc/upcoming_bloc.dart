@@ -18,18 +18,26 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
   }) : super(UpcomingLoadInProgress()) {
     todosSubscription = taskBloc.stream.listen((state) {
       if(state is TaskLoadSuccess) {
-        add(TasksUpdated((taskBloc.state as TaskLoadSuccess).tasks));
+        add(TasksUpdated(state.tasks));
       }
     });
 
-    on<UpcomingLoaded>((event, emit) => add(TasksUpdated((taskBloc.state as TaskLoadSuccess).tasks)));
+    on<UpcomingLoaded>((event, emit){
+      TaskState taskBlocState = taskBloc.state;
+      if(taskBlocState is TaskLoadSuccess){
+        add(TasksUpdated(taskBlocState.tasks));
+      }
+    });
 
-    on<TasksUpdated>((event, emit) => emit(
-      UpcomingLoadSuccess(
-        weekTasks: _getWeekTasks((taskBloc.state as TaskLoadSuccess).tasks),
-        groups: _getGroups((taskBloc.state as TaskLoadSuccess).tasks)
-      )
-    ));
+    on<TasksUpdated>((event, emit){
+      TaskState taskBlocState = taskBloc.state;
+      if(taskBlocState is TaskLoadSuccess){
+        emit(UpcomingLoadSuccess(
+          weekTasks: _getWeekTasks(taskBlocState.tasks),
+          groups: _getGroups(taskBlocState.tasks)
+        ));
+      }
+    });
   }
 
   List<Task> _getWeekTasks(List<Task> tasks){
