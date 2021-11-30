@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
+import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/results_bottom_sheet.dart';
+import 'package:task_manager/components/popup_menu_icon_item.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
+import 'package:task_manager/components/rounded_alert_dialog.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/models/category.dart';
 import '../constants.dart';
@@ -11,7 +14,7 @@ import '../constants.dart';
 class CategoryScreen extends StatefulWidget{
 
   final String categoryUuid;
-  CategoryScreen({required this.categoryUuid});
+  CategoryScreen({required this.categoryUuid,});
 
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
@@ -20,6 +23,8 @@ class CategoryScreen extends StatefulWidget{
 class _CategoryScreenState extends State<CategoryScreen>{
 
   double appBarHeight = 500.0;
+  GlobalKey<PopupMenuButtonState> popupMenuKey = GlobalKey<PopupMenuButtonState>();
+  bool categoryDeleted = false;
 
   @override
   Widget build(BuildContext context){
@@ -28,6 +33,10 @@ class _CategoryScreenState extends State<CategoryScreen>{
       backgroundColor: cBackgroundColor,
 
       body: BlocBuilder<CategoryBloc, CategoryState>(
+        buildWhen: (previousState, currentState){
+          if(currentState is CategoryLoadSuccess) return !categoryDeleted;
+          return true;
+        },
         builder: (_, categoryState) {
           
           Category category = (categoryState as CategoryLoadSuccess).categories.firstWhere((c) => c.uuid == widget.categoryUuid);
@@ -90,11 +99,75 @@ class _CategoryScreenState extends State<CategoryScreen>{
                                 ],
                               ),
 
-                              IconButton(
-                                color: Colors.white.withOpacity(0.75),
-                                icon: Icon(Icons.more_vert_rounded),
-                                splashRadius: 32.0,
-                                onPressed: () {},
+                              PopupMenuButton(
+                                key: popupMenuKey,
+                                color: cCardBackgroundColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                                ),
+                                elevation: 4,
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    value: 0,
+                                    child: PopupMenuIconItem(
+                                      icon: Icons.edit_outlined,
+                                      text: "Edit"
+                                    ),
+                                  ),
+
+                                  PopupMenuItem(
+                                    value: 1,
+                                    child: PopupMenuIconItem(
+                                      icon: Icons.delete_outlined,
+                                      text: "Delete"
+                                    ),
+                                  ),
+                                ],
+                                onSelected: (value){
+                                  if(value == 0){
+                                    ModalBottomSheet(
+                                      title: "Edit category", 
+                                      context: context, 
+                                      content: CategoryBottomSheet(editCategory: category)
+                                    ).show();
+                                  }
+                                  else if(value == 1){
+                                    RoundedAlertDialog(
+                                      buildContext: context,
+                                      title: "Delete this category?",
+                                      description: "Do you really want to delete this category? All tasks will be unlinked without being deleted. This process cannot be undone.",
+                                      actions: [
+                                        RoundedAlertDialogButton(
+                                          text: "Cancel",
+                                          onPressed: () => Navigator.of(context).pop()
+                                        ),
+
+                                        RoundedAlertDialogButton(
+                                          text: "Delete",
+                                          backgroundColor: cRedColor,
+                                          onPressed: (){
+                                            // Close AlertDialog
+                                            Navigator.of(context).pop();
+
+                                            setState(() => categoryDeleted = true);
+                                            BlocProvider.of<CategoryBloc>(context).add(CategoryDeleted(category));
+                                            
+                                            // Close screen
+                                            Navigator.of(context).pop();
+                                          },
+                                        )
+                                      ],
+                                    ).show();
+                                  }
+                                },
+                                child: IconButton(
+                                  color: Colors.white.withOpacity(0.75),
+                                  icon: Icon(Icons.more_vert_rounded),
+                                  splashRadius: 32.0,
+                                  onPressed: () {
+                                    popupMenuKey.currentState!.showButtonMenu();
+                                  },
+                                ),
                               )
                             ],
                           ),
