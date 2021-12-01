@@ -94,6 +94,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                                 SizedBox(height: cPadding),
 
                                 BlocBuilder<CategoryBloc, CategoryState>(
+                                  buildWhen: (previousState, currentState){
+                                    if(previousState is CategoryLoadSuccess && currentState is CategoryLoadSuccess){
+                                      if(previousState.categories.length != currentState.categories.length) return true;
+                                      return false;
+                                    }
+                                    return true;
+                                  },
                                   builder: (_, categoryState){
                                     return categoryState is CategoryLoadSuccess ? Align(
                                       alignment: Alignment.centerLeft,
@@ -109,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                                               width: 148.0,
                                               margin: EdgeInsets.only(right: lastItem ? 0.0 : 12.0),
                                               child: CategoryCard(
-                                                category: categoryState.categories[index]
+                                                categoryUuid: categoryState.categories[index].uuid
                                               ),
                                             );
                                           }),
