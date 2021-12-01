@@ -162,37 +162,42 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
 
           BlocBuilder<CategoryBloc, CategoryState>(
             builder: (_, categoryState){
-              return categoryState is CategoryLoadSuccess ? Align(
-                alignment: Alignment.centerLeft,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  physics: BouncingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: cPadding),
-                  child: Row(
-                    children: List.generate(categoryState.categories.length, (index){
-                      Category category = categoryState.categories[index];
-                      bool isSelected = task.categoryUuid == category.uuid;
-                      bool isLastItem = index == categoryState.categories.length - 1;
+              if(categoryState is CategoryLoadSuccess){
+                List<Category> categories = categoryState.categories.where((category) => !category.isGeneral).toList();
 
-                      return AnimatedChip(
-                        text: category.name,
-                        textColor: isSelected ? category.color : null,
-                        backgroundColor: isSelected ? Color.alphaBlend(
-                          category.color.withOpacity(0.1),
-                          cBackgroundColor
-                        ) : null,
-                        isLastItem: isLastItem,
-                        onTap: () {
-                          setState(() {
-                            if(category.uuid == task.categoryUuid) task = task.copyWith(categoryUuid: null);
-                            else task = task.copyWith(categoryUuid: category.uuid);
-                          });
-                        }
-                      );
-                    }),
+                return Align(
+                  alignment: Alignment.centerLeft,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
+                    padding: EdgeInsets.symmetric(horizontal: cPadding),
+                    child: Row(
+                      children: List.generate(categories.length, (index){
+                        Category category = categories[index];
+                        bool isSelected = task.categoryUuid == category.uuid;
+                        bool isLastItem = index == categories.length - 1;
+
+                        return AnimatedChip(
+                          text: category.name,
+                          textColor: isSelected ? category.color : null,
+                          backgroundColor: isSelected ? Color.alphaBlend(
+                            category.color.withOpacity(0.1),
+                            cBackgroundColor
+                          ) : null,
+                          isLastItem: isLastItem,
+                          onTap: () {
+                            setState(() {
+                              if(category.uuid == task.categoryUuid) task = task.copyWith(categoryUuid: null);
+                              else task = task.copyWith(categoryUuid: category.uuid);
+                            });
+                          }
+                        );
+                      }),
+                    ),
                   ),
-                ),
-              ) : Container();
+                );
+              }
+              return Container();
             }
           ),
 

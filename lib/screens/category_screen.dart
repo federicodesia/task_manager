@@ -13,7 +13,7 @@ import '../constants.dart';
 
 class CategoryScreen extends StatefulWidget{
 
-  final String categoryUuid;
+  final String? categoryUuid;
   CategoryScreen({required this.categoryUuid,});
 
   @override
@@ -109,6 +109,7 @@ class _CategoryScreenState extends State<CategoryScreen>{
                                 itemBuilder: (context) => [
                                   PopupMenuItem(
                                     value: 0,
+                                    enabled: !category.isGeneral,
                                     child: PopupMenuIconItem(
                                       icon: Icons.edit_outlined,
                                       text: "Edit"
@@ -117,6 +118,7 @@ class _CategoryScreenState extends State<CategoryScreen>{
 
                                   PopupMenuItem(
                                     value: 1,
+                                    enabled: !category.isGeneral,
                                     child: PopupMenuIconItem(
                                       icon: Icons.delete_outlined,
                                       text: "Delete"

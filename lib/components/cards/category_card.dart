@@ -10,7 +10,7 @@ import 'package:task_manager/screens/category_screen.dart';
 
 class CategoryCard extends StatelessWidget{
 
-  final String categoryUuid;
+  final String? categoryUuid;
   CategoryCard({required this.categoryUuid});
 
   @override
@@ -34,13 +34,13 @@ class CategoryCard extends StatelessWidget{
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryScreen(categoryUuid: category.uuid)));
           },
-          onLongPress: () {
+          onLongPress: !category.isGeneral ? () {
             ModalBottomSheet(
               title: "Edit category",
               context: context,
               content: CategoryBottomSheet(editCategory: category)
             ).show();
-          },
+          } : null,
           style: ElevatedButton.styleFrom(
             primary: cCardBackgroundColor,
             padding: EdgeInsets.all(cPadding),
@@ -70,6 +70,7 @@ class CategoryCard extends StatelessWidget{
               SizedBox(height: 10.0),
               
               LinearPercentIndicator(
+                lineHeight: 6.0,
                 padding: EdgeInsets.zero,
                 progressColor: category.color,
                 backgroundColor: Colors.white.withOpacity(0.25),
