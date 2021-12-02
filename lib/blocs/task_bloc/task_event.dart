@@ -29,3 +29,8 @@ class TaskCompleted extends TaskEvent {
     required this.value
   });
 }
+
+class TasksUpdated extends TaskEvent {
+  final List<Task> tasks;
+  TasksUpdated(this.tasks);
+}

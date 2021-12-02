@@ -23,7 +23,7 @@ class CalendarTaskListItem extends StatelessWidget{
       builder: (_, categoryState) {
 
         if(categoryState is CategoryLoadSuccess){
-          Category category = categoryState.categories.firstWhere((category) => category.uuid == task.categoryUuid);
+          Category category = categoryState.categories.firstWhere((c) => c.uuid == task.categoryUuid);
 
           return ElevatedButton(
             onPressed: onPressed,

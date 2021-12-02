@@ -49,5 +49,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         }).toList()));
       }
     });
+
+    on<TasksUpdated>((event, emit){
+      if(state is TaskLoadSuccess){
+        emit(TaskLoadSuccess(event.tasks));
+      }
+    });
   }
 }

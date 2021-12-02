@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
@@ -13,24 +12,14 @@ part 'calendar_state.dart';
 
 class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   final TaskBloc taskBloc;
-  final CategoryBloc categoryBloc;
   late StreamSubscription tasksSubscription;
-  late StreamSubscription categoriesSubscription;
 
   CalendarBloc({
     required this.taskBloc,
-    required this.categoryBloc
   }) : super(CalendarLoadInProgress()) {
     tasksSubscription = taskBloc.stream.listen((state) {
       if(state is TaskLoadSuccess) {
         add(TasksUpdated(state.tasks));
-      }
-    });
-
-    categoriesSubscription = categoryBloc.stream.listen((state) {
-      TaskState taskBlocState = taskBloc.state;
-      if(taskBlocState is TaskLoadSuccess) {
-        add(TasksUpdated(taskBlocState.tasks));
       }
     });
 
@@ -82,7 +71,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       TaskState taskBlocState = taskBloc.state;
       if(state is CalendarLoadSuccess && taskBlocState is TaskLoadSuccess){
         emit((state as CalendarLoadSuccess).copyWith(
-          groups: _getGroupsByDate(taskBlocState.tasks, (state as CalendarLoadSuccess).selectedDay)
+          groups: _getGroupsByDate(event.tasks, (state as CalendarLoadSuccess).selectedDay)
         ));
       }
     });
@@ -121,7 +110,6 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   @override
   Future<void> close() {
     tasksSubscription.cancel();
-    categoriesSubscription.cancel();
     return super.close();
   }
 }

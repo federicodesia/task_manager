@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/models/category.dart';
-import 'package:task_manager/models/task.dart';
 import 'package:task_manager/repositories/category_repository.dart';
 
 part 'category_event.dart';
@@ -21,20 +20,9 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     required this.taskBloc
   }) : super(CategoryLoadInProgress()){
 
-    tasksSubscription = taskBloc.stream.listen((state) {
-      if(state is TaskLoadSuccess) {
-        add(TasksUpdated(state.tasks));
-      }
-    });
-
     on<CategoryLoaded>((event, emit) async{
       try{
         final categories = await categoryRepository.fetchCategories();
-        for(int i = 0; i < categories.length; i++){
-          Category category = categories[i];
-          categories[i] = category.copyWith(tasks: _getCategoryTasks(category));
-        }
-
         emit(CategoryLoadSuccess(categories));
       }
       catch(_){
@@ -60,22 +48,17 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       if(state is CategoryLoadSuccess){
         emit(CategoryLoadSuccess((state as CategoryLoadSuccess).categories
           .where((category) => category.uuid != event.category.uuid).toList()));
+        
+        TaskState taskBlocState = taskBloc.state;
+        if(taskBlocState is TaskLoadSuccess){
+          taskBloc.add(TasksUpdated(
+            taskBlocState.tasks.map((task){
+              return task.categoryUuid == event.category.uuid ? task.copyWith(categoryUuid: null) : task;
+            }).toList())
+          );
+        }
       }
     });
-
-    on<TasksUpdated>((event, emit){
-      if(state is CategoryLoadSuccess){
-        emit(CategoryLoadSuccess((state as CategoryLoadSuccess).categories.map((category){
-          return category.copyWith(tasks: _getCategoryTasks(category));
-        }).toList()));
-      }
-    });
-  }
-
-  List<Task> _getCategoryTasks(Category category){
-    TaskState taskBlocState = taskBloc.state;
-    return (taskBlocState is TaskLoadSuccess) ? taskBlocState.tasks
-      .where((task) => task.categoryUuid == category.uuid).toList() : [];
   }
 
   @override
