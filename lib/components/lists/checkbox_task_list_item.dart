@@ -71,8 +71,8 @@ class _CheckboxTaskListItemState extends State<CheckboxTaskListItem>{
                     SizedBox(width: 12.0),
 
                     Text(
-                      DateFormat("HH:mm a").format(widget.task.dateTime),
-                      style: cSubtitleTextStyle
+                      DateFormat("HH:mm a").format(widget.task.dateTime).toLowerCase(),
+                      style: cLightTextStyle
                     )
                   ],
                 ),

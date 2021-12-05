@@ -21,14 +21,12 @@ class TaskListItem extends StatelessWidget{
   final TaskListItemType type;
   final BuildContext context;
   final Function(Task) onUndoDismissed;
-  final bool bottomPadding;
 
   TaskListItem({
     required this.task,
     required this.type,
     required this.context,
     required this.onUndoDismissed,
-    required this.bottomPadding
   });
 
   @override
@@ -61,7 +59,7 @@ class TaskListItem extends StatelessWidget{
     }
 
     return Padding(
-      padding: EdgeInsets.only(top: cListItemSpace),
+      padding: EdgeInsets.only(bottom: cListItemSpace),
       child: RoundedDismissible(
         key: UniqueKey(),
         text: "Delete task",

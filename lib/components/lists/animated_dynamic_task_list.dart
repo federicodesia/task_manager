@@ -45,8 +45,7 @@ class AnimatedDynamicTaskList extends StatelessWidget{
             task: item,
             type: taskListItemType,
             context: context,
-            onUndoDismissed: onUndoDismissed,
-            bottomPadding: false,
+            onUndoDismissed: onUndoDismissed
           ) : objectBuilder(item)
         );
       },
@@ -63,8 +62,7 @@ class AnimatedDynamicTaskList extends StatelessWidget{
                     task: item,
                     type: taskListItemType,
                     context: context,
-                    onUndoDismissed: onUndoDismissed,
-                    bottomPadding: false,
+                    onUndoDismissed: onUndoDismissed
                   )
                 : Container();
               }

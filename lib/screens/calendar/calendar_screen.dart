@@ -157,6 +157,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                       }
                                     ),
 
+                                    SizedBox(height: cPadding - cListItemSpace),
+
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: cPadding),
                                       child: AnimatedDynamicTaskList(
@@ -166,7 +168,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                         onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task)),
                                         objectBuilder: (object){
                                           return (object is DateTime) ? CalendarGroupHour(dateTime: object) : Container();
-                                        },
+                                        }
                                       )
                                     ),
 

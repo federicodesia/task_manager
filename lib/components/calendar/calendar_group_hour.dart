@@ -13,7 +13,7 @@ class CalendarGroupHour extends StatelessWidget{
   Widget build(BuildContext _) {
 
     return Padding(
-      padding: EdgeInsets.only(top: 24.0),
+      padding: EdgeInsets.symmetric(vertical: cListItemSpace),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,7 +55,7 @@ class CalendarGroupHourText extends StatelessWidget{
       child: Padding(
         padding: EdgeInsets.only(right: 12.0),
         child: Text(
-          "12:00 ",
+          text,
           style: cLightTextStyle.copyWith(fontWeight: FontWeight.w300),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
