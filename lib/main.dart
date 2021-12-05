@@ -4,9 +4,7 @@ import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/blocs/upcoming_bloc/upcoming_bloc.dart';
-import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
-import 'package:task_manager/cubits/main_context_cubit.dart';
 import 'package:task_manager/repositories/category_repository.dart';
 import 'package:task_manager/repositories/task_repository.dart';
 import 'components/main/bottom_navigation_bar.dart';
@@ -24,10 +22,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<MainContextCubit>(create: (context) => MainContextCubit()),
         BlocProvider<TaskBloc>(create: (context) => TaskBloc(taskRepository: TaskRepository())..add(TaskLoaded())),
         
-        BlocProvider<AppBarCubit>(create: (context) => AppBarCubit()..setHeight(1000.0)),
         BlocProvider<AvailableSpaceCubit>(create: (context) => AvailableSpaceCubit()),
 
         BlocProvider<CategoryBloc>(create: (context) => CategoryBloc(
@@ -65,12 +61,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>{
 
   int selectedIndex = 0;
-
-  @override
-  void initState() {
-    context.read<MainContextCubit>().setContext(context);
-    super.initState();
-  }
   
   @override
   Widget build(BuildContext context) {

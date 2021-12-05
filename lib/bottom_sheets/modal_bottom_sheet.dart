@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/constants.dart';
-import 'package:task_manager/cubits/main_context_cubit.dart';
 
 class ModalBottomSheet{
 
@@ -16,7 +14,6 @@ class ModalBottomSheet{
   });
 
   void show(){
-    BuildContext mainContext = BlocProvider.of<MainContextCubit>(context).state!;
 
     showModalBottomSheet(
       isScrollControlled: true,
@@ -28,7 +25,7 @@ class ModalBottomSheet{
           topRight: Radius.circular(cBottomSheetBorderRadius)
         ),
       ),
-      context: mainContext,
+      context: context,
       builder: (context){
         return Container(
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
