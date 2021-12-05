@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/task.dart';
-import 'package:task_manager/models/tasks_group_date.dart';
 
 part 'upcoming_event.dart';
 part 'upcoming_state.dart';
@@ -34,7 +34,7 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
       if(taskBlocState is TaskLoadSuccess){
         emit(UpcomingLoadSuccess(
           weekTasks: _getWeekTasks(taskBlocState.tasks),
-          groups: _getGroups(taskBlocState.tasks)
+          items: _getGroups(taskBlocState.tasks)
         ));
       }
     });
@@ -52,38 +52,32 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
     return weekTasks;
   }
 
-  List<TaskGroupDate> _getGroups(List<Task> tasks){
-    List<TaskGroupDate> groups = [];
+  List<DynamicObject> _getGroups(List<Task> tasks){
+    List<DynamicObject> items = [];
 
     DateTime now = DateTime.now();
     tasks = tasks.where((task) => dateDifference(task.dateTime, now) >= 1).toList();
     tasks.sort((a, b) => a.dateTime.compareTo(b.dateTime));
 
     if(tasks.length > 0){
-      groups.add(
-        TaskGroupDate(
-          dateTime: getDate(tasks.first.dateTime),
-          tasks: []
-        )
-      );
+
+      int dateTimeCount = 1;
+      DateTime lastDateTime = getDate(tasks.first.dateTime);
+      items.add(DynamicObject(object: lastDateTime));
 
       for(int i = 0; i < tasks.length; i++){
         Task task = tasks[i];
-        TaskGroupDate lastGroup = groups.last;
-
-        if(dateDifference(task.dateTime, lastGroup.dateTime) == 0) lastGroup.tasks.add(task);
-        else if(groups.length - 1 == 3) break; // Max 3 groups
+        if(dateDifference(task.dateTime, lastDateTime) == 0) items.add(DynamicObject(object: task));
+        else if(dateTimeCount == 3) break;
         else{
-          groups.add(
-            TaskGroupDate(
-              dateTime: getDate(task.dateTime),
-              tasks: [task]
-            )
-          );
+          lastDateTime = getDate(task.dateTime);
+          items.add(DynamicObject(object: lastDateTime));
+          items.add(DynamicObject(object: task));
+          dateTimeCount++;
         }
       }
     }
-    return groups;
+    return items;
   }
 
   @override

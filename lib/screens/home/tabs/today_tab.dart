@@ -4,10 +4,13 @@ import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/progress_summary.dart';
 import 'package:task_manager/components/empty_space.dart';
-import 'package:task_manager/components/lists/animated_task_list.dart';
+import 'package:task_manager/components/lists/animated_dynamic_task_list.dart';
+import 'package:task_manager/components/lists/list_header.dart';
+import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/task.dart';
 
 class TodayTab extends StatefulWidget{
@@ -49,7 +52,20 @@ class _TodayTabState extends State<TodayTab>{
           }
           else{
             List<Task> todayTasks = tasksList.where((task) => dateDifference(task.dateTime, DateTime.now()) == 0).toList();
+            List<Task> remainingTasks = todayTasks.where((task) => !task.completed).toList();
             List<Task> completedTasks = todayTasks.where((task) => task.completed).toList();
+
+            List<DynamicObject> items = [];
+
+            if(remainingTasks.isNotEmpty){
+              items.add(DynamicObject(object: "Tasks"));
+              items.addAll(remainingTasks.map((task) => DynamicObject(object: task)));
+            }
+
+            if(completedTasks.isNotEmpty){
+              items.add(DynamicObject(object: "Completed"));
+              items.addAll(completedTasks.map((task) => DynamicObject(object: task)));
+            }
 
             child = Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -70,24 +86,14 @@ class _TodayTabState extends State<TodayTab>{
                   ),
                 ),
 
-                if(todayTasks.length > 0) Column(
-                  children: [
-                    AnimatedTaskList(
-                      headerTitle: "Tasks",
-                      items: todayTasks.where((task) => !task.completed).toList(),
-                      type: TaskListItemType.Checkbox,
-                      context: context,
-                      onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
-                    ),
-
-                    AnimatedTaskList(
-                      headerTitle: "Completed",
-                      items: completedTasks,
-                      type: TaskListItemType.Checkbox,
-                      context: context,
-                      onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task))
-                    )
-                  ],
+                if(todayTasks.isNotEmpty) AnimatedDynamicTaskList(
+                  items: items,
+                  taskListItemType: TaskListItemType.Checkbox,
+                  context: context,
+                  onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task)),
+                  objectBuilder: (object){
+                    return (object is String) ? ListHeader(object) : Container();
+                  }
                 )
                 else CenteredListWidget(
                   subtractHeight: progressSummaryHeight,

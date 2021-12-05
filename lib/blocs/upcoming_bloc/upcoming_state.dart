@@ -6,11 +6,11 @@ class UpcomingLoadInProgress extends UpcomingState {}
 
 class UpcomingLoadSuccess extends UpcomingState {
   final List<Task> weekTasks;
-  final List<TaskGroupDate> groups;
+  final List<DynamicObject> items;
 
   UpcomingLoadSuccess({
     required this.weekTasks,
-    required this.groups
+    required this.items
   });
 }
 

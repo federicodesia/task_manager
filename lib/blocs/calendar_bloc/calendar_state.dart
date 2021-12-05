@@ -10,14 +10,14 @@ class CalendarLoadSuccess extends CalendarState {
   final List<DateTime> months;
   final DateTime selectedDay;
   final List<DateTime> days;
-  final List<TaskGroupHour> groups;
+  final List<DynamicObject> items;
   
   CalendarLoadSuccess({
     required this.selectedMonth,
     required this.months,
     required this.selectedDay,
     required this.days,
-    required this.groups
+    required this.items
   });
 
   CalendarLoadSuccess copyWith({
@@ -25,14 +25,14 @@ class CalendarLoadSuccess extends CalendarState {
     List<DateTime>? months,
     DateTime? selectedDay,
     List<DateTime>? days,
-    List<TaskGroupHour>? groups
+    List<DynamicObject>? items
   }){
     return CalendarLoadSuccess(
       selectedMonth: selectedMonth ?? this.selectedMonth,
       months: months ?? this.months,
       selectedDay: selectedDay ?? this.selectedDay,
       days: days ?? this.days,
-      groups: groups ?? this.groups
+      items: items ?? this.items
     );
   }
 }

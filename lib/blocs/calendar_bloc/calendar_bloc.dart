@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
-import 'package:task_manager/models/tasks_group_hour.dart';
+import 'package:task_manager/models/dynamic_object.dart';
 
 part 'calendar_event.dart';
 part 'calendar_state.dart';
@@ -43,7 +43,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
           selectedMonth: event.selectedDate,
           days: _getDaysOfMonth(event.selectedDate),
           selectedDay: event.selectedDate,
-          groups: []
+          items: []
         )
       );
     });
@@ -62,7 +62,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       if(state is CalendarLoadSuccess && taskBlocState is TaskLoadSuccess){
         emit((state as CalendarLoadSuccess).copyWith(
           selectedDay: event.date,
-          groups: _getGroupsByDate(taskBlocState.tasks, event.date)
+          items: _getGroupsByDate(taskBlocState.tasks, event.date)
         ));
       }
     });
@@ -71,29 +71,28 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       TaskState taskBlocState = taskBloc.state;
       if(state is CalendarLoadSuccess && taskBlocState is TaskLoadSuccess){
         emit((state as CalendarLoadSuccess).copyWith(
-          groups: _getGroupsByDate(event.tasks, (state as CalendarLoadSuccess).selectedDay)
+          items: _getGroupsByDate(event.tasks, (state as CalendarLoadSuccess).selectedDay)
         ));
       }
     });
   }
 
-  List<TaskGroupHour> _getGroupsByDate(List<Task> tasks, DateTime date){
+  List<DynamicObject> _getGroupsByDate(List<Task> tasks, DateTime date){
     List<Task> _tasks = tasks.where((task) => dateDifference(task.dateTime, date) == 0).toList();
     _tasks.sort((a, b) => a.dateTime.compareTo(b.dateTime));
 
-    List<TaskGroupHour> groups = [];
+    List<DynamicObject> groups = [];
+    DateTime now = DateTime.now();
 
     if(_tasks.length > 0){
       for(int i = _tasks.first.dateTime.hour; i <= _tasks.last.dateTime.hour; i++){
-        groups.add(
-          TaskGroupHour(
-            hour: copyDateTimeWith(
-              date,
-              hour: i
-            ),
-            tasks: _tasks.where((task) => task.dateTime.hour == i).toList()
-          )
-        );
+        groups.add(DynamicObject(
+          object: DateTime(now.year, now.month, now.day, i)
+        ));
+
+        _tasks.where((task) => task.dateTime.hour == i).forEach((task) {
+          groups.add(DynamicObject(object: task));
+        });
       }
     }
     return groups;

@@ -2,19 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
+import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/components/calendar/calendar_card.dart';
 import 'package:task_manager/components/calendar/calendar_group_hour.dart';
 import 'package:task_manager/components/calendar/calendar_month_picker.dart';
-import 'package:task_manager/components/lists/declarative_animated_list.dart';
-import 'package:task_manager/components/lists/list_item_animation.dart';
+import 'package:task_manager/components/lists/animated_dynamic_task_list.dart';
 import 'package:task_manager/components/lists/snap_bounce_scroll_physics.dart';
+import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/components/main/app_bar.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/app_bar_cubit.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
-import 'package:task_manager/models/tasks_group_hour.dart';
+import 'package:task_manager/models/dynamic_object.dart';
 
 import '../../constants.dart';
 
@@ -50,7 +51,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               return BlocBuilder<CalendarBloc, CalendarState>(
                 builder: (_, calendarState){
 
-                  List<TaskGroupHour> groups = (calendarState is CalendarLoadSuccess) ? calendarState.groups : [];
+                  List<DynamicObject> items = (calendarState is CalendarLoadSuccess) ? calendarState.items : [];
 
                   return Column(
                     children: [
@@ -158,17 +159,13 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
 
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: cPadding),
-                                      child: DeclarativeAnimatedList(
-                                        items: groups,
-                                        equalityCheck: (TaskGroupHour a, TaskGroupHour b) => a.hour.hour == b.hour.hour,
-                                        itemBuilder: (BuildContext context, TaskGroupHour group, int index, Animation<double> animation){
-                                          return ListItemAnimation(
-                                            animation: animation,
-                                            child: CalendarGroupHour(
-                                              group: group,
-                                              context: context,
-                                            ),
-                                          );
+                                      child: AnimatedDynamicTaskList(
+                                        items: items,
+                                        taskListItemType: TaskListItemType.Calendar,
+                                        context: context,
+                                        onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task)),
+                                        objectBuilder: (object){
+                                          return (object is DateTime) ? CalendarGroupHour(dateTime: object) : Container();
                                         },
                                       )
                                     ),
