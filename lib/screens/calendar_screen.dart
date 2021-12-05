@@ -15,7 +15,7 @@ import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 
-import '../../constants.dart';
+import '../constants.dart';
 
 class CalendarScreen extends StatefulWidget{
 

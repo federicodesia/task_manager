@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/screens/home/tabs/today_tab.dart';
-import 'package:task_manager/screens/home/tabs/upcoming_tab.dart';
+import 'package:task_manager/screens/home/today_tab.dart';
+import 'package:task_manager/screens/home/upcoming_tab.dart';
 
 class MyTab{
   final String name;

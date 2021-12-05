@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/screens/calendar/calendar_screen.dart';
+import 'package:task_manager/screens/calendar_screen.dart';
 import 'package:task_manager/screens/home/home_screen.dart';
 
 class MyBottomNavigationBarItem{
