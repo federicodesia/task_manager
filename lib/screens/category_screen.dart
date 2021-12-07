@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
+import 'package:task_manager/blocs/category_screen_bloc/category_screen_bloc.dart';
+import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/results_bottom_sheet.dart';
+import 'package:task_manager/components/lists/animated_dynamic_task_list.dart';
+import 'package:task_manager/components/lists/list_header.dart';
+import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/components/popup_menu_icon_item.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_alert_dialog.dart';
 import 'package:task_manager/components/rounded_button.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/category.dart';
 import '../constants.dart';
 
 class CategoryScreen extends StatefulWidget{
 
   final String? categoryUuid;
-  CategoryScreen({required this.categoryUuid,});
+  CategoryScreen({required this.categoryUuid});
 
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
@@ -31,24 +38,24 @@ class _CategoryScreenState extends State<CategoryScreen>{
 
     return Scaffold(
       backgroundColor: cBackgroundColor,
+      body: SafeArea(
+        child: CustomScrollView(
+          physics: BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()
+          ),
+          slivers: [
 
-      body: BlocBuilder<CategoryBloc, CategoryState>(
-        buildWhen: (previousState, currentState){
-          if(currentState is CategoryLoadSuccess) return !categoryDeleted;
-          return true;
-        },
-        builder: (_, categoryState) {
-          
-          Category category = (categoryState as CategoryLoadSuccess).categories.firstWhere((c) => c.uuid == widget.categoryUuid);
+            BlocBuilder<CategoryBloc, CategoryState>(
+              buildWhen: (previousState, currentState){
+                if(currentState is CategoryLoadSuccess) return !categoryDeleted;
+                return true;
+              },
+              builder: (_, categoryState){
 
-          return SafeArea(
-            child: CustomScrollView(
-              physics: BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()
-              ),
-              slivers: [
+                Category category = (categoryState as CategoryLoadSuccess).categories
+                  .firstWhere((c) => c.uuid == widget.categoryUuid);
 
-                SliverAppBar(
+                return SliverAppBar(
                   backgroundColor: Colors.transparent,
 
                   shape: RoundedRectangleBorder(
@@ -218,7 +225,9 @@ class _CategoryScreenState extends State<CategoryScreen>{
                                   ModalBottomSheet(
                                     title: "Results", 
                                     context: context, 
-                                    content: ResultsBottomSheet()
+                                    content: ResultsBottomSheet(
+                                      categoryScreenBloc: context.read<CategoryScreenBloc>(),
+                                    )
                                   ).show();
                                 },
                               )
@@ -226,16 +235,50 @@ class _CategoryScreenState extends State<CategoryScreen>{
                           ),
                         ),
 
-                        SizedBox(height: cPadding),
+                        SizedBox(height: cPadding - cListItemSpace),
                       ],
                     ),
                   ),
-                ),
-              ]
+                );
+              }
             ),
-          );
-        }
-      )
+
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: cPadding),
+                child: BlocBuilder<CategoryScreenBloc, CategoryScreenState>(
+                  builder: (_, state){
+                    
+                    return state is CategoryScreenLoadSuccess ? AnimatedDynamicTaskList(
+                      items: state.items,
+                      taskListItemType: TaskListItemType.Checkbox,
+                      context: context,
+                      onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task)),
+                      objectBuilder: (object){
+                        if(object is DateTime){
+                          DateTime now = DateTime.now();
+                          DateTime dateTime = object;
+
+                          String header;
+                          int difference = dateDifference(dateTime, now);
+                          if(difference == -1) header = "Yasterday";
+                          else if(difference == 0) header = "Today";
+                          else if(difference == 1) header = "Tomorrow";
+                          else if(dateTime.year != now.year) header = DateFormat('E, dd MMM y').format(dateTime);
+                          else header = DateFormat('E, dd MMM').format(dateTime);
+
+                          return ListHeader(header);
+                        }
+                        return Container();
+                      }
+                    ) : Container();
+                  }
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

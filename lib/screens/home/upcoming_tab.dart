@@ -69,7 +69,6 @@ class _UpcomingTabState extends State<UpcomingTab>{
                 if(items.isNotEmpty) AnimatedDynamicTaskList(
                   items: items,
                   taskListItemType: TaskListItemType.Checkbox,
-                  compareTaskUuid: true,
                   context: context,
                   onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task)),
                   objectBuilder: (object){

@@ -10,7 +10,6 @@ import 'package:task_manager/models/task.dart';
 class AnimatedDynamicTaskList extends StatelessWidget{
   final List<DynamicObject> items;
   final TaskListItemType taskListItemType;
-  final bool compareTaskUuid;
   final Widget Function(Object) objectBuilder;
   final BuildContext context;
   final Function(Task) onUndoDismissed;
@@ -18,7 +17,6 @@ class AnimatedDynamicTaskList extends StatelessWidget{
   AnimatedDynamicTaskList({
     required this.items,
     required this.taskListItemType,
-    this.compareTaskUuid = false,
     required this.objectBuilder,
     required this.context,
     required this.onUndoDismissed
@@ -29,13 +27,7 @@ class AnimatedDynamicTaskList extends StatelessWidget{
 
     return DeclarativeAnimatedList(
       items: items,
-      equalityCheck: (DynamicObject a, DynamicObject b){
-        final dynamic objectA = a.object;
-        final dynamic objectB = b.object;
-
-        if(compareTaskUuid && objectA is Task && objectB is Task) return objectA.uuid == objectB.uuid;
-        else return objectA == objectB;
-      },
+      equalityCheck: (DynamicObject a, DynamicObject b) => a.object == b.object,
       itemBuilder: (BuildContext context, DynamicObject dynamicObject, int index, Animation<double> animation){
         final dynamic item = dynamicObject.object;
 

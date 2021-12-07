@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
+import 'package:task_manager/blocs/category_screen_bloc/category_screen_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
@@ -40,7 +41,17 @@ class CategoryCard extends StatelessWidget{
 
               return ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryScreen(categoryUuid: category.uuid)));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context){
+                      return BlocProvider(
+                        create: (BuildContext context) => CategoryScreenBloc(
+                          taskBloc: BlocProvider.of<TaskBloc>(context),
+                          categoryUuid: categoryUuid
+                        )..add(CategoryScreenLoaded()),
+                        child: CategoryScreen(categoryUuid: categoryUuid),
+                      );
+                    })
+                  );
                 },
                 onLongPress: !category.isGeneral ? () {
                   ModalBottomSheet(

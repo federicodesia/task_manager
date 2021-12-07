@@ -1,0 +1,1 @@
+enum TaskFilter { All, Completed, Uncompleted }
