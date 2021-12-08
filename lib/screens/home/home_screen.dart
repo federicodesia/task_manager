@@ -1,3 +1,4 @@
+import 'package:boxy/flex.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/category_card.dart';
 import 'package:task_manager/components/header.dart';
 import 'package:task_manager/components/main/app_bar.dart';
+import 'package:task_manager/components/shimmer_list.dart';
 import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
@@ -138,27 +140,51 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                         builder: (_, categoryState){
                           return WidgetSize(
                             onChange: (Size size) => setState(() {}),
-                            child: categoryState is CategoryLoadSuccess ? Align(
+                            child: Align(
                               alignment: Alignment.centerLeft,
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 physics: BouncingScrollPhysics(),
                                 padding: EdgeInsets.symmetric(horizontal: cPadding),
-                                child: Row(
-                                  children: List.generate(categoryState.categories.length, (index){
-                                    bool lastItem = index == categoryState.categories.length - 1;
+                                child: AlignedAnimatedSwitcher(
+                                  duration: cTransitionDuration,
+                                  child: categoryState is CategoryLoadSuccess ? Row(
+                                    children: List.generate(categoryState.categories.length, (index){
+                                      bool lastItem = index == categoryState.categories.length - 1;
 
-                                    return Container(
-                                      width: 148.0,
-                                      margin: EdgeInsets.only(right: lastItem ? 0.0 : 12.0),
-                                      child: CategoryCard(
-                                        categoryUuid: categoryState.categories[index].uuid
+                                      return Container(
+                                        width: 148.0,
+                                        margin: EdgeInsets.only(right: lastItem ? 0.0 : 12.0),
+                                        child: CategoryCard(
+                                          categoryUuid: categoryState.categories[index].uuid
+                                        ),
+                                      );
+                                    })
+                                  ) : BoxyRow(
+                                    children: [
+                                      Dominant(
+                                        child: Opacity(
+                                          opacity: 0,
+                                          child: Container(
+                                            width: double.minPositive,
+                                            child: CategoryCard(isShimmer: true)
+                                          ),
+                                        )
                                       ),
-                                    );
-                                  }),
+
+                                      ShimmerList(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Container(
+                                          width: 148.0,
+                                          margin: EdgeInsets.only(right: 12.0),
+                                          child: CategoryCard(isShimmer: true),
+                                        )
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ) : Container(),
+                              )
+                            ),
                           );
                         },
                       ),

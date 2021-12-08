@@ -16,6 +16,7 @@ class DeclarativeAnimatedList<T extends Object> extends StatelessWidget{
   final AnimatedItemBuilder<T> itemBuilder;
   final AnimatedItemBuilder<T>? removeBuilder;
   final EqualityCheck<T>? equalityCheck;
+  final Axis scrollDirection;
   
   DeclarativeAnimatedList({
     this.shrinkWrap = true,
@@ -25,7 +26,8 @@ class DeclarativeAnimatedList<T extends Object> extends StatelessWidget{
     required this.items,
     required this.itemBuilder,
     this.removeBuilder,
-    this.equalityCheck
+    this.equalityCheck,
+    this.scrollDirection = Axis.vertical
   });
 
   @override
@@ -39,6 +41,8 @@ class DeclarativeAnimatedList<T extends Object> extends StatelessWidget{
       itemBuilder: itemBuilder,
       removeBuilder: removeBuilder ?? itemBuilder,
       equalityCheck: equalityCheck,
+      scrollDirection: scrollDirection,
+      reverse: scrollDirection == Axis.horizontal,
     );
   }
 }

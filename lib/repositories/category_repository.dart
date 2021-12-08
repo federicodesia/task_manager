@@ -7,7 +7,7 @@ class CategoryRepository{
 
   Future<List<Category>> fetchCategories() async{
 
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 2000));
     final List<Category> categories = [];
 
     categories.add(Category(uuid: null, name: "General", color: Colors.white.withOpacity(0.25)));
