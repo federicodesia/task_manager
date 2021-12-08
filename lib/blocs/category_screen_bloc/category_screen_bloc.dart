@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
-import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/models/task_filter.dart';

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/screens/home/today_tab.dart';
-import 'package:task_manager/screens/home/upcoming_tab.dart';
 
 class MyTab{
   final String name;
@@ -13,21 +11,3 @@ class MyTab{
     this.floatingActionButton = false
   });
 }
-
-List<MyTab> tabList = <MyTab>[
-  MyTab(
-    name: "Today",
-    content: TodayTab(),
-    floatingActionButton: true
-  ),
-
-  MyTab(
-    name: "Upcoming",
-    content: UpcomingTab(),
-  ),
-
-  MyTab(
-    name: "Previous",
-    content: Container(),
-  ),
-];

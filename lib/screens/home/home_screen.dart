@@ -11,16 +11,30 @@ import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
+import 'package:task_manager/screens/home/today_tab.dart';
+import 'package:task_manager/screens/home/upcoming_tab.dart';
 
 import '../../constants.dart';
 
-class HomeScreen extends StatefulWidget{
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => AvailableSpaceCubit(),
+      child: _HomeScreen(),
+    );
+  }
+}
+
+class _HomeScreen extends StatefulWidget{
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
+class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
+
+  late List<MyTab> tabList;
 
   late PageController pageController;
   late TabController tabController;
@@ -31,6 +45,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
   
   @override
   void initState() {
+    final availableSpaceCubit = BlocProvider.of<AvailableSpaceCubit>(context);
+
+    tabList = [
+      MyTab(
+        name: "Today",
+        content: TodayTab(availableSpaceCubit: availableSpaceCubit),
+        floatingActionButton: true
+      ),
+      MyTab(
+        name: "Upcoming",
+        content: UpcomingTab(availableSpaceCubit: availableSpaceCubit),
+      ),
+      MyTab(
+        name: "Previous",
+        content: Container(),
+      ),
+    ];
+
     pageController = PageController();
 
     tabController = TabController(

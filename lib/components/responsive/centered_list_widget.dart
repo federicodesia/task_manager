@@ -7,10 +7,12 @@ import '../../constants.dart';
 
 class CenteredListWidget extends StatefulWidget{
   
+  final AvailableSpaceCubit availableSpaceCubit;
   final Widget child;
   final double subtractHeight;
 
   CenteredListWidget({
+    required this.availableSpaceCubit,
     required this.child,
     this.subtractHeight = 0.0
   });
@@ -26,6 +28,7 @@ class _CenteredListWidgetState extends State<CenteredListWidget>{
   Widget build(BuildContext context) {
 
     return BlocBuilder<AvailableSpaceCubit, double>(
+      bloc: widget.availableSpaceCubit,
       builder: (_, state) {
         final availableHeight = state - cPadding * 2 - widget.subtractHeight;
 

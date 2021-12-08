@@ -4,7 +4,6 @@ import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/blocs/upcoming_bloc/upcoming_bloc.dart';
-import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/repositories/category_repository.dart';
 import 'package:task_manager/repositories/task_repository.dart';
 import 'components/main/bottom_navigation_bar.dart';
@@ -23,8 +22,6 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<TaskBloc>(create: (context) => TaskBloc(taskRepository: TaskRepository())..add(TaskLoaded())),
-        
-        BlocProvider<AvailableSpaceCubit>(create: (context) => AvailableSpaceCubit()),
 
         BlocProvider<CategoryBloc>(create: (context) => CategoryBloc(
           categoryRepository: CategoryRepository(),

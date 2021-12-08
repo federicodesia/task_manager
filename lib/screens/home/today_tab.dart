@@ -9,11 +9,15 @@ import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
+import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/task.dart';
 
 class TodayTab extends StatefulWidget{
+
+  final AvailableSpaceCubit availableSpaceCubit;
+  TodayTab({required this.availableSpaceCubit});
 
   @override
   _TodayTabState createState() => _TodayTabState();
@@ -40,6 +44,7 @@ class _TodayTabState extends State<TodayTab>{
 
           if(tasksList.isEmpty){
             child = CenteredListWidget(
+              availableSpaceCubit: widget.availableSpaceCubit,
               child: EmptySpace(
                 svgImage: "assets/svg/completed_tasks.svg",
                 svgHeight: MediaQuery.of(context).orientation == Orientation.portrait ? 
@@ -96,6 +101,7 @@ class _TodayTabState extends State<TodayTab>{
                   }
                 )
                 else CenteredListWidget(
+                  availableSpaceCubit: widget.availableSpaceCubit,
                   subtractHeight: progressSummaryHeight,
                   child: EmptySpace(
                     header: "You haven't tasks for today!",
@@ -108,6 +114,7 @@ class _TodayTabState extends State<TodayTab>{
         }
         else{
           child = CenteredListWidget(
+            availableSpaceCubit: widget.availableSpaceCubit,
             child: CircularProgressIndicator(),
           );
         }
