@@ -16,6 +16,8 @@ Color cCheckBoxUnselectedColor = Color(0xFF2C2F39);
 Color cChartPrimaryColor = Color(0xFFF5A1FD);
 Color cChartBackgroundColor = Color(0xFF9E6AF8);
 
+Color cShimmerColor = Colors.white.withOpacity(0.03);
+
 // Bottom Navigation Bar
 const double cBottomNavigationBarSeparatorHeight = 2.0;
 const double cBottomNavigationBarPadding = 12.0;

@@ -8,7 +8,7 @@ import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/category_card.dart';
 import 'package:task_manager/components/header.dart';
 import 'package:task_manager/components/main/app_bar.dart';
-import 'package:task_manager/components/shimmer_list.dart';
+import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';

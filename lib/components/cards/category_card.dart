@@ -8,6 +8,7 @@ import 'package:task_manager/blocs/category_screen_bloc/category_screen_bloc.dar
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
+import 'package:task_manager/components/shimmer/shimmer_text.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
@@ -112,8 +113,8 @@ class CategoryCardContent extends StatelessWidget{
     return IgnorePointer(
       ignoring: isShimmer,
       child: ElevatedButton(
-        onPressed: () => onPressed,
-        onLongPress: () => onLongPress,
+        onPressed: () => onPressed != null ? onPressed!() : null,
+        onLongPress: () => onLongPress != null ? onLongPress!() : null,
         style: ElevatedButton.styleFrom(
           primary: cCardBackgroundColor,
           padding: EdgeInsets.all(cPadding),
@@ -127,7 +128,9 @@ class CategoryCardContent extends StatelessWidget{
           children: [
             ShimmerText(
               isShimmer: isShimmer,
-              text: name ?? (List.generate(15 + Random().nextInt(10), (_) => " ").join()),
+              shimmerMinTextLenght: 15,
+              shimmerMaxTextLenght: 25,
+              text: name,
               style: cHeaderTextStyle.copyWith(fontSize: 15.0),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -138,7 +141,9 @@ class CategoryCardContent extends StatelessWidget{
             ShimmerText(
               isShimmer: isShimmer,
               shimmerTextHeight: 0.75,
-              text: description ?? (List.generate(12 + Random().nextInt(10), (_) => " ").join()),
+              shimmerMinTextLenght: 12,
+              shimmerMaxTextLenght: 22,
+              text: description,
               style: cLightTextStyle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -150,7 +155,7 @@ class CategoryCardContent extends StatelessWidget{
               lineHeight: 6.0,
               padding: EdgeInsets.zero,
               progressColor: color,
-              backgroundColor: Colors.white.withOpacity(isShimmer ? 0.03 : 0.25),
+              backgroundColor: isShimmer ? cShimmerColor : Colors.white.withOpacity(0.25),
               percent: tasksCount > 0 ? completedTasks / tasksCount : 0,
               animation: true,
               animateFromLastPercent: true,
@@ -159,62 +164,6 @@ class CategoryCardContent extends StatelessWidget{
           ],
         )
       ),
-    );
-  }
-}
-
-class ShimmerText extends StatelessWidget{
-
-  final bool isShimmer;
-  final double shimmerTextHeight;
-  final String text;
-  final TextStyle? style;
-  final int? maxLines;
-  final TextOverflow? overflow;
-
-  ShimmerText({
-    required this.isShimmer,
-    this.shimmerTextHeight = 0.8,
-    required this.text,
-    this.style,
-    this.maxLines,
-    this.overflow
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.centerLeft,
-      children: [
-        Opacity(
-          opacity: isShimmer ? 0.0 : 1.0,
-          child: Text(
-            text,
-            style: style,
-            maxLines: maxLines,
-            overflow: overflow,
-          ),
-        ),
-
-        Opacity(
-          opacity: isShimmer ? 1.0 : 0.0,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(6.0)),
-              color: Colors.white.withOpacity(0.03)
-            ),
-            child: Opacity(
-              opacity: 0,
-              child: Text(
-                text,
-                style: style != null ? style!.copyWith(height: shimmerTextHeight) : null,
-                maxLines: maxLines,
-                overflow: overflow,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
