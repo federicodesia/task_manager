@@ -5,6 +5,7 @@ import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:intl/intl.dart';
+import 'package:collection/collection.dart';
 
 import 'calendar_group_hour.dart';
 
@@ -25,92 +26,95 @@ class CalendarTaskListItem extends StatelessWidget{
       builder: (_, categoryState) {
 
         if(categoryState is CategoryLoadSuccess){
-          Category category = categoryState.categories.firstWhere((c) => c.uuid == task.categoryUuid);
+          Category? category = categoryState.categories.firstWhereOrNull((c) => c.uuid == task.categoryUuid);
 
-          return Row(
-            children: [
-              CalendarGroupHourText(text: "12:00", visible: false),
+          if(category != null){
+            return Row(
+              children: [
+                CalendarGroupHourText(text: "12:00", visible: false),
 
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: onPressed,
-                  style: ElevatedButton.styleFrom(
-                    primary: cCardBackgroundColor,
-                    padding: EdgeInsets.all(cListItemPadding),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(cBorderRadius),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: onPressed,
+                    style: ElevatedButton.styleFrom(
+                      primary: cCardBackgroundColor,
+                      padding: EdgeInsets.all(cListItemPadding),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(cBorderRadius),
+                      ),
                     ),
-                  ),
-                  child: IntrinsicHeight(
-                    child: Row(
-                      children: [
-                        
-                        Container(
-                          width: 6.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                            color: category.color
-                          )
-                        ),
-                        SizedBox(width: 16.0),
+                    child: IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          
+                          Container(
+                            width: 6.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                              color: category.color
+                            )
+                          ),
+                          SizedBox(width: 16.0),
 
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        category.name,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: cLightTextStyle.copyWith(fontWeight: FontWeight.w400, fontSize: 13.0)
+                                      ),
+                                    ),
+
+                                    SizedBox(width: 12.0),
+
+                                    Text(
+                                      DateFormat("HH:mm a").format(task.dateTime).toLowerCase(),
+                                      style: cLightTextStyle
+                                    )
+                                  ],
+                                ),
+                                SizedBox(height: 4.0),
+
+                                Text(
+                                  task.title,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  style: cSubtitleTextStyle
+                                ),
+
+                                // Description
+                                Visibility(
+                                  visible: task.description != "",
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 8.0),
                                     child: Text(
-                                      category.name,
+                                      task.description,
                                       overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: cLightTextStyle.copyWith(fontWeight: FontWeight.w400, fontSize: 13.0)
+                                      maxLines: 3,
+                                      style: cLightTextStyle.copyWith(fontWeight: FontWeight.w300, fontSize: 14.0)
                                     ),
                                   ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ),
+                )
+              ],
+            );
+          }
 
-                                  SizedBox(width: 12.0),
-
-                                  Text(
-                                    DateFormat("HH:mm a").format(task.dateTime).toLowerCase(),
-                                    style: cLightTextStyle
-                                  )
-                                ],
-                              ),
-                              SizedBox(height: 4.0),
-
-                              Text(
-                                task.title,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                style: cSubtitleTextStyle
-                              ),
-
-                              // Description
-                              Visibility(
-                                visible: task.description != "",
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 8.0),
-                                  child: Text(
-                                    task.description,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 3,
-                                    style: cLightTextStyle.copyWith(fontWeight: FontWeight.w300, fontSize: 14.0)
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ),
-              )
-            ],
-          );
+          return Container();
         }
-
         return Container();
       }
     );

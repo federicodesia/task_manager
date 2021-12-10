@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class ListItemAnimation extends StatelessWidget{
   
   final Animation<double> animation;
+  final Axis axis;
   final Widget child;
 
   ListItemAnimation({
     required this.animation,
+    this.axis = Axis.vertical,
     required this.child,
   });
 
@@ -20,6 +22,7 @@ class ListItemAnimation extends StatelessWidget{
         ),
       ),
       child: SizeTransition(
+        axis: axis,
         sizeFactor: CurvedAnimation(
           parent: animation,
           curve: Curves.fastOutSlowIn

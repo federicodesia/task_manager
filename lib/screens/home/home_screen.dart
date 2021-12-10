@@ -7,8 +7,11 @@ import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/category_card.dart';
 import 'package:task_manager/components/header.dart';
+import 'package:task_manager/components/lists/declarative_animated_list.dart';
+import 'package:task_manager/components/lists/list_item_animation.dart';
 import 'package:task_manager/components/main/app_bar.dart';
 import 'package:task_manager/components/shimmer/shimmer_list.dart';
+import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
@@ -131,10 +134,10 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
                       BlocBuilder<CategoryBloc, CategoryState>(
                         buildWhen: (previousState, currentState){
-                          if(previousState is CategoryLoadSuccess && currentState is CategoryLoadSuccess){
+                          /*if(previousState is CategoryLoadSuccess && currentState is CategoryLoadSuccess){
                             if(previousState.categories.length != currentState.categories.length) return true;
                             return false;
-                          }
+                          }*/
                           return true;
                         },
                         builder: (_, categoryState){
@@ -146,42 +149,48 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                 scrollDirection: Axis.horizontal,
                                 physics: BouncingScrollPhysics(),
                                 padding: EdgeInsets.symmetric(horizontal: cPadding),
-                                child: AlignedAnimatedSwitcher(
-                                  duration: cTransitionDuration,
-                                  child: categoryState is CategoryLoadSuccess ? Row(
-                                    children: List.generate(categoryState.categories.length, (index){
-                                      bool lastItem = index == categoryState.categories.length - 1;
-
-                                      return Container(
-                                        width: 148.0,
-                                        margin: EdgeInsets.only(right: lastItem ? 0.0 : 12.0),
-                                        child: CategoryCard(
-                                          categoryUuid: categoryState.categories[index].uuid
+                                child: BoxyRow(
+                                  children: [
+                                    Dominant(
+                                      child: Opacity(
+                                        opacity: 0,
+                                        child: Container(
+                                          width: double.minPositive,
+                                          child: CategoryCard(isShimmer: true)
                                         ),
-                                      );
-                                    })
-                                  ) : BoxyRow(
-                                    children: [
-                                      Dominant(
-                                        child: Opacity(
-                                          opacity: 0,
-                                          child: Container(
-                                            width: double.minPositive,
-                                            child: CategoryCard(isShimmer: true)
-                                          ),
-                                        )
-                                      ),
+                                      )
+                                    ),
 
-                                      ShimmerList(
+                                    AlignedAnimatedSwitcher(
+                                      duration: cTransitionDuration,
+                                      child: categoryState is CategoryLoadSuccess ? DeclarativeAnimatedList(
+                                        scrollDirection: Axis.horizontal,
+                                        items: categoryState.categories,
+                                        itemBuilder: (BuildContext context, Category item, int index, Animation<double> animation){
+                                          bool lastItem = index == categoryState.categories.length - 1;
+
+                                          return ListItemAnimation(
+                                            animation: animation,
+                                            axis: Axis.horizontal,
+                                            child: Container(
+                                              width: 148.0,
+                                              margin: EdgeInsets.only(right: lastItem ? 0.0 : 12.0),
+                                              child: CategoryCard(
+                                                categoryUuid: item.uuid
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ) : ShimmerList(
                                         scrollDirection: Axis.horizontal,
                                         child: Container(
                                           width: 148.0,
                                           margin: EdgeInsets.only(right: 12.0),
                                           child: CategoryCard(isShimmer: true),
                                         )
-                                      )
-                                    ],
-                                  ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               )
                             ),

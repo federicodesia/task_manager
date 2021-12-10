@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -31,6 +29,12 @@ class CategoryCard extends StatelessWidget{
       builder: (_, taskState) {
 
         return BlocBuilder<CategoryBloc, CategoryState>(
+          buildWhen: (previousState, currentState){
+            if(currentState is CategoryLoadSuccess){
+              if(currentState.categories.where((c) => c.uuid == categoryUuid).isEmpty) return false;
+            }
+            return true;
+          },
           builder: (_, categoryState) {
 
             if(isShimmer) return CategoryCardContent(isShimmer: true);

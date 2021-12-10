@@ -66,11 +66,13 @@ class _ShimmerListState extends State<ShimmerList>{
     return DeclarativeAnimatedList(
       insertDuration: animationDuration,
       removeDuration: animationDuration,
+      reverse: widget.scrollDirection == Axis.horizontal ? true : false,
       scrollDirection: widget.scrollDirection,
       items: List.generate(currentItems, (index) => widget.child),
       itemBuilder: (context, item, index, animation){
         return ListItemAnimation(
           animation: animation,
+          axis: Axis.horizontal,
           child: widget.child
         );
       },
