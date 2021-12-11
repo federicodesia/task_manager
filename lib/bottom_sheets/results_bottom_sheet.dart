@@ -57,7 +57,7 @@ class _ResultsBottomSheetState extends State<ResultsBottomSheet>{
                   bool isSelected = filter == taskFilter;
 
                   return AnimatedChip(
-                    text: filter.toString().split('.').last,
+                    text: getEnumValue(filter),
                     isLastItem: TaskFilter.values.length - 1 == index,
                     backgroundColor: isSelected ? cPrimaryColor : null,
                     onTap: () {
