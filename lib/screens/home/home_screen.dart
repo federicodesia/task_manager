@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
+import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
+import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/category_card.dart';
 import 'package:task_manager/components/header.dart';
@@ -126,20 +128,10 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Header(
-                        text: "Categories",
-                        rightText: "See all",
-                      ),
+                      Header(text: "Categories"),
                       SizedBox(height: cPadding),
 
                       BlocBuilder<CategoryBloc, CategoryState>(
-                        buildWhen: (previousState, currentState){
-                          /*if(previousState is CategoryLoadSuccess && currentState is CategoryLoadSuccess){
-                            if(previousState.categories.length != currentState.categories.length) return true;
-                            return false;
-                          }*/
-                          return true;
-                        },
                         builder: (_, categoryState){
                           return WidgetSize(
                             onChange: (Size size) => setState(() {}),
@@ -163,24 +155,66 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
                                     AlignedAnimatedSwitcher(
                                       duration: cTransitionDuration,
-                                      child: categoryState is CategoryLoadSuccess ? DeclarativeAnimatedList(
-                                        scrollDirection: Axis.horizontal,
-                                        items: categoryState.categories,
-                                        itemBuilder: (BuildContext context, Category item, int index, Animation<double> animation){
-                                          bool lastItem = index == categoryState.categories.length - 1;
+                                      child: categoryState is CategoryLoadSuccess ? Row(
+                                        children: [
+                                          DeclarativeAnimatedList(
+                                            scrollDirection: Axis.horizontal,
+                                            items: categoryState.categories.toList(),
+                                            itemBuilder: (BuildContext context, Category item, int index, Animation<double> animation){
+                                              return ListItemAnimation(
+                                                animation: animation,
+                                                axis: Axis.horizontal,
+                                                child: Container(
+                                                  width: 148.0,
+                                                  margin: EdgeInsets.only(right: 12.0),
+                                                  child: CategoryCard(
+                                                    categoryUuid: item.uuid
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
 
-                                          return ListItemAnimation(
-                                            animation: animation,
-                                            axis: Axis.horizontal,
-                                            child: Container(
-                                              width: 148.0,
-                                              margin: EdgeInsets.only(right: lastItem ? 0.0 : 12.0),
-                                              child: CategoryCard(
-                                                categoryUuid: item.uuid
+                                          AspectRatio(
+                                            aspectRatio: 1.0,
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                ModalBottomSheet(
+                                                  title: "Create category",
+                                                  context: context,
+                                                  content: CategoryBottomSheet()
+                                                ).show();
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                primary: cBackgroundColor,
+                                                padding: EdgeInsets.all(8.0),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(cBorderRadius),
+                                                  side: BorderSide(color: cCardBackgroundColor, width: 1.5)
+                                                ),
                                               ),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.add_rounded,
+                                                    color: Colors.white.withOpacity(0.6),
+                                                  ),
+                                                  SizedBox(height: 6.0),
+
+                                                  Text(
+                                                    "Add new",
+                                                    style: cLightTextStyle,
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                  SizedBox(height: 2.0),
+                                                ],
+                                              )
                                             ),
-                                          );
-                                        },
+                                          )
+                                        ],
                                       ) : ShimmerList(
                                         scrollDirection: Axis.horizontal,
                                         child: Container(
