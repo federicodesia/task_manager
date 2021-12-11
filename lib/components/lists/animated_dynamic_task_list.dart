@@ -27,7 +27,13 @@ class AnimatedDynamicTaskList extends StatelessWidget{
 
     return DeclarativeAnimatedList(
       items: items,
-      equalityCheck: (DynamicObject a, DynamicObject b) => a.object == b.object,
+      equalityCheck: (DynamicObject a, DynamicObject b){
+        final objectA = a.object;
+        final objectB = b.object;
+
+        if(objectA is Task && objectB is Task) return objectA.uuid == objectB.uuid;
+        return objectA == objectB;
+      },
       itemBuilder: (BuildContext context, DynamicObject dynamicObject, int index, Animation<double> animation){
         final dynamic item = dynamicObject.object;
 

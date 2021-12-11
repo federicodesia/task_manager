@@ -160,6 +160,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                           DeclarativeAnimatedList(
                                             scrollDirection: Axis.horizontal,
                                             items: categoryState.categories.toList(),
+                                            equalityCheck: (Category a, Category b) => a.uuid == b.uuid,
                                             itemBuilder: (BuildContext context, Category item, int index, Animation<double> animation){
                                               return ListItemAnimation(
                                                 animation: animation,
