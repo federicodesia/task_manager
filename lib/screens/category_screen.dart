@@ -12,6 +12,7 @@ import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_dynamic_task_list.dart';
 import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
+import 'package:task_manager/components/main/center_app_bar.dart';
 import 'package:task_manager/components/popup_menu_icon_item.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
@@ -87,6 +88,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                       ),
 
                       automaticallyImplyLeading: false,
+                      toolbarHeight: appBarHeight,
                       collapsedHeight: appBarHeight,
                       flexibleSpace: WidgetSize(
                         onChange: (Size size){
@@ -97,114 +99,102 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            
+                            CenterAppBar(
+                              center: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  IconButton(
-                                    color: Colors.white.withOpacity(0.75),
-                                    icon: Icon(Icons.navigate_before_rounded),
-                                    splashRadius: 32.0,
-                                    onPressed: () {
-                                      Navigator.of(context).maybePop();
-                                    },
+                                  Container(
+                                    height: 8.0,
+                                    width: 8.0,
+                                    decoration: BoxDecoration(
+                                      color: category.color,
+                                      borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                    )
                                   ),
-
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: 8.0,
-                                        width: 8.0,
-                                        decoration: BoxDecoration(
-                                          color: category.color,
-                                          borderRadius: BorderRadius.all(Radius.circular(8.0))
-                                        )
-                                      ),
-                                      SizedBox(width: 8.0),
-                                      Text(
-                                        category.name,
-                                        style: cTitleTextStyle.copyWith(fontSize: 16.0, height: 1.0),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    ],
-                                  ),
-
-                                  PopupMenuButton(
-                                    key: popupMenuKey,
-                                    color: cCardBackgroundColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                                    ),
-                                    elevation: 4,
-                                    itemBuilder: (context) => [
-                                      PopupMenuItem(
-                                        value: 0,
-                                        enabled: !category.isGeneral,
-                                        child: PopupMenuIconItem(
-                                          icon: Icons.edit_outlined,
-                                          text: "Edit"
-                                        ),
-                                      ),
-
-                                      PopupMenuItem(
-                                        value: 1,
-                                        enabled: !category.isGeneral,
-                                        child: PopupMenuIconItem(
-                                          icon: Icons.delete_outlined,
-                                          text: "Delete"
-                                        ),
-                                      ),
-                                    ],
-                                    onSelected: (value){
-                                      if(value == 0){
-                                        ModalBottomSheet(
-                                          title: "Edit category", 
-                                          context: context, 
-                                          content: CategoryBottomSheet(editCategory: category)
-                                        ).show();
-                                      }
-                                      else if(value == 1){
-                                        RoundedAlertDialog(
-                                          buildContext: context,
-                                          title: "Delete this category?",
-                                          description: "Do you really want to delete this category? All tasks will be unlinked without being deleted. This process cannot be undone.",
-                                          actions: [
-                                            RoundedAlertDialogButton(
-                                              text: "Cancel",
-                                              onPressed: () => Navigator.of(context).pop()
-                                            ),
-
-                                            RoundedAlertDialogButton(
-                                              text: "Delete",
-                                              backgroundColor: cRedColor,
-                                              onPressed: (){
-                                                // Close AlertDialog
-                                                Navigator.of(context).pop();
-
-                                                setState(() => categoryDeleted = true);
-                                                BlocProvider.of<CategoryBloc>(context).add(CategoryDeleted(category));
-                                                
-                                                // Close screen
-                                                Navigator.of(context).pop();
-                                              },
-                                            )
-                                          ],
-                                        ).show();
-                                      }
-                                    },
-                                    child: IconButton(
-                                      color: Colors.white.withOpacity(0.75),
-                                      icon: Icon(Icons.more_vert_rounded),
-                                      splashRadius: 32.0,
-                                      onPressed: () {
-                                        popupMenuKey.currentState!.showButtonMenu();
-                                      },
-                                    ),
+                                  SizedBox(width: 8.0),
+                                  Text(
+                                    category.name,
+                                    style: cTitleTextStyle.copyWith(fontSize: 16.0, height: 1.0),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   )
                                 ],
                               ),
+                              actions: [
+                                PopupMenuButton(
+                                  key: popupMenuKey,
+                                  color: cCardBackgroundColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                                  ),
+                                  elevation: 4,
+                                  itemBuilder: (context) => [
+                                    PopupMenuItem(
+                                      value: 0,
+                                      enabled: !category.isGeneral,
+                                      child: PopupMenuIconItem(
+                                        icon: Icons.edit_outlined,
+                                        text: "Edit"
+                                      ),
+                                    ),
+
+                                    PopupMenuItem(
+                                      value: 1,
+                                      enabled: !category.isGeneral,
+                                      child: PopupMenuIconItem(
+                                        icon: Icons.delete_outlined,
+                                        text: "Delete"
+                                      ),
+                                    ),
+                                  ],
+                                  onSelected: (value){
+                                    if(value == 0){
+                                      ModalBottomSheet(
+                                        title: "Edit category", 
+                                        context: context, 
+                                        content: CategoryBottomSheet(editCategory: category)
+                                      ).show();
+                                    }
+                                    else if(value == 1){
+                                      RoundedAlertDialog(
+                                        buildContext: context,
+                                        title: "Delete this category?",
+                                        description: "Do you really want to delete this category? All tasks will be unlinked without being deleted. This process cannot be undone.",
+                                        actions: [
+                                          RoundedAlertDialogButton(
+                                            text: "Cancel",
+                                            onPressed: () => Navigator.of(context).pop()
+                                          ),
+
+                                          RoundedAlertDialogButton(
+                                            text: "Delete",
+                                            backgroundColor: cRedColor,
+                                            onPressed: (){
+                                              // Close AlertDialog
+                                              Navigator.of(context).pop();
+
+                                              setState(() => categoryDeleted = true);
+                                              BlocProvider.of<CategoryBloc>(context).add(CategoryDeleted(category));
+                                              
+                                              // Close screen
+                                              Navigator.of(context).pop();
+                                            },
+                                          )
+                                        ],
+                                      ).show();
+                                    }
+                                  },
+                                  child: IconButton(
+                                    color: Colors.white.withOpacity(0.75),
+                                    icon: Icon(Icons.more_vert_rounded),
+                                    splashRadius: 32.0,
+                                    onPressed: () {
+                                      popupMenuKey.currentState!.showButtonMenu();
+                                    },
+                                  ),
+                                )
+                              ],
                             ),
                             SizedBox(height: cPadding - 16.0),
                             
