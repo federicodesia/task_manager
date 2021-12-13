@@ -49,25 +49,17 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
   double appBarHeight = 500.0;
   double contentHeight = 0.0;
+
+  bool showFloatingActionButton = true;
   
   @override
   void initState() {
     final availableSpaceCubit = BlocProvider.of<AvailableSpaceCubit>(context);
 
     tabList = [
-      MyTab(
-        name: "Today",
-        content: TodayTab(availableSpaceCubit: availableSpaceCubit),
-        floatingActionButton: true
-      ),
-      MyTab(
-        name: "Upcoming",
-        content: UpcomingTab(availableSpaceCubit: availableSpaceCubit),
-      ),
-      MyTab(
-        name: "Previous",
-        content: Container(),
-      ),
+      MyTab(name: "Today", content: TodayTab(availableSpaceCubit: availableSpaceCubit)),
+      MyTab(name: "Upcoming", content: UpcomingTab(availableSpaceCubit: availableSpaceCubit)),
+      MyTab(name: "Previous", content: Container()),
     ];
 
     pageController = PageController();
@@ -85,237 +77,234 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      
-      floatingActionButton: AlignedAnimatedSwitcher(
-        alignment: Alignment.bottomRight,
-        duration: Duration(milliseconds: 150),
-        child: tabList[currentTab].floatingActionButton ? MyFloatingActionButton(
-          currentTab: currentTab,
-        ) : Container(),
-      ),
+      floatingActionButton: AnimatedFloatingActionButton(visible: showFloatingActionButton),
 
       body: LayoutBuilder(
         builder: (_, constraints){
           
-          return CustomScrollView(
-            physics: BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()
-            ),
-            slivers: [
-
-              SliverAppBar(
-                backgroundColor: cBackgroundColor,
-                collapsedHeight: appBarHeight,
-                flexibleSpace: WidgetSize(
-                  onChange: (Size size){
-                    setState(() => appBarHeight = size.height);
-                    context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height - contentHeight);
-                  },
-                  child: MyAppBar(
-                    header: "Hello 👋",
-                    description: "Have a nice day!",
-                    onButtonPressed: () {},
-                  )
-                )
+          return AnimatedFloatingActionButtonScrollNotification(
+            currentState: showFloatingActionButton,
+            onChange: (value) => setState(() => showFloatingActionButton = value),
+            child: CustomScrollView(
+              physics: BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()
               ),
+              slivers: [
 
-              SliverToBoxAdapter(
-                child: WidgetSize(
-                  onChange: (Size size){
-                    setState(() => contentHeight = size.height);
-                    context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - appBarHeight - size.height);
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Header(text: "Categories"),
-                      SizedBox(height: cPadding),
+                SliverAppBar(
+                  backgroundColor: cBackgroundColor,
+                  collapsedHeight: appBarHeight,
+                  flexibleSpace: WidgetSize(
+                    onChange: (Size size){
+                      setState(() => appBarHeight = size.height);
+                      context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height - contentHeight);
+                    },
+                    child: MyAppBar(
+                      header: "Hello 👋",
+                      description: "Have a nice day!",
+                      onButtonPressed: () {},
+                    )
+                  )
+                ),
 
-                      BlocBuilder<CategoryBloc, CategoryState>(
-                        builder: (_, categoryState){
-                          return WidgetSize(
-                            onChange: (Size size) => setState(() {}),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                physics: BouncingScrollPhysics(),
-                                padding: EdgeInsets.symmetric(horizontal: cPadding),
-                                child: BoxyRow(
-                                  children: [
-                                    Dominant(
-                                      child: Opacity(
-                                        opacity: 0,
-                                        child: Container(
-                                          width: double.minPositive,
-                                          child: CategoryCard(isShimmer: true)
-                                        ),
-                                      )
-                                    ),
+                SliverToBoxAdapter(
+                  child: WidgetSize(
+                    onChange: (Size size){
+                      setState(() => contentHeight = size.height);
+                      context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - appBarHeight - size.height);
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Header(text: "Categories"),
+                        SizedBox(height: cPadding),
 
-                                    AlignedAnimatedSwitcher(
-                                      duration: cTransitionDuration,
-                                      child: categoryState is CategoryLoadSuccess ? Row(
-                                        children: [
-                                          DeclarativeAnimatedList(
-                                            scrollDirection: Axis.horizontal,
-                                            items: categoryState.categories.toList(),
-                                            equalityCheck: (Category a, Category b) => a.uuid == b.uuid,
-                                            itemBuilder: (BuildContext context, Category item, int index, Animation<double> animation){
-                                              return ListItemAnimation(
-                                                animation: animation,
-                                                axis: Axis.horizontal,
-                                                child: Container(
-                                                  width: 148.0,
-                                                  margin: EdgeInsets.only(right: 12.0),
-                                                  child: CategoryCard(
-                                                    categoryUuid: item.uuid
-                                                  ),
-                                                ),
-                                              );
-                                            },
+                        BlocBuilder<CategoryBloc, CategoryState>(
+                          builder: (_, categoryState){
+                            return WidgetSize(
+                              onChange: (Size size) => setState(() {}),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: BouncingScrollPhysics(),
+                                  padding: EdgeInsets.symmetric(horizontal: cPadding),
+                                  child: BoxyRow(
+                                    children: [
+                                      Dominant(
+                                        child: Opacity(
+                                          opacity: 0,
+                                          child: Container(
+                                            width: double.minPositive,
+                                            child: CategoryCard(isShimmer: true)
                                           ),
-
-                                          AspectRatio(
-                                            aspectRatio: 1.0,
-                                            child: ElevatedButton(
-                                              onPressed: () {
-                                                ModalBottomSheet(
-                                                  title: "Create category",
-                                                  context: context,
-                                                  content: CategoryBottomSheet()
-                                                ).show();
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                primary: cBackgroundColor,
-                                                padding: EdgeInsets.all(8.0),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(cBorderRadius),
-                                                  side: BorderSide(color: cCardBackgroundColor, width: 1.5)
-                                                ),
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.add_rounded,
-                                                    color: Colors.white.withOpacity(0.6),
-                                                  ),
-                                                  SizedBox(height: 6.0),
-
-                                                  Text(
-                                                    "Add new",
-                                                    style: cLightTextStyle,
-                                                    textAlign: TextAlign.center,
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                  SizedBox(height: 2.0),
-                                                ],
-                                              )
-                                            ),
-                                          )
-                                        ],
-                                      ) : ShimmerList(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Container(
-                                          width: 148.0,
-                                          margin: EdgeInsets.only(right: 12.0),
-                                          child: CategoryCard(isShimmer: true),
                                         )
                                       ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ),
-                          );
-                        },
-                      ),
 
-                      SizedBox(height: cPadding),
+                                      AlignedAnimatedSwitcher(
+                                        duration: cTransitionDuration,
+                                        child: categoryState is CategoryLoadSuccess ? Row(
+                                          children: [
+                                            DeclarativeAnimatedList(
+                                              scrollDirection: Axis.horizontal,
+                                              items: categoryState.categories.toList(),
+                                              equalityCheck: (Category a, Category b) => a.uuid == b.uuid,
+                                              itemBuilder: (BuildContext context, Category item, int index, Animation<double> animation){
+                                                return ListItemAnimation(
+                                                  animation: animation,
+                                                  axis: Axis.horizontal,
+                                                  child: Container(
+                                                    width: 148.0,
+                                                    margin: EdgeInsets.only(right: 12.0),
+                                                    child: CategoryCard(
+                                                      categoryUuid: item.uuid
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
 
-                      // Tabs
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: cPadding),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Theme(
-                            data: ThemeData(
-                              highlightColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                            ),
-                            child: TabBar(
-                              controller: tabController,
-                              isScrollable: true,
-                              physics: BouncingScrollPhysics(),
+                                            AspectRatio(
+                                              aspectRatio: 1.0,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  ModalBottomSheet(
+                                                    title: "Create category",
+                                                    context: context,
+                                                    content: CategoryBottomSheet()
+                                                  ).show();
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: cBackgroundColor,
+                                                  padding: EdgeInsets.all(8.0),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(cBorderRadius),
+                                                    side: BorderSide(color: cCardBackgroundColor, width: 1.5)
+                                                  ),
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.add_rounded,
+                                                      color: Colors.white.withOpacity(0.6),
+                                                    ),
+                                                    SizedBox(height: 6.0),
 
-                              indicatorSize: TabBarIndicatorSize.tab,
-                              indicatorWeight: 0.0,
-                              
-                              indicator: DotIndicator(
-                                color: cPrimaryColor,
-                                distanceFromCenter: 20.0
+                                                    Text(
+                                                      "Add new",
+                                                      style: cLightTextStyle,
+                                                      textAlign: TextAlign.center,
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                    SizedBox(height: 2.0),
+                                                  ],
+                                                )
+                                              ),
+                                            )
+                                          ],
+                                        ) : ShimmerList(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Container(
+                                            width: 148.0,
+                                            margin: EdgeInsets.only(right: 12.0),
+                                            child: CategoryCard(isShimmer: true),
+                                          )
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
                               ),
-                              labelPadding: EdgeInsets.only(right: 32.0),
-                              indicatorPadding: EdgeInsets.only(right: 32.0),
+                            );
+                          },
+                        ),
 
-                              /*indicator: TabIndicatorDecoration(),
-                              labelPadding: EdgeInsets.symmetric(horizontal: cPadding),*/
-                              
-                              labelStyle: cLightTextStyle,
-                              labelColor: cTextColor,
-                              unselectedLabelColor: cLightTextColor,
+                        SizedBox(height: cPadding),
 
-                              tabs: List.generate(tabList.length, (index){
-                                return Tab(
-                                  text: tabList[index].name
-                                );
-                              }),
-                              onTap: (index){
-                                pageController.animateToPage(
-                                  index,
-                                  duration: kTabScrollDuration,
-                                  curve: Curves.ease
-                                );
-                              }
+                        // Tabs
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: cPadding),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Theme(
+                              data: ThemeData(
+                                highlightColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                              ),
+                              child: TabBar(
+                                controller: tabController,
+                                isScrollable: true,
+                                physics: BouncingScrollPhysics(),
+
+                                indicatorSize: TabBarIndicatorSize.tab,
+                                indicatorWeight: 0.0,
+                                
+                                indicator: DotIndicator(
+                                  color: cPrimaryColor,
+                                  distanceFromCenter: 20.0
+                                ),
+                                labelPadding: EdgeInsets.only(right: 32.0),
+                                indicatorPadding: EdgeInsets.only(right: 32.0),
+
+                                /*indicator: TabIndicatorDecoration(),
+                                labelPadding: EdgeInsets.symmetric(horizontal: cPadding),*/
+                                
+                                labelStyle: cLightTextStyle,
+                                labelColor: cTextColor,
+                                unselectedLabelColor: cLightTextColor,
+
+                                tabs: List.generate(tabList.length, (index){
+                                  return Tab(
+                                    text: tabList[index].name
+                                  );
+                                }),
+                                onTap: (index){
+                                  pageController.animateToPage(
+                                    index,
+                                    duration: kTabScrollDuration,
+                                    curve: Curves.ease
+                                  );
+                                }
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              SliverToBoxAdapter(
-                child: ExpandablePageView.builder(
-                  controller: pageController,
-                  physics: BouncingScrollPhysics(),
-                  itemCount: tabList.length,
-                  itemBuilder: (context, index){
-                    
-                    return ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: (constraints.maxHeight - appBarHeight - contentHeight).clamp(0.0, constraints.maxHeight)
-                      ),
-                      child: SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
-                        padding: EdgeInsets.all(cPadding),
-                        child: tabList[index].content
-                      ),
-                    );
-                  },
-                  onPageChanged: (index){
-                    setState(() => currentTab = index);
-                    if(tabController.index != pageController.page){
-                      tabController.animateTo(index);
-                    }
-                  },
-                )
-              ),
-            ]
+                SliverToBoxAdapter(
+                  child: ExpandablePageView.builder(
+                    controller: pageController,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: tabList.length,
+                    itemBuilder: (context, index){
+                      
+                      return ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: (constraints.maxHeight - appBarHeight - contentHeight).clamp(0.0, constraints.maxHeight)
+                        ),
+                        child: SingleChildScrollView(
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.all(cPadding),
+                          child: tabList[index].content
+                        ),
+                      );
+                    },
+                    onPageChanged: (index){
+                      setState(() => currentTab = index);
+                      if(tabController.index != pageController.page){
+                        tabController.animateTo(index);
+                      }
+                    },
+                  )
+                ),
+              ]
+            ),
           );
         },
       ),
