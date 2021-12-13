@@ -6,6 +6,7 @@ import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
+import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/category_card.dart';
 import 'package:task_manager/components/header.dart';
@@ -77,7 +78,16 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton: AnimatedFloatingActionButton(visible: showFloatingActionButton),
+      floatingActionButton: AnimatedFloatingActionButton(
+        visible: showFloatingActionButton,
+        onPressed: () {
+          ModalBottomSheet(
+            title: "Create a task",
+            context: context,
+            content: TaskBottomSheet(),
+          ).show();
+        },
+      ),
 
       body: LayoutBuilder(
         builder: (_, constraints){

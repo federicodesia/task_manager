@@ -23,7 +23,14 @@ import 'modal_bottom_sheet.dart';
 class TaskBottomSheet extends StatefulWidget{
   
   final Task? editTask;
-  TaskBottomSheet({this.editTask});
+  final DateTime? initialDate;
+  final String? initialCategoryUuid;
+
+  TaskBottomSheet({
+    this.editTask,
+    this.initialDate,
+    this.initialCategoryUuid
+  });
 
   @override
   _TaskBottomSheetState createState() => _TaskBottomSheetState();
@@ -33,7 +40,12 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool formValidated = false;
-  late Task task = widget.editTask ?? Task(uuid: Uuid().v4());
+
+  late Task task = widget.editTask ?? Task(
+    uuid: Uuid().v4(),
+    date: widget.initialDate != null ? getDate(widget.initialDate!) : null,
+    categoryUuid: widget.initialCategoryUuid
+  );
 
   @override
   Widget build(BuildContext context) {

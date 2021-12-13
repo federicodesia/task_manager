@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
+import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
+import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/calendar/calendar_card.dart';
 import 'package:task_manager/components/calendar/calendar_group_hour.dart';
@@ -53,7 +55,20 @@ class _CalendarScreenState extends State<_CalendarScreen>{
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton: AnimatedFloatingActionButton(visible: showFloatingActionButton),
+      floatingActionButton: AnimatedFloatingActionButton(
+        visible: showFloatingActionButton,
+        onPressed: () {
+          CalendarState calendarState = BlocProvider.of<CalendarBloc>(context).state;
+
+          ModalBottomSheet(
+            title: "Create a task",
+            context: context,
+            content: TaskBottomSheet(
+              initialDate: (calendarState is CalendarLoadSuccess) ? calendarState.selectedDay : null,
+            ),
+          ).show();
+        },
+      ),
 
       body: LayoutBuilder(
         builder: (_, constraints){

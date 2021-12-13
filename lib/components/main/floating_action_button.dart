@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
-import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 
 import '../../constants.dart';
@@ -39,7 +37,14 @@ class AnimatedFloatingActionButtonScrollNotification extends StatelessWidget{
 class AnimatedFloatingActionButton extends StatelessWidget {
 
   final bool visible;
-  AnimatedFloatingActionButton({this.visible = true});
+  final IconData icon;
+  final void Function()? onPressed;
+
+  AnimatedFloatingActionButton({
+    this.visible = true,
+    this.icon = Icons.add_rounded,
+    this.onPressed
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +60,8 @@ class AnimatedFloatingActionButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
           ),
-          child: Icon(Icons.add_rounded),
-          onPressed: () {
-            ModalBottomSheet(
-              title: "Create a task",
-              context: context,
-              content: TaskBottomSheet(),
-            ).show();
-          },
+          child: Icon(icon),
+          onPressed: onPressed,
           heroTag: null,
         ),
       ) : Container(),

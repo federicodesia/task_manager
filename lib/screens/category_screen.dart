@@ -7,6 +7,7 @@ import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/results_bottom_sheet.dart';
+import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_dynamic_task_list.dart';
@@ -61,7 +62,18 @@ class _CategoryScreenState extends State<_CategoryScreen>{
 
     return Scaffold(
       backgroundColor: cBackgroundColor,
-      floatingActionButton: AnimatedFloatingActionButton(visible: showFloatingActionButton),
+      floatingActionButton: AnimatedFloatingActionButton(
+        visible: showFloatingActionButton,
+        onPressed: () {
+          ModalBottomSheet(
+            title: "Create a task",
+            context: context,
+            content: TaskBottomSheet(
+              initialCategoryUuid: widget.categoryUuid,
+            ),
+          ).show();
+        },
+      ),
       
       body: SafeArea(
         child: LayoutBuilder(
