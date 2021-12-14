@@ -1,25 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/components/shimmer/shimmer_text.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:intl/intl.dart';
 
-class CheckboxTaskListItem extends StatefulWidget{
+class CheckboxTaskListItem extends StatelessWidget{
 
-  final Task task;
-  final Function() onPressed;
-  final Function(bool?) onChanged;
+  final Task? task;
+  final Function()? onPressed;
+  final Function(bool?)? onChanged;
+  final bool isShimmer;
   
   CheckboxTaskListItem({
-    required this.task,
-    required this.onPressed,
-    required this.onChanged,
+    this.task,
+    this.onPressed,
+    this.onChanged,
+    this.isShimmer = false
   });
 
   @override
-  _CheckboxTaskListItemState createState() => _CheckboxTaskListItemState();
+  Widget build(BuildContext context) {
+    if(isShimmer) return IgnorePointer(
+      ignoring: true,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: cListItemSpace),
+        child: CheckboxTaskListItemContent(isShimmer: true),
+      ),
+    );
+
+    if(task != null) return CheckboxTaskListItemContent(
+      onCheckboxChanged: onChanged,
+      onPressed: onPressed,
+      completed: task!.completed,
+      title: task!.title,
+      description: task!.description,
+      dateTime: task!.dateTime,
+    );
+
+    return Container();
+  }
 }
 
-class _CheckboxTaskListItemState extends State<CheckboxTaskListItem>{
+class CheckboxTaskListItemContent extends StatelessWidget{
+
+  final void Function(bool?)? onCheckboxChanged;
+  final void Function()? onPressed;
+  final bool? completed;
+  final String? title;
+  final String? description;
+  final DateTime? dateTime;
+  final bool isShimmer;
+
+  CheckboxTaskListItemContent({
+    this.onCheckboxChanged,
+    this.onPressed,
+    this.completed,
+    this.title,
+    this.description,
+    this.dateTime,
+    this.isShimmer = false
+  });
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +76,10 @@ class _CheckboxTaskListItemState extends State<CheckboxTaskListItem>{
             unselectedWidgetColor: cCheckBoxUnselectedColor,
           ),
           child: Checkbox(
-            value: widget.task.completed,
-            activeColor: cPrimaryColor,
-            onChanged: (value) => widget.onChanged(value)
+            value: isShimmer ? true : (completed ?? false),
+            activeColor: isShimmer ? cCardBackgroundColor : cPrimaryColor,
+            checkColor: isShimmer ? cCardBackgroundColor : null,
+            onChanged: (value) => onCheckboxChanged != null ? onCheckboxChanged!(value) : null
           ),
         ),
 
@@ -45,13 +87,14 @@ class _CheckboxTaskListItemState extends State<CheckboxTaskListItem>{
 
         Expanded(
           child: ElevatedButton(
-            onPressed: widget.onPressed,
+            onPressed: onPressed ?? () {},
             style: ElevatedButton.styleFrom(
               primary: cCardBackgroundColor,
               padding: EdgeInsets.all(cListItemPadding),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(cBorderRadius),
               ),
+              elevation: 0
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,18 +103,23 @@ class _CheckboxTaskListItemState extends State<CheckboxTaskListItem>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: Text(
-                        widget.task.title,
-                        overflow: TextOverflow.ellipsis,
+                      child: ShimmerText(
+                        isShimmer: isShimmer,
+                        shimmerTextHeight: 0.9,
+                        shimmerMinTextLenght: 25,
+                        shimmerMaxTextLenght: 40,
+                        text: title,
+                        style: cSubtitleTextStyle,
                         maxLines: 2,
-                        style: cSubtitleTextStyle
+                        overflow: TextOverflow.ellipsis,
+                        alignment: Alignment.bottomLeft,
                       ),
                     ),
 
                     SizedBox(width: 12.0),
 
-                    Text(
-                      DateFormat("HH:mm a").format(widget.task.dateTime).toLowerCase(),
+                    if(dateTime != null) Text(
+                      DateFormat("HH:mm a").format(dateTime!).toLowerCase(),
                       style: cLightTextStyle
                     )
                   ],
@@ -79,14 +127,19 @@ class _CheckboxTaskListItemState extends State<CheckboxTaskListItem>{
 
                 // Description
                 Visibility(
-                  visible: widget.task.description != "",
+                  visible: isShimmer ? true : description != "",
                   child: Padding(
                     padding: EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      widget.task.description,
+                    child: ShimmerText(
+                      isShimmer: isShimmer,
+                      shimmerTextHeight: 0.9,
+                      shimmerMinTextLenght: 25,
+                      shimmerMaxTextLenght: 45,
+                      shimmerProbability: 0.5,
+                      text: description,
+                      style: cLightTextStyle,
+                      maxLines: isShimmer ? 1 : 3,
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
-                      style: cLightTextStyle
                     ),
                   ),
                 ),

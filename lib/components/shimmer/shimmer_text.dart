@@ -9,56 +9,64 @@ class ShimmerText extends StatelessWidget{
   final double shimmerTextHeight;
   final int shimmerMinTextLenght;
   final int shimmerMaxTextLenght;
+  final double shimmerProbability;
   final String? text;
   final TextStyle? style;
   final int? maxLines;
   final TextOverflow? overflow;
+  final Alignment alignment;
 
   ShimmerText({
     required this.isShimmer,
-    this.shimmerTextHeight = 0.8,
+    this.shimmerTextHeight = 0.9,
     required this.shimmerMinTextLenght,
     required this.shimmerMaxTextLenght,
+    this.shimmerProbability = 1.0,
     required this.text,
     this.style,
     this.maxLines,
-    this.overflow
+    this.overflow,
+    this.alignment = Alignment.centerLeft
   });
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.centerLeft,
+
+    if(!isShimmer) return Text(
+      text ?? "",
+      style: style,
+      maxLines: maxLines,
+      overflow: overflow,
+    );
+
+    bool shimmerText = Random().nextDouble() <= shimmerProbability;
+
+    return shimmerText ? Stack(
+      alignment: alignment,
       children: [
-        Opacity(
-          opacity: isShimmer ? 0.0 : 1.0,
-          child: Text(
-            text ?? "",
-            style: style,
-            maxLines: maxLines,
-            overflow: overflow,
-          ),
+        Text(
+          "",
+          style: style,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
 
-        Opacity(
-          opacity: isShimmer ? 1.0 : 0.0,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(6.0)),
-              color: cShimmerColor
-            ),
-            child: Opacity(
-              opacity: 0,
-              child: Text(
-                (List.generate(shimmerMinTextLenght + Random().nextInt(shimmerMaxTextLenght - shimmerMinTextLenght), (_) => " ").join()),
-                style: style != null ? style!.copyWith(height: shimmerTextHeight) : null,
-                maxLines: maxLines,
-                overflow: overflow,
-              ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(6.0)),
+            color: cShimmerColor
+          ),
+          child: Opacity(
+            opacity: 0,
+            child: Text(
+              (List.generate(shimmerMinTextLenght + Random().nextInt(shimmerMaxTextLenght - shimmerMinTextLenght),(_) => " ").join()),
+              style: style != null ? style!.copyWith(height: shimmerTextHeight) : null,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis
             ),
           ),
-        ),
+        )
       ],
-    );
+    ) : Container();
   }
 }

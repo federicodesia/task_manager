@@ -8,7 +8,7 @@ class TaskRepository{
 
   Future<List<Task>> fetchTasks() async{
 
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 10000));
     final List<Task> taskList = [];
 
     taskList.add(Task(uuid: Uuid().v4(), title: "Wake up buddy", categoryUuid: "520b1787-46e5-4aa4-84fe-4a7d267b84a7", completed: true)..setDateTime(copyDateTimeWith(DateTime.now(), hour: 7)));

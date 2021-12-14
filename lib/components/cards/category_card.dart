@@ -132,6 +132,7 @@ class CategoryCardContent extends StatelessWidget{
           children: [
             ShimmerText(
               isShimmer: isShimmer,
+              shimmerTextHeight: 0.8,
               shimmerMinTextLenght: 15,
               shimmerMaxTextLenght: 25,
               text: name,
@@ -144,7 +145,7 @@ class CategoryCardContent extends StatelessWidget{
 
             ShimmerText(
               isShimmer: isShimmer,
-              shimmerTextHeight: 0.75,
+              shimmerTextHeight: 0.8,
               shimmerMinTextLenght: 12,
               shimmerMaxTextLenght: 22,
               text: description,
