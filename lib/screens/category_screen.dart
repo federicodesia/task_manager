@@ -11,6 +11,7 @@ import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_dynamic_task_list.dart';
+import 'package:task_manager/components/lists/checkbox_task_list_item.dart';
 import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/components/main/center_app_bar.dart';
@@ -20,6 +21,7 @@ import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_alert_dialog.dart';
 import 'package:task_manager/components/rounded_button.dart';
+import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/category.dart';
@@ -263,8 +265,6 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                   ],
                                 ),
                               ),
-
-                              SizedBox(height: cPadding - cListItemSpace),
                             ],
                           ),
                         ),
@@ -280,50 +280,57 @@ class _CategoryScreenState extends State<_CategoryScreen>{
 
                           if(state is CategoryScreenLoadSuccess){
 
-                            return AlignedAnimatedSwitcher(
-                              alignment: Alignment.topCenter,
-                              duration: cTransitionDuration,
-                              child: state.items.isNotEmpty ? AnimatedDynamicTaskList(
-                                items: state.items,
-                                taskListItemType: TaskListItemType.Checkbox,
-                                context: context,
-                                onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task)),
-                                objectBuilder: (object){
-                                  if(object is DateTime){
-                                    DateTime now = DateTime.now();
-                                    DateTime dateTime = object;
+                            return Padding(
+                              padding: EdgeInsets.only(top: cPadding - cListItemSpace),
+                              child: AlignedAnimatedSwitcher(
+                                alignment: Alignment.topCenter,
+                                duration: cTransitionDuration,
+                                child: state.items.isNotEmpty ? AnimatedDynamicTaskList(
+                                  items: state.items,
+                                  taskListItemType: TaskListItemType.Checkbox,
+                                  context: context,
+                                  onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task)),
+                                  objectBuilder: (object){
+                                    if(object is DateTime){
+                                      DateTime now = DateTime.now();
+                                      DateTime dateTime = object;
 
-                                    String header;
-                                    int difference = dateDifference(dateTime, now);
-                                    if(difference == -1) header = "Yasterday";
-                                    else if(difference == 0) header = "Today";
-                                    else if(difference == 1) header = "Tomorrow";
-                                    else if(dateTime.year != now.year) header = DateFormat('E, dd MMM y').format(dateTime);
-                                    else header = DateFormat('E, dd MMM').format(dateTime);
+                                      String header;
+                                      int difference = dateDifference(dateTime, now);
+                                      if(difference == -1) header = "Yasterday";
+                                      else if(difference == 0) header = "Today";
+                                      else if(difference == 1) header = "Tomorrow";
+                                      else if(dateTime.year != now.year) header = DateFormat('E, dd MMM y').format(dateTime);
+                                      else header = DateFormat('E, dd MMM').format(dateTime);
 
-                                    return ListHeader(header);
+                                      return ListHeader(header);
+                                    }
+                                    return Container();
                                   }
-                                  return Container();
-                                }
-                              ) : CenteredListWidget(
-                                availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
-                                child: EmptySpace(
-                                  svgImage: "assets/svg/completed_tasks.svg",
-                                  svgHeight: MediaQuery.of(context).size.width * 0.4,
-                                  header: state.activeFilter == TaskFilter.All
-                                    ? "You haven't tasks in this category!"
-                                    : "You haven't ${getEnumValue(state.activeFilter).toLowerCase()} tasks!",
-                                  description: state.activeFilter == TaskFilter.All
-                                    ? "Categories help you organize easily. Add a new task by pressing the button below."
-                                    : "There are no tasks with the current filter. Change it by pressing the button above.",
+                                ) : CenteredListWidget(
+                                  availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
+                                  child: EmptySpace(
+                                    svgImage: "assets/svg/completed_tasks.svg",
+                                    svgHeight: MediaQuery.of(context).size.width * 0.4,
+                                    header: state.activeFilter == TaskFilter.All
+                                      ? "You haven't tasks in this category!"
+                                      : "You haven't ${getEnumValue(state.activeFilter).toLowerCase()} tasks!",
+                                    description: state.activeFilter == TaskFilter.All
+                                      ? "Categories help you organize easily. Add a new task by pressing the button below."
+                                      : "There are no tasks with the current filter. Change it by pressing the button above.",
+                                  )
                                 )
-                              )
+                              ),
                             );
                           }
 
-                          return CenteredListWidget(
-                            availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
-                            child: CircularProgressIndicator(),
+                          return Padding(
+                            padding: EdgeInsets.only(top: cPadding),
+                            child: ShimmerList(
+                              minItems: 3,
+                              maxItems: 5,
+                              child: CheckboxTaskListItem(isShimmer: true)
+                            ),
                           );
                         }
                       ),

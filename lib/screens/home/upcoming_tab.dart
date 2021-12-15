@@ -7,10 +7,12 @@ import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/charts/week_bar_chat.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_dynamic_task_list.dart';
+import 'package:task_manager/components/lists/checkbox_task_list_item.dart';
 import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
+import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/dynamic_object.dart';
@@ -104,9 +106,10 @@ class _UpcomingTabState extends State<UpcomingTab>{
           }
         }
         else{
-          child = CenteredListWidget(
-            availableSpaceCubit: widget.availableSpaceCubit,
-            child: CircularProgressIndicator(),
+          child = ShimmerList(
+            minItems: 2,
+            maxItems: 4,
+            child: CheckboxTaskListItem(isShimmer: true)
           );
         }
 
