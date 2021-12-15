@@ -215,6 +215,8 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                             )
                                           ],
                                         ) : ShimmerList(
+                                          minItems: 2,
+                                          maxItems: 3,
                                           scrollDirection: Axis.horizontal,
                                           child: Container(
                                             width: 148.0,

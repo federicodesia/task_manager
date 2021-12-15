@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/lists/declarative_animated_list.dart';
@@ -10,14 +11,18 @@ class ShimmerList extends StatefulWidget{
   final Axis scrollDirection;
   final Duration delayDuration;
   final Duration animationDuration;
-  final int itemCount;
+  final Duration lastItemDuration;
+  final int minItems;
+  final int maxItems;
   final Widget child;
 
   const ShimmerList({
     this.scrollDirection = Axis.vertical,
     this.delayDuration = const Duration(milliseconds: 250),
     this.animationDuration = cAnimatedListDuration,
-    this.itemCount = 3,
+    this.lastItemDuration = const Duration(milliseconds: 1500),
+    this.minItems = 3,
+    this.maxItems = 3,
     required this.child
   });
 
@@ -27,45 +32,46 @@ class ShimmerList extends StatefulWidget{
 
 class _ShimmerListState extends State<ShimmerList>{
 
-  late Duration delayDuration = widget.delayDuration;
-  late Duration animationDuration = widget.animationDuration;
-  late int itemCount = widget.itemCount;
+  late int minItems = widget.minItems;
+  late int maxItems = widget.maxItems;
+  late bool generateRandom = widget.maxItems > widget.minItems;
 
-  late Timer timer;
-  late int currentItems;
+  int currentItems = 0;
   bool disposed = false;
 
   @override
-  void initState() {
-    final Duration timerDuration = animationDuration * itemCount + delayDuration;
-
+  void initState(){
     animate();
-    Future.delayed(timerDuration - (delayDuration * itemCount), () {
-      timer = Timer.periodic(timerDuration, (_) => animate());
-    });
-    
     super.initState();
-  }
-
-  void animate() async{
-    for(int i = 0; i <= itemCount; i++){
-      if(!disposed) setState(() => currentItems = i);
-      await Future.delayed(delayDuration);
-    }
   }
 
   @override
   void dispose() {
     disposed = true;
-    timer.cancel();
     super.dispose();
+  }
+
+  void animate() async{
+    while(!disposed) {
+
+      final int itemCount;
+      if(generateRandom) itemCount = minItems + Random().nextInt(maxItems + 1 - minItems);
+      else itemCount = minItems;
+
+      for(int i = 0; i <= itemCount; i++){
+        if(!disposed) setState(() => currentItems = i);
+        await Future.delayed(widget.delayDuration);
+      }
+
+      await Future.delayed(widget.lastItemDuration);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return DeclarativeAnimatedList(
-      insertDuration: animationDuration,
-      removeDuration: animationDuration,
+      insertDuration: widget.animationDuration,
+      removeDuration: widget.animationDuration,
       reverse: true,
       scrollDirection: widget.scrollDirection,
       items: List.generate(currentItems, (index) => widget.child),

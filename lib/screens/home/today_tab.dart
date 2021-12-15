@@ -117,6 +117,8 @@ class _TodayTabState extends State<TodayTab>{
         }
         else{
           child = ShimmerList(
+            minItems: 2,
+            maxItems: 4,
             child: CheckboxTaskListItem(isShimmer: true)
           );
         }
