@@ -10,7 +10,7 @@ class CalendarLoadSuccess extends CalendarState {
   final List<DateTime> months;
   final DateTime selectedDay;
   final List<DateTime> days;
-  final List<DynamicObject> items;
+  final List<DynamicObject>? items;
   
   CalendarLoadSuccess({
     required this.selectedMonth,

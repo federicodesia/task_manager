@@ -9,6 +9,7 @@ import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/calendar/calendar_card.dart';
 import 'package:task_manager/components/calendar/calendar_group_hour.dart';
 import 'package:task_manager/components/calendar/calendar_month_picker.dart';
+import 'package:task_manager/components/calendar/calendar_task_list_item.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/animated_dynamic_task_list.dart';
 import 'package:task_manager/components/lists/snap_bounce_scroll_physics.dart';
@@ -17,6 +18,7 @@ import 'package:task_manager/components/main/app_bar.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/responsive/centered_list_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
+import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/dynamic_object.dart';
@@ -76,7 +78,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
           return BlocBuilder<CalendarBloc, CalendarState>(
             builder: (_, calendarState){
 
-              List<DynamicObject> items = (calendarState is CalendarLoadSuccess) ? calendarState.items : [];
+              List<DynamicObject>? items = (calendarState is CalendarLoadSuccess) ? calendarState.items : null;
 
               return AnimatedFloatingActionButtonScrollNotification(
                 currentState: showFloatingActionButton,
@@ -198,7 +200,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
 
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: cPadding),
-                            child: AlignedAnimatedSwitcher(
+                            child: items != null ? AlignedAnimatedSwitcher(
                               alignment: Alignment.topCenter,
                               duration: cTransitionDuration,
                               child: items.isNotEmpty ? AnimatedDynamicTaskList(
@@ -218,15 +220,19 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                   description: "There is nothing scheduled on this day. Add a new task by pressing the button below.",
                                 )
                               ),
+                            ) : Padding(
+                              padding: EdgeInsets.only(top: cPadding),
+                              child: ShimmerList(
+                                minItems: 3,
+                                maxItems: 4,
+                                child: CalendarTaskListItem(isShimmer: true)
+                              ),
                             )
                           ),
 
                           SizedBox(height: cPadding),
                         ],
-                      ) : CenteredListWidget(
-                        availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
-                        child: CircularProgressIndicator()
-                      ),
+                      ) : Container(),
                     ),
                   ]
                 ),

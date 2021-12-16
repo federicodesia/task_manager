@@ -43,7 +43,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
           selectedMonth: event.selectedDate,
           days: _getDaysOfMonth(event.selectedDate),
           selectedDay: event.selectedDate,
-          items: []
+          items: null
         )
       );
     });

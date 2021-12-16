@@ -126,21 +126,18 @@ class CheckboxTaskListItemContent extends StatelessWidget{
                 ),
 
                 // Description
-                Visibility(
-                  visible: isShimmer ? true : description != "",
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 8.0),
-                    child: ShimmerText(
-                      isShimmer: isShimmer,
-                      shimmerTextHeight: 0.9,
-                      shimmerMinTextLenght: 25,
-                      shimmerMaxTextLenght: 45,
-                      shimmerProbability: 0.5,
-                      text: description,
-                      style: cLightTextStyle,
-                      maxLines: isShimmer ? 1 : 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                if(isShimmer || description != "") Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: ShimmerText(
+                    isShimmer: isShimmer,
+                    shimmerTextHeight: 0.9,
+                    shimmerMinTextLenght: 25,
+                    shimmerMaxTextLenght: 45,
+                    shimmerProbability: 0.5,
+                    text: description,
+                    style: cLightTextStyle,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
