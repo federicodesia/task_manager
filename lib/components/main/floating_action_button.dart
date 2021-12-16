@@ -3,7 +3,7 @@ import 'package:task_manager/components/aligned_animated_switcher.dart';
 
 import '../../constants.dart';
 
-class AnimatedFloatingActionButtonScrollNotification extends StatelessWidget{
+class AnimatedFloatingActionButtonScrollNotification extends StatefulWidget{
   final bool currentState;
   final Function(bool) onChange;
   final Widget child;
@@ -15,21 +15,37 @@ class AnimatedFloatingActionButtonScrollNotification extends StatelessWidget{
   });
 
   @override
-  Widget build(BuildContext context) {
-    return NotificationListener<ScrollNotification>(
-      onNotification: (scroll) {
-        ScrollMetrics metrics = scroll.metrics;
- 
-        if(metrics.maxScrollExtent > 0){
-          if(metrics.pixels >= metrics.maxScrollExtent){
-            if(currentState) onChange(false);
-          }
-          else if(!currentState) onChange(true);
+  State<AnimatedFloatingActionButtonScrollNotification> createState() => _AnimatedFloatingActionButtonScrollNotificationState();
+}
+
+class _AnimatedFloatingActionButtonScrollNotificationState extends State<AnimatedFloatingActionButtonScrollNotification> {
+  ScrollMetricsNotification? lastNotification;
+
+  void updateState(ScrollMetrics metrics){
+    if(metrics.axis == Axis.vertical){
+      if(metrics.maxScrollExtent > 0){
+        if(metrics.pixels >= metrics.maxScrollExtent){
+          if(widget.currentState) widget.onChange(false);
         }
-        else if(!currentState) onChange(true);
-        return true;
+        else if(!widget.currentState) widget.onChange(true);
+      }
+      else if(!widget.currentState) widget.onChange(true);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return NotificationListener<ScrollMetricsNotification>(
+      onNotification: (ScrollMetricsNotification notification){
+        lastNotification = notification;
+
+        Future.delayed(Duration(), (){
+          if(lastNotification == notification) updateState(notification.metrics);
+        });
+        
+        return false;
       },
-      child: child,
+      child: widget.child,
     );
   }
 }
