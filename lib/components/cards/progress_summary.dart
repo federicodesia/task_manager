@@ -44,7 +44,7 @@ class ProgressSummary extends StatelessWidget{
               children: [
                 Text(
                   header,
-                  style: cTitleTextStyle.copyWith(fontSize: 15.0),
+                  style: cBoldTextStyle,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -69,14 +69,14 @@ class ProgressSummary extends StatelessWidget{
 
           CircularPercentIndicator(
             radius: 56.0,
-            lineWidth: 6.0,
+            lineWidth: cLineSize,
             animation: true,
             animateFromLastPercent: true,
             animationDuration: cAnimationDuration.inMilliseconds,
             percent: _percent,
             center: Text(
               "${(_percent * 100).toStringAsFixed(0)}%",
-              style: cSubtitleTextStyle,
+              style: cTextStyle,
             ),
             circularStrokeCap: CircularStrokeCap.round,
             backgroundColor: cChartBackgroundColor.withOpacity(0.35),

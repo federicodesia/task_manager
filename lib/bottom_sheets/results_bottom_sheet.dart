@@ -76,7 +76,7 @@ class _ResultsBottomSheetState extends State<ResultsBottomSheet>{
                 width: double.infinity,
                 child: Text(
                   "Done",
-                  style: cSubtitleTextStyle,
+                  style: cBoldTextStyle,
                 ),
                 onPressed: (){
                   if(taskFilter != null) categoryScreenBloc.add(CategoryScreenFilterUpdated(filter: taskFilter!));

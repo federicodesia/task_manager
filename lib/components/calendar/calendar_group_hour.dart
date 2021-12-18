@@ -26,10 +26,7 @@ class CalendarGroupHour extends StatelessWidget{
             ),
 
             Expanded(
-              child: Container(
-                height: 1,
-                color: Colors.white.withOpacity(0.08),
-              )
+              child: Container(height: 1, color: cDividerColor)
             )
           ],
         ),
@@ -56,7 +53,7 @@ class CalendarGroupHourText extends StatelessWidget{
         padding: EdgeInsets.only(right: 12.0),
         child: Text(
           text,
-          style: cLightTextStyle.copyWith(fontWeight: FontWeight.w300),
+          style: cExtraLightTextStyle,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

@@ -18,7 +18,7 @@ class RoundedAlertDialog{
   void show(){
     showDialog(
       context: buildContext,
-      barrierColor: Colors.black26,
+      barrierColor: cModalBottomSheetBarrierColor,
       builder: (_) => AlertDialog(
         backgroundColor: cBackgroundColor,
         shape: RoundedRectangleBorder(
@@ -28,7 +28,7 @@ class RoundedAlertDialog{
         actionsPadding: EdgeInsets.fromLTRB(12.0, 0, 12.0, 12.0),
         title: title != null ? Text(
           title!,
-          style: cTitleTextStyle.copyWith(fontSize: 16.0),
+          style: cSubtitleTextStyle,
           textAlign: TextAlign.center
         ) : null,
         content: description != null ? Text(

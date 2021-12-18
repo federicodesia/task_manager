@@ -9,10 +9,10 @@ class ListHeader extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: cHeaderPadding),
+      padding: EdgeInsets.symmetric(vertical: 16.0),
       child: Text(
         text,
-        style: cTitleTextStyle.copyWith(fontSize: 14.0)
+        style: cBoldTextStyle
       ),
     );
   }

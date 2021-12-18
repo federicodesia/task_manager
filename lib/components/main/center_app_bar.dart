@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/constants.dart';
 
 class CenterAppBar extends StatelessWidget {
 
@@ -29,9 +30,9 @@ class CenterAppBar extends StatelessWidget {
               children: [
                 if(leading != null) leading!
                 else if(automaticallyImplyLeading && canPop) IconButton(
-                  color: Colors.white.withOpacity(0.75),
+                  color: cIconColor,
                   icon: Icon(Icons.navigate_before_rounded),
-                  splashRadius: 32.0,
+                  splashRadius: cSplashRadius,
                   onPressed: () => Navigator.of(context).maybePop()
                 ),
               ],

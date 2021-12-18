@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/constants.dart';
 
 class FormValidator extends StatelessWidget{
 
@@ -23,7 +24,7 @@ class FormValidator extends StatelessWidget{
             widget(state),
             
             AnimatedCrossFade(
-              duration: Duration(milliseconds: 300),
+              duration: cTransitionDuration,
               alignment: Alignment.centerLeft,
               crossFadeState: state.hasError ? CrossFadeState.showFirst : CrossFadeState.showSecond,
               firstChild: Padding(

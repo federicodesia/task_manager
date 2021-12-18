@@ -131,7 +131,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                     SizedBox(width: 8.0),
                                     Text(
                                       category.name,
-                                      style: cTitleTextStyle.copyWith(fontSize: 16.0, height: 1.0),
+                                      style: cSubtitleTextStyle.copyWith(height: 1.0),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     )
@@ -202,9 +202,9 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                       }
                                     },
                                     child: IconButton(
-                                      color: Colors.white.withOpacity(0.75),
+                                      color: cIconColor,
                                       icon: Icon(Icons.more_vert_rounded),
-                                      splashRadius: 32.0,
+                                      splashRadius: cSplashRadius,
                                       onPressed: () {
                                         popupMenuKey.currentState!.showButtonMenu();
                                       },
@@ -230,7 +230,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                             children: [
                                               Icon(
                                                 Icons.search_rounded,
-                                                color: Colors.white.withOpacity(0.25),
+                                                color: cLightGrayColor,
                                               ),
                                               SizedBox(width: 12.0),
                                               Text(
@@ -250,7 +250,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                       color: cCardBackgroundColor,
                                       child: Icon(
                                         Icons.tune_rounded,
-                                        color: Colors.white.withOpacity(0.75)
+                                        color: cIconColor
                                       ),
                                       onPressed: () {
                                         ModalBottomSheet(

@@ -86,10 +86,7 @@ class WeekBarChart extends StatelessWidget{
                     child: Text(
                       "$completedWeekTasks Completed",
                       key: Key("$completedWeekTasks Completed"),
-                      style: cTextStyle.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: cChartPrimaryColor
-                      ),
+                      style: cBoldTextStyle.copyWith(color: cChartPrimaryColor),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     )
@@ -105,7 +102,7 @@ class WeekBarChart extends StatelessWidget{
                     opacity: 0,
                     child: Text(
                       "100 Completed",
-                      style: cTextStyle.copyWith(fontWeight: FontWeight.w500),
+                      style: cBoldTextStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -118,10 +115,7 @@ class WeekBarChart extends StatelessWidget{
                       child: Text(
                         "${weekTasksList.length - completedWeekTasks} Remaining",
                         key: Key("${weekTasksList.length - completedWeekTasks} Remaining"),
-                        style: cTextStyle.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: cChartBackgroundColor
-                        ),
+                        style: cBoldTextStyle.copyWith(color: cChartBackgroundColor),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

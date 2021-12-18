@@ -90,7 +90,7 @@ class MyBottomNavigationBarIcon extends StatelessWidget{
             height: cBottomNavigationBarIconSize,
             width: cBottomNavigationBarIconSize,
             child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 200),
+              duration: cFastAnimationDuration,
               switchOutCurve: Curves.fastOutSlowIn,
               switchInCurve: Curves.fastOutSlowIn,
               child: Opacity(
@@ -106,7 +106,7 @@ class MyBottomNavigationBarIcon extends StatelessWidget{
         ),
 
         AnimatedContainer(
-          duration: Duration(milliseconds: 300),
+          duration: cTransitionDuration,
           height: 5.0,
           width: 5.0,
           decoration: BoxDecoration(

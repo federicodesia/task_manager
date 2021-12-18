@@ -20,7 +20,7 @@ class Header extends StatelessWidget{
           Expanded(
             child: Text(
               text,
-              style: cTitleTextStyle.copyWith(fontSize: 14.0),
+              style: cBoldTextStyle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

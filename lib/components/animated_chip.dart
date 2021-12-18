@@ -22,7 +22,7 @@ class AnimatedChip extends StatelessWidget{
 
     return GestureDetector(
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 150),
+        duration: cFastAnimationDuration,
         padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
         margin: EdgeInsets.only(right: isLastItem ? 0.0 : 8.0),
 

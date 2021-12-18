@@ -58,8 +58,8 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
 
         IconButton(
           icon: Icon(Icons.chevron_left_rounded),
-          color: Colors.white.withOpacity(0.5),
-          splashRadius: 24.0,
+          color: cGrayColor,
+          splashRadius: cSmallSplashRadius,
           onPressed: (){
             if(currentPage % 1 == 0) pageController.animateToPage(
               (currentPage).toInt() - 1,
@@ -88,7 +88,7 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       DateFormat('MMMM y').format(monthList[index]),
-                      style: cTitleTextStyle.copyWith(fontSize: 14.0),
+                      style: cBoldTextStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
@@ -105,8 +105,8 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
 
         IconButton(
           icon: Icon(Icons.chevron_right_rounded),
-          color: Colors.white.withOpacity(0.5),
-          splashRadius: 24.0,
+          color: cGrayColor,
+          splashRadius: cSmallSplashRadius,
           onPressed: (){
             if(currentPage % 1 == 0) pageController.animateToPage(
               (currentPage).toInt() + 1,

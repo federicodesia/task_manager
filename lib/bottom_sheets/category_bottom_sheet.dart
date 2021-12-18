@@ -92,10 +92,10 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                           child: WidgetSize(
                             onChange: (Size size) => setState(() => colorWidth = size.width),
                             child: AnimatedContainer(
-                              duration: Duration(milliseconds: 150),
+                              duration: cFastAnimationDuration,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: isSelected ? Color(0xFF616164) : Colors.transparent,
+                                  color: isSelected ? cBorderColor : Colors.transparent,
                                   width: 1.5
                                 ),
                                 borderRadius: BorderRadius.all(Radius.circular(12.0))
@@ -131,7 +131,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
               width: double.infinity,
               child: Text(
                 "Done",
-                style: cSubtitleTextStyle,
+                style: cBoldTextStyle,
               ),
               onPressed: (){
                 setState(() => formValidated = true);

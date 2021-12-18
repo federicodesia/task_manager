@@ -109,7 +109,7 @@ class CheckboxTaskListItemContent extends StatelessWidget{
                         shimmerMinTextLenght: 25,
                         shimmerMaxTextLenght: 40,
                         text: title,
-                        style: cSubtitleTextStyle,
+                        style: cBoldTextStyle,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         alignment: Alignment.bottomLeft,

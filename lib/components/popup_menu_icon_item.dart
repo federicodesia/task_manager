@@ -17,7 +17,7 @@ class PopupMenuIconItem extends StatelessWidget{
       children: [
         Icon(
           icon,
-          color: Colors.white.withOpacity(0.75),
+          color: cIconColor,
         ),
         SizedBox(width: 12.0),
         Text(

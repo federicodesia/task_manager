@@ -197,7 +197,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                                   children: [
                                                     Icon(
                                                       Icons.add_rounded,
-                                                      color: Colors.white.withOpacity(0.6),
+                                                      color: cGrayColor,
                                                     ),
                                                     SizedBox(height: 6.0),
 

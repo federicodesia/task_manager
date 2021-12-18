@@ -99,7 +99,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                 children: [
                   
                   Container(
-                    width: 6.0,
+                    width: cLineSize,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(6.0)),
                       color: isShimmer ? cShimmerColor : categoryColor
@@ -120,7 +120,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                                 shimmerMinTextLenght: 15,
                                 shimmerMaxTextLenght: 25,
                                 text: categoryName,
-                                style: cLightTextStyle.copyWith(fontWeight: FontWeight.w400, fontSize: 13.0),
+                                style: cSmallLightTextStyle,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -142,7 +142,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                           shimmerMinTextLenght: 25,
                           shimmerMaxTextLenght: 40,
                           text: title,
-                          style: cSubtitleTextStyle,
+                          style: cBoldTextStyle,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                         ),
@@ -152,7 +152,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                           padding: EdgeInsets.only(top: 8.0),
                           child: Text(
                             description!,
-                            style: cLightTextStyle.copyWith(fontWeight: FontWeight.w300, fontSize: 14.0),
+                            style: cExtraLightTextStyle,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),

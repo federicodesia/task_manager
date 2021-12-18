@@ -23,7 +23,7 @@ class OutlinedFormIconButton extends StatelessWidget{
         children: [
           Icon(
             icon,
-            color: Color(0xFF9192A6)
+            color: cBorderColor
           ),
 
           Expanded(

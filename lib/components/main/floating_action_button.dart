@@ -66,7 +66,7 @@ class AnimatedFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlignedAnimatedSwitcher(
       alignment: Alignment.bottomRight,
-      duration: Duration(milliseconds: 150),
+      duration: cFastAnimationDuration,
       child: visible ? SizedBox(
         height: cButtonSize,
         width: cButtonSize,

@@ -136,7 +136,7 @@ class CategoryCardContent extends StatelessWidget{
               shimmerMinTextLenght: 15,
               shimmerMaxTextLenght: 25,
               text: name,
-              style: cHeaderTextStyle.copyWith(fontSize: 15.0),
+              style: cBoldTextStyle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -157,10 +157,10 @@ class CategoryCardContent extends StatelessWidget{
             SizedBox(height: 10.0),
             
             LinearPercentIndicator(
-              lineHeight: 6.0,
+              lineHeight: cLineSize,
               padding: EdgeInsets.zero,
               progressColor: color,
-              backgroundColor: isShimmer ? cShimmerColor : Colors.white.withOpacity(0.25),
+              backgroundColor: isShimmer ? cShimmerColor : cLightGrayColor,
               percent: tasksCount > 0 ? completedTasks / tasksCount : 0,
               animation: true,
               animateFromLastPercent: true,

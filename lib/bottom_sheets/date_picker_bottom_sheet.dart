@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/rounded_button.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 
 import '../constants.dart';
 
@@ -30,7 +31,7 @@ class DatePickerBottomSheet extends StatelessWidget{
               padding: EdgeInsets.symmetric(vertical: cPadding),
               child: CalendarDatePicker(
                 initialDate: initialDate,
-                firstDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+                firstDate: getDate(DateTime.now()),
                 lastDate: DateTime.now().add(Duration(days: 365)),
                 onDateChanged: onDateChanged
               ),
@@ -39,7 +40,7 @@ class DatePickerBottomSheet extends StatelessWidget{
               width: double.infinity,
               child: Text(
                 "Select",
-                style: cSubtitleTextStyle,
+                style: cBoldTextStyle,
               ),
               onPressed: () {
                 Navigator.of(context).pop();

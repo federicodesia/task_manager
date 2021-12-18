@@ -19,9 +19,9 @@ class CalendarCard extends StatelessWidget{
 
     return GestureDetector(
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 150),
+        duration: cFastAnimationDuration,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(18.0)),
+          borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
           color: isSelected ? cPrimaryColor : Colors.transparent
         ),
         padding: EdgeInsets.symmetric(
@@ -33,11 +33,7 @@ class CalendarCard extends StatelessWidget{
           children: [
             Text(
               DateFormat('d').format(dateTime),
-              style: cTextStyle.copyWith(
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
-                color: isSelected ? cTextColor : cLightTextColor
-              ),
+              style: cSubtitleTextStyle.copyWith(color: isSelected ? cTextColor : cLightTextColor),
             ),
             SizedBox(height: 4.0),
 
@@ -49,16 +45,13 @@ class CalendarCard extends StatelessWidget{
                   opacity: 0.0,
                   child: Text(
                     "aaaa",
-                    style: cLightTextStyle.copyWith(fontSize: 13.0),
+                    style: cSmallLightTextStyle,
                   ),
                 ),
 
                 Text(
                   DateFormat('E').format(dateTime),
-                  style: cLightTextStyle.copyWith(
-                    fontSize: 13.0,
-                    color: isSelected ? cTextColor : cLightTextColor
-                  ),
+                  style: cSmallLightTextStyle.copyWith(color: isSelected ? cTextColor : cLightTextColor),
                 )
               ],
             ),

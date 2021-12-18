@@ -221,7 +221,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
               width: double.infinity,
               child: Text(
                 "Done",
-                style: cSubtitleTextStyle,
+                style: cBoldTextStyle,
               ),
               onPressed: (){
                 setState(() => formValidated = true);

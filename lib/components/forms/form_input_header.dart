@@ -15,7 +15,7 @@ class FormInputHeader extends StatelessWidget{
       ),
       child: Text(
         text,
-        style: cSubtitleTextStyle
+        style: cBoldTextStyle
       ),
     );
   }

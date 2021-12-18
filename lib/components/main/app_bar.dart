@@ -49,7 +49,7 @@ class MyAppBar extends StatelessWidget {
               // Profile
               RoundedButton(
                 width: cButtonSize,
-                color: Color(0xFF252A34),
+                color: cCardBackgroundColor,
                 child: Image.asset(
                   "assets/icons/profile.png"
                 ),
