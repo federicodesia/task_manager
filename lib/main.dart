@@ -6,6 +6,7 @@ import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/blocs/upcoming_bloc/upcoming_bloc.dart';
 import 'package:task_manager/repositories/category_repository.dart';
 import 'package:task_manager/repositories/task_repository.dart';
+import 'package:task_manager/screens/welcome_screen.dart';
 import 'components/main/bottom_navigation_bar.dart';
 import 'constants.dart';
 import 'helpers/date_time_helper.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: MyHomePage(),
+        home: WelcomeScreen(),
       ),
     );
   }

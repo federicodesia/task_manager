@@ -21,7 +21,7 @@ Color cBorderColor = Color(0xFF616164);
 Color cModalBottomSheetColorIndicator = Color(0xFF2A2E3D);
 Color cModalBottomSheetBarrierColor = Colors.black26;
 
-Color cCardBackgroundColor = Color(0xFF272735);
+const Color cCardBackgroundColor = Color(0xFF272735);
 const Color cOutlinedButtonColor = Color(0xFF2B3039);
 Color cCheckBoxUnselectedColor = Color(0xFF2C2F39);
 
