@@ -25,29 +25,19 @@ class CenterTextIconButton extends StatelessWidget{
       color: color,
       child: Padding(
         padding: padding,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  SizedBox(
-                    height: 32.0,
-                    width: 32.0,
-                    child: Image.asset(iconAsset)
-                  )
-                ],
-              ),
-            ),
-            
-            Text(
-              text,
-              style: cBoldTextStyle,
-            ),
-
-            Spacer()
-          ],
-        ),
+        child: NavigationToolbar(
+          leading: SizedBox(
+            height: 32.0,
+            width: 32.0,
+            child: Image.asset(iconAsset)
+          ),
+          middle: Text(
+            text,
+            style: cBoldTextStyle.copyWith(fontSize: 13.5),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        )
       ),
       onPressed: () {},
     );

@@ -6,12 +6,14 @@ class EmptySpace extends StatelessWidget{
 
   final String? svgImage;
   final double? svgHeight;
+  final double? svgWidth;
   final String header;
   final String description;
 
   const EmptySpace({
     this.svgImage,
     this.svgHeight,
+    this.svgWidth,
     required this.header,
     required this.description,
   });
@@ -24,6 +26,7 @@ class EmptySpace extends StatelessWidget{
         children: [
           if(svgImage != null) Container(
             height: svgHeight,
+            width: svgWidth,
             padding: EdgeInsets.only(bottom: 32.0),
             child: SvgPicture.asset(svgImage!)
           ),
