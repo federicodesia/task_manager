@@ -10,11 +10,13 @@ class CenteredListWidget extends StatefulWidget{
   final AvailableSpaceCubit availableSpaceCubit;
   final Widget child;
   final double subtractHeight;
+  final bool subtractPadding;
 
   CenteredListWidget({
     required this.availableSpaceCubit,
     required this.child,
-    this.subtractHeight = 0.0
+    this.subtractHeight = 0.0,
+    this.subtractPadding = true
   });
 
   @override
@@ -30,7 +32,8 @@ class _CenteredListWidgetState extends State<CenteredListWidget>{
     return BlocBuilder<AvailableSpaceCubit, double>(
       bloc: widget.availableSpaceCubit,
       builder: (_, state) {
-        final availableHeight = state - cPadding * 2 - widget.subtractHeight;
+        double availableHeight = state - widget.subtractHeight;
+        if(widget.subtractPadding) availableHeight -= cPadding * 2;
 
         return SizedBox(
           height: availableHeight > childHeight ? availableHeight : childHeight,

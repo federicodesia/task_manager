@@ -1,3 +1,4 @@
+import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/components/center_text_icon_button.dart';
@@ -38,31 +39,38 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
 
             return SingleChildScrollView(
               physics: BouncingScrollPhysics(),
-              child: Padding(
-                padding: EdgeInsets.all(cPadding),
-                child: Column(
-                  children: [
+              child: Column(
+                children: [
 
-                    CenteredListWidget(
-                      availableSpaceCubit: availableSpaceCubit,
-                      child: EmptySpace(
-                        svgImage: "assets/svg/completed_tasks.svg",
-                        svgHeight: MediaQuery.of(context).size.width * 0.5 + 64.0,
-                        svgWidth: MediaQuery.of(context).size.width * 0.5,
-                        header: "Organize your works",
-                        description: "Let's organize your works with priority and do everything without stress.",
-                      ),
+                  CenteredListWidget(
+                    availableSpaceCubit: availableSpaceCubit,
+                    subtractPadding: false,
+                    child: ExpandablePageView(
+                      scrollDirection: Axis.horizontal,
+                      physics: BouncingScrollPhysics(),
+                      children: List.generate(3, (index){
+                        return EmptySpace(
+                          svgImage: "assets/svg/completed_tasks.svg",
+                          svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
+                            ? MediaQuery.of(context).size.width * 0.4
+                            : MediaQuery.of(context).size.height * 0.4,
+                          svgBottomMargin: 48.0,
+                          header: "Organize your works",
+                          description: "Let's organize your works with priority and do everything without stress.",
+                        );
+                      }),
                     ),
+                  ),
 
-                    WidgetSize(
-                      onChange: (Size size){
-                        context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height);
-                      },
+                  WidgetSize(
+                    onChange: (Size size){
+                      context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(cPadding),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(height: 32.0),
-
                           CenterTextIconButton(
                             text: "Continue with Facebook",
                             iconAsset: "assets/icons/facebook.png",
@@ -84,9 +92,9 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                           ),
                         ],
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               )
             );
           }

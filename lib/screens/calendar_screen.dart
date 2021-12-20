@@ -215,7 +215,9 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                 availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
                                 child: EmptySpace(
                                   svgImage: "assets/svg/completed_tasks.svg",
-                                  svgHeight: MediaQuery.of(context).size.width * 0.4,
+                                  svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
+                                    ? MediaQuery.of(context).size.width * 0.4
+                                    : MediaQuery.of(context).size.height * 0.4,
                                   header: "You haven't tasks on this day!",
                                   description: "There is nothing scheduled on this day. Add a new task by pressing the button below.",
                                 )
