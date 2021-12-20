@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const double cPadding = 24.0;
 const double cBorderRadius = 18.0;
 const double cLineSize = 6.0;
+const double cDotSize = 7.0;
 
 // Colors
 

@@ -1,9 +1,9 @@
-import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/components/center_text_icon_button.dart';
+import 'package:task_manager/components/lists/dot_indicator_list.dart';
 import 'package:task_manager/components/empty_space.dart';
-import 'package:task_manager/components/responsive/centered_list_widget.dart';
+import 'package:task_manager/components/responsive/centered_page_view_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import '../constants.dart';
@@ -27,6 +27,7 @@ class _WelcomeScreen extends StatefulWidget{
 class _WelcomeScreenState extends State<_WelcomeScreen>{
 
   late AvailableSpaceCubit availableSpaceCubit = BlocProvider.of<AvailableSpaceCubit>(context);
+  int currentSlidingPage = 0;
 
   @override
   Widget build(BuildContext context){
@@ -42,14 +43,16 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
               child: Column(
                 children: [
 
-                  CenteredListWidget(
+                  CenteredPageViewWidget(
                     availableSpaceCubit: availableSpaceCubit,
-                    subtractPadding: false,
-                    child: ExpandablePageView(
-                      scrollDirection: Axis.horizontal,
-                      physics: BouncingScrollPhysics(),
-                      children: List.generate(3, (index){
-                        return EmptySpace(
+                    onPageChanged: (index){
+                      setState(() => currentSlidingPage = index);
+                    },
+                    physics: BouncingScrollPhysics(),
+                    children: List.generate(3, (index){
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: cPadding),
+                        child: EmptySpace(
                           svgImage: "assets/svg/completed_tasks.svg",
                           svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
                             ? MediaQuery.of(context).size.width * 0.4
@@ -57,9 +60,9 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                           svgBottomMargin: 48.0,
                           header: "Organize your works",
                           description: "Let's organize your works with priority and do everything without stress.",
-                        );
-                      }),
-                    ),
+                        ),
+                      );
+                    }),
                   ),
 
                   WidgetSize(
@@ -67,10 +70,17 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                       context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height);
                     },
                     child: Padding(
-                      padding: EdgeInsets.all(cPadding),
+                      padding: EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+
+                          DotIndicatorList(
+                            count: 3,
+                            selectedIndex: currentSlidingPage,
+                          ),
+                          SizedBox(height: cPadding),
+
                           CenterTextIconButton(
                             text: "Continue with Facebook",
                             iconAsset: "assets/icons/facebook.png",
