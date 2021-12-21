@@ -14,6 +14,7 @@ class EmptySpace extends StatelessWidget{
   final String description;
   final int descriptionMaxLines;
   final bool descriptionFillLines;
+  final double descriptionWidthFactor;
 
   const EmptySpace({
     this.padding = const EdgeInsets.symmetric(vertical: cPadding),
@@ -25,7 +26,8 @@ class EmptySpace extends StatelessWidget{
     this.headerFillLines = false,
     required this.description,
     this.descriptionMaxLines = 4,
-    this.descriptionFillLines = false
+    this.descriptionFillLines = false,
+    this.descriptionWidthFactor = 0.9
   });
   
   @override
@@ -50,7 +52,7 @@ class EmptySpace extends StatelessWidget{
           SizedBox(height: 16.0),
 
           FractionallySizedBox(
-            widthFactor: 0.9,
+            widthFactor: descriptionWidthFactor,
             child: Text(
               description + (List.generate(descriptionFillLines ? descriptionMaxLines : 0, (_) => "\n").join()),
               textAlign: TextAlign.center,

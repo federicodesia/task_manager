@@ -65,7 +65,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
               children: [
                   FormInputHeader("Task"),
                   RoundedTextFormField(
-                    label: "Task title",
+                    hintText: "Task title",
                     initialValue: task.title,
                     onChanged: (value){
                       task = task.copyWith(title: value);
@@ -80,7 +80,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
 
                   FormInputHeader("Description"),
                   RoundedTextFormField(
-                    label: "Description",
+                    hintText: "Description",
                     initialValue: task.description,
                     textInputType: TextInputType.multiline,
                     maxLines: 3,

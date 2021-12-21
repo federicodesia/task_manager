@@ -61,7 +61,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
 
                 FormInputHeader("Name"),
                 RoundedTextFormField(
-                  label: "Category name",
+                  hintText: "Category name",
                   initialValue: category.name,
                   onChanged: (value){
                     category = category.copyWith(name: value);

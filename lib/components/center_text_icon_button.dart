@@ -39,7 +39,7 @@ class CenterTextIconButton extends StatelessWidget{
           ),
         )
       ),
-      onPressed: () {},
+      onPressed: onPressed,
     );
   }
 }

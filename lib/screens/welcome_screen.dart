@@ -7,6 +7,7 @@ import 'package:task_manager/components/responsive/centered_page_view_widget.dar
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/models/sliding_page.dart';
+import 'package:task_manager/screens/login_screen.dart';
 import '../constants.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -77,8 +78,8 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                         padding: EdgeInsets.all(cPadding),
                         svgImage: slidingPage.svg,
                         svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
-                          ? MediaQuery.of(context).size.width * 0.4
-                          : MediaQuery.of(context).size.height * 0.4,
+                          ? MediaQuery.of(context).size.width * 0.35
+                          : MediaQuery.of(context).size.height * 0.35,
                         svgBottomMargin: 48.0,
                         header: slidingPage.header,
                         headerMaxLines: 1,
@@ -86,6 +87,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                         description: slidingPage.description,
                         descriptionMaxLines: 3,
                         descriptionFillLines: true,
+                        descriptionWidthFactor: MediaQuery.of(context).orientation == Orientation.portrait ? 0.9 : 0.55
                       );
                     }),
                   ),
@@ -123,8 +125,27 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                           CenterTextIconButton(
                             text: "Continue with email",
                             iconAsset: "assets/icons/email.png",
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => LoginScreen())
+                              );
+                            },
                           ),
+                          SizedBox(height: cPadding),
+
+                          FractionallySizedBox(
+                            widthFactor: 0.75,
+                            child: Text(
+                              "By continuing, you agree Terms of Service and Privacy Policy.",
+                              style: cExtraLightTextStyle.copyWith(
+                                fontSize: 13.0,
+                                color: cLightTextColor.withOpacity(0.5)
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                            ),
+                          )
                         ],
                       ),
                     ),

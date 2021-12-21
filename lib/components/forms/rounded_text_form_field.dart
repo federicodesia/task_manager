@@ -3,7 +3,8 @@ import 'package:task_manager/constants.dart';
 
 class RoundedTextFormField extends StatelessWidget{
 
-  final String? label;
+  final String? labelText;
+  final String? hintText;
   final String? initialValue;
   final TextInputType textInputType;
   final int minLines;
@@ -13,9 +14,12 @@ class RoundedTextFormField extends StatelessWidget{
   final Function(String?)? onSaved;
   final Function(String)? onChanged;
   final String? errorText;
+  final Widget? suffixIcon;
+  final bool obscureText;
   
   RoundedTextFormField({
-    this.label,
+    this.labelText,
+    this.hintText,
     this.initialValue,
     this.textInputType = TextInputType.text,
     this.minLines = 1,
@@ -24,7 +28,9 @@ class RoundedTextFormField extends StatelessWidget{
     this.validator,
     this.onSaved,
     this.onChanged,
-    this.errorText
+    this.errorText,
+    this.suffixIcon,
+    this.obscureText = false
   });
 
   @override
@@ -40,10 +46,13 @@ class RoundedTextFormField extends StatelessWidget{
       maxLines: maxLines,
       style: cLightTextStyle,
       textInputAction: textInputAction,
+      obscureText: obscureText,
 
       decoration: InputDecoration(
-        labelText: label,
-        labelStyle: cLightTextStyle,
+        hintText: hintText,
+        hintStyle: cExtraLightTextStyle,
+        labelText: labelText,
+        labelStyle: cExtraLightTextStyle,
         floatingLabelBehavior: FloatingLabelBehavior.never,
 
         border: OutlineInputBorder(
@@ -54,9 +63,14 @@ class RoundedTextFormField extends StatelessWidget{
           borderSide: BorderSide(style: BorderStyle.none),
         ),
         
-        contentPadding: EdgeInsets.fromLTRB(16, 24, 16, 16),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 24.0,
+          vertical: 20.0
+        ),
         filled: true,
         fillColor: cCardBackgroundColor,
+
+        suffixIcon: suffixIcon,
       ),
     );
   }

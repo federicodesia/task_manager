@@ -62,6 +62,7 @@ const double cSnackBarBorderRadius = 12.0;
 
 Color cTextColor = Color(0xFFFBFAFC);
 Color cLightTextColor = cTextColor.withOpacity(0.75);
+Color cTextButtonColor = Color(0xFF9E6AF8);
 
 TextStyle cTextStyle = TextStyle(
   fontSize: 14.0,
