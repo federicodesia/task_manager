@@ -6,6 +6,7 @@ import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/responsive/centered_page_view_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
+import 'package:task_manager/models/sliding_page.dart';
 import '../constants.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -29,6 +30,24 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
   late AvailableSpaceCubit availableSpaceCubit = BlocProvider.of<AvailableSpaceCubit>(context);
   int currentSlidingPage = 0;
 
+  List<SlidingPage> slidingPages = [
+    SlidingPage(
+      header: "Organize your works",
+      description: "Let's organize your works with priority and do everything without stress.",
+      svg: "assets/svg/completed_tasks.svg",
+    ),
+    SlidingPage(
+      header: "Keep everything in one place",
+      description: "Access your account from anywhere, all your tasks are in the cloud!",
+      svg: "assets/svg/going_offline.svg",
+    ),
+    SlidingPage(
+      header: "Receive notifications",
+      description: "Don't forget your work anymore! Receive reminders without Internet.",
+      svg: "assets/svg/to_do.svg",
+    ),
+  ];
+
   @override
   Widget build(BuildContext context){
 
@@ -39,7 +58,9 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
           builder: (_, constraints) {
 
             return SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()
+              ),
               child: Column(
                 children: [
 
@@ -49,18 +70,22 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                       setState(() => currentSlidingPage = index);
                     },
                     physics: BouncingScrollPhysics(),
-                    children: List.generate(3, (index){
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: cPadding),
-                        child: EmptySpace(
-                          svgImage: "assets/svg/completed_tasks.svg",
-                          svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
-                            ? MediaQuery.of(context).size.width * 0.4
-                            : MediaQuery.of(context).size.height * 0.4,
-                          svgBottomMargin: 48.0,
-                          header: "Organize your works",
-                          description: "Let's organize your works with priority and do everything without stress.",
-                        ),
+                    children: List.generate(slidingPages.length, (index){
+                      SlidingPage slidingPage = slidingPages[index];
+
+                      return EmptySpace(
+                        padding: EdgeInsets.all(cPadding),
+                        svgImage: slidingPage.svg,
+                        svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
+                          ? MediaQuery.of(context).size.width * 0.4
+                          : MediaQuery.of(context).size.height * 0.4,
+                        svgBottomMargin: 48.0,
+                        header: slidingPage.header,
+                        headerMaxLines: 1,
+                        headerFillLines: true,
+                        description: slidingPage.description,
+                        descriptionMaxLines: 3,
+                        descriptionFillLines: true,
                       );
                     }),
                   ),
@@ -76,7 +101,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                         children: [
 
                           DotIndicatorList(
-                            count: 3,
+                            count: slidingPages.length,
                             selectedIndex: currentSlidingPage,
                           ),
                           SizedBox(height: cPadding),
