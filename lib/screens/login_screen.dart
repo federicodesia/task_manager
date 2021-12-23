@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
+import 'package:task_manager/components/responsive/fill_remaining_list.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
@@ -43,7 +44,6 @@ class _LoginScreenState extends State<_LoginScreen>{
               child: Column(
                 children: [
 
-
                   WidgetSize(
                     onChange: (Size size){
                       context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height);
@@ -58,12 +58,16 @@ class _LoginScreenState extends State<_LoginScreen>{
                           Text(
                             "Welcome back!",
                             style: cTitleTextStyle,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           SizedBox(height: 8.0),
 
                           Text(
                             "Please sign in to your account",
                             style: cSmallLightTextStyle,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           SizedBox(height: cPadding * 2),
 
@@ -103,14 +107,25 @@ class _LoginScreenState extends State<_LoginScreen>{
                             children: [
                               Text(
                                 "Forgot Password?",
-                                style: cSmallLightTextStyle
+                                style: cSmallLightTextStyle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
-                          ),
+                          ),                          
+                        ],
+                      ),
+                    ),
+                  ),
 
-
-                          SizedBox(height: 150),
-
+                  FillRemainingList(
+                    availableSpaceCubit: availableSpaceCubit,
+                    alignment: Alignment.bottomCenter,
+                    subtractPadding: false,
+                    child: Padding(
+                      padding: EdgeInsets.all(cPadding),
+                      child: Column(
+                        children: [
                           RoundedButton(
                             color: cCardBackgroundColor,
                             width: double.infinity,
@@ -122,21 +137,19 @@ class _LoginScreenState extends State<_LoginScreen>{
                           ),
                           SizedBox(height: cPadding),
 
-                          FractionallySizedBox(
-                            widthFactor: 0.75,
-                            child: RichText(
-                              text: TextSpan(
-                                style: cSmallLightTextStyle,
-                                children: <TextSpan>[
-                                  TextSpan(text: "Don't have an Account? "),
-                                  TextSpan(text: "Sign Up", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
-                                ],
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                            )
-                          )
+                          RichText(
+                            text: TextSpan(
+                              style: cSmallLightTextStyle,
+                              children: <TextSpan>[
+                                TextSpan(text: "Don't have an Account? "),
+                                TextSpan(text: "Sign Up", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
+                              ],
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: cPadding),
                         ],
                       ),
                     ),

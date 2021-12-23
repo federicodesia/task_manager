@@ -10,7 +10,7 @@ import 'package:task_manager/components/lists/animated_dynamic_task_list.dart';
 import 'package:task_manager/components/lists/checkbox_task_list_item.dart';
 import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
-import 'package:task_manager/components/responsive/centered_list_widget.dart';
+import 'package:task_manager/components/responsive/fill_remaining_list.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
@@ -44,7 +44,7 @@ class _UpcomingTabState extends State<UpcomingTab>{
           List<DynamicObject> items = state.items;
 
           if(weekTasksList.isEmpty && items.isEmpty){
-            child = CenteredListWidget(
+            child = FillRemainingList(
               availableSpaceCubit: widget.availableSpaceCubit,
               child: EmptySpace(
                 svgImage: "assets/svg/completed_tasks.svg",
@@ -93,7 +93,7 @@ class _UpcomingTabState extends State<UpcomingTab>{
                     return Container();
                   }
                 )
-                else CenteredListWidget(
+                else FillRemainingList(
                   availableSpaceCubit: widget.availableSpaceCubit,
                   subtractHeight: weekBarChartHeight,
                   child: EmptySpace(

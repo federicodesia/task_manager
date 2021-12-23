@@ -16,7 +16,7 @@ import 'package:task_manager/components/lists/snap_bounce_scroll_physics.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/components/main/app_bar.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
-import 'package:task_manager/components/responsive/centered_list_widget.dart';
+import 'package:task_manager/components/responsive/fill_remaining_list.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
@@ -211,7 +211,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                 objectBuilder: (object){
                                   return (object is DateTime) ? CalendarGroupHour(dateTime: object) : Container();
                                 }
-                              ) : CenteredListWidget(
+                              ) : FillRemainingList(
                                 availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
                                 child: EmptySpace(
                                   svgImage: "assets/svg/completed_tasks.svg",

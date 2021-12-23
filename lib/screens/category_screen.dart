@@ -17,7 +17,7 @@ import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/components/main/center_app_bar.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/popup_menu_icon_item.dart';
-import 'package:task_manager/components/responsive/centered_list_widget.dart';
+import 'package:task_manager/components/responsive/fill_remaining_list.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_alert_dialog.dart';
 import 'package:task_manager/components/rounded_button.dart';
@@ -307,7 +307,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                     }
                                     return Container();
                                   }
-                                ) : CenteredListWidget(
+                                ) : FillRemainingList(
                                   availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
                                   child: EmptySpace(
                                     svgImage: "assets/svg/completed_tasks.svg",

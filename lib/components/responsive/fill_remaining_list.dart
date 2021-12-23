@@ -5,25 +5,27 @@ import 'package:task_manager/cubits/available_space_cubit.dart';
 
 import '../../constants.dart';
 
-class CenteredListWidget extends StatefulWidget{
+class FillRemainingList extends StatefulWidget{
   
   final AvailableSpaceCubit availableSpaceCubit;
+  final Alignment alignment;
   final Widget child;
   final double subtractHeight;
   final bool subtractPadding;
 
-  CenteredListWidget({
+  FillRemainingList({
     required this.availableSpaceCubit,
+    this.alignment = Alignment.center,
     required this.child,
     this.subtractHeight = 0.0,
     this.subtractPadding = true
   });
 
   @override
-  _CenteredListWidgetState createState() => _CenteredListWidgetState();
+  _FillRemainingListState createState() => _FillRemainingListState();
 }
 
-class _CenteredListWidgetState extends State<CenteredListWidget>{
+class _FillRemainingListState extends State<FillRemainingList>{
   double childHeight = 0.0;
 
   @override
@@ -37,7 +39,8 @@ class _CenteredListWidgetState extends State<CenteredListWidget>{
 
         return SizedBox(
           height: availableHeight > childHeight ? availableHeight : childHeight,
-          child: Center(
+          child: Align(
+            alignment: widget.alignment,
             child: SingleChildScrollView(
               physics: NeverScrollableScrollPhysics(),
               child: Column(
