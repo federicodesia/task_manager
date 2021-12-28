@@ -6,6 +6,7 @@ import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/blocs/upcoming_bloc/upcoming_bloc.dart';
 import 'package:task_manager/repositories/category_repository.dart';
 import 'package:task_manager/repositories/task_repository.dart';
+import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/screens/welcome_screen.dart';
 import 'components/main/bottom_navigation_bar.dart';
 import 'constants.dart';
@@ -18,8 +19,16 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final _appRouter = AppRouter();
+  
   @override
   Widget build(BuildContext context) {
+    return MaterialApp.router(
+      routerDelegate: _appRouter.delegate(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
+      debugShowCheckedModeBanner: false,
+    );
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<TaskBloc>(create: (context) => TaskBloc(taskRepository: TaskRepository())..add(TaskLoaded())),
@@ -43,9 +52,10 @@ class MyApp extends StatelessWidget {
           )),
         ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: WelcomeScreen(),
+      child: MaterialApp.router(
+        routerDelegate: _appRouter.delegate(),
+        routeInformationParser: _appRouter.defaultRouteParser(),
+        debugShowCheckedModeBanner: false
       ),
     );
   }

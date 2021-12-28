@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/components/center_text_icon_button.dart';
@@ -7,6 +8,7 @@ import 'package:task_manager/components/responsive/centered_page_view_widget.dar
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/models/sliding_page.dart';
+import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/screens/login_screen.dart';
 import '../constants.dart';
 
@@ -126,9 +128,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                             text: "Continue with email",
                             iconAsset: "assets/icons/email.png",
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => LoginScreen())
-                              );
+                              AutoRouter.of(context).navigate(LoginRoute());
                             },
                           ),
                           SizedBox(height: cPadding),
