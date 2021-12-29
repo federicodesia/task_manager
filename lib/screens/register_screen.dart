@@ -130,9 +130,11 @@ class _RegisterScreenState extends State<RegisterScreen>{
                                   style: cBoldTextStyle,
                                 ),
                                 onPressed: () {
-                                  if(formKey.currentState!.validate()){
+                                  AutoRouter.of(context).navigate(EmailVerificationRoute());
+
+                                  /*if(formKey.currentState!.validate()){
                                     formKey.currentState!.save();
-                                  }
+                                  }*/
                                 },
                               ),
                               SizedBox(height: cPadding),

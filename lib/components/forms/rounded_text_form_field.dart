@@ -3,6 +3,8 @@ import 'package:task_manager/constants.dart';
 
 class RoundedTextFormField extends StatelessWidget{
 
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
   final String? labelText;
   final String? hintText;
   final String? initialValue;
@@ -14,10 +16,16 @@ class RoundedTextFormField extends StatelessWidget{
   final Function(String?)? onSaved;
   final Function(String)? onChanged;
   final String? errorText;
+  final TextStyle? errorStyle;
   final Widget? suffixIcon;
   final bool obscureText;
+  final int? maxLength;
+  final String? counterText;
+  final TextAlign textAlign;
   
   RoundedTextFormField({
+    this.controller,
+    this.focusNode,
     this.labelText,
     this.hintText,
     this.initialValue,
@@ -29,13 +37,20 @@ class RoundedTextFormField extends StatelessWidget{
     this.onSaved,
     this.onChanged,
     this.errorText,
+    this.errorStyle,
     this.suffixIcon,
-    this.obscureText = false
+    this.obscureText = false,
+    this.maxLength,
+    this.counterText,
+    this.textAlign = TextAlign.start
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
+      focusNode: focusNode,
+
       initialValue: initialValue,
       validator: validator,
       onSaved: onSaved,
@@ -47,6 +62,8 @@ class RoundedTextFormField extends StatelessWidget{
       style: cLightTextStyle,
       textInputAction: textInputAction,
       obscureText: obscureText,
+      maxLength: maxLength,
+      textAlign: textAlign,
 
       decoration: InputDecoration(
         hintText: hintText,
@@ -71,6 +88,10 @@ class RoundedTextFormField extends StatelessWidget{
         fillColor: cCardBackgroundColor,
 
         suffixIcon: suffixIcon,
+        counterText: counterText,
+
+        errorText: errorText,
+        errorStyle: errorStyle
       ),
     );
   }

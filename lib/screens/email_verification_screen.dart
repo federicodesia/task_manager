@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/empty_space.dart';
+import 'package:task_manager/components/forms/verification_code.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import '../constants.dart';
 
@@ -42,13 +43,24 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen>{
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 EmptySpace(
-                                  svgImage: "assets/svg/newsletter.svg",
+                                  svgImage: "assets/svg/mention.svg",
                                   svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
-                                    ? MediaQuery.of(context).size.width * 0.35
-                                    : MediaQuery.of(context).size.height * 0.35,
-                                  svgBottomMargin: 48.0,
+                                    ? MediaQuery.of(context).size.width * 0.4
+                                    : MediaQuery.of(context).size.height * 0.4,
+                                  svgBottomMargin: 64.0,
                                   header: "Verify your email",
                                   description: "Please enter the 4 digit verification code sent to your email address.",
+                                ),
+
+                                SizedBox(height: cPadding),
+
+                                VerificationCode(
+                                  length: 4,
+                                  validator: (value){
+                                    value = value ?? "";
+                                    if(value.isEmpty) return "Please enter the code";
+                                    return null;
+                                  },
                                 )
                               ],
                             ),
@@ -66,7 +78,11 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen>{
                                   "Confirm",
                                   style: cBoldTextStyle,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  if(formKey.currentState!.validate()){
+                                    formKey.currentState!.save();
+                                  }
+                                },
                               ),
                               SizedBox(height: cPadding),
 
