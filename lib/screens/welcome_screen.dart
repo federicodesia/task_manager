@@ -9,7 +9,6 @@ import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/models/sliding_page.dart';
 import 'package:task_manager/router/router.gr.dart';
-import 'package:task_manager/screens/login_screen.dart';
 import '../constants.dart';
 
 class WelcomeScreen extends StatelessWidget {

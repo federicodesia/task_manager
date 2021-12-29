@@ -7,7 +7,6 @@ import 'package:task_manager/blocs/upcoming_bloc/upcoming_bloc.dart';
 import 'package:task_manager/repositories/category_repository.dart';
 import 'package:task_manager/repositories/task_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
-import 'package:task_manager/screens/welcome_screen.dart';
 import 'components/main/bottom_navigation_bar.dart';
 import 'constants.dart';
 import 'helpers/date_time_helper.dart';

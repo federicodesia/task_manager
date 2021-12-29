@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:task_manager/components/forms/form_validator.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
-import 'package:task_manager/constants.dart';
 
 class VerificationCode extends StatefulWidget{
 

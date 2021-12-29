@@ -72,7 +72,7 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
         Expanded(
           child: NotificationListener<OverscrollIndicatorNotification>(
             onNotification: (overscroll){
-              overscroll.disallowGlow();
+              overscroll.disallowIndicator();
               return false;
             },
             child: ExpandablePageView.builder(

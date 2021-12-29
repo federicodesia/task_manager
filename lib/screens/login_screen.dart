@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/router/router.gr.dart';
-import 'package:task_manager/screens/register_screen.dart';
 import '../constants.dart';
 
 class LoginScreen extends StatefulWidget{
