@@ -1,3 +1,4 @@
+import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/forms/verification_code.dart';
@@ -13,6 +14,7 @@ class EmailVerificationScreen extends StatefulWidget{
 class _EmailVerificationScreenState extends State<EmailVerificationScreen>{
   
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  CustomTimerController customTimerController = CustomTimerController();
 
   @override
   Widget build(BuildContext context){
@@ -86,21 +88,46 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen>{
                               ),
                               SizedBox(height: cPadding),
 
-                              GestureDetector(
-                                child: RichText(
-                                  text: TextSpan(
+                              CustomTimer(
+                                controller: customTimerController,
+                                begin: Duration(minutes: 2),
+                                end: Duration(),
+                                builder: (time) {
+                                  return Text(
+                                    "Resend code in ${time.minutes}:${time.seconds}\n",
                                     style: cSmallLightTextStyle,
-                                    children: <TextSpan>[
-                                      TextSpan(text: "Didn't receive the code? "),
-                                      TextSpan(text: "Resend", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
-                                      TextSpan(text: "\n")
-                                    ],
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                ),
-                                onTap: () {},
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                  );
+                                },
+                                stateBuilder: (time, state) {
+                                  return GestureDetector(
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: cSmallLightTextStyle,
+                                        children: <TextSpan>[
+                                          TextSpan(text: "Didn't receive the code? "),
+                                          TextSpan(text: "Resend", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                          TextSpan(text: "\n")
+                                        ],
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    onTap: (){
+                                      customTimerController.reset();
+                                      customTimerController.start();
+                                    },
+                                  );
+                                },
+                                animationBuilder: (child) {
+                                  return AnimatedSwitcher(
+                                    duration: cTransitionDuration,
+                                    child: child,
+                                  );
+                                },
                               ),
                             ],
                           ),
