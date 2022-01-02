@@ -15,6 +15,7 @@ class RoundedTextFormField extends StatelessWidget{
   final String? Function(String?)? validator;
   final Function(String?)? onSaved;
   final Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
   final String? errorText;
   final TextStyle? errorStyle;
   final Widget? suffixIcon;
@@ -36,6 +37,7 @@ class RoundedTextFormField extends StatelessWidget{
     this.validator,
     this.onSaved,
     this.onChanged,
+    this.onFieldSubmitted,
     this.errorText,
     this.errorStyle,
     this.suffixIcon,
@@ -55,6 +57,7 @@ class RoundedTextFormField extends StatelessWidget{
       validator: validator,
       onSaved: onSaved,
       onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
 
       keyboardType: textInputType,
       minLines: minLines,
