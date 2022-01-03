@@ -105,11 +105,16 @@ class _LoginScreenState extends State<LoginScreen>{
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    "Forgot Password?",
-                                    style: cSmallLightTextStyle,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                  GestureDetector(
+                                    child: Text(
+                                      "Forgot Password?",
+                                      style: cSmallLightTextStyle,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    onTap: () {
+                                      AutoRouter.of(context).navigate(ForgotPasswordRoute());
+                                    },
                                   ),
                                 ],
                               ),                          

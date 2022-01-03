@@ -1,17 +1,19 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/empty_space.dart';
-import 'package:task_manager/components/forms/verification_code.dart';
+import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/components/rounded_button.dart';
+import 'package:task_manager/router/router.gr.dart';
 import '../constants.dart';
 
-class EmailVerificationScreen extends StatefulWidget{
+class ForgotPasswordScreen extends StatefulWidget{
 
   @override
-  _EmailVerificationScreenState createState() => _EmailVerificationScreenState();
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
 }
 
-class _EmailVerificationScreenState extends State<EmailVerificationScreen>{
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>{
   
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   CustomTimerController customTimerController = CustomTimerController();
@@ -45,22 +47,22 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen>{
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 EmptySpace(
-                                  svgImage: "assets/svg/newsletter.svg",
+                                  svgImage: "assets/svg/mention.svg",
                                   svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
                                     ? MediaQuery.of(context).size.width * 0.35
                                     : MediaQuery.of(context).size.height * 0.35,
                                   svgBottomMargin: 64.0,
-                                  header: "Verify your email",
-                                  description: "Please enter the 4 digit verification code sent to your email address.",
+                                  header: "Forgot your password?",
+                                  description: "Please enter your registered email to request a password reset.",
                                 ),
 
                                 SizedBox(height: cPadding),
 
-                                VerificationCode(
-                                  length: 4,
+                                RoundedTextFormField(
+                                  hintText: "Email address",
                                   validator: (value){
                                     value = value ?? "";
-                                    if(value.isEmpty) return "Please enter the code";
+                                    if(value.isEmpty) return "Please enter your email";
                                     return null;
                                   },
                                 )
@@ -77,58 +79,37 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen>{
                                 color: cCardBackgroundColor,
                                 width: double.infinity,
                                 child: Text(
-                                  "Confirm",
+                                  "Continue",
                                   style: cBoldTextStyle,
                                 ),
                                 onPressed: () {
                                   if(formKey.currentState!.validate()){
                                     formKey.currentState!.save();
+
+                                    AutoRouter.of(context).navigate(EmailVerificationRoute());
                                   }
                                 },
                               ),
                               SizedBox(height: cPadding),
 
-                              CustomTimer(
-                                controller: customTimerController,
-                                begin: Duration(minutes: 2),
-                                end: Duration(),
-                                builder: (time) {
-                                  return Text(
-                                    "Resend code in ${time.minutes}:${time.seconds}\n",
+                              GestureDetector(
+                                child: RichText(
+                                  text: TextSpan(
                                     style: cSmallLightTextStyle,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                  );
+                                    children: <TextSpan>[
+                                      TextSpan(text: "Remember your password? "),
+                                      TextSpan(text: "Sign In", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                      TextSpan(text: "\n")
+                                    ],
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                                onTap: () {
+                                  AutoRouter.of(context).navigate(LoginRoute());
                                 },
-                                stateBuilder: (time, state) {
-                                  return GestureDetector(
-                                    child: RichText(
-                                      text: TextSpan(
-                                        style: cSmallLightTextStyle,
-                                        children: <TextSpan>[
-                                          TextSpan(text: "Didn't receive the code? "),
-                                          TextSpan(text: "Resend", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
-                                          TextSpan(text: "\n")
-                                        ],
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    onTap: (){
-                                      customTimerController.reset();
-                                      customTimerController.start();
-                                    },
-                                  );
-                                },
-                                animationBuilder: (child) {
-                                  return AnimatedSwitcher(
-                                    duration: cTransitionDuration,
-                                    child: child,
-                                  );
-                                },
-                              ),
+                              )
                             ],
                           ),
                         )
