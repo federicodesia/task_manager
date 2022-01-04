@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 
 class ResponseMessages{
 
-  from(dynamic message, {required List<String> keys}){
+  List<ResponseMessage> from(dynamic message, {required List<String> keys}){
 
     final List<ResponseMessage> responseMessages = [];
 
@@ -23,5 +23,9 @@ class ResponseMessages{
     }
 
     return responseMessages;
+  }
+
+  String? getMessage(List<ResponseMessage> responseMessages, {required String key}){
+    return responseMessages.firstWhereOrNull((r) => r.key?.toLowerCase() == key.toLowerCase())?.message;
   }
 }

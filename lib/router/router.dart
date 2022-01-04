@@ -9,13 +9,21 @@ import 'package:task_manager/screens/welcome_screen.dart';
 @MaterialAutoRouter(
   replaceInRouteName: 'Screen,Route',
   routes: <AutoRoute>[
-    AutoRoute(page: WelcomeScreen),
-    AutoRoute(page: LoginScreen),
-    AutoRoute(page: RegisterScreen),
-    AutoRoute(page: EmailVerificationScreen),
-    AutoRoute(page: ForgotPasswordScreen),
 
-    AutoRoute(page: TempHomeScreen, initial: true),
+    AutoRoute(
+      name: "WelcomeRouter",
+      page: EmptyRouterPage,
+      children: [
+        AutoRoute(page: WelcomeScreen, initial: true),
+        AutoRoute(page: LoginScreen),
+        AutoRoute(page: RegisterScreen),
+        AutoRoute(page: ForgotPasswordScreen),
+      ]
+    ),
+
+    AutoRoute(page: EmailVerificationScreen),
+    
+    AutoRoute(page: TempHomeScreen),
   ],
 )
 

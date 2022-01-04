@@ -31,14 +31,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       switch (event.status) {
         case AuthStatus.unauthenticated:
           return emit(const AuthState.unauthenticated());
+        
+        case AuthStatus.waitingVerification:
+          return emit(AuthState.waitingVerification(User.empty, AuthCredentials.empty));
 
         case AuthStatus.authenticated:
-          /*final user = await _userRepository.getUser();
-          
-          return emit(user != null
-            ? AuthState.authenticated(user, AuthCredentials.empty)
-            : const AuthState.unauthenticated()
-          );*/
+          return emit(AuthState.authenticated(User.empty, AuthCredentials.empty));
 
         default:
           return emit(const AuthState.unknown());

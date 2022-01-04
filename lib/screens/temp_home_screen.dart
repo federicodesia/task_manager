@@ -41,18 +41,7 @@ class _TempHomeScreenState extends State<TempHomeScreen>{
                   "Logout",
                   style: cBoldTextStyle,
                 ),
-                onPressed: () async {
-                  final authRepository = AuthRepository();
-                  final response = await authRepository.register(name: "test", email: "test52311312@gmail.com", password: "x32112312d");
-                  
-                  if(response is AuthCredentials){
-                    print("Refresh token:  ${response.refreshToken}");
-                    print("Access token:  ${response.accessToken}");
-                  }
-                  else if(response is List<ResponseMessage>){
-                    response.forEach((element) => print("${element.key} | ${element.message}"));
-                  }
-                }
+                onPressed: () {}
               )
             ],
           ),

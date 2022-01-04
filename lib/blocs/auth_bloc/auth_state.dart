@@ -20,6 +20,12 @@ class AuthState {
     user: user
   );
 
+  const AuthState.waitingVerification(User user, AuthCredentials credentials) : this._(
+    status: AuthStatus.waitingVerification,
+    credentials: credentials,
+    user: user
+  );
+
   const AuthState.unauthenticated() : this._(
     status: AuthStatus.unauthenticated,
   );

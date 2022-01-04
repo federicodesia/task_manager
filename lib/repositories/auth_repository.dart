@@ -3,9 +3,8 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_messages.dart';
 import 'package:task_manager/models/auth_credentials.dart';
-import 'package:task_manager/models/response_message.dart';
 
-enum AuthStatus { unknown, authenticated, unauthenticated }
+enum AuthStatus { unknown, waitingVerification, authenticated, unauthenticated }
 
 class AuthRepository {
 
@@ -40,7 +39,7 @@ class AuthRepository {
         final authCredentials = AuthCredentials.fromJson(response.data);
 
         if(authCredentials.isNotEmpty){
-          _controller.add(AuthStatus.authenticated);
+          _controller.add(AuthStatus.waitingVerification);
           return authCredentials;
         }
       }
