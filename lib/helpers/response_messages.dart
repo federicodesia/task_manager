@@ -1,31 +1,11 @@
-import 'package:task_manager/models/response_message.dart';
 import 'package:collection/collection.dart';
 
-class ResponseMessages{
+List<String> generateResponseMessage(dynamic message){
+  if(message is List<dynamic>) return message.where((m) => m is String).map((m) => m as String).toList();
+  return [message];
+}
 
-  List<ResponseMessage> from(dynamic message, {required List<String> keys}){
-
-    final List<ResponseMessage> responseMessages = [];
-
-    if(message is List<dynamic>){
-      keys.forEach((key) {
-        responseMessages.add(ResponseMessage(
-          key: key,
-          message: message.firstWhereOrNull((m) => m is String && m.toLowerCase().contains(key.toLowerCase()))
-        ));
-      });
-    }
-    else if(message is String){
-      responseMessages.add(ResponseMessage(
-        key: keys.firstWhereOrNull((k) => message.toLowerCase().contains(k.toLowerCase())),
-        message: message
-      ));
-    }
-
-    return responseMessages;
-  }
-
-  String? getMessage(List<ResponseMessage> responseMessages, {required String key}){
-    return responseMessages.firstWhereOrNull((r) => r.key?.toLowerCase() == key.toLowerCase())?.message;
-  }
+String? getResponseMessage(List<String> messages, {String? key}){
+  if(key != null) return messages.firstWhereOrNull((m) => m.toLowerCase().contains(key.toLowerCase()));
+  else return messages.firstOrNull;
 }

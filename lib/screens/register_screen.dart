@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_manager/blocs/register_bloc/register_bloc.dart';
+import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
+import 'package:task_manager/cubits/register_cubit.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
@@ -12,7 +13,10 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => RegisterBloc(authRepository: context.read<AuthRepository>()),
+      create: (_) => RegisterCubit(
+        authRepository: context.read<AuthRepository>(),
+        authBloc: context.read<AuthBloc>()
+      ),
       child: _RegisterScreen(),
     );
   }
@@ -50,7 +54,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
               child: ConstrainedBox(
                 constraints: BoxConstraints(minWidth: constraints.maxWidth, minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
-                  child: BlocBuilder<RegisterBloc, RegisterState>(
+                  child: BlocBuilder<RegisterCubit, RegisterState>(
                     builder: (_, registerState) {
                       return Form(
                         key: formKey,
@@ -146,6 +150,11 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                               padding: EdgeInsets.all(cPadding),
                               child: Column(
                                 children: [
+                                  if(registerState.isLoading) Padding(
+                                    padding: EdgeInsets.only(bottom: 32.0),
+                                    child: CircularProgressIndicator(),
+                                  ),
+
                                   RoundedButton(
                                     color: cCardBackgroundColor,
                                     width: double.infinity,
@@ -158,11 +167,11 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                       if(formKey.currentState!.validate()){
                                         formKey.currentState!.save();
 
-                                        context.read<RegisterBloc>().add(RegisterSubmitted(
+                                        context.read<RegisterCubit>().submitted(
                                           name: nameController.text,
                                           email: emailController.text,
                                           password: passwordController.text
-                                        ));
+                                        );
                                       }
                                     },
                                   ),

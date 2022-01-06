@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/constants.dart';
-import 'package:task_manager/models/auth_credentials.dart';
-import 'package:task_manager/models/response_message.dart';
-import 'package:task_manager/repositories/auth_repository.dart';
 
 class TempHomeScreen extends StatefulWidget{
 

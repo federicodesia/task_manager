@@ -1,32 +1,26 @@
 part of 'auth_bloc.dart';
 
+enum AuthStatus { unknown, waitingVerification, authenticated, unauthenticated }
+
 class AuthState {
 
-  final AuthStatus status;
-  final AuthCredentials credentials;
-  final User user;
+  final AuthStatus? status;
+  final AuthCredentials? credentials;
+  final User? user;
 
-  const AuthState._({
+  AuthState({
     this.status = AuthStatus.unknown,
-    this.credentials = AuthCredentials.empty,
-    this.user = User.empty,
+    this.credentials,
+    this.user,
   });
 
-  const AuthState.unknown() : this._();
-
-  const AuthState.authenticated(User user, AuthCredentials credentials) : this._(
-    status: AuthStatus.authenticated,
-    credentials: credentials,
-    user: user
-  );
-
-  const AuthState.waitingVerification(User user, AuthCredentials credentials) : this._(
-    status: AuthStatus.waitingVerification,
-    credentials: credentials,
-    user: user
-  );
-
-  const AuthState.unauthenticated() : this._(
-    status: AuthStatus.unauthenticated,
-  );
+  AuthState copyWith({
+    required AuthState newState
+  }){
+    return AuthState(
+      status: newState.status ?? this.status,
+      credentials: newState.credentials ?? this.credentials,
+      user: newState.user ?? this.user
+    );
+  }
 }

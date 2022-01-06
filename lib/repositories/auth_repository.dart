@@ -1,14 +1,12 @@
 import 'dart:async';
 
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_messages.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 
-enum AuthStatus { unknown, waitingVerification, authenticated, unauthenticated }
-
 class AuthRepository {
 
-  final _controller = StreamController<AuthStatus>();
   final _dio = Dio(
     BaseOptions(
       baseUrl: "https://yusuf007r.dev/task-manager/auth",
@@ -16,11 +14,31 @@ class AuthRepository {
     )
   );
 
-  Stream<AuthStatus> get status async* {
-    yield* _controller.stream;
-  }
+  Future<Either<List<String>, AuthCredentials>> login({
+    required String email,
+    required String password,
+  }) async {
 
-  Future<dynamic> register({
+    final response = await _dio.post('/login', data: {
+      "email": email,
+      "password": password,
+    });
+
+    int? statusCode = response.statusCode;
+    if(statusCode != null){
+      if(statusCode == 201){
+        final authCredentials = AuthCredentials.fromJson(response.data);
+        if(authCredentials.isNotEmpty) return right(authCredentials);
+      }
+      else{
+        final message = response.data["message"];
+        return left(generateResponseMessage(message));
+      }
+    }
+    return left([]);
+  }
+  
+  Future<Either<List<String>, AuthCredentials>> register({
     required String name,
     required String email,
     required String password,
@@ -37,22 +55,32 @@ class AuthRepository {
     if(statusCode != null){
       if(statusCode == 201){
         final authCredentials = AuthCredentials.fromJson(response.data);
-
-        if(authCredentials.isNotEmpty){
-          _controller.add(AuthStatus.waitingVerification);
-          return authCredentials;
-        }
+        if(authCredentials.isNotEmpty) return right(authCredentials);
       }
       else{
         final message = response.data["message"];
-        return ResponseMessages().from(message, keys: ["firstname", "lastname", "email", "password"]);
+        return left(generateResponseMessage(message));
       }
     }
+    return left([]);
   }
 
-  void logOut() {
-    _controller.add(AuthStatus.unauthenticated);
-  }
+  Future<bool> sendAccountVerificationCode({
+    required String refreshToken
+  }) async {
 
-  void dispose() => _controller.close();
+    final response = await _dio.get(
+      '/sendAccountVerificationCode',
+      options: Options(headers: {"Authorization": "Token: $refreshToken"})
+    );
+
+    int? statusCode = response.statusCode;
+    if(statusCode != null){
+      if(statusCode == 200){
+        final authCredentials = AuthCredentials.fromJson(response.data);
+        if(authCredentials.isNotEmpty) return true;
+      }
+    }
+    return false; 
+  }
 }

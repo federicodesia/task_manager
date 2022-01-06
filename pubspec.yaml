@@ -26,6 +26,7 @@ dependencies:
   intl: ^0.17.0
   
   flutter_bloc: ^8.0.0
+  dartz: ^0.10.1
   uuid: ^3.0.5
   dio: ^4.0.4
   auto_route: ^3.2.0

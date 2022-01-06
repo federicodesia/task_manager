@@ -12,11 +12,6 @@ class AuthCredentials{
     this.accessToken,
   });
 
-  static const empty = AuthCredentials(
-    refreshToken: null,
-    accessToken: null
-  );
-
   bool get isEmpty => this.refreshToken == null && this.accessToken == null;
   bool get isNotEmpty => !isEmpty;
 
