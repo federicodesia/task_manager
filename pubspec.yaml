@@ -29,6 +29,7 @@ dependencies:
   dartz: ^0.10.1
   uuid: ^3.0.5
   dio: ^4.0.4
+  jwt_decoder: ^2.0.1
   auto_route: ^3.2.0
   json_annotation: ^4.4.0
   flutter_secure_storage: ^5.0.2

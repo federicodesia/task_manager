@@ -2,7 +2,7 @@ part of 'auth_bloc.dart';
 
 abstract class AuthEvent {}
 
-class AuthStateChanged extends AuthEvent {
-  final AuthState state;
-  AuthStateChanged({required this.state});
+class AuthCredentialsChanged extends AuthEvent {
+  final AuthCredentials credentials;
+  AuthCredentialsChanged({required this.credentials});
 }

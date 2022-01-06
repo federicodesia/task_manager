@@ -20,8 +20,8 @@ String? validatePassword(String value) {
   if(value.length < 8) return "Must contain at least 8 characters";
   if(value.length > 128) return "Maximum 128 characters";
 
-  if(!RegExp(r'^(?=.*?[0-9])$').hasMatch(value)) return "Must contain at least one number";
-  if(!RegExp(r'^(?=.*[a-z])$').hasMatch(value)) return "Must contain at least one lowercase letter";
-  if(!RegExp(r'^(?=.*[A-Z])$').hasMatch(value)) return "Must contain at least one uppercase letter";
+  if(!RegExp(r'[0-9]').hasMatch(value)) return "Must contain at least one number";
+  if(!RegExp(r'[a-z]').hasMatch(value)) return "Must contain at least one lowercase letter";
+  if(!RegExp(r'[A-Z]').hasMatch(value)) return "Must contain at least one uppercase letter";
   return null;
 }

@@ -4,54 +4,49 @@ import 'package:task_manager/helpers/response_messages.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/validators/validators.dart';
 
-class RegisterState {
+class LoginState {
   final bool isLoading;
-  final String? nameError;
   final String? emailError;
   final String? passwordError;
 
-  const RegisterState({
+  const LoginState({
     this.isLoading = false,
-    this.nameError,
     this.emailError,
     this.passwordError,
   });
 }
 
-class RegisterCubit extends Cubit<RegisterState> {
+class LoginCubit extends Cubit<LoginState> {
   
   final AuthRepository authRepository;
   final AuthBloc authBloc;
 
-  RegisterCubit({
+  LoginCubit({
     required this.authRepository,
     required this.authBloc
-  }) : super(const RegisterState());
+  }) : super(const LoginState());
 
   void submitted({
-    required String name,
     required String email,
     required String password
   }) async{
 
-    emit(RegisterState(isLoading: true));
+    emit(LoginState(isLoading: true));
 
-    final response = await authRepository.register(
-      name: name,
+    final response = await authRepository.login(
       email: email,
       password: password
     );
 
     response.fold(
-      (responseMessages) => emit(RegisterState(
+      (responseMessages) => emit(LoginState(
         isLoading: false,
-        nameError: validateName(name) ?? getResponseMessage(responseMessages, key: "name"),
         emailError: validateEmail(email) ?? getResponseMessage(responseMessages, key: "email"),
         passwordError: validatePassword(password) ?? getResponseMessage(responseMessages, key: "password"),
       )),
 
       (authCredentials){
-        emit(RegisterState(isLoading: false));
+        emit(LoginState(isLoading: false));
         authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
       }, 
     );

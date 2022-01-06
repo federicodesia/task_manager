@@ -8,6 +8,17 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc() : super(AuthState()){
-    on<AuthStateChanged>((event, emit) => emit(state.copyWith(newState: event.state)));
+    
+    on<AuthCredentialsChanged>((event, emit){
+      final credentials = event.credentials;
+
+      emit(state.copyWith(
+        credentials: credentials,
+        status: credentials.isNotEmpty ? credentials.isVerified
+            ? AuthStatus.authenticated
+            : AuthStatus.waitingVerification
+          : AuthStatus.unauthenticated
+      ));
+    });
   }
 }

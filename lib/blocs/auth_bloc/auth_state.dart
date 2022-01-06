@@ -15,12 +15,14 @@ class AuthState {
   });
 
   AuthState copyWith({
-    required AuthState newState
+    AuthStatus? status,
+    AuthCredentials? credentials,
+    User? user
   }){
     return AuthState(
-      status: newState.status ?? this.status,
-      credentials: newState.credentials ?? this.credentials,
-      user: newState.user ?? this.user
+      status: status ?? this.status,
+      credentials: credentials ?? this.credentials,
+      user: user ?? this.user
     );
   }
 }
