@@ -18,7 +18,10 @@ class AuthCredentials{
     accessToken: ""
   );
 
-  bool get isVerified => accessToken != "" ? JwtDecoder.decode(accessToken)["verified"] : false;
+  bool get isEmpty => this.refreshToken == "" && this.accessToken == "";
+  bool get isNotEmpty => !isEmpty;
+
+  bool get isVerified => isNotEmpty && JwtDecoder.decode(accessToken)["verified"];
 
   factory AuthCredentials.fromJson(Map<String, dynamic> json) => _$AuthCredentialsFromJson(json);
   Map<String, dynamic> toJson() => _$AuthCredentialsToJson(this);

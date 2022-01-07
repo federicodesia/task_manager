@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/user.dart';
 
 class UserRepository {
@@ -14,21 +15,17 @@ class UserRepository {
   );
   
   Future<Either<List<String>, User>> getUser({
-    required String name,
-    required String email,
-    required String password,
+    required AuthCredentials authCredentials,
   }) async {
 
-    final response = await _dio.post('/register', data: {
-      "firstName": name,
-      "lastName": name,
-      "email": email,
-      "password": password,
-    });
+    final response = await _dio.get(
+      "/",
+      options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
+    );
 
     int? statusCode = response.statusCode;
     if(statusCode != null){
-      if(statusCode == 201){
+      if(statusCode == 200){
         final user = User.fromJson(response.data);
         return right(user);
       }

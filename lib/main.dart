@@ -33,7 +33,10 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(create: (context) => UserRepository()),
       ],
       child: BlocProvider(
-        create: (context) => AuthBloc(),
+        create: (context) => AuthBloc(
+          authRepository: context.read<AuthRepository>(),
+          userRepository: context.read<UserRepository>()
+        ),
           
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, authState) {

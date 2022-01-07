@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/constants.dart';
 
@@ -16,31 +18,37 @@ class _TempHomeScreenState extends State<TempHomeScreen>{
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(cPadding),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Username",
-                style: cTitleTextStyle,
-              ),
-              SizedBox(height: 4.0),
+          child: BlocBuilder<AuthBloc, AuthState>(
+            builder: (_, authState) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    authState.user.firstName,
+                    style: cTitleTextStyle,
+                  ),
+                  SizedBox(height: 4.0),
 
-              Text(
-                "youremail@example.com",
-                style: cTextStyle,
-              ),
+                  Text(
+                    authState.user.email,
+                    style: cTextStyle,
+                  ),
 
-              SizedBox(height: 64.0),
+                  SizedBox(height: 64.0),
 
-              RoundedButton(
-                width: double.infinity,
-                child: Text(
-                  "Logout",
-                  style: cBoldTextStyle,
-                ),
-                onPressed: () {}
-              )
-            ],
+                  RoundedButton(
+                    width: double.infinity,
+                    child: Text(
+                      "Logout",
+                      style: cBoldTextStyle,
+                    ),
+                    onPressed: () {
+                      context.read<AuthBloc>().add(AuthLogoutRequested());
+                    }
+                  )
+                ],
+              );
+            }
           ),
         ),
       ),

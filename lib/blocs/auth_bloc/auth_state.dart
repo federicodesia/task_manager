@@ -4,14 +4,14 @@ enum AuthStatus { unauthenticated, waitingVerification, authenticated }
 
 class AuthState {
 
-  final AuthStatus? status;
+  final AuthStatus status;
   final AuthCredentials credentials;
-  final User? user;
+  final User user;
 
   AuthState({
     this.status = AuthStatus.unauthenticated,
     this.credentials = AuthCredentials.empty,
-    this.user,
+    this.user = User.empty
   });
 
   AuthState copyWith({

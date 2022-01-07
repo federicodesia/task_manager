@@ -65,6 +65,13 @@ class AuthRepository {
     return left([]);
   }
 
+  Future<void> logout({required AuthCredentials authCredentials}) async {
+    _dio.post(
+      "/logout",
+      options: Options(headers: {"Authorization": "Bearer " + authCredentials.refreshToken})
+    );
+  }
+
   Future<void> sendAccountVerificationCode({required AuthCredentials authCredentials}) async {
     _dio.get(
       "/sendAccountVerificationCode",
