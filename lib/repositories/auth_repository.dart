@@ -19,7 +19,7 @@ class AuthRepository {
     required String password,
   }) async {
 
-    final response = await _dio.post('/login', data: {
+    final response = await _dio.post("/login", data: {
       "email": email,
       "password": password,
     });
@@ -28,7 +28,7 @@ class AuthRepository {
     if(statusCode != null){
       if(statusCode == 201){
         final authCredentials = AuthCredentials.fromJson(response.data);
-        if(authCredentials.isNotEmpty) return right(authCredentials);
+        return right(authCredentials);
       }
       else{
         final message = response.data["message"];
@@ -44,7 +44,7 @@ class AuthRepository {
     required String password,
   }) async {
 
-    final response = await _dio.post('/register', data: {
+    final response = await _dio.post("/register", data: {
       "firstName": name,
       "lastName": name,
       "email": email,
@@ -55,7 +55,7 @@ class AuthRepository {
     if(statusCode != null){
       if(statusCode == 201){
         final authCredentials = AuthCredentials.fromJson(response.data);
-        if(authCredentials.isNotEmpty) return right(authCredentials);
+        return right(authCredentials);
       }
       else{
         final message = response.data["message"];
@@ -65,22 +65,30 @@ class AuthRepository {
     return left([]);
   }
 
-  Future<bool> sendAccountVerificationCode({
-    required String refreshToken
+  Future<void> sendAccountVerificationCode({required AuthCredentials authCredentials}) async {
+    _dio.get(
+      "/sendAccountVerificationCode",
+      options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
+    );
+  }
+
+  Future<Either<String, bool>> verifyAccountCode({
+    required AuthCredentials authCredentials,
+    required String code,
   }) async {
 
     final response = await _dio.get(
-      '/sendAccountVerificationCode',
-      options: Options(headers: {"Authorization": "Token: $refreshToken"})
+      "/verifyAccountCode/$code",
+      options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
     );
 
     int? statusCode = response.statusCode;
     if(statusCode != null){
-      if(statusCode == 200){
-        final authCredentials = AuthCredentials.fromJson(response.data);
-        if(authCredentials.isNotEmpty) return true;
-      }
+      if(statusCode == 200 || statusCode == 403) return right(true);
     }
-    return false; 
+
+    final message = response.data["message"];
+    if(message is String) return left(message);
+    return left(""); 
   }
 }

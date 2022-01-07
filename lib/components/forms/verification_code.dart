@@ -5,16 +5,20 @@ import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 
 class VerificationCode extends StatefulWidget{
 
+  final TextEditingController? controller;
   final int length;
   final TextInputType textInputType;
   final bool closeKeyboardOnFinish;
   final String? Function(String?)? validator;
+  final String? errorText;
 
   VerificationCode({
+    this.controller,
     required this.length,
     this.textInputType = TextInputType.number,
     this.closeKeyboardOnFinish = true,
-    this.validator
+    this.validator,
+    this.errorText
   });
 
   @override
@@ -52,6 +56,13 @@ class _VerificationCodeState extends State<VerificationCode>{
     else if(widget.closeKeyboardOnFinish){
       FocusScope.of(context).unfocus();
     }
+  }
+
+  String getCode(){
+    String code = "";
+    textEditingControllers.forEach((t) => code += t.text);
+    if(widget.controller != null) widget.controller?.text = code;
+    return code;
   }
 
   @override
@@ -97,10 +108,12 @@ class _VerificationCodeState extends State<VerificationCode>{
                             textInputAction: index == length - 1 ? TextInputAction.done : TextInputAction.next,
                             maxLength: 1,
                             counterText: "",
-                            errorText: state.errorText,
+                            errorText: widget.errorText != null ? widget.errorText : state.errorText,
                             errorStyle: TextStyle(height: 0.0),
                             onChanged: (String value){
                               if(value.isNotEmpty) next(index);
+
+                              getCode();
                             },
                             onFieldSubmitted: (_) => next(index)
                           ),
@@ -114,11 +127,9 @@ class _VerificationCodeState extends State<VerificationCode>{
           ),
         ),
       ),
+      errorText: widget.errorText,
       validator: (value){
-        String code = "";
-        textEditingControllers.forEach((t) => code += t.text);
-
-        if(widget.validator != null) return widget.validator!(code);
+        if(widget.validator != null) return widget.validator!(getCode());
         else return null;
       }
     );

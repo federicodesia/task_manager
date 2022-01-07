@@ -1,11 +1,9 @@
-bool isValidName(String value) => validateName(value) == null;
 String? validateName(String value) {
   if(value.isEmpty) return "Please enter your name";
   if(value.length > 128) return "Maximum 128 characters";
   return null;
 }
 
-bool isValidEmail(String value) => validateEmail(value) == null;
 String? validateEmail(String value) {
   if(value.isEmpty) return "Please enter your email";
 
@@ -14,7 +12,6 @@ String? validateEmail(String value) {
   return null;
 }
 
-bool isValidPassword(String value) => validatePassword(value) == null;
 String? validatePassword(String value) {
   if(value.isEmpty) return "Please enter your password";
   if(value.length < 8) return "Must contain at least 8 characters";
@@ -23,5 +20,12 @@ String? validatePassword(String value) {
   if(!RegExp(r'[0-9]').hasMatch(value)) return "Must contain at least one number";
   if(!RegExp(r'[a-z]').hasMatch(value)) return "Must contain at least one lowercase letter";
   if(!RegExp(r'[A-Z]').hasMatch(value)) return "Must contain at least one uppercase letter";
+  return null;
+}
+
+String? validateEmailVerificationCode(String value) {
+  if(value.isEmpty) return "Please enter the code";
+  if(value.length < 4) return "Please complete the code";
+  if(!RegExp(r'^[A-Za-z0-9]+$').hasMatch(value)) return "Please enter a valid code";
   return null;
 }

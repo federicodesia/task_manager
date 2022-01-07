@@ -143,7 +143,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                     "Sign Up",
                                     style: cBoldTextStyle,
                                   ),
-                                  onPressed: () async {
+                                  onPressed: (){
 
                                     context.read<RegisterCubit>().submitted(
                                       name: nameController.text,

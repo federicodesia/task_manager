@@ -8,8 +8,8 @@ part of 'auth_credentials.dart';
 
 AuthCredentials _$AuthCredentialsFromJson(Map<String, dynamic> json) =>
     AuthCredentials(
-      refreshToken: json['refreshToken'] as String?,
-      accessToken: json['accessToken'] as String?,
+      refreshToken: json['refreshToken'] as String,
+      accessToken: json['accessToken'] as String,
     );
 
 Map<String, dynamic> _$AuthCredentialsToJson(AuthCredentials instance) =>

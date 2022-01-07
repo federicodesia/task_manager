@@ -14,11 +14,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(state.copyWith(
         credentials: credentials,
-        status: credentials.isNotEmpty ? credentials.isVerified
+        status: credentials != null ? credentials.isVerified
             ? AuthStatus.authenticated
             : AuthStatus.waitingVerification
           : AuthStatus.unauthenticated
       ));
     });
+
+    on<AuthEmailVerified>((event, emit) => emit(state.copyWith(status: AuthStatus.authenticated)));
   }
 }

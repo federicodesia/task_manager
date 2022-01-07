@@ -5,18 +5,20 @@ part 'auth_credentials.g.dart';
 
 @JsonSerializable()
 class AuthCredentials{
-  final String? refreshToken;
-  final String? accessToken;
+  final String refreshToken;
+  final String accessToken;
 
   const AuthCredentials({ 
-    this.refreshToken,
-    this.accessToken,
+    required this.refreshToken,
+    required this.accessToken,
   });
 
-  bool get isEmpty => this.refreshToken == null && this.accessToken == null;
-  bool get isNotEmpty => !isEmpty;
+  static const empty = AuthCredentials(
+    refreshToken: "",
+    accessToken: ""
+  );
 
-  bool get isVerified => accessToken != null ? JwtDecoder.decode(accessToken!)["verified"] : false;
+  bool get isVerified => accessToken != "" ? JwtDecoder.decode(accessToken)["verified"] : false;
 
   factory AuthCredentials.fromJson(Map<String, dynamic> json) => _$AuthCredentialsFromJson(json);
   Map<String, dynamic> toJson() => _$AuthCredentialsToJson(this);

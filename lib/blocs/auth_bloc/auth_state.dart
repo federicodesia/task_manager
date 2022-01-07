@@ -1,16 +1,16 @@
 part of 'auth_bloc.dart';
 
-enum AuthStatus { unknown, waitingVerification, authenticated, unauthenticated }
+enum AuthStatus { unauthenticated, waitingVerification, authenticated }
 
 class AuthState {
 
   final AuthStatus? status;
-  final AuthCredentials? credentials;
+  final AuthCredentials credentials;
   final User? user;
 
   AuthState({
-    this.status = AuthStatus.unknown,
-    this.credentials,
+    this.status = AuthStatus.unauthenticated,
+    this.credentials = AuthCredentials.empty,
     this.user,
   });
 

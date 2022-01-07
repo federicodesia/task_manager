@@ -5,11 +5,13 @@ class FormValidator extends StatefulWidget{
 
   final Widget Function(FormFieldState) widget;
   final String? Function(dynamic)? validator;
+  final String? errorText;
   final EdgeInsets errorTextPadding;
   
   FormValidator({
     required this.widget,
     this.validator,
+    this.errorText,
     this.errorTextPadding = const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0)
   });
 
@@ -30,10 +32,14 @@ class _FormValidatorState extends State<FormValidator> {
     return FormField(
       builder: (FormFieldState state){
 
-        if(errorCurrentState && !state.hasError) animate = false;
+        bool hasError;
+        if(widget.errorText != null) hasError = widget.errorText != null;
+        else hasError = state.hasError;
+
+        if(errorCurrentState && !hasError) animate = false;
         else animate = true;
 
-        errorCurrentState = state.hasError;
+        errorCurrentState = hasError;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,14 +48,14 @@ class _FormValidatorState extends State<FormValidator> {
             
             animate ? AnimatedCrossFade(
               duration: cTransitionDuration,
-              crossFadeState: state.hasError ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+              crossFadeState: hasError ? CrossFadeState.showFirst : CrossFadeState.showSecond,
               firstChild: Padding(
                 padding: widget.errorTextPadding,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      state.errorText ?? "",
+                      (widget.errorText != null ? widget.errorText : state.errorText) ?? "",
                       style: themeData.textTheme.caption!.copyWith(color: themeData.errorColor),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
