@@ -25,4 +25,14 @@ class AuthCredentials{
 
   factory AuthCredentials.fromJson(Map<String, dynamic> json) => _$AuthCredentialsFromJson(json);
   Map<String, dynamic> toJson() => _$AuthCredentialsToJson(this);
+
+  AuthCredentials copyWith({
+    String? refreshToken,
+    String? accessToken
+  }){
+    return AuthCredentials(
+      refreshToken: refreshToken ?? this.refreshToken,
+      accessToken: accessToken ?? this.accessToken
+    );
+  }
 }

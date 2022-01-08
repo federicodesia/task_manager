@@ -65,6 +65,28 @@ class AuthRepository {
     return left([]);
   }
 
+  Future<Either<String, AuthCredentials>> accessToken({
+    required AuthCredentials authCredentials
+  }) async {
+
+    final response = await _dio.get(
+      "/accesstoken",
+      options: Options(headers: {"Authorization": "Bearer " + authCredentials.refreshToken})
+    );
+
+    int? statusCode = response.statusCode;
+    if(statusCode != null){
+      if(statusCode == 200){
+        final accessToken = response.data["accessToken"];
+        if(accessToken != null) return right(authCredentials.copyWith(accessToken: accessToken));
+      }
+    }
+
+    final message = response.data["message"];
+    if(message is String) return left(message);
+    return left(""); 
+  }
+
   Future<void> logout({required AuthCredentials authCredentials}) async {
     _dio.post(
       "/logout",

@@ -1,6 +1,6 @@
 part of 'auth_bloc.dart';
 
-enum AuthStatus { unauthenticated, waitingVerification, authenticated }
+enum AuthStatus { loading, unauthenticated, waitingVerification, authenticated }
 
 class AuthState {
 

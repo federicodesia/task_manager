@@ -41,12 +41,15 @@ class MyApp extends StatelessWidget {
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, authState) {
 
+            final authStatus = authState.status;
+
             return MaterialApp.router(
               routerDelegate: AutoRouterDelegate.declarative(
                 _appRouter,
                 routes: (_) => [
-                  if(authState.status == AuthStatus.authenticated) TempHomeRoute()
-                  else if(authState.status == AuthStatus.waitingVerification) EmailVerificationRoute()
+                  if(authStatus == AuthStatus.loading) SplashRoute()
+                  else if(authStatus == AuthStatus.waitingVerification) EmailVerificationRoute()
+                  else if(authStatus == AuthStatus.authenticated) TempHomeRoute()
                   else WelcomeRouter()
                 ],
               ),
