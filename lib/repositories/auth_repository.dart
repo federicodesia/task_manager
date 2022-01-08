@@ -10,7 +10,9 @@ class AuthRepository {
   final _dio = Dio(
     BaseOptions(
       baseUrl: "https://yusuf007r.dev/task-manager/auth",
-      validateStatus: (_) => true
+      validateStatus: (_) => true,
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
     )
   );
 
@@ -19,23 +21,22 @@ class AuthRepository {
     required String password,
   }) async {
 
-    final response = await _dio.post("/login", data: {
-      "email": email,
-      "password": password,
-    });
-
-    int? statusCode = response.statusCode;
-    if(statusCode != null){
-      if(statusCode == 201){
+    try{
+      final response = await _dio.post("/login", data: {
+        "email": email,
+        "password": password,
+      });
+      
+      if(response.statusCode == 201){
         final authCredentials = AuthCredentials.fromJson(response.data);
         return right(authCredentials);
       }
-      else{
-        final message = response.data["message"];
-        return left(generateResponseMessage(message));
-      }
+      final message = response.data["message"];
+      return left(generateResponseMessage(message));
     }
-    return left([]);
+    catch(_){
+      return left([]);
+    }
   }
   
   Future<Either<List<String>, AuthCredentials>> register({
@@ -44,61 +45,66 @@ class AuthRepository {
     required String password,
   }) async {
 
-    final response = await _dio.post("/register", data: {
-      "firstName": name,
-      "lastName": name,
-      "email": email,
-      "password": password,
-    });
+    try{
+      final response = await _dio.post("/register", data: {
+        "firstName": name,
+        "lastName": name,
+        "email": email,
+        "password": password,
+      });
 
-    int? statusCode = response.statusCode;
-    if(statusCode != null){
-      if(statusCode == 201){
+      if(response.statusCode == 201){
         final authCredentials = AuthCredentials.fromJson(response.data);
         return right(authCredentials);
       }
-      else{
-        final message = response.data["message"];
-        return left(generateResponseMessage(message));
-      }
+      final message = response.data["message"];
+      return left(generateResponseMessage(message));
     }
-    return left([]);
+    catch(_){
+      return left([]);
+    }
   }
 
   Future<Either<String, AuthCredentials>> accessToken({
     required AuthCredentials authCredentials
   }) async {
 
-    final response = await _dio.get(
-      "/accesstoken",
-      options: Options(headers: {"Authorization": "Bearer " + authCredentials.refreshToken})
-    );
+    try{
+      final response = await _dio.get(
+        "/accesstoken",
+        options: Options(headers: {"Authorization": "Bearer " + authCredentials.refreshToken})
+      );
 
-    int? statusCode = response.statusCode;
-    if(statusCode != null){
-      if(statusCode == 200){
+      if(response.statusCode == 200){
         final accessToken = response.data["accessToken"];
         if(accessToken != null) return right(authCredentials.copyWith(accessToken: accessToken));
       }
+      final message = response.data["message"];
+      return left(message);
     }
-
-    final message = response.data["message"];
-    if(message is String) return left(message);
-    return left(""); 
+    catch(_){
+      return left("");
+    }
   }
 
   Future<void> logout({required AuthCredentials authCredentials}) async {
-    _dio.post(
-      "/logout",
-      options: Options(headers: {"Authorization": "Bearer " + authCredentials.refreshToken})
-    );
+    try{
+      _dio.post(
+        "/logout",
+        options: Options(headers: {"Authorization": "Bearer " + authCredentials.refreshToken})
+      );
+    }
+    catch(_) {}
   }
 
   Future<void> sendAccountVerificationCode({required AuthCredentials authCredentials}) async {
-    _dio.get(
-      "/sendAccountVerificationCode",
-      options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
-    );
+    try{
+      _dio.get(
+        "/sendAccountVerificationCode",
+        options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
+      );
+    }
+    catch(_) {}
   }
 
   Future<Either<String, bool>> verifyAccountCode({
@@ -106,18 +112,20 @@ class AuthRepository {
     required String code,
   }) async {
 
-    final response = await _dio.get(
-      "/verifyAccountCode/$code",
-      options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
-    );
+    try{
+      final response = await _dio.get(
+        "/verifyAccountCode/$code",
+        options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
+      );
 
-    int? statusCode = response.statusCode;
-    if(statusCode != null){
+      int? statusCode = response.statusCode;
       if(statusCode == 200 || statusCode == 403) return right(true);
-    }
 
-    final message = response.data["message"];
-    if(message is String) return left(message);
-    return left(""); 
+      final message = response.data["message"];
+      return left(message);
+    }
+    catch(_){
+      return left("");
+    }
   }
 }
