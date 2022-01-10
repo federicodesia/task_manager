@@ -39,10 +39,11 @@ class RegisterCubit extends Cubit<RegisterState> {
     final response = await authRepository.register(
       name: name,
       email: email,
-      password: password
+      password: password,
+      messageKeys: ["name", "email", "password"]
     );
 
-    response.fold(
+    if(response != null) response.fold(
       (responseMessages) => emit(RegisterState(
         isLoading: false,
         nameError: validateName(name) ?? getResponseMessage(responseMessages, key: "name"),
@@ -55,5 +56,6 @@ class RegisterCubit extends Cubit<RegisterState> {
         authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
       }, 
     );
+    else emit(RegisterState(isLoading: false));
   }
 }

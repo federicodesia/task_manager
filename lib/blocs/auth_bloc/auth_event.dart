@@ -7,6 +7,4 @@ class AuthCredentialsChanged extends AuthEvent {
   AuthCredentialsChanged({required this.credentials});
 }
 
-class AuthEmailVerified extends AuthEvent {}
-
 class AuthLogoutRequested extends AuthEvent {}

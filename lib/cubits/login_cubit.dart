@@ -35,20 +35,23 @@ class LoginCubit extends Cubit<LoginState> {
 
     final response = await authRepository.login(
       email: email,
-      password: password
+      password: password,
+      messageKeys: ["email", "password"]
     );
 
-    response.fold(
-      (responseMessages) => emit(LoginState(
-        isLoading: false,
-        emailError: validateEmail(email) ?? getResponseMessage(responseMessages, key: "email"),
-        passwordError: validatePassword(password) ?? getResponseMessage(responseMessages, key: "password"),
-      )),
+    if(response != null){
+      response.fold(
+        (responseMessages) => emit(LoginState(
+          isLoading: false,
+          emailError: validateEmail(email) ?? getResponseMessage(responseMessages, key: "email"),
+          passwordError: validatePassword(password) ?? getResponseMessage(responseMessages, key: "password"),
+        )),
 
-      (authCredentials){
-        emit(LoginState(isLoading: false));
-        authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
-      }, 
-    );
+        (authCredentials){
+          emit(LoginState(isLoading: false));
+          authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
+        }, 
+      );
+    } else emit(LoginState(isLoading: false));
   }
 }

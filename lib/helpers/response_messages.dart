@@ -2,7 +2,8 @@ import 'package:collection/collection.dart';
 
 List<String> generateResponseMessage(dynamic message){
   if(message is List<dynamic>) return message.where((m) => m is String).map((m) => m as String).toList();
-  return [message];
+  if(message is String) return [message];
+  return [];
 }
 
 String? getResponseMessage(List<String> messages, {String? key}){

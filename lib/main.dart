@@ -11,6 +11,8 @@ import 'package:task_manager/repositories/category_repository.dart';
 import 'package:task_manager/repositories/task_repository.dart';
 import 'package:task_manager/repositories/user_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
+import 'package:task_manager/services/dialog_service.dart';
+import 'package:task_manager/services/locator_service.dart';
 import 'components/main/bottom_navigation_bar.dart';
 import 'constants.dart';
 import 'helpers/date_time_helper.dart';
@@ -18,18 +20,19 @@ import 'models/bottom_navigation_bar_item.dart';
 
 void main() {
   Paint.enableDithering = true;
+  setupLocator();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final _appRouter = AppRouter();
+  final _appRouter = AppRouter(locator<DialogService>().navigatoryKey);
 
   @override
   Widget build(BuildContext context) {
 
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(create: (context) => AuthRepository()),
+        RepositoryProvider(create: (context) => AuthRepository(appRouter: _appRouter)),
         RepositoryProvider(create: (context) => UserRepository()),
       ],
       child: BlocProvider(

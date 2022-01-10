@@ -40,14 +40,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       if(credentials.isVerified){
         final response = await userRepository.getUser(authCredentials: credentials);
-        response.fold(
-          (_) {},
+        if(response != null) response.fold(
+          (error) {},
           (user) => emit(state.copyWith(user: user))
         );
       }
     });
-
-    on<AuthEmailVerified>((event, emit) => emit(state.copyWith(status: AuthStatus.authenticated)));
 
     on<AuthLogoutRequested>((event, emit){
       authRepository.logout(authCredentials: state.credentials);

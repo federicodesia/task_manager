@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:task_manager/helpers/response_messages.dart';
+import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/user.dart';
 
@@ -11,13 +11,12 @@ class UserRepository {
   final _dio = Dio(
     BaseOptions(
       baseUrl: "https://yusuf007r.dev/task-manager/user",
-      validateStatus: (_) => true,
       connectTimeout: 5000,
       receiveTimeout: 3000,
     )
   );
   
-  Future<Either<List<String>, User>> getUser({
+  Future<Either<String, User>?> getUser({
     required AuthCredentials authCredentials,
   }) async {
 
@@ -26,16 +25,12 @@ class UserRepository {
         "/",
         options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
       );
-
-      if(response.statusCode == 200){
-        final user = User.fromJson(response.data);
-        return right(user);
-      }
-      final message = response.data["message"];
-      return left(generateResponseMessage(message));
+      return right(User.fromJson(response.data));
     }
-    catch(_){
-      return left([]);
+    catch (error){
+      final errorMessages = await onResponseError(error: error);
+      if(errorMessages != null) return left(errorMessages.first);
+      return null;
     }
   }
 }

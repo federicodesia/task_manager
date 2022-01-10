@@ -33,17 +33,18 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
       code: code
     );
 
-    response.fold(
+    if(response != null) response.fold(
       (message) => emit(EmailVerificationState(
         isLoading: false,
         codeError: validateEmailVerificationCode(code) ?? message
       )),
 
-      (verified){
+      (credentials){
         emit(EmailVerificationState(isLoading: false));
-        authBloc.add(AuthEmailVerified());
+        authBloc.add(AuthCredentialsChanged(credentials: credentials));
       }, 
     );
+    else emit(EmailVerificationState(isLoading: false));
   }
 
   void sendAccountVerificationCode(){
