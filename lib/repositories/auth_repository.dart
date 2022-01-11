@@ -67,7 +67,7 @@ class AuthRepository {
 
     try{
       final response = await _dio.get(
-        "/accesstoken",
+        "/access-token",
         options: Options(headers: {"Authorization": "Bearer " + authCredentials.refreshToken})
       );
       return right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
@@ -98,8 +98,8 @@ class AuthRepository {
   }) async {
 
     try{
-      await _dio.get(
-        "/sendAccountVerificationCode",
+      await _dio.post(
+        "/send-account-verification-code",
         options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
       );
     }
@@ -114,8 +114,11 @@ class AuthRepository {
   }) async {
 
     try{
-      final response = await _dio.get(
-        "/verifyAccountCode/$code",
+      final response = await _dio.post(
+        "/verify-account-code",
+        data: {
+          "code": code
+        },
         options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
       );
       return right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
