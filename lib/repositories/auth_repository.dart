@@ -129,4 +129,71 @@ class AuthRepository {
       return null;
     }
   }
+
+  Future<Either<String, void>?> sendPasswordResetCode({
+    required String email
+  }) async {
+
+    try{
+      await _dio.post(
+        "/send-password-reset-code",
+        data: {
+          "email": email
+        }
+      );
+      return right(() {});
+    }
+    catch (error){
+      final errorMessages = await onResponseError(error: error, getAllMessages: true);
+      if(errorMessages != null) return left(errorMessages.first);
+      return null;
+    }
+  }
+
+   Future<Either<String, AuthCredentials>?> verifyPasswordCode({
+    required String email,
+    required String code
+  }) async {
+
+    try{
+      final response = await _dio.post(
+        "/verify-password-code",
+        data: {
+          "email": email,
+          "code": code
+        },
+      );
+      return right(AuthCredentials(
+        refreshToken: "",
+        accessToken: response.data["accessToken"]
+      ));
+    }
+    catch (error){
+      final errorMessages = await onResponseError(error: error, getAllMessages: true);
+      if(errorMessages != null) return left(errorMessages.first);
+      return null;
+    }
+  }
+
+  Future<Either<String, void>?> changeForgotPassword({
+    required String accessToken,
+    required String password
+  }) async {
+
+    try{
+      await _dio.post(
+        "/change-forgot-password",
+        data: {
+          "password": password
+        },
+        options: Options(headers: {"Authorization": "Bearer " + accessToken})
+      );
+      return right(() {});
+    }
+    catch (error){
+      final errorMessages = await onResponseError(error: error, getAllMessages: true);
+      if(errorMessages != null) return left(errorMessages.first);
+      return null;
+    }
+  }
 }
