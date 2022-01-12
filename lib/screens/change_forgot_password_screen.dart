@@ -6,13 +6,15 @@ import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/router/router.gr.dart';
 import '../constants.dart';
 
-class ForgotPasswordScreen extends StatefulWidget{
+class ChangeForgotPasswordScreen extends StatefulWidget{
 
   @override
-  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+  _ChangeForgotPasswordScreenState createState() => _ChangeForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>{
+class _ChangeForgotPasswordScreenState extends State<ChangeForgotPasswordScreen>{
+
+  bool obscurePassword = true;
 
   @override
   Widget build(BuildContext context){
@@ -41,19 +43,40 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>{
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               EmptySpace(
-                                svgImage: "assets/svg/mention.svg",
+                                svgImage: "assets/svg/confirmed.svg",
                                 svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
                                   ? MediaQuery.of(context).size.width * 0.35
                                   : MediaQuery.of(context).size.height * 0.35,
                                 svgBottomMargin: 64.0,
-                                header: "Forgot your password?",
-                                description: "Please enter your registered email to request a password reset.",
+                                header: "Create new password",
+                                description: "We are ready! Now enter your new password that you will use to log in.",
                               ),
 
                               SizedBox(height: cPadding),
 
                               RoundedTextFormField(
-                                hintText: "Email address"
+                                hintText: "New password",
+                                obscureText: obscurePassword,
+                                  suffixIcon: Padding(
+                                    padding: EdgeInsets.only(right: 8.0),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: IconButton(
+                                        icon: AnimatedSwitcher(
+                                          duration: cFastAnimationDuration,
+                                          child: Icon(
+                                            obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                            key: Key("IconButtonObscurePasswordKeyValue=$obscurePassword"),
+                                          ),
+                                        ),
+                                        splashRadius: 24.0,
+                                        color: cLightGrayColor,
+                                        onPressed: () {
+                                          setState(() => obscurePassword = !obscurePassword);
+                                        },
+                                      ),
+                                    ),
+                                  ),
                               )
                             ],
                           ),
@@ -68,11 +91,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>{
                               color: cCardBackgroundColor,
                               width: double.infinity,
                               child: Text(
-                                "Continue",
+                                "Confirm",
                                 style: cBoldTextStyle,
                               ),
                               onPressed: () {
-                                AutoRouter.of(context).navigate(EmailVerificationRoute());
+
                               },
                             ),
                             SizedBox(height: cPadding),

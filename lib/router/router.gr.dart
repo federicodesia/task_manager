@@ -9,8 +9,9 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i9;
+import 'package:flutter/material.dart' as _i10;
 
+import '../screens/change_forgot_password_screen.dart' as _i9;
 import '../screens/email_verification_screen.dart' as _i3;
 import '../screens/forgot_password_screen.dart' as _i8;
 import '../screens/login_screen.dart' as _i6;
@@ -20,7 +21,7 @@ import '../screens/temp_home_screen.dart' as _i4;
 import '../screens/welcome_screen.dart' as _i5;
 
 class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i9.GlobalKey<_i9.NavigatorState>? navigatorKey])
+  AppRouter([_i10.GlobalKey<_i10.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -56,6 +57,10 @@ class AppRouter extends _i2.RootStackRouter {
     ForgotPasswordRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: _i8.ForgotPasswordScreen());
+    },
+    ChangeForgotPasswordRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: _i9.ChangeForgotPasswordScreen());
     }
   };
 
@@ -72,7 +77,10 @@ class AppRouter extends _i2.RootStackRouter {
               _i2.RouteConfig(RegisterRoute.name,
                   path: 'register-screen', parent: WelcomeRouter.name),
               _i2.RouteConfig(ForgotPasswordRoute.name,
-                  path: 'forgot-password-screen', parent: WelcomeRouter.name)
+                  path: 'forgot-password-screen', parent: WelcomeRouter.name),
+              _i2.RouteConfig(ChangeForgotPasswordRoute.name,
+                  path: 'change-forgot-password-screen',
+                  parent: WelcomeRouter.name)
             ]),
         _i2.RouteConfig(EmailVerificationRoute.name,
             path: '/email-verification-screen'),
@@ -146,4 +154,14 @@ class ForgotPasswordRoute extends _i2.PageRouteInfo<void> {
       : super(ForgotPasswordRoute.name, path: 'forgot-password-screen');
 
   static const String name = 'ForgotPasswordRoute';
+}
+
+/// generated route for
+/// [_i9.ChangeForgotPasswordScreen]
+class ChangeForgotPasswordRoute extends _i2.PageRouteInfo<void> {
+  const ChangeForgotPasswordRoute()
+      : super(ChangeForgotPasswordRoute.name,
+            path: 'change-forgot-password-screen');
+
+  static const String name = 'ChangeForgotPasswordRoute';
 }
