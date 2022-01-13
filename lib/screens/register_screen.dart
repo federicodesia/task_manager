@@ -53,7 +53,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                 constraints: BoxConstraints(minWidth: constraints.maxWidth, minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
                   child: BlocBuilder<RegisterCubit, RegisterState>(
-                    builder: (_, registerState) {
+                    builder: (_, formState) {
                       return Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -84,14 +84,15 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                 RoundedTextFormField(
                                   controller: nameController,
                                   hintText: "Name",
-                                  errorText: registerState.nameError
+                                  errorText: formState.nameError
                                 ),
                                 SizedBox(height: 16.0),
 
                                 RoundedTextFormField(
                                   controller: emailController,
                                   hintText: "Email",
-                                  errorText: registerState.emailError
+                                  textInputType: TextInputType.emailAddress,
+                                  errorText: formState.emailError
                                 ),
                                 SizedBox(height: 16.0),
 
@@ -99,6 +100,8 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   controller: passwordController,
                                   hintText: "Password",
                                   obscureText: obscurePassword,
+                                  enableSuggestions: false,
+                                  autocorrect: false,
                                   suffixIcon: Padding(
                                     padding: EdgeInsets.only(right: 8.0),
                                     child: Material(
@@ -119,7 +122,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                       ),
                                     ),
                                   ),
-                                  errorText: registerState.passwordError,
+                                  errorText: formState.passwordError,
                                 ),                   
                               ],
                             ),
@@ -131,7 +134,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                             padding: EdgeInsets.all(cPadding),
                             child: Column(
                               children: [
-                                if(registerState.isLoading) Padding(
+                                if(formState.isLoading) Padding(
                                   padding: EdgeInsets.only(bottom: 32.0),
                                   child: CircularProgressIndicator(),
                                 ),
@@ -146,8 +149,8 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   onPressed: (){
 
                                     context.read<RegisterCubit>().submitted(
-                                      name: nameController.text,
-                                      email: emailController.text,
+                                      name: nameController.text.trim(),
+                                      email: emailController.text.trim(),
                                       password: passwordController.text
                                     );
                                   },

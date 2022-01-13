@@ -78,6 +78,8 @@ class _ForgotPasswordNewPasswordScreenState extends State<_ForgotPasswordNewPass
                                     controller: passwordController,
                                     hintText: "New password",
                                     obscureText: obscurePassword,
+                                    enableSuggestions: false,
+                                    autocorrect: false,
                                     suffixIcon: Padding(
                                       padding: EdgeInsets.only(right: 8.0),
                                       child: Material(

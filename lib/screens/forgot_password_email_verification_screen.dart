@@ -59,7 +59,7 @@ class _ForgotPasswordEmailVerificationScreenState extends State<_ForgotPasswordE
                 constraints: BoxConstraints(minWidth: constraints.maxWidth, minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
                   child: BlocBuilder<ForgotPasswordEmailVerificationCubit, ForgotPasswordEmailVerificationState>(
-                    builder: (_, emailVerificationCodeState) {
+                    builder: (_, formState) {
                       return Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -86,7 +86,7 @@ class _ForgotPasswordEmailVerificationScreenState extends State<_ForgotPasswordE
                                     controller: codeController,
                                     textInputType: TextInputType.text,
                                     length: 4,
-                                    errorText: emailVerificationCodeState.codeError,
+                                    errorText: formState.codeError,
                                   )
                                 ],
                               ),
@@ -97,7 +97,7 @@ class _ForgotPasswordEmailVerificationScreenState extends State<_ForgotPasswordE
                             padding: EdgeInsets.all(cPadding),
                             child: Column(
                               children: [
-                                if(emailVerificationCodeState.isLoading) Padding(
+                                if(formState.isLoading) Padding(
                                   padding: EdgeInsets.only(bottom: 32.0),
                                   child: CircularProgressIndicator(),
                                 ),

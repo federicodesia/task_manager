@@ -20,6 +20,8 @@ class RoundedTextFormField extends StatelessWidget{
   final TextStyle? errorStyle;
   final Widget? suffixIcon;
   final bool obscureText;
+  final bool enableSuggestions;
+  final bool autocorrect;
   final int? maxLength;
   final String? counterText;
   final TextAlign textAlign;
@@ -42,6 +44,8 @@ class RoundedTextFormField extends StatelessWidget{
     this.errorStyle,
     this.suffixIcon,
     this.obscureText = false,
+    this.enableSuggestions = true,
+    this.autocorrect = false,
     this.maxLength,
     this.counterText,
     this.textAlign = TextAlign.start
@@ -64,7 +68,11 @@ class RoundedTextFormField extends StatelessWidget{
       maxLines: maxLines,
       style: cLightTextStyle,
       textInputAction: textInputAction,
+
       obscureText: obscureText,
+      enableSuggestions: enableSuggestions,
+      autocorrect: autocorrect,
+
       maxLength: maxLength,
       textAlign: textAlign,
 

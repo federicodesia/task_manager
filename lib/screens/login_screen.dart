@@ -52,7 +52,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                 constraints: BoxConstraints(minWidth: constraints.maxWidth, minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
                   child: BlocBuilder<LoginCubit, LoginState>(
-                    builder: (_, loginState) {
+                    builder: (_, formState) {
                       return Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -83,14 +83,17 @@ class _LoginScreenState extends State<_LoginScreen>{
                                 RoundedTextFormField(
                                   controller: emailController,
                                   hintText: "Email",
-                                  errorText: loginState.emailError
+                                  textInputType: TextInputType.emailAddress,
+                                  errorText: formState.emailError
                                 ),
                                 SizedBox(height: 16.0),
 
                                 RoundedTextFormField(
                                   controller: passwordController,
                                   hintText: "Password",
-                                  errorText: loginState.passwordError,
+                                  errorText: formState.passwordError,
+                                  enableSuggestions: false,
+                                  autocorrect: false,
                                   obscureText: obscurePassword,
                                   suffixIcon: Padding(
                                     padding: EdgeInsets.only(right: 8.0),
@@ -141,7 +144,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                             padding: EdgeInsets.all(cPadding),
                             child: Column(
                               children: [
-                                if(loginState.isLoading) Padding(
+                                if(formState.isLoading) Padding(
                                   padding: EdgeInsets.only(bottom: 32.0),
                                   child: CircularProgressIndicator(),
                                 ),
@@ -155,7 +158,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                   ),
                                   onPressed: () {
                                     context.read<LoginCubit>().submitted(
-                                      email: emailController.text,
+                                      email: emailController.text.trim(),
                                       password: passwordController.text
                                     );
                                   },

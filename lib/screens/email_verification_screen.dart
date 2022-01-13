@@ -52,7 +52,7 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                 constraints: BoxConstraints(minWidth: constraints.maxWidth, minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
                   child: BlocBuilder<EmailVerificationCubit, EmailVerificationState>(
-                    builder: (_, emailVerificationCodeState) {
+                    builder: (_, formState) {
                       return Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -79,7 +79,7 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                                     controller: codeController,
                                     textInputType: TextInputType.text,
                                     length: 4,
-                                    errorText: emailVerificationCodeState.codeError,
+                                    errorText: formState.codeError,
                                   )
                                 ],
                               ),
@@ -90,7 +90,7 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                             padding: EdgeInsets.all(cPadding),
                             child: Column(
                               children: [
-                                if(emailVerificationCodeState.isLoading) Padding(
+                                if(formState.isLoading) Padding(
                                   padding: EdgeInsets.only(bottom: 32.0),
                                   child: CircularProgressIndicator(),
                                 ),

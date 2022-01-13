@@ -48,7 +48,7 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                 constraints: BoxConstraints(minWidth: constraints.maxWidth, minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
                   child: BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
-                    builder: (_, forgotPasswordState) {
+                    builder: (_, formState) {
                       return Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -74,7 +74,8 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                                   RoundedTextFormField(
                                     controller: emailController,
                                     hintText: "Email address",
-                                    errorText: forgotPasswordState.emailError,
+                                    textInputType: TextInputType.emailAddress,
+                                    errorText: formState.emailError,
                                   )
                                 ],
                               ),
@@ -85,7 +86,7 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                             padding: EdgeInsets.all(cPadding),
                             child: Column(
                               children: [
-                                if(forgotPasswordState.isLoading) Padding(
+                                if(formState.isLoading) Padding(
                                   padding: EdgeInsets.only(bottom: 32.0),
                                   child: CircularProgressIndicator(),
                                 ),
@@ -99,7 +100,7 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                                   ),
                                   onPressed: () async {
                                     context.read<ForgotPasswordCubit>().submitted(
-                                      email: emailController.text
+                                      email: emailController.text.trim()
                                     );
 
                                     final nextState = await context.read<ForgotPasswordCubit>().stream.first;
