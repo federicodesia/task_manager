@@ -1,35 +1,38 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/components/rounded_button.dart';
-import 'package:task_manager/cubits/forgot_password_cubit.dart';
+import 'package:task_manager/cubits/forgot_password_new_password_cubit.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
 import '../constants.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
+class ForgotPasswordNewPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ForgotPasswordCubit(
-        authRepository: context.read<AuthRepository>()
+      create: (_) => ForgotPasswordNewPasswordCubit(
+        authRepository: context.read<AuthRepository>(),
+        authBloc: context.read<AuthBloc>()
       ),
-      child: _ForgotPasswordScreen(),
+      child: _ForgotPasswordNewPasswordScreen(),
     );
   }
 }
 
-class _ForgotPasswordScreen extends StatefulWidget{
+class _ForgotPasswordNewPasswordScreen extends StatefulWidget{
 
   @override
-  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+  _ForgotPasswordNewPasswordScreenState createState() => _ForgotPasswordNewPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
+class _ForgotPasswordNewPasswordScreenState extends State<_ForgotPasswordNewPasswordScreen>{
 
-  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool obscurePassword = true;
 
   @override
   Widget build(BuildContext context){
@@ -47,8 +50,8 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
               child: ConstrainedBox(
                 constraints: BoxConstraints(minWidth: constraints.maxWidth, minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
-                  child: BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
-                    builder: (_, forgotPasswordState) {
+                  child: BlocBuilder<ForgotPasswordNewPasswordCubit, ForgotPasswordNewPasswordState>(
+                    builder: (_, formState) {
                       return Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -60,21 +63,42 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   EmptySpace(
-                                    svgImage: "assets/svg/mention.svg",
+                                    svgImage: "assets/svg/confirmed.svg",
                                     svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
                                       ? MediaQuery.of(context).size.width * 0.35
                                       : MediaQuery.of(context).size.height * 0.35,
                                     svgBottomMargin: 64.0,
-                                    header: "Forgot your password?",
-                                    description: "Please enter your registered email to request a password reset.",
+                                    header: "Create new password",
+                                    description: "We are ready! Now enter your new password that you will use to log in.",
                                   ),
 
                                   SizedBox(height: cPadding),
 
                                   RoundedTextFormField(
-                                    controller: emailController,
-                                    hintText: "Email address",
-                                    errorText: forgotPasswordState.emailError,
+                                    controller: passwordController,
+                                    hintText: "New password",
+                                    obscureText: obscurePassword,
+                                    suffixIcon: Padding(
+                                      padding: EdgeInsets.only(right: 8.0),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: IconButton(
+                                          icon: AnimatedSwitcher(
+                                            duration: cFastAnimationDuration,
+                                            child: Icon(
+                                              obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                              key: Key("IconButtonObscurePasswordKeyValue=$obscurePassword"),
+                                            ),
+                                          ),
+                                          splashRadius: 24.0,
+                                          color: cLightGrayColor,
+                                          onPressed: () {
+                                            setState(() => obscurePassword = !obscurePassword);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    errorText: formState.passwordError,
                                   )
                                 ],
                               ),
@@ -85,7 +109,7 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                             padding: EdgeInsets.all(cPadding),
                             child: Column(
                               children: [
-                                if(forgotPasswordState.isLoading) Padding(
+                                if(formState.isLoading) Padding(
                                   padding: EdgeInsets.only(bottom: 32.0),
                                   child: CircularProgressIndicator(),
                                 ),
@@ -94,18 +118,16 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                                   color: cCardBackgroundColor,
                                   width: double.infinity,
                                   child: Text(
-                                    "Continue",
+                                    "Confirm",
                                     style: cBoldTextStyle,
                                   ),
                                   onPressed: () async {
-                                    context.read<ForgotPasswordCubit>().submitted(
-                                      email: emailController.text
+                                    context.read<ForgotPasswordNewPasswordCubit>().submitted(
+                                      password: passwordController.text
                                     );
 
-                                    final nextState = await context.read<ForgotPasswordCubit>().stream.first;
-                                    if(nextState.emailSent) AutoRouter.of(context).navigate(
-                                      ForgotPasswordEmailVerificationRoute(email: emailController.text)
-                                    );
+                                    final nextState = await context.read<ForgotPasswordNewPasswordCubit>().stream.first;
+                                    if(nextState.changed) AutoRouter.of(context).navigate(WelcomeRoute());
                                   },
                                 ),
                                 SizedBox(height: cPadding),

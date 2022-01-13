@@ -32,13 +32,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(state.copyWith(
         credentials: credentials,
-        status: credentials.isNotEmpty ? credentials.isVerified
-            ? AuthStatus.authenticated
-            : AuthStatus.waitingVerification
+        status: credentials.isNotEmpty
+          ? credentials.accessTokenType == TokenType.access
+            ? credentials.isVerified
+              ? AuthStatus.authenticated
+              : AuthStatus.waitingVerification
+            : AuthStatus.unauthenticated
           : AuthStatus.unauthenticated
       ));
 
-      if(credentials.isVerified){
+      if(credentials.accessTokenType == TokenType.access && credentials.isVerified){
         final response = await userRepository.getUser(authCredentials: credentials);
         if(response != null) response.fold(
           (error) {},

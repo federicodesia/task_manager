@@ -9,10 +9,11 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i10;
+import 'package:flutter/material.dart' as _i11;
 
-import '../screens/change_forgot_password_screen.dart' as _i9;
 import '../screens/email_verification_screen.dart' as _i3;
+import '../screens/forgot_password_email_verification_screen.dart' as _i9;
+import '../screens/forgot_password_new_password_screen.dart' as _i10;
 import '../screens/forgot_password_screen.dart' as _i8;
 import '../screens/login_screen.dart' as _i6;
 import '../screens/register_screen.dart' as _i7;
@@ -21,7 +22,7 @@ import '../screens/temp_home_screen.dart' as _i4;
 import '../screens/welcome_screen.dart' as _i5;
 
 class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i10.GlobalKey<_i10.NavigatorState>? navigatorKey])
+  AppRouter([_i11.GlobalKey<_i11.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -58,9 +59,15 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: _i8.ForgotPasswordScreen());
     },
-    ChangeForgotPasswordRoute.name: (routeData) {
+    ForgotPasswordEmailVerificationRoute.name: (routeData) {
+      final args = routeData.argsAs<ForgotPasswordEmailVerificationRouteArgs>();
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i9.ChangeForgotPasswordScreen());
+          routeData: routeData,
+          child: _i9.ForgotPasswordEmailVerificationScreen(email: args.email));
+    },
+    ForgotPasswordNewPasswordRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: _i10.ForgotPasswordNewPasswordScreen());
     }
   };
 
@@ -78,8 +85,11 @@ class AppRouter extends _i2.RootStackRouter {
                   path: 'register-screen', parent: WelcomeRouter.name),
               _i2.RouteConfig(ForgotPasswordRoute.name,
                   path: 'forgot-password-screen', parent: WelcomeRouter.name),
-              _i2.RouteConfig(ChangeForgotPasswordRoute.name,
-                  path: 'change-forgot-password-screen',
+              _i2.RouteConfig(ForgotPasswordEmailVerificationRoute.name,
+                  path: 'forgot-password-email-verification-screen',
+                  parent: WelcomeRouter.name),
+              _i2.RouteConfig(ForgotPasswordNewPasswordRoute.name,
+                  path: 'forgot-password-new-password-screen',
                   parent: WelcomeRouter.name)
             ]),
         _i2.RouteConfig(EmailVerificationRoute.name,
@@ -157,11 +167,34 @@ class ForgotPasswordRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.ChangeForgotPasswordScreen]
-class ChangeForgotPasswordRoute extends _i2.PageRouteInfo<void> {
-  const ChangeForgotPasswordRoute()
-      : super(ChangeForgotPasswordRoute.name,
-            path: 'change-forgot-password-screen');
+/// [_i9.ForgotPasswordEmailVerificationScreen]
+class ForgotPasswordEmailVerificationRoute
+    extends _i2.PageRouteInfo<ForgotPasswordEmailVerificationRouteArgs> {
+  ForgotPasswordEmailVerificationRoute({required String email})
+      : super(ForgotPasswordEmailVerificationRoute.name,
+            path: 'forgot-password-email-verification-screen',
+            args: ForgotPasswordEmailVerificationRouteArgs(email: email));
 
-  static const String name = 'ChangeForgotPasswordRoute';
+  static const String name = 'ForgotPasswordEmailVerificationRoute';
+}
+
+class ForgotPasswordEmailVerificationRouteArgs {
+  const ForgotPasswordEmailVerificationRouteArgs({required this.email});
+
+  final String email;
+
+  @override
+  String toString() {
+    return 'ForgotPasswordEmailVerificationRouteArgs{email: $email}';
+  }
+}
+
+/// generated route for
+/// [_i10.ForgotPasswordNewPasswordScreen]
+class ForgotPasswordNewPasswordRoute extends _i2.PageRouteInfo<void> {
+  const ForgotPasswordNewPasswordRoute()
+      : super(ForgotPasswordNewPasswordRoute.name,
+            path: 'forgot-password-new-password-screen');
+
+  static const String name = 'ForgotPasswordNewPasswordRoute';
 }

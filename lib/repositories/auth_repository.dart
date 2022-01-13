@@ -176,7 +176,7 @@ class AuthRepository {
   }
 
   Future<Either<String, void>?> changeForgotPassword({
-    required String accessToken,
+    required AuthCredentials credentials,
     required String password
   }) async {
 
@@ -186,7 +186,7 @@ class AuthRepository {
         data: {
           "password": password
         },
-        options: Options(headers: {"Authorization": "Bearer " + accessToken})
+        options: Options(headers: {"Authorization": "Bearer " + credentials.accessToken})
       );
       return right(() {});
     }
