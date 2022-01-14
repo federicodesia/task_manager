@@ -3,20 +3,28 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/models/auth_credentials.dart';
-import 'package:task_manager/router/router.gr.dart';
+import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
 
 class AuthRepository {
-  
-  final AppRouter appRouter;
-  AuthRepository({required this.appRouter});
 
-  late Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: "https://yusuf007r.dev/task-manager/auth",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-    )
-  );
+  late Dio _dio;
+  AuthRepository(){
+
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: "https://yusuf007r.dev/task-manager/auth",
+        connectTimeout: 5000,
+        receiveTimeout: 3000,
+      )
+    );
+
+    _dio.interceptors.add(
+      AccessTokenInterceptor(
+        dio: _dio,
+        authRepository: this
+      )
+    );
+  }
 
   Future<Either<List<String>, AuthCredentials>?> login({
     required String email,

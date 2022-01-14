@@ -11,6 +11,7 @@ import 'package:task_manager/repositories/category_repository.dart';
 import 'package:task_manager/repositories/task_repository.dart';
 import 'package:task_manager/repositories/user_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
+import 'package:task_manager/services/context_service.dart';
 import 'package:task_manager/services/dialog_service.dart';
 import 'package:task_manager/services/locator_service.dart';
 import 'components/main/bottom_navigation_bar.dart';
@@ -24,15 +25,31 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  final _appRouter = AppRouter(locator<DialogService>().navigatoryKey);
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final navigatoryKey = locator<DialogService>().navigatoryKey;
+  late AppRouter _appRouter = AppRouter(navigatoryKey);
+
+  @override
+  void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((_){
+      final context = navigatoryKey.currentContext;
+      if(context != null) locator<ContextService>().setContext(context);
+    });
+    
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
 
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(create: (context) => AuthRepository(appRouter: _appRouter)),
+        RepositoryProvider(create: (context) => AuthRepository()),
         RepositoryProvider(create: (context) => UserRepository()),
       ],
       child: BlocProvider(
