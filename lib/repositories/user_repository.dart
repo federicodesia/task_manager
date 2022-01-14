@@ -5,16 +5,25 @@ import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/user.dart';
+import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
 
 class UserRepository {
 
-  final _dio = Dio(
-    BaseOptions(
-      baseUrl: "https://yusuf007r.dev/task-manager/user",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-    )
-  );
+  late Dio _dio;
+  UserRepository(){
+
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: "https://yusuf007r.dev/task-manager/user",
+        connectTimeout: 5000,
+        receiveTimeout: 3000,
+      )
+    );
+
+    _dio.interceptors.add(
+      AccessTokenInterceptor(dio: _dio)
+    );
+  }
   
   Future<Either<String, User>?> getUser({
     required AuthCredentials authCredentials,

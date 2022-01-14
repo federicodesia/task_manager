@@ -19,10 +19,7 @@ class AuthRepository {
     );
 
     _dio.interceptors.add(
-      AccessTokenInterceptor(
-        dio: _dio,
-        authRepository: this
-      )
+      AccessTokenInterceptor(dio: _dio)
     );
   }
 
