@@ -53,110 +53,113 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                 child: IntrinsicHeight(
                   child: BlocBuilder<EmailVerificationCubit, EmailVerificationState>(
                     builder: (_, formState) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
+                      return IgnorePointer(
+                        ignoring: formState.isLoading,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
 
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.all(cPadding),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  EmptySpace(
-                                    svgImage: "assets/svg/newsletter.svg",
-                                    svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
-                                      ? MediaQuery.of(context).size.width * 0.35
-                                      : MediaQuery.of(context).size.height * 0.35,
-                                    svgBottomMargin: 64.0,
-                                    header: "Verify your email",
-                                    description: "Please enter the 4 character verification code sent to your email address.",
-                                  ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.all(cPadding),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    EmptySpace(
+                                      svgImage: "assets/svg/newsletter.svg",
+                                      svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
+                                        ? MediaQuery.of(context).size.width * 0.35
+                                        : MediaQuery.of(context).size.height * 0.35,
+                                      svgBottomMargin: 64.0,
+                                      header: "Verify your email",
+                                      description: "Please enter the 4 character verification code sent to your email address.",
+                                    ),
 
-                                  SizedBox(height: cPadding),
+                                    SizedBox(height: cPadding),
 
-                                  VerificationCode(
-                                    controller: codeController,
-                                    textInputType: TextInputType.text,
-                                    length: 4,
-                                    errorText: formState.codeError,
-                                  )
-                                ],
+                                    VerificationCode(
+                                      controller: codeController,
+                                      textInputType: TextInputType.text,
+                                      length: 4,
+                                      errorText: formState.codeError,
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
 
-                          Padding(
-                            padding: EdgeInsets.all(cPadding),
-                            child: Column(
-                              children: [
-                                if(formState.isLoading) Padding(
-                                  padding: EdgeInsets.only(bottom: 32.0),
-                                  child: CircularProgressIndicator(),
-                                ),
-
-                                RoundedButton(
-                                  color: cCardBackgroundColor,
-                                  width: double.infinity,
-                                  child: Text(
-                                    "Confirm",
-                                    style: cBoldTextStyle,
+                            Padding(
+                              padding: EdgeInsets.all(cPadding),
+                              child: Column(
+                                children: [
+                                  if(formState.isLoading) Padding(
+                                    padding: EdgeInsets.only(bottom: 32.0),
+                                    child: CircularProgressIndicator(),
                                   ),
-                                  onPressed: () {
-                                    context.read<EmailVerificationCubit>().submitted(
-                                      code: codeController.text
-                                    );
-                                  },
-                                ),
-                                SizedBox(height: cPadding),
 
-                                CustomTimer(
-                                  controller: customTimerController,
-                                  begin: Duration(minutes: 2),
-                                  end: Duration(),
-                                  builder: (time) {
-                                    return Text(
-                                      "Resend code in ${time.minutes}:${time.seconds}\n",
-                                      style: cSmallLightTextStyle,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                    );
-                                  },
-                                  stateBuilder: (time, state) {
-                                    return GestureDetector(
-                                      child: RichText(
-                                        text: TextSpan(
-                                          style: cSmallLightTextStyle,
-                                          children: <TextSpan>[
-                                            TextSpan(text: "Didn't receive the code? "),
-                                            TextSpan(text: "Resend", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
-                                            TextSpan(text: "\n")
-                                          ],
-                                        ),
+                                  RoundedButton(
+                                    color: cCardBackgroundColor,
+                                    width: double.infinity,
+                                    child: Text(
+                                      "Confirm",
+                                      style: cBoldTextStyle,
+                                    ),
+                                    onPressed: () {
+                                      context.read<EmailVerificationCubit>().submitted(
+                                        code: codeController.text
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(height: cPadding),
+
+                                  CustomTimer(
+                                    controller: customTimerController,
+                                    begin: Duration(minutes: 2),
+                                    end: Duration(),
+                                    builder: (time) {
+                                      return Text(
+                                        "Resend code in ${time.minutes}:${time.seconds}\n",
+                                        style: cSmallLightTextStyle,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.center,
-                                      ),
-                                      onTap: (){
-                                        customTimerController.reset();
-                                        customTimerController.start();
+                                      );
+                                    },
+                                    stateBuilder: (time, state) {
+                                      return GestureDetector(
+                                        child: RichText(
+                                          text: TextSpan(
+                                            style: cSmallLightTextStyle,
+                                            children: <TextSpan>[
+                                              TextSpan(text: "Didn't receive the code? "),
+                                              TextSpan(text: "Resend", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                              TextSpan(text: "\n")
+                                            ],
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        onTap: (){
+                                          customTimerController.reset();
+                                          customTimerController.start();
 
-                                        context.read<EmailVerificationCubit>().sendAccountVerificationCode();
-                                      },
-                                    );
-                                  },
-                                  animationBuilder: (child) {
-                                    return AnimatedSwitcher(
-                                      duration: cTransitionDuration,
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          )
-                        ]
+                                          context.read<EmailVerificationCubit>().sendAccountVerificationCode();
+                                        },
+                                      );
+                                    },
+                                    animationBuilder: (child) {
+                                      return AnimatedSwitcher(
+                                        duration: cTransitionDuration,
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
+                          ]
+                        ),
                       );
                     }
                   ),

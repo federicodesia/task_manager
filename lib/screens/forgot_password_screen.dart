@@ -49,90 +49,93 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                 child: IntrinsicHeight(
                   child: BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
                     builder: (_, formState) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
+                      return IgnorePointer(
+                        ignoring: formState.isLoading,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
 
-                          Expanded(
-                            child: Padding(
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.all(cPadding),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    EmptySpace(
+                                      svgImage: "assets/svg/mention.svg",
+                                      svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
+                                        ? MediaQuery.of(context).size.width * 0.35
+                                        : MediaQuery.of(context).size.height * 0.35,
+                                      svgBottomMargin: 64.0,
+                                      header: "Forgot your password?",
+                                      description: "Please enter your registered email to request a password reset.",
+                                    ),
+
+                                    SizedBox(height: cPadding),
+
+                                    RoundedTextFormField(
+                                      controller: emailController,
+                                      hintText: "Email address",
+                                      textInputType: TextInputType.emailAddress,
+                                      errorText: formState.emailError,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            Padding(
                               padding: EdgeInsets.all(cPadding),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  EmptySpace(
-                                    svgImage: "assets/svg/mention.svg",
-                                    svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
-                                      ? MediaQuery.of(context).size.width * 0.35
-                                      : MediaQuery.of(context).size.height * 0.35,
-                                    svgBottomMargin: 64.0,
-                                    header: "Forgot your password?",
-                                    description: "Please enter your registered email to request a password reset.",
+                                  if(formState.isLoading) Padding(
+                                    padding: EdgeInsets.only(bottom: 32.0),
+                                    child: CircularProgressIndicator(),
                                   ),
 
+                                  RoundedButton(
+                                    color: cCardBackgroundColor,
+                                    width: double.infinity,
+                                    child: Text(
+                                      "Continue",
+                                      style: cBoldTextStyle,
+                                    ),
+                                    onPressed: () async {
+                                      context.read<ForgotPasswordCubit>().submitted(
+                                        email: emailController.text.trim()
+                                      );
+
+                                      final nextState = await context.read<ForgotPasswordCubit>().stream.first;
+                                      if(nextState.emailSent) AutoRouter.of(context).navigate(
+                                        ForgotPasswordEmailVerificationRoute(email: emailController.text)
+                                      );
+                                    },
+                                  ),
                                   SizedBox(height: cPadding),
 
-                                  RoundedTextFormField(
-                                    controller: emailController,
-                                    hintText: "Email address",
-                                    textInputType: TextInputType.emailAddress,
-                                    errorText: formState.emailError,
+                                  GestureDetector(
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: cSmallLightTextStyle,
+                                        children: <TextSpan>[
+                                          TextSpan(text: "Remember your password? "),
+                                          TextSpan(text: "Sign In", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                          TextSpan(text: "\n")
+                                        ],
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    onTap: () {
+                                      AutoRouter.of(context).navigate(LoginRoute());
+                                    },
                                   )
                                 ],
                               ),
-                            ),
-                          ),
-
-                          Padding(
-                            padding: EdgeInsets.all(cPadding),
-                            child: Column(
-                              children: [
-                                if(formState.isLoading) Padding(
-                                  padding: EdgeInsets.only(bottom: 32.0),
-                                  child: CircularProgressIndicator(),
-                                ),
-
-                                RoundedButton(
-                                  color: cCardBackgroundColor,
-                                  width: double.infinity,
-                                  child: Text(
-                                    "Continue",
-                                    style: cBoldTextStyle,
-                                  ),
-                                  onPressed: () async {
-                                    context.read<ForgotPasswordCubit>().submitted(
-                                      email: emailController.text.trim()
-                                    );
-
-                                    final nextState = await context.read<ForgotPasswordCubit>().stream.first;
-                                    if(nextState.emailSent) AutoRouter.of(context).navigate(
-                                      ForgotPasswordEmailVerificationRoute(email: emailController.text)
-                                    );
-                                  },
-                                ),
-                                SizedBox(height: cPadding),
-
-                                GestureDetector(
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: cSmallLightTextStyle,
-                                      children: <TextSpan>[
-                                        TextSpan(text: "Remember your password? "),
-                                        TextSpan(text: "Sign In", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
-                                        TextSpan(text: "\n")
-                                      ],
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  onTap: () {
-                                    AutoRouter.of(context).navigate(LoginRoute());
-                                  },
-                                )
-                              ],
-                            ),
-                          )
-                        ]
+                            )
+                          ]
+                        ),
                       );
                     }
                   ),

@@ -54,131 +54,134 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                 child: IntrinsicHeight(
                   child: BlocBuilder<RegisterCubit, RegisterState>(
                     builder: (_, formState) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
+                      return IgnorePointer(
+                        ignoring: formState.isLoading,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
 
-                          Padding(
-                            padding: EdgeInsets.all(cPadding),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
+                            Padding(
+                              padding: EdgeInsets.all(cPadding),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
 
-                                SizedBox(height: cPadding),
-                                Text(
-                                  "Create new account",
-                                  style: cTitleTextStyle,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: 8.0),
-
-                                Text(
-                                  "Please fill in the form to continue",
-                                  style: cLightTextStyle,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: cPadding * 2),
-
-                                RoundedTextFormField(
-                                  controller: nameController,
-                                  hintText: "Name",
-                                  errorText: formState.nameError
-                                ),
-                                SizedBox(height: 16.0),
-
-                                RoundedTextFormField(
-                                  controller: emailController,
-                                  hintText: "Email",
-                                  textInputType: TextInputType.emailAddress,
-                                  errorText: formState.emailError
-                                ),
-                                SizedBox(height: 16.0),
-
-                                RoundedTextFormField(
-                                  controller: passwordController,
-                                  hintText: "Password",
-                                  obscureText: obscurePassword,
-                                  enableSuggestions: false,
-                                  autocorrect: false,
-                                  suffixIcon: Padding(
-                                    padding: EdgeInsets.only(right: 8.0),
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: IconButton(
-                                        icon: AnimatedSwitcher(
-                                          duration: cFastAnimationDuration,
-                                          child: Icon(
-                                            obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                            key: Key("IconButtonObscurePasswordKeyValue=$obscurePassword"),
-                                          ),
-                                        ),
-                                        splashRadius: 24.0,
-                                        color: cLightGrayColor,
-                                        onPressed: () {
-                                          setState(() => obscurePassword = !obscurePassword);
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  errorText: formState.passwordError,
-                                ),                   
-                              ],
-                            ),
-                          ),
-                          
-                          Spacer(),
-
-                          Padding(
-                            padding: EdgeInsets.all(cPadding),
-                            child: Column(
-                              children: [
-                                if(formState.isLoading) Padding(
-                                  padding: EdgeInsets.only(bottom: 32.0),
-                                  child: CircularProgressIndicator(),
-                                ),
-
-                                RoundedButton(
-                                  color: cCardBackgroundColor,
-                                  width: double.infinity,
-                                  child: Text(
-                                    "Sign Up",
-                                    style: cBoldTextStyle,
-                                  ),
-                                  onPressed: (){
-
-                                    context.read<RegisterCubit>().submitted(
-                                      name: nameController.text.trim(),
-                                      email: emailController.text.trim(),
-                                      password: passwordController.text
-                                    );
-                                  },
-                                ),
-                                SizedBox(height: cPadding),
-
-                                GestureDetector(
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: cSmallLightTextStyle,
-                                      children: <TextSpan>[
-                                        TextSpan(text: "Already have an Account? "),
-                                        TextSpan(text: "Sign In", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
-                                        TextSpan(text: "\n")
-                                      ],
-                                    ),
+                                  SizedBox(height: cPadding),
+                                  Text(
+                                    "Create new account",
+                                    style: cTitleTextStyle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
                                   ),
-                                  onTap: () {
-                                    AutoRouter.of(context).navigate(LoginRoute());
-                                  },
-                                ),
-                              ],
+                                  SizedBox(height: 8.0),
+
+                                  Text(
+                                    "Please fill in the form to continue",
+                                    style: cLightTextStyle,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(height: cPadding * 2),
+
+                                  RoundedTextFormField(
+                                    controller: nameController,
+                                    hintText: "Name",
+                                    errorText: formState.nameError
+                                  ),
+                                  SizedBox(height: 16.0),
+
+                                  RoundedTextFormField(
+                                    controller: emailController,
+                                    hintText: "Email",
+                                    textInputType: TextInputType.emailAddress,
+                                    errorText: formState.emailError
+                                  ),
+                                  SizedBox(height: 16.0),
+
+                                  RoundedTextFormField(
+                                    controller: passwordController,
+                                    hintText: "Password",
+                                    obscureText: obscurePassword,
+                                    enableSuggestions: false,
+                                    autocorrect: false,
+                                    suffixIcon: Padding(
+                                      padding: EdgeInsets.only(right: 8.0),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: IconButton(
+                                          icon: AnimatedSwitcher(
+                                            duration: cFastAnimationDuration,
+                                            child: Icon(
+                                              obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                              key: Key("IconButtonObscurePasswordKeyValue=$obscurePassword"),
+                                            ),
+                                          ),
+                                          splashRadius: 24.0,
+                                          color: cLightGrayColor,
+                                          onPressed: () {
+                                            setState(() => obscurePassword = !obscurePassword);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    errorText: formState.passwordError,
+                                  ),                   
+                                ],
+                              ),
                             ),
-                          )
-                        ]
+                            
+                            Spacer(),
+
+                            Padding(
+                              padding: EdgeInsets.all(cPadding),
+                              child: Column(
+                                children: [
+                                  if(formState.isLoading) Padding(
+                                    padding: EdgeInsets.only(bottom: 32.0),
+                                    child: CircularProgressIndicator(),
+                                  ),
+
+                                  RoundedButton(
+                                    color: cCardBackgroundColor,
+                                    width: double.infinity,
+                                    child: Text(
+                                      "Sign Up",
+                                      style: cBoldTextStyle,
+                                    ),
+                                    onPressed: (){
+
+                                      context.read<RegisterCubit>().submitted(
+                                        name: nameController.text.trim(),
+                                        email: emailController.text.trim(),
+                                        password: passwordController.text
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(height: cPadding),
+
+                                  GestureDetector(
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: cSmallLightTextStyle,
+                                        children: <TextSpan>[
+                                          TextSpan(text: "Already have an Account? "),
+                                          TextSpan(text: "Sign In", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                          TextSpan(text: "\n")
+                                        ],
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    onTap: () {
+                                      AutoRouter.of(context).navigate(LoginRoute());
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
+                          ]
+                        ),
                       );
                     }
                   ),
