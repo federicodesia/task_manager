@@ -12,12 +12,12 @@ part 'category_screen_state.dart';
 
 class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> {
   final TaskBloc taskBloc;
-  final String? categoryUuid;
+  final String? categoryId;
   late StreamSubscription todosSubscription;
 
   CategoryScreenBloc({
     required this.taskBloc,
-    required this.categoryUuid
+    required this.categoryId
   }) : super(CategoryScreenLoadInProgress()){
 
     todosSubscription = taskBloc.stream.listen((state) {
@@ -60,21 +60,21 @@ class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> 
   List<DynamicObject> _getGroups(TaskFilter filter, List<Task> tasks){
     List<DynamicObject> items = [];
 
-    tasks = tasks.where((task) => task.categoryUuid == categoryUuid).toList();
-    if(filter == TaskFilter.Completed) tasks = tasks.where((task) => task.completed).toList();
-    else if(filter == TaskFilter.Uncompleted) tasks = tasks.where((task) => !task.completed).toList();
+    tasks = tasks.where((task) => task.categoryId == categoryId).toList();
+    if(filter == TaskFilter.Completed) tasks = tasks.where((task) => task.isCompleted).toList();
+    else if(filter == TaskFilter.Uncompleted) tasks = tasks.where((task) => !task.isCompleted).toList();
 
     if(tasks.isNotEmpty){
-      tasks.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+      tasks.sort((a, b) => a.date.compareTo(b.date));
 
-      DateTime lastDateTime = getDate(tasks.first.dateTime);
+      DateTime lastDateTime = getDate(tasks.first.date);
       items.add(DynamicObject(object: lastDateTime));
 
       for(int i = 0; i < tasks.length; i++){
         Task task = tasks[i];
-        if(dateDifference(task.dateTime, lastDateTime) == 0) items.add(DynamicObject(object: task));
+        if(dateDifference(task.date, lastDateTime) == 0) items.add(DynamicObject(object: task));
         else{
-          lastDateTime = getDate(task.dateTime);
+          lastDateTime = getDate(task.date);
           items.add(DynamicObject(object: lastDateTime));
           items.add(DynamicObject(object: task));
         }

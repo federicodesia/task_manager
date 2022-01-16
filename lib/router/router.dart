@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:task_manager/router/wrappers/main_router_wrapper.dart';
 import 'package:task_manager/screens/email_verification_screen.dart';
 import 'package:task_manager/screens/forgot_password_email_verification_screen.dart';
 import 'package:task_manager/screens/forgot_password_new_password_screen.dart';
@@ -32,10 +33,16 @@ import 'package:task_manager/screens/welcome_screen.dart';
     AutoRoute(page: EmailVerificationScreen),
     
     AutoRoute(
-      name: "MainScreenRouter",
-      page: MainScreen,
+      name: "MainRouter",
+      page: MainRouteWrapper,
       children: [
-        AutoRoute(page: HomeScreen)
+        AutoRoute(
+          initial: true,
+          page: MainScreen,
+          children: [
+            AutoRoute(page: HomeScreen)
+          ]
+        ),
       ]
     ),
   ],

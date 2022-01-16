@@ -9,21 +9,22 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i12;
+import 'package:flutter/material.dart' as _i13;
 
 import '../screens/email_verification_screen.dart' as _i3;
 import '../screens/forgot_password_email_verification_screen.dart' as _i9;
 import '../screens/forgot_password_new_password_screen.dart' as _i10;
 import '../screens/forgot_password_screen.dart' as _i8;
-import '../screens/home/home_screen.dart' as _i11;
+import '../screens/home/home_screen.dart' as _i12;
 import '../screens/login_screen.dart' as _i6;
-import '../screens/main_screen.dart' as _i4;
+import '../screens/main_screen.dart' as _i11;
 import '../screens/register_screen.dart' as _i7;
 import '../screens/splash_screen.dart' as _i1;
 import '../screens/welcome_screen.dart' as _i5;
+import 'wrappers/main_router_wrapper.dart' as _i4;
 
 class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i12.GlobalKey<_i12.NavigatorState>? navigatorKey])
+  AppRouter([_i13.GlobalKey<_i13.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -40,9 +41,9 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: _i3.EmailVerificationScreen());
     },
-    MainScreenRouter.name: (routeData) {
+    MainRouter.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i4.MainScreen());
+          routeData: routeData, child: _i4.MainRouteWrapper());
     },
     WelcomeRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
@@ -70,9 +71,13 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: _i10.ForgotPasswordNewPasswordScreen());
     },
+    MainRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: _i11.MainScreen());
+    },
     HomeRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i11.HomeScreen());
+          routeData: routeData, child: _i12.HomeScreen());
     }
   };
 
@@ -99,10 +104,17 @@ class AppRouter extends _i2.RootStackRouter {
             ]),
         _i2.RouteConfig(EmailVerificationRoute.name,
             path: '/email-verification-screen'),
-        _i2.RouteConfig(MainScreenRouter.name, path: '/main-screen', children: [
-          _i2.RouteConfig(HomeRoute.name,
-              path: 'home-screen', parent: MainScreenRouter.name)
-        ])
+        _i2.RouteConfig(MainRouter.name,
+            path: '/main-route-wrapper',
+            children: [
+              _i2.RouteConfig(MainRoute.name,
+                  path: '',
+                  parent: MainRouter.name,
+                  children: [
+                    _i2.RouteConfig(HomeRoute.name,
+                        path: 'home-screen', parent: MainRoute.name)
+                  ])
+            ])
       ];
 }
 
@@ -134,13 +146,13 @@ class EmailVerificationRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i4.MainScreen]
-class MainScreenRouter extends _i2.PageRouteInfo<void> {
-  const MainScreenRouter({List<_i2.PageRouteInfo>? children})
-      : super(MainScreenRouter.name,
-            path: '/main-screen', initialChildren: children);
+/// [_i4.MainRouteWrapper]
+class MainRouter extends _i2.PageRouteInfo<void> {
+  const MainRouter({List<_i2.PageRouteInfo>? children})
+      : super(MainRouter.name,
+            path: '/main-route-wrapper', initialChildren: children);
 
-  static const String name = 'MainScreenRouter';
+  static const String name = 'MainRouter';
 }
 
 /// generated route for
@@ -210,7 +222,16 @@ class ForgotPasswordNewPasswordRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i11.HomeScreen]
+/// [_i11.MainScreen]
+class MainRoute extends _i2.PageRouteInfo<void> {
+  const MainRoute({List<_i2.PageRouteInfo>? children})
+      : super(MainRoute.name, path: '', initialChildren: children);
+
+  static const String name = 'MainRoute';
+}
+
+/// generated route for
+/// [_i12.HomeScreen]
 class HomeRoute extends _i2.PageRouteInfo<void> {
   const HomeRoute() : super(HomeRoute.name, path: 'home-screen');
 

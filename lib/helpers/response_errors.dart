@@ -6,7 +6,6 @@ import 'package:task_manager/services/locator_service.dart';
 
 Future<List<String>?> onResponseError({
   required Object error,
-  bool getAllMessages = false,
   List<String>? messageKeys
 }) async{
 
@@ -18,8 +17,7 @@ Future<List<String>?> onResponseError({
 
   if(error is DioError){
     final responseMessages = generateResponseMessage(error.response?.data["message"]);
-    if(getAllMessages
-      || (messageKeys != null && responseMessages.any((m) => messageKeys.any((k) => m.contains(k))))
+    if(messageKeys == null || (responseMessages.any((m) => messageKeys.any((k) => m.contains(k))))
     ) return responseMessages;
   }
   

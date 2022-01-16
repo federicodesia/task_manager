@@ -18,25 +18,39 @@ import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/task.dart';
 
-class UpcomingTab extends StatefulWidget{
+class UpcomingTab extends StatelessWidget{
   
   final AvailableSpaceCubit availableSpaceCubit;
   UpcomingTab({required this.availableSpaceCubit});
 
   @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => UpcomingBloc(taskBloc: context.read<TaskBloc>())..add(UpcomingLoaded()),
+      child: _UpcomingTab(availableSpaceCubit: availableSpaceCubit),
+    );
+  }
+}
+
+class _UpcomingTab extends StatefulWidget{
+  
+  final AvailableSpaceCubit availableSpaceCubit;
+  _UpcomingTab({required this.availableSpaceCubit});
+
+  @override
   _UpcomingTabState createState() => _UpcomingTabState();
 }
 
-class _UpcomingTabState extends State<UpcomingTab>{
+class _UpcomingTabState extends State<_UpcomingTab>{
 
   late Widget child;
   double weekBarChartHeight = 0.0;
 
   @override
-  Widget build(BuildContext buildContext) {
+  Widget build(BuildContext context) {
     
     return BlocBuilder<UpcomingBloc, UpcomingState>(
-      builder: (_, state){
+      builder: (context, state){
 
         if(state is UpcomingLoadSuccess){
 

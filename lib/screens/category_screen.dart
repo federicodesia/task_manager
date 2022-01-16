@@ -30,22 +30,22 @@ import '../constants.dart';
 
 class CategoryScreen extends StatelessWidget {
 
-  final String? categoryUuid;
-  CategoryScreen({required this.categoryUuid});
+  final String? categoryId;
+  CategoryScreen({required this.categoryId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AvailableSpaceCubit(),
-      child: _CategoryScreen(categoryUuid: categoryUuid),
+      child: _CategoryScreen(categoryId: categoryId),
     );
   }
 }
 
 class _CategoryScreen extends StatefulWidget{
 
-  final String? categoryUuid;
-  _CategoryScreen({required this.categoryUuid});
+  final String? categoryId;
+  _CategoryScreen({required this.categoryId});
 
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
@@ -71,7 +71,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
             title: "Create a task",
             context: context,
             content: TaskBottomSheet(
-              initialCategoryUuid: widget.categoryUuid,
+              initialcategoryId: widget.categoryId,
             ),
           ).show();
         },
@@ -98,7 +98,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                     builder: (_, categoryState){
 
                       Category category = (categoryState as CategoryLoadSuccess).categories
-                        .firstWhere((c) => c.uuid == widget.categoryUuid);
+                        .firstWhere((c) => c.id == widget.categoryId);
 
                       return SliverAppBar(
                         backgroundColor: Colors.transparent,

@@ -78,7 +78,7 @@ class AuthRepository {
       return right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
     }
     catch (error){
-      final errorMessages = await onResponseError(error: error, getAllMessages: true);
+      final errorMessages = await onResponseError(error: error);
       return left(errorMessages != null ? errorMessages.first : "");
     }
   }
@@ -129,7 +129,7 @@ class AuthRepository {
       return right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
     }
     catch(error){
-      final errorMessages = await onResponseError(error: error, getAllMessages: true);
+      final errorMessages = await onResponseError(error: error);
       if(errorMessages != null) return left(errorMessages.first);
       return null;
     }
@@ -149,7 +149,7 @@ class AuthRepository {
       return right(() {});
     }
     catch (error){
-      final errorMessages = await onResponseError(error: error, getAllMessages: true);
+      final errorMessages = await onResponseError(error: error);
       if(errorMessages != null) return left(errorMessages.first);
       return null;
     }
@@ -174,7 +174,7 @@ class AuthRepository {
       ));
     }
     catch (error){
-      final errorMessages = await onResponseError(error: error, getAllMessages: true);
+      final errorMessages = await onResponseError(error: error);
       if(errorMessages != null) return left(errorMessages.first);
       return null;
     }
@@ -196,7 +196,7 @@ class AuthRepository {
       return right(() {});
     }
     catch (error){
-      final errorMessages = await onResponseError(error: error, getAllMessages: true);
+      final errorMessages = await onResponseError(error: error);
       if(errorMessages != null) return left(errorMessages.first);
       return null;
     }

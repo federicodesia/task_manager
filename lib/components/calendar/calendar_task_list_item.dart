@@ -38,12 +38,12 @@ class CalendarTaskListItem extends StatelessWidget{
 
         if(categoryState is CategoryLoadSuccess){
 
-          Category? category = categoryState.categories.firstWhereOrNull((c) => c.uuid == task!.categoryUuid);
+          Category? category = categoryState.categories.firstWhereOrNull((c) => c.id == task!.categoryId);
           if(category != null) return CalendarTaskListItemContent(
             onPressed: onPressed,
             categoryColor: category.color,
             categoryName: category.name,
-            dateTime: task!.dateTime,
+            dateTime: task!.date,
             title: task!.title,
             description: task!.description,
           );

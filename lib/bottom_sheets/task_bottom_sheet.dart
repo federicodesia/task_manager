@@ -23,12 +23,12 @@ class TaskBottomSheet extends StatefulWidget{
   
   final Task? editTask;
   final DateTime? initialDate;
-  final String? initialCategoryUuid;
+  final String? initialcategoryId;
 
   TaskBottomSheet({
     this.editTask,
     this.initialDate,
-    this.initialCategoryUuid
+    this.initialcategoryId
   });
 
   @override
@@ -37,14 +37,13 @@ class TaskBottomSheet extends StatefulWidget{
 
 class _TaskBottomSheetState extends State<TaskBottomSheet>{
 
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  bool formValidated = false;
+  late String title = widget.editTask != null ? widget.editTask!.title : "";
+  late String description = widget.editTask != null ? widget.editTask!.description : "";
+  late DateTime? date = widget.editTask != null ? widget.editTask!.date : null;
+  late DateTime? time = widget.editTask != null ? widget.editTask!.date : null;
+  late String? categoryId = widget.editTask != null ? widget.editTask!.categoryId : null;
 
-  late Task task = widget.editTask ?? Task(
-    uuid: Uuid().v4(),
-    date: widget.initialDate != null ? getDate(widget.initialDate!) : null,
-    categoryUuid: widget.initialCategoryUuid
-  );
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +64,9 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                   FormInputHeader("Task"),
                   RoundedTextFormField(
                     hintText: "Task title",
-                    initialValue: task.title,
-                    onChanged: (value){
-                      task = task.copyWith(title: value);
-                    },
-                    validator: (value){
+                    initialValue: title,
+                    onChanged: (value) => title = value,
+                    validator: (value) {
                       value = value ?? "";
                       if(value.isEmpty) return "Please enter a title";
                       if(value.length > 30) return "Maximum 30 characters";
@@ -80,13 +77,11 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                   FormInputHeader("Description"),
                   RoundedTextFormField(
                     hintText: "Description",
-                    initialValue: task.description,
+                    initialValue: description,
+                    onChanged: (value) => description = value,
                     textInputType: TextInputType.multiline,
                     maxLines: 3,
                     textInputAction: TextInputAction.newline,
-                    onChanged: (value){
-                      task = task.copyWith(description: value);
-                    },
                     validator: (value){
                       value = value ?? "";
                       if(value.length > 60) return "Maximum 60 characters";
@@ -103,7 +98,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                         child: FormValidator(
                           widget: (state) => OutlinedFormIconButton(
                             icon: Icons.event_rounded,
-                            text: task.date == null ? "Select a date" : DateFormat("dd/MM/yyyy").format(task.date!),
+                            text: date == null ? "Select a date" : DateFormat("dd/MM/yyyy").format(date!),
                             outlineColor: state.hasError ? themeData.errorColor : null,
                             onPressed: () {
                               FocusScope.of(context).requestFocus(new FocusNode());
@@ -111,16 +106,14 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                                 context: context,
                                 title: "Select a date",
                                 content: DatePickerBottomSheet(
-                                  initialDate: task.date ?? DateTime.now(),
-                                  onDateChanged: (value){
-                                    task = task.copyWith(date: value);
-                                  },
+                                  initialDate: date ?? DateTime.now(),
+                                  onDateChanged: (value) => date = value,
                                 )
                               ).show();
                             }
                           ),
                           validator: (value){
-                            if(task.date == null) return "Please select a date";
+                            if(date == null) return "Please select a date";
                             return null;
                           }
                         )
@@ -131,7 +124,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                         child: FormValidator(
                           widget: (state) => OutlinedFormIconButton(
                             icon: Icons.watch_later_rounded,
-                            text: task.time == null ? "Select a time" : DateFormat("HH:mm a").format(task.time!),
+                            text: time == null ? "Select a time" : DateFormat("HH:mm a").format(time!),
                             outlineColor: state.hasError ? themeData.errorColor : null,
                             onPressed: () {
                               FocusScope.of(context).requestFocus(new FocusNode());
@@ -140,24 +133,20 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                                 title: "Select Time",
                                 content: TimePickerBottomSheet(
                                   initialTime: Duration(
-                                    hours: task.time != null ? task.time!.hour : DateTime.now().hour,
-                                    minutes: task.time != null ? task.time!.minute : DateTime.now().minute,
+                                    hours: time != null ? time!.hour : DateTime.now().hour,
+                                    minutes: time != null ? time!.minute : DateTime.now().minute,
                                   ),
-                                  onTimeChanged: (duration){
-                                    task = task.copyWith(
-                                      time: copyDateTimeWith(
-                                        DateTime.now(),
-                                        hour: duration.inHours,
-                                        minute: duration.inMinutes.remainder(60)
-                                      )
-                                    );
-                                  },
+                                  onTimeChanged: (duration) => time = copyDateTimeWith(
+                                    time != null ? time! : DateTime.now(),
+                                    hour: duration.inHours,
+                                    minute: duration.inMinutes.remainder(60)
+                                  ),
                                 )
                               ).show();
                             }
                           ),
                           validator: (value){
-                            if(task.time == null) return "Please select a time";
+                            if(time == null) return "Please select a time";
                             return null;
                           }
                         )
@@ -171,7 +160,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
             ),
           ),
 
-          BlocBuilder<CategoryBloc, CategoryState>(
+          /*BlocBuilder<CategoryBloc, CategoryState>(
             builder: (_, categoryState){
               if(categoryState is CategoryLoadSuccess){
                 List<Category> categories = categoryState.categories.where((category) => !category.isGeneral).toList();
@@ -185,7 +174,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                     child: Row(
                       children: List.generate(categories.length, (index){
                         Category category = categories[index];
-                        bool isSelected = task.categoryUuid == category.uuid;
+                        bool isSelected = categoryId == category.id;
                         bool isLastItem = index == categories.length - 1;
 
                         return AnimatedChip(
@@ -198,8 +187,8 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                           isLastItem: isLastItem,
                           onTap: () {
                             setState(() {
-                              if(category.uuid == task.categoryUuid) task = task.copyWith(categoryUuid: null);
-                              else task = task.copyWith(categoryUuid: category.uuid);
+                              if(category.id == categoryId) categoryId = null;
+                              else categoryId = category.id;
                             });
                           }
                         );
@@ -210,7 +199,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
               }
               return Container();
             }
-          ),
+          ),*/
 
           SizedBox(height: 48.0),
 
@@ -223,12 +212,19 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                 style: cBoldTextStyle,
               ),
               onPressed: (){
-                setState(() => formValidated = true);
-                if (formKey.currentState!.validate()){
+
+                if(formKey.currentState!.validate()){
                   formKey.currentState!.save();
 
-                  if(widget.editTask != null) BlocProvider.of<TaskBloc>(context).add(TaskUpdated(task));
-                  else BlocProvider.of<TaskBloc>(context).add(TaskAdded(task));
+                  final task = Task(
+                    categoryId: categoryId,
+                    title: title,
+                    description: description,
+                    date: date!
+                  );
+
+                  if(widget.editTask != null) context.read<TaskBloc>().add(TaskUpdated(task));
+                  else context.read<TaskBloc>().add(TaskAdded(task));
                   
                   Navigator.pop(context);
                 }

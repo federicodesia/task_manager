@@ -31,7 +31,7 @@ class AnimatedDynamicTaskList extends StatelessWidget{
         final objectA = a.object;
         final objectB = b.object;
 
-        if(objectA is Task && objectB is Task) return objectA.uuid == objectB.uuid;
+        if(objectA is Task && objectB is Task) return objectA.id == objectB.id;
         return objectA == objectB;
       },
       itemBuilder: (BuildContext context, DynamicObject dynamicObject, int index, Animation<double> animation){
@@ -55,7 +55,7 @@ class AnimatedDynamicTaskList extends StatelessWidget{
           child: item is Task ? BlocBuilder<TaskBloc, TaskState>(
             builder: (_, state){
               if(state is TaskLoadSuccess){
-                return state.tasks.where((t) => t.uuid == item.uuid).isNotEmpty ?
+                return state.tasks.where((t) => t.id == item.id).isNotEmpty ?
                   TaskListItem(
                     task: item,
                     type: taskListItemType,

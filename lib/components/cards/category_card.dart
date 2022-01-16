@@ -14,11 +14,11 @@ import 'package:task_manager/screens/category_screen.dart';
 
 class CategoryCard extends StatelessWidget{
 
-  final String? categoryUuid;
+  final String? categoryId;
   final bool isShimmer;
 
   CategoryCard({
-    this.categoryUuid,
+    this.categoryId,
     this.isShimmer = false
   });
 
@@ -31,7 +31,7 @@ class CategoryCard extends StatelessWidget{
         return BlocBuilder<CategoryBloc, CategoryState>(
           buildWhen: (previousState, currentState){
             if(currentState is CategoryLoadSuccess){
-              if(currentState.categories.where((c) => c.uuid == categoryUuid).isEmpty) return false;
+              if(currentState.categories.where((c) => c.id == categoryId).isEmpty) return false;
             }
             return true;
           },
@@ -40,12 +40,12 @@ class CategoryCard extends StatelessWidget{
             if(isShimmer) return CategoryCardContent(isShimmer: true);
 
             if(taskState is TaskLoadSuccess && categoryState is CategoryLoadSuccess){
-              Category category = categoryState.categories.firstWhere((c) => c.uuid == categoryUuid);
-              List<Task> categoryTasks = taskState.tasks.where((t) => t.categoryUuid == categoryUuid).toList();
+              Category category = categoryState.categories.firstWhere((c) => c.id == categoryId);
+              List<Task> categoryTasks = taskState.tasks.where((t) => t.categoryId == categoryId).toList();
 
               String description;
               int tasksCount = categoryTasks.length;
-              int completedTasks = categoryTasks.where((task) => task.completed).length;
+              int completedTasks = categoryTasks.where((task) => task.isCompleted).length;
               if(tasksCount > 0 && tasksCount == completedTasks) description = "All done";
               else{
                 int remainingTasks = tasksCount - completedTasks;
@@ -60,9 +60,9 @@ class CategoryCard extends StatelessWidget{
                       return BlocProvider(
                         create: (BuildContext context) => CategoryScreenBloc(
                           taskBloc: BlocProvider.of<TaskBloc>(context),
-                          categoryUuid: categoryUuid
+                          categoryId: categoryId
                         )..add(CategoryScreenLoaded()),
-                        child: CategoryScreen(categoryUuid: categoryUuid),
+                        child: CategoryScreen(categoryId: categoryId),
                       );
                     })
                   );

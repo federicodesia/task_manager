@@ -39,7 +39,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool formValidated = false;
-  late Category category = widget.editCategory ?? Category(uuid: Uuid().v4(), name: "", color: colors.first);
+  late Category category = widget.editCategory ?? Category(id: Uuid().v4(), name: "", color: colors.first);
 
   double? colorWidth;
 

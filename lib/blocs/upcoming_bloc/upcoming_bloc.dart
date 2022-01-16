@@ -45,7 +45,7 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
     int weekday = now.weekday - 1;
 
     List<Task> weekTasks = tasks.where((task){
-      int difference = dateDifference(task.dateTime, now);
+      int difference = dateDifference(task.date, now);
       return difference >= weekday * -1 && difference < 7 - weekday;
     }).toList();
 
@@ -56,21 +56,21 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
     List<DynamicObject> items = [];
 
     DateTime now = DateTime.now();
-    tasks = tasks.where((task) => dateDifference(task.dateTime, now) >= 1).toList();
-    tasks.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+    tasks = tasks.where((task) => dateDifference(task.date, now) >= 1).toList();
+    tasks.sort((a, b) => a.date.compareTo(b.date));
 
     if(tasks.length > 0){
 
       int dateTimeCount = 1;
-      DateTime lastDateTime = getDate(tasks.first.dateTime);
+      DateTime lastDateTime = getDate(tasks.first.date);
       items.add(DynamicObject(object: lastDateTime));
 
       for(int i = 0; i < tasks.length; i++){
         Task task = tasks[i];
-        if(dateDifference(task.dateTime, lastDateTime) == 0) items.add(DynamicObject(object: task));
+        if(dateDifference(task.date, lastDateTime) == 0) items.add(DynamicObject(object: task));
         else if(dateTimeCount == 3) break;
         else{
-          lastDateTime = getDate(task.dateTime);
+          lastDateTime = getDate(task.date);
           items.add(DynamicObject(object: lastDateTime));
           items.add(DynamicObject(object: task));
           dateTimeCount++;

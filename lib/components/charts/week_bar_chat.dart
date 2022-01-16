@@ -22,7 +22,7 @@ class WeekBarChart extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    int completedWeekTasks = weekTasksList.where((task) => task.completed).length;
+    int completedWeekTasks = weekTasksList.where((task) => task.isCompleted).length;
 
     return Container(
       decoration: BoxDecoration(
@@ -63,10 +63,10 @@ class WeekBarChart extends StatelessWidget{
                 ),
 
                 barGroups: List.generate(7, (index){
-                  final weekdayTasksList = weekTasksList.where((task) => task.dateTime.weekday - 1 == index);
+                  final weekdayTasksList = weekTasksList.where((task) => task.date.weekday - 1 == index);
                   return weekBarChartGroupData(
                     index: index,
-                    height: weekdayTasksList.where((task) => task.completed).length.toDouble(),
+                    height: weekdayTasksList.where((task) => task.isCompleted).length.toDouble(),
                     backgroundHeight: weekdayTasksList.length.toDouble()
                   );
                 })

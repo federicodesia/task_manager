@@ -2,19 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
-import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
-import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
-import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
-import 'package:task_manager/blocs/upcoming_bloc/upcoming_bloc.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
-import 'package:task_manager/repositories/category_repository.dart';
-import 'package:task_manager/repositories/task_repository.dart';
 import 'package:task_manager/repositories/user_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/services/context_service.dart';
 import 'package:task_manager/services/dialog_service.dart';
 import 'package:task_manager/services/locator_service.dart';
-import 'helpers/date_time_helper.dart';
 
 void main() {
   Paint.enableDithering = true;
@@ -66,7 +59,7 @@ class _MyAppState extends State<MyApp> {
                 routes: (_) => [
                   if(authStatus == AuthStatus.loading) SplashRoute()
                   else if(authStatus == AuthStatus.waitingVerification) EmailVerificationRoute()
-                  else if(authStatus == AuthStatus.authenticated) MainScreenRouter()
+                  else if(authStatus == AuthStatus.authenticated) MainRouter()
                   else WelcomeRouter()
                 ],
               ),
@@ -78,7 +71,7 @@ class _MyAppState extends State<MyApp> {
       ),
     );
 
-    return MultiBlocProvider(
+    /*return MultiBlocProvider(
       providers: [
         BlocProvider<TaskBloc>(
             create: (context) =>
@@ -107,6 +100,7 @@ class _MyAppState extends State<MyApp> {
           routerDelegate: _appRouter.delegate(),
           routeInformationParser: _appRouter.defaultRouteParser(),
           debugShowCheckedModeBanner: false),
-    );
+    );*/
+
   }
 }

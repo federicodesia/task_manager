@@ -39,7 +39,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<CategoryUpdated>((event, emit){
       if(state is CategoryLoadSuccess){
         emit(CategoryLoadSuccess((state as CategoryLoadSuccess).categories.map((category){
-          return category.uuid == event.category.uuid ? event.category : category;
+          return category.id == event.category.id ? event.category : category;
         }).toList()));
       }
     });
@@ -47,13 +47,13 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<CategoryDeleted>((event, emit){
       if(state is CategoryLoadSuccess){
         emit(CategoryLoadSuccess((state as CategoryLoadSuccess).categories
-          .where((category) => category.uuid != event.category.uuid).toList()));
+          .where((category) => category.id != event.category.id).toList()));
         
         TaskState taskBlocState = taskBloc.state;
         if(taskBlocState is TaskLoadSuccess){
           taskBloc.add(TasksUpdated(
             taskBlocState.tasks.map((task){
-              return task.categoryUuid == event.category.uuid ? task.copyWith(categoryUuid: null) : task;
+              return task.categoryId == event.category.id ? task.copyWith(categoryId: null) : task;
             }).toList())
           );
         }

@@ -78,7 +78,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      /*floatingActionButton: AnimatedFloatingActionButton(
+      floatingActionButton: AnimatedFloatingActionButton(
         visible: showFloatingActionButton,
         onPressed: () {
           ModalBottomSheet(
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
             content: TaskBottomSheet(),
           ).show();
         },
-      ),*/
+      ),
 
       body: LayoutBuilder(
         builder: (_, constraints){
@@ -117,7 +117,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                   )
                 ),
 
-                /*SliverToBoxAdapter(
+                SliverToBoxAdapter(
                   child: WidgetSize(
                     onChange: (Size size){
                       setState(() => contentHeight = size.height);
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Header(text: "Categories"),
+                        /*Header(text: "Categories"),
                         SizedBox(height: cPadding),
 
                         BlocBuilder<CategoryBloc, CategoryState>(
@@ -158,7 +158,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                             DeclarativeAnimatedList(
                                               scrollDirection: Axis.horizontal,
                                               items: categoryState.categories.toList(),
-                                              equalityCheck: (Category a, Category b) => a.uuid == b.uuid,
+                                              equalityCheck: (Category a, Category b) => a.id == b.id,
                                               itemBuilder: (BuildContext context, Category item, int index, Animation<double> animation){
                                                 return ListItemAnimation(
                                                   animation: animation,
@@ -167,7 +167,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                                     width: 148.0,
                                                     margin: EdgeInsets.only(right: 12.0),
                                                     child: CategoryCard(
-                                                      categoryUuid: item.uuid
+                                                      categoryId: item.id
                                                     ),
                                                   ),
                                                 );
@@ -233,7 +233,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                           },
                         ),
 
-                        SizedBox(height: cPadding),
+                        SizedBox(height: cPadding),*/
 
                         // Tabs
                         Padding(
@@ -314,7 +314,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                       }
                     },
                   )
-                ),*/
+                ),
               ]
             ),
           );

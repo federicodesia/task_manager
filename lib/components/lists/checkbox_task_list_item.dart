@@ -31,10 +31,10 @@ class CheckboxTaskListItem extends StatelessWidget{
     if(task != null) return CheckboxTaskListItemContent(
       onCheckboxChanged: onChanged,
       onPressed: onPressed,
-      completed: task!.completed,
+      completed: task!.isCompleted,
       title: task!.title,
       description: task!.description,
-      dateTime: task!.dateTime,
+      dateTime: task!.date,
     );
 
     return Container();

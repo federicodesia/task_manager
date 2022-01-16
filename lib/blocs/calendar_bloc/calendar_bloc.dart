@@ -78,19 +78,19 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   }
 
   List<DynamicObject> _getGroupsByDate(List<Task> tasks, DateTime date){
-    List<Task> _tasks = tasks.where((task) => dateDifference(task.dateTime, date) == 0).toList();
-    _tasks.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+    List<Task> _tasks = tasks.where((task) => dateDifference(task.date, date) == 0).toList();
+    _tasks.sort((a, b) => a.date.compareTo(b.date));
 
     List<DynamicObject> groups = [];
     DateTime now = DateTime.now();
 
     if(_tasks.length > 0){
-      for(int i = _tasks.first.dateTime.hour; i <= _tasks.last.dateTime.hour; i++){
+      for(int i = _tasks.first.date.hour; i <= _tasks.last.date.hour; i++){
         groups.add(DynamicObject(
           object: DateTime(now.year, now.month, now.day, i)
         ));
 
-        _tasks.where((task) => task.dateTime.hour == i).forEach((task) {
+        _tasks.where((task) => task.date.hour == i).forEach((task) {
           groups.add(DynamicObject(object: task));
         });
       }
