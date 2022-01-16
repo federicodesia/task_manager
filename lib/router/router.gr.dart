@@ -9,20 +9,21 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i11;
+import 'package:flutter/material.dart' as _i12;
 
 import '../screens/email_verification_screen.dart' as _i3;
 import '../screens/forgot_password_email_verification_screen.dart' as _i9;
 import '../screens/forgot_password_new_password_screen.dart' as _i10;
 import '../screens/forgot_password_screen.dart' as _i8;
+import '../screens/home/home_screen.dart' as _i11;
 import '../screens/login_screen.dart' as _i6;
+import '../screens/main_screen.dart' as _i4;
 import '../screens/register_screen.dart' as _i7;
 import '../screens/splash_screen.dart' as _i1;
-import '../screens/temp_home_screen.dart' as _i4;
 import '../screens/welcome_screen.dart' as _i5;
 
 class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i11.GlobalKey<_i11.NavigatorState>? navigatorKey])
+  AppRouter([_i12.GlobalKey<_i12.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -39,9 +40,9 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: _i3.EmailVerificationScreen());
     },
-    TempHomeRoute.name: (routeData) {
+    MainScreenRouter.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i4.TempHomeScreen());
+          routeData: routeData, child: _i4.MainScreen());
     },
     WelcomeRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
@@ -68,6 +69,10 @@ class AppRouter extends _i2.RootStackRouter {
     ForgotPasswordNewPasswordRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: _i10.ForgotPasswordNewPasswordScreen());
+    },
+    HomeRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: _i11.HomeScreen());
     }
   };
 
@@ -94,7 +99,10 @@ class AppRouter extends _i2.RootStackRouter {
             ]),
         _i2.RouteConfig(EmailVerificationRoute.name,
             path: '/email-verification-screen'),
-        _i2.RouteConfig(TempHomeRoute.name, path: '/temp-home-screen')
+        _i2.RouteConfig(MainScreenRouter.name, path: '/main-screen', children: [
+          _i2.RouteConfig(HomeRoute.name,
+              path: 'home-screen', parent: MainScreenRouter.name)
+        ])
       ];
 }
 
@@ -126,11 +134,13 @@ class EmailVerificationRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i4.TempHomeScreen]
-class TempHomeRoute extends _i2.PageRouteInfo<void> {
-  const TempHomeRoute() : super(TempHomeRoute.name, path: '/temp-home-screen');
+/// [_i4.MainScreen]
+class MainScreenRouter extends _i2.PageRouteInfo<void> {
+  const MainScreenRouter({List<_i2.PageRouteInfo>? children})
+      : super(MainScreenRouter.name,
+            path: '/main-screen', initialChildren: children);
 
-  static const String name = 'TempHomeRoute';
+  static const String name = 'MainScreenRouter';
 }
 
 /// generated route for
@@ -197,4 +207,12 @@ class ForgotPasswordNewPasswordRoute extends _i2.PageRouteInfo<void> {
             path: 'forgot-password-new-password-screen');
 
   static const String name = 'ForgotPasswordNewPasswordRoute';
+}
+
+/// generated route for
+/// [_i11.HomeScreen]
+class HomeRoute extends _i2.PageRouteInfo<void> {
+  const HomeRoute() : super(HomeRoute.name, path: 'home-screen');
+
+  static const String name = 'HomeRoute';
 }

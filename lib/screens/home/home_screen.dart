@@ -78,7 +78,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton: AnimatedFloatingActionButton(
+      /*floatingActionButton: AnimatedFloatingActionButton(
         visible: showFloatingActionButton,
         onPressed: () {
           ModalBottomSheet(
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
             content: TaskBottomSheet(),
           ).show();
         },
-      ),
+      ),*/
 
       body: LayoutBuilder(
         builder: (_, constraints){
@@ -117,7 +117,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                   )
                 ),
 
-                SliverToBoxAdapter(
+                /*SliverToBoxAdapter(
                   child: WidgetSize(
                     onChange: (Size size){
                       setState(() => contentHeight = size.height);
@@ -314,7 +314,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                       }
                     },
                   )
-                ),
+                ),*/
               ]
             ),
           );

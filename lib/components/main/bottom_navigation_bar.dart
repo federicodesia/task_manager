@@ -1,25 +1,16 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:task_manager/models/bottom_navigation_bar_item.dart';
+import 'package:task_manager/constants.dart';
 
-import '../../constants.dart';
+class MyBottomNavigationBar extends StatelessWidget{
 
-class MyBottomNavigationBar extends StatefulWidget{
-
-  final int initialSelectedIndex;
-  final Function(int) onChange;
+  final TabsRouter tabsRouter;
+  final List<MyBottomNavigationBarItem> items;
 
   MyBottomNavigationBar({
-    this.initialSelectedIndex = 0,
-    required this.onChange
+    required this.tabsRouter,
+    required this.items
   });
-
-  @override
-  _MyBottomNavigationBarState createState() => _MyBottomNavigationBarState();
-}
-
-class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>{
-
-  late int selectedIndex = widget.initialSelectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +41,11 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>{
           padding: EdgeInsets.all(cBottomNavigationBarPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(bottomNavigationBarItems.length, (index){
+            children: List.generate(items.length, (index){
               return MyBottomNavigationBarIcon(
-                item: bottomNavigationBarItems[index],
-                isSelected: selectedIndex == index,
-                onPressed: () {
-                  setState(() => selectedIndex = index);
-                  widget.onChange(selectedIndex);
-                }
+                item: items.elementAt(index),
+                isSelected: tabsRouter.activeIndex == index,
+                onPressed: () => index < tabsRouter.stack.length ? tabsRouter.setActiveIndex(index) : null
               );
             }),
           ),
@@ -67,8 +55,18 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar>{
   }
 }
 
-class MyBottomNavigationBarIcon extends StatelessWidget{
+class MyBottomNavigationBarItem{
+  final String icon;
+  final String selectedIcon;
 
+  MyBottomNavigationBarItem({
+    required this.icon,
+    required this.selectedIcon
+  });
+}
+
+class MyBottomNavigationBarIcon extends StatelessWidget{
+  
   final MyBottomNavigationBarItem item;
   final bool isSelected;
   final Function() onPressed;
@@ -76,7 +74,7 @@ class MyBottomNavigationBarIcon extends StatelessWidget{
   MyBottomNavigationBarIcon({
     required this.item,
     required this.isSelected,
-    required this.onPressed
+    required this.onPressed,
   });
 
   @override
@@ -94,9 +92,9 @@ class MyBottomNavigationBarIcon extends StatelessWidget{
               switchOutCurve: Curves.fastOutSlowIn,
               switchInCurve: Curves.fastOutSlowIn,
               child: Opacity(
-                key: UniqueKey(),
+                key: Key("MyBottomNavigationBarIcon: " + (isSelected ? item.selectedIcon : item.icon)),
                 opacity: isSelected ? 0.9 : 0.5,
-                child: Image.asset("assets/icons/${isSelected ? item.selectedIcon : item.icon}.png")
+                child: Image.asset("assets/icons/${isSelected ? item.selectedIcon : item.icon}")
               )
             ),
           ),

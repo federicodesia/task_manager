@@ -3,10 +3,11 @@ import 'package:task_manager/screens/email_verification_screen.dart';
 import 'package:task_manager/screens/forgot_password_email_verification_screen.dart';
 import 'package:task_manager/screens/forgot_password_new_password_screen.dart';
 import 'package:task_manager/screens/forgot_password_screen.dart';
+import 'package:task_manager/screens/home/home_screen.dart';
 import 'package:task_manager/screens/login_screen.dart';
 import 'package:task_manager/screens/register_screen.dart';
 import 'package:task_manager/screens/splash_screen.dart';
-import 'package:task_manager/screens/temp_home_screen.dart';
+import 'package:task_manager/screens/main_screen.dart';
 import 'package:task_manager/screens/welcome_screen.dart';
 
 @MaterialAutoRouter(
@@ -30,7 +31,13 @@ import 'package:task_manager/screens/welcome_screen.dart';
 
     AutoRoute(page: EmailVerificationScreen),
     
-    AutoRoute(page: TempHomeScreen),
+    AutoRoute(
+      name: "MainScreenRouter",
+      page: MainScreen,
+      children: [
+        AutoRoute(page: HomeScreen)
+      ]
+    ),
   ],
 )
 

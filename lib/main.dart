@@ -14,10 +14,7 @@ import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/services/context_service.dart';
 import 'package:task_manager/services/dialog_service.dart';
 import 'package:task_manager/services/locator_service.dart';
-import 'components/main/bottom_navigation_bar.dart';
-import 'constants.dart';
 import 'helpers/date_time_helper.dart';
-import 'models/bottom_navigation_bar_item.dart';
 
 void main() {
   Paint.enableDithering = true;
@@ -69,7 +66,7 @@ class _MyAppState extends State<MyApp> {
                 routes: (_) => [
                   if(authStatus == AuthStatus.loading) SplashRoute()
                   else if(authStatus == AuthStatus.waitingVerification) EmailVerificationRoute()
-                  else if(authStatus == AuthStatus.authenticated) TempHomeRoute()
+                  else if(authStatus == AuthStatus.authenticated) MainScreenRouter()
                   else WelcomeRouter()
                 ],
               ),
@@ -110,34 +107,6 @@ class _MyAppState extends State<MyApp> {
           routerDelegate: _appRouter.delegate(),
           routeInformationParser: _appRouter.defaultRouteParser(),
           debugShowCheckedModeBanner: false),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int selectedIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: MyBottomNavigationBar(
-        onChange: (index) {
-          setState(() => selectedIndex = index);
-        },
-      ),
-      backgroundColor: cBackgroundColor,
-      body: SafeArea(
-          child: IndexedStack(
-        index: selectedIndex,
-        children: List.generate(bottomNavigationBarItems.length, (index) {
-          return bottomNavigationBarItems[index].child;
-        }),
-      )),
     );
   }
 }
