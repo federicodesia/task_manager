@@ -7,21 +7,13 @@ import 'package:task_manager/repositories/interceptors/access_token_interceptor.
 
 class AuthRepository {
 
-  late Dio _dio;
-  AuthRepository(){
-
-    _dio = Dio(
-      BaseOptions(
-        baseUrl: "https://yusuf007r.dev/task-manager/auth",
-        connectTimeout: 5000,
-        receiveTimeout: 3000,
-      )
-    );
-
-    _dio.interceptors.add(
-      AccessTokenInterceptor(dio: _dio)
-    );
-  }
+  late Dio _dio = Dio(
+    BaseOptions(
+      baseUrl: "https://yusuf007r.dev/task-manager/auth",
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+    )
+  )..interceptors.add(AccessTokenInterceptor());
 
   Future<Either<List<String>, AuthCredentials>?> login({
     required String email,

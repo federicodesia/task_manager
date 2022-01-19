@@ -37,11 +37,13 @@ class TaskBottomSheet extends StatefulWidget{
 
 class _TaskBottomSheetState extends State<TaskBottomSheet>{
 
-  late String title = widget.editTask != null ? widget.editTask!.title : "";
-  late String description = widget.editTask != null ? widget.editTask!.description : "";
-  late DateTime? date = widget.editTask != null ? widget.editTask!.date : null;
-  late DateTime? time = widget.editTask != null ? widget.editTask!.date : null;
-  late String? categoryId = widget.editTask != null ? widget.editTask!.categoryId : null;
+  late Task? editTask = widget.editTask;
+
+  late String title = editTask != null ? editTask!.title : "";
+  late String description = editTask != null ? editTask!.description : "";
+  late DateTime? date = editTask != null ? editTask!.date : null;
+  late DateTime? time = editTask != null ? editTask!.date : null;
+  late String? categoryId = editTask != null ? editTask!.categoryId : null;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -216,15 +218,18 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                 if(formKey.currentState!.validate()){
                   formKey.currentState!.save();
 
-                  final task = Task(
+                  if(editTask != null) context.read<TaskBloc>().add(TaskUpdated(editTask!.copyWith(
+                    categoryId: categoryId,
+                    title: title,
+                    description: description,
+                    date: date
+                  )));
+                  else context.read<TaskBloc>().add(TaskAdded(Task(
                     categoryId: categoryId,
                     title: title,
                     description: description,
                     date: date!
-                  );
-
-                  if(widget.editTask != null) context.read<TaskBloc>().add(TaskUpdated(task));
-                  else context.read<TaskBloc>().add(TaskAdded(task));
+                  )));
                   
                   Navigator.pop(context);
                 }

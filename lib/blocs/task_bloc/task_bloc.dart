@@ -1,4 +1,6 @@
-import 'package:bloc/bloc.dart';
+import 'dart:convert';
+
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/repositories/task_repository.dart';
@@ -6,15 +8,15 @@ import 'package:task_manager/repositories/task_repository.dart';
 part 'task_event.dart';
 part 'task_state.dart';
 
-class TaskBloc extends Bloc<TaskEvent, TaskState> {
+class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
 
   final TaskRepository taskRepository;
   TaskBloc({required this.taskRepository}) : super(TaskLoadInProgress()){
 
     on<TaskLoaded>((event, emit) async{
-      final tasks = await taskRepository.getTasks();
+      /*final tasks = await taskRepository.getTasks();
       if(tasks != null) emit(TaskLoadSuccess(tasks));
-      else emit(TaskLoadFailure());
+      else emit(TaskLoadFailure());*/
     });
 
     on<TaskAdded>((event, emit) async{
@@ -52,5 +54,30 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         emit(TaskLoadSuccess(event.tasks));
       }
     });
+  }
+
+  @override
+  TaskState? fromJson(Map<String, dynamic> json) {
+    try{
+      final tasks = List<Task>.from(jsonDecode(json["tasks"])
+        .map((task) => Task.fromJson(task))
+        .where(((task) => task.id != null))
+      );
+      return TaskLoadSuccess(tasks);
+    }
+    catch(_) {}
+  }
+
+  @override
+  Map<String, dynamic>? toJson(TaskState state) {
+    try{
+      if(state is TaskLoadSuccess){
+        final tasks = jsonEncode(state.tasks.map((task) => task.toJson()).toList());
+        return {
+          "tasks": tasks
+        };
+      }
+    }
+    catch(_) {}
   }
 }

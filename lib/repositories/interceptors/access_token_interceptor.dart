@@ -9,10 +9,13 @@ import 'package:task_manager/services/locator_service.dart';
 
 class AccessTokenInterceptor extends Interceptor {
 
-  late Dio _dio;
-  AccessTokenInterceptor({required Dio dio}){
-    _dio = Dio(dio.options);
-  }
+  late Dio _dio = Dio(
+    BaseOptions(
+      baseUrl: "https://yusuf007r.dev/task-manager/auth",
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+    )
+  );
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {

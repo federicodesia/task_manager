@@ -31,7 +31,7 @@ class AnimatedDynamicTaskList extends StatelessWidget{
         final objectA = a.object;
         final objectB = b.object;
 
-        if(objectA is Task && objectB is Task) return objectA.id == objectB.id;
+        //if(objectA is Task && objectB is Task) return objectA.id == objectB.id;
         return objectA == objectB;
       },
       itemBuilder: (BuildContext context, DynamicObject dynamicObject, int index, Animation<double> animation){
