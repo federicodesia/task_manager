@@ -6,8 +6,7 @@ part 'user.g.dart';
 class User{
   final String id;
   final String email;
-  final String firstName;
-  final String lastName;
+  final String name;
   final String? imageUrl;
   final String createdAt;
   final String updatedAt;
@@ -16,8 +15,7 @@ class User{
   const User({
     required this.id,
     required this.email,
-    required this.firstName,
-    required this.lastName,
+    required this.name,
     this.imageUrl,
     required this.createdAt,
     required this.updatedAt,
@@ -27,8 +25,7 @@ class User{
   static const empty = User(
     id: "",
     email: "",
-    firstName: "",
-    lastName: "",
+    name: "",
     createdAt: "",
     updatedAt: "",
     verified: false
@@ -37,8 +34,7 @@ class User{
   bool get isEmpty =>
     this.id == ""
     && this.email == ""
-    && this.firstName == ""
-    && this.lastName == ""
+    && this.name == ""
     && this.imageUrl == null
     && this.createdAt == ""
     && this.updatedAt == ""

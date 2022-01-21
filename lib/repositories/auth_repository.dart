@@ -44,8 +44,7 @@ class AuthRepository {
 
     try{
       final response = await _dio.post("/register", data: {
-        "firstName": name,
-        "lastName": name,
+        "name": name,
         "email": email,
         "password": password,
       });
@@ -71,7 +70,7 @@ class AuthRepository {
     }
     catch (error){
       final errorMessages = await onResponseError(error: error);
-      return left(errorMessages != null ? errorMessages.first : "");
+      return left(errorMessages != null && errorMessages.isNotEmpty ? errorMessages.first : "");
     }
   }
 

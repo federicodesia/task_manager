@@ -9,7 +9,7 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i13;
+import 'package:flutter/material.dart' as _i14;
 
 import '../screens/email_verification_screen.dart' as _i3;
 import '../screens/forgot_password_email_verification_screen.dart' as _i9;
@@ -19,12 +19,13 @@ import '../screens/home/home_screen.dart' as _i12;
 import '../screens/login_screen.dart' as _i6;
 import '../screens/main_screen.dart' as _i11;
 import '../screens/register_screen.dart' as _i7;
+import '../screens/settings/settings_screen.dart' as _i13;
 import '../screens/splash_screen.dart' as _i1;
 import '../screens/welcome_screen.dart' as _i5;
 import 'wrappers/main_router_wrapper.dart' as _i4;
 
 class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i13.GlobalKey<_i13.NavigatorState>? navigatorKey])
+  AppRouter([_i14.GlobalKey<_i14.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -78,6 +79,10 @@ class AppRouter extends _i2.RootStackRouter {
     HomeRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: _i12.HomeScreen());
+    },
+    SettingsRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: _i13.SettingsScreen());
     }
   };
 
@@ -112,7 +117,9 @@ class AppRouter extends _i2.RootStackRouter {
                   parent: MainRouter.name,
                   children: [
                     _i2.RouteConfig(HomeRoute.name,
-                        path: 'home-screen', parent: MainRoute.name)
+                        path: 'home-screen', parent: MainRoute.name),
+                    _i2.RouteConfig(SettingsRoute.name,
+                        path: 'settings-screen', parent: MainRoute.name)
                   ])
             ])
       ];
@@ -236,4 +243,12 @@ class HomeRoute extends _i2.PageRouteInfo<void> {
   const HomeRoute() : super(HomeRoute.name, path: 'home-screen');
 
   static const String name = 'HomeRoute';
+}
+
+/// generated route for
+/// [_i13.SettingsScreen]
+class SettingsRoute extends _i2.PageRouteInfo<void> {
+  const SettingsRoute() : super(SettingsRoute.name, path: 'settings-screen');
+
+  static const String name = 'SettingsRoute';
 }

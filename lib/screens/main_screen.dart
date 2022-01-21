@@ -17,6 +17,9 @@ class MainScreen extends StatelessWidget{
       homeIndex: 0,
       routes: [
         HomeRoute(),
+        SettingsRoute(),
+        SettingsRoute(),
+        SettingsRoute()
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
 
