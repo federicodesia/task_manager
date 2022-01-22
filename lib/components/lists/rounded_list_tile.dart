@@ -5,6 +5,7 @@ class RoundedListTile extends StatelessWidget {
 
   RoundedListTile({
     required this.title,
+    this.description,
     required this.icon,
     this.color = Colors.grey,
     this.counter,
@@ -14,6 +15,7 @@ class RoundedListTile extends StatelessWidget {
   });
 
   final String title;
+  final String? description;
   final IconData icon;
   final Color color;
   final String? counter;
@@ -31,30 +33,60 @@ class RoundedListTile extends StatelessWidget {
         padding: EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Container(
-              padding: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                color: Color.alphaBlend(color.withOpacity(0.1), cBackgroundColor),
-                //color: color
-              ),
-              child: Icon(
-                icon,
-                //color: color == cCardBackgroundColor ? Colors.white.withOpacity(0.5) : Colors.white,
-                color: color,
-                size: 16.0,
-              )
-            ),
-            SizedBox(width: 16.0),
 
             Expanded(
-              child: Text(
-                title,
-                style: cLightTextStyle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                          color: Color.alphaBlend(color.withOpacity(0.1), cBackgroundColor),
+                          //color: color
+                        ),
+                        child: Icon(
+                          icon,
+                          //color: color == cCardBackgroundColor ? Colors.white.withOpacity(0.5) : Colors.white,
+                          color: color,
+                          size: 16.0,
+                        )
+                      ),
+
+                      SizedBox(width: 16.0),
+
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: cLightTextStyle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
+                  ),
+
+                  if(description != null) Row(
+                    children: [
+                      SizedBox(width: 36.0),
+                      SizedBox(width: 16.0),
+
+                      Expanded(
+                        child: Text(
+                          description!,
+                          style: cSmallExtraLightTextStyle,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
+            
+            SizedBox(width: 16.0),
 
             if(value != null) Padding(
               padding: EdgeInsets.only(right: 16.0),
@@ -95,6 +127,56 @@ class RoundedListTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class RoundedListTileSwitch extends StatefulWidget{
+
+  RoundedListTileSwitch({
+    required this.title,
+    this.description,
+    required this.icon,
+    this.color = Colors.grey,
+    this.initialValue = true,
+    this.onChanged
+  });
+
+  final String title;
+  final String? description;
+  final IconData icon;
+  final Color color;
+  final bool initialValue;
+  final void Function(bool)? onChanged;
+
+  @override
+  State<RoundedListTileSwitch> createState() => _RoundedListTileSwitchState();
+}
+
+class _RoundedListTileSwitchState extends State<RoundedListTileSwitch> {
+
+  late bool switchValue = widget.initialValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return RoundedListTile(
+      title: widget.title,
+      description: widget.description,
+      icon: widget.icon,
+      color: widget.color,
+      suffix: SizedBox(
+        height: double.minPositive,
+        child: Switch(
+          activeColor: cPrimaryColor,
+          inactiveThumbColor: Color.alphaBlend(cLightGrayColor, cBackgroundColor),
+          value: switchValue,
+          onChanged: (value) {},
+        ),
+      ),
+      onTap: (){
+        setState(() => switchValue = !switchValue);
+        if(widget.onChanged != null) widget.onChanged!(switchValue);
+      },
     );
   }
 }

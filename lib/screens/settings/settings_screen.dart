@@ -19,6 +19,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 }
+
 class _SettingsScreen extends StatefulWidget{
 
   @override
@@ -110,18 +111,10 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                       children: [
                         Divider(color: cDividerColor),
 
-                        RoundedListTile(
+                        RoundedListTileSwitch(
                           title: "Dark mode",
                           icon: Icons.dark_mode_rounded,
-                          suffix: SizedBox(
-                            height: double.minPositive,
-                            child: Switch(
-                              activeColor: cPrimaryColor,
-                              value: true,
-                              onChanged: (value) {},
-                            ),
-                          ),
-                          onTap: () {},
+                          onChanged: (value) {},
                         ),
 
                         RoundedListTile(
@@ -143,7 +136,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                           title: "Notifications",
                           icon: Icons.notifications_rounded,
                           color: Color(0xFFB548C5),
-                          onTap: () {},
+                          onTap: () => AutoRouter.of(context).navigate(NotificationsRoute()),
                         ),
 
                         Divider(color: cDividerColor),

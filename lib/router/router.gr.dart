@@ -9,24 +9,25 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i15;
+import 'package:flutter/material.dart' as _i16;
 
 import '../screens/email_verification_screen.dart' as _i3;
 import '../screens/forgot_password_email_verification_screen.dart' as _i9;
 import '../screens/forgot_password_new_password_screen.dart' as _i10;
 import '../screens/forgot_password_screen.dart' as _i8;
-import '../screens/home/home_screen.dart' as _i13;
+import '../screens/home/home_screen.dart' as _i14;
 import '../screens/login_screen.dart' as _i6;
 import '../screens/main_screen.dart' as _i11;
 import '../screens/register_screen.dart' as _i7;
+import '../screens/settings/notifications_screen.dart' as _i13;
 import '../screens/settings/security_screen.dart' as _i12;
-import '../screens/settings/settings_screen.dart' as _i14;
+import '../screens/settings/settings_screen.dart' as _i15;
 import '../screens/splash_screen.dart' as _i1;
 import '../screens/welcome_screen.dart' as _i5;
 import 'wrappers/main_router_wrapper.dart' as _i4;
 
 class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i15.GlobalKey<_i15.NavigatorState>? navigatorKey])
+  AppRouter([_i16.GlobalKey<_i16.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -81,13 +82,17 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: _i12.SecurityScreen());
     },
+    NotificationsRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: _i13.NotificationsScreen());
+    },
     HomeRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i13.HomeScreen());
+          routeData: routeData, child: _i14.HomeScreen());
     },
     SettingsRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i14.SettingsScreen());
+          routeData: routeData, child: _i15.SettingsScreen());
     }
   };
 
@@ -127,7 +132,9 @@ class AppRouter extends _i2.RootStackRouter {
                         path: 'settings-screen', parent: MainRoute.name)
                   ]),
               _i2.RouteConfig(SecurityRoute.name,
-                  path: 'security-screen', parent: MainRouter.name)
+                  path: 'security-screen', parent: MainRouter.name),
+              _i2.RouteConfig(NotificationsRoute.name,
+                  path: 'notifications-screen', parent: MainRouter.name)
             ])
       ];
 }
@@ -253,7 +260,16 @@ class SecurityRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i13.HomeScreen]
+/// [_i13.NotificationsScreen]
+class NotificationsRoute extends _i2.PageRouteInfo<void> {
+  const NotificationsRoute()
+      : super(NotificationsRoute.name, path: 'notifications-screen');
+
+  static const String name = 'NotificationsRoute';
+}
+
+/// generated route for
+/// [_i14.HomeScreen]
 class HomeRoute extends _i2.PageRouteInfo<void> {
   const HomeRoute() : super(HomeRoute.name, path: 'home-screen');
 
@@ -261,7 +277,7 @@ class HomeRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i14.SettingsScreen]
+/// [_i15.SettingsScreen]
 class SettingsRoute extends _i2.PageRouteInfo<void> {
   const SettingsRoute() : super(SettingsRoute.name, path: 'settings-screen');
 
