@@ -6,17 +6,19 @@ class RoundedListTile extends StatelessWidget {
   RoundedListTile({
     required this.title,
     required this.icon,
-    this.color = cPrimaryColor,
+    this.color = Colors.grey,
+    this.counter,
+    this.value,
     this.suffix,
-    this.arrowEnabled = true,
     this.onTap
   });
 
   final String title;
   final IconData icon;
   final Color color;
-  final String? suffix;
-  final bool arrowEnabled;
+  final String? counter;
+  final String? value;
+  final Widget? suffix;
   final void Function()? onTap;
 
   @override
@@ -30,15 +32,17 @@ class RoundedListTile extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              padding: EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                borderRadius: BorderRadius.all(Radius.circular(12.0)),
                 color: Color.alphaBlend(color.withOpacity(0.1), cBackgroundColor),
+                //color: color
               ),
               child: Icon(
                 icon,
+                //color: color == cCardBackgroundColor ? Colors.white.withOpacity(0.5) : Colors.white,
                 color: color,
-                size: 18.0,
+                size: 16.0,
               )
             ),
             SizedBox(width: 16.0),
@@ -52,7 +56,17 @@ class RoundedListTile extends StatelessWidget {
               ),
             ),
 
-            if(suffix != null) Container(
+            if(value != null) Padding(
+              padding: EdgeInsets.only(right: 16.0),
+              child: Text(
+                value ?? "",
+                style: cExtraLightTextStyle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+
+            if(counter != null) Container(
               margin: EdgeInsets.only(right: 12.0),
               height: 28.0,
               width: 28.0,
@@ -62,7 +76,7 @@ class RoundedListTile extends StatelessWidget {
                 color: cRedColor,
               ),
               child: Text(
-                suffix ?? "",
+                counter ?? "",
                 textAlign: TextAlign.center,
                 style: cSmallLightTextStyle,
                 maxLines: 1,
@@ -70,11 +84,14 @@ class RoundedListTile extends StatelessWidget {
               )
             ),
 
-            if(arrowEnabled) Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.grey,
-              size: 16.0,
-            )
+            suffix == null ? Padding(
+              padding: EdgeInsets.only(right: 8.0),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.grey,
+                size: 14.0,
+              ),
+            ) : suffix!
           ],
         ),
       ),

@@ -76,6 +76,7 @@ TextStyle cBoldTextStyle = cTextStyle.copyWith(fontWeight: FontWeight.w500);
 TextStyle cLightTextStyle = cTextStyle.copyWith(fontWeight: FontWeight.w400, color: cLightTextColor);
 TextStyle cExtraLightTextStyle = cLightTextStyle.copyWith(fontWeight: FontWeight.w300);
 TextStyle cSmallLightTextStyle = cLightTextStyle.copyWith(fontSize: 13.0);
+TextStyle cSmallExtraLightTextStyle = cLightTextStyle.copyWith(fontSize: 13.0, fontWeight: FontWeight.w300);
 
 TextStyle cTitleTextStyle = cTextStyle.copyWith(fontWeight: FontWeight.w500, fontSize: 18.0);
 TextStyle cSubtitleTextStyle = cTitleTextStyle.copyWith(fontSize: 16.0);
