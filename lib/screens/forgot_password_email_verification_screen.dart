@@ -9,6 +9,7 @@ import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/forgot_password_email_verification_cubit.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
+import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class ForgotPasswordEmailVerificationScreen extends StatelessWidget {
@@ -44,9 +45,10 @@ class _ForgotPasswordEmailVerificationScreenState extends State<_ForgotPasswordE
 
   @override
   Widget build(BuildContext context){
+    final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      backgroundColor: cBackgroundColor,
+      backgroundColor: customTheme.backgroundColor,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints){
@@ -105,11 +107,11 @@ class _ForgotPasswordEmailVerificationScreenState extends State<_ForgotPasswordE
                                   ),
 
                                   RoundedButton(
-                                    color: cCardBackgroundColor,
+                                    color: customTheme.contentBackgroundColor,
                                     width: double.infinity,
                                     child: Text(
                                       "Confirm",
-                                      style: cBoldTextStyle,
+                                      style: customTheme.boldTextStyle,
                                     ),
                                     onPressed: () async {
                                       context.read<ForgotPasswordEmailVerificationCubit>().submitted(
@@ -129,7 +131,7 @@ class _ForgotPasswordEmailVerificationScreenState extends State<_ForgotPasswordE
                                     builder: (time) {
                                       return Text(
                                         "Resend code in ${time.minutes}:${time.seconds}\n",
-                                        style: cSmallLightTextStyle,
+                                        style: customTheme.smallLightTextStyle,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.center,
@@ -139,10 +141,10 @@ class _ForgotPasswordEmailVerificationScreenState extends State<_ForgotPasswordE
                                       return GestureDetector(
                                         child: RichText(
                                           text: TextSpan(
-                                            style: cSmallLightTextStyle,
+                                            style: customTheme.smallLightTextStyle,
                                             children: <TextSpan>[
                                               TextSpan(text: "Didn't receive the code? "),
-                                              TextSpan(text: "Resend", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                              TextSpan(text: "Resend", style: customTheme.smallLightTextStyle.copyWith(color: cTextButtonColor)),
                                               TextSpan(text: "\n")
                                             ],
                                           ),

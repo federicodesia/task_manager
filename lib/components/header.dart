@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class Header extends StatelessWidget{
 
@@ -13,6 +14,8 @@ class Header extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: cPadding),
       child: Row(
@@ -20,7 +23,7 @@ class Header extends StatelessWidget{
           Expanded(
             child: Text(
               text,
-              style: cBoldTextStyle,
+              style: customTheme.boldTextStyle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -28,7 +31,7 @@ class Header extends StatelessWidget{
 
           Text(
             rightText ?? "",
-            style: cLightTextStyle,
+            style: customTheme.lightTextStyle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           )

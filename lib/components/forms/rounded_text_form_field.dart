@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class RoundedTextFormField extends StatelessWidget{
 
@@ -53,6 +54,8 @@ class RoundedTextFormField extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return TextFormField(
       controller: controller,
       focusNode: focusNode,
@@ -66,7 +69,7 @@ class RoundedTextFormField extends StatelessWidget{
       keyboardType: textInputType,
       minLines: minLines,
       maxLines: maxLines,
-      style: cLightTextStyle,
+      style: customTheme.lightTextStyle,
       textInputAction: textInputAction,
 
       obscureText: obscureText,
@@ -78,9 +81,9 @@ class RoundedTextFormField extends StatelessWidget{
 
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: cExtraLightTextStyle,
+        hintStyle: customTheme.extraLightTextStyle,
         labelText: labelText,
-        labelStyle: cExtraLightTextStyle,
+        labelStyle: customTheme.extraLightTextStyle,
         floatingLabelBehavior: FloatingLabelBehavior.never,
 
         border: OutlineInputBorder(
@@ -96,7 +99,7 @@ class RoundedTextFormField extends StatelessWidget{
           vertical: 20.0
         ),
         filled: true,
-        fillColor: cCardBackgroundColor,
+        fillColor: customTheme.contentBackgroundColor,
 
         suffixIcon: suffixIcon,
         counterText: counterText,

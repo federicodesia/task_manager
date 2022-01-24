@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class LoginActivityCard extends StatelessWidget {
 
@@ -17,6 +18,8 @@ class LoginActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(cBorderRadius),
@@ -29,7 +32,7 @@ class LoginActivityCard extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                color: cCardBackgroundColor
+                color: customTheme.contentBackgroundColor
               ),
               child: Icon(
                 Icons.place_outlined,
@@ -45,11 +48,11 @@ class LoginActivityCard extends StatelessWidget {
                 children: [
                   RichText(
                     text: TextSpan(
-                      style: cLightTextStyle,
+                      style: customTheme.lightTextStyle,
                       children: <TextSpan>[
                         if(isThisDevice) TextSpan(
                           text: "This device  ",
-                          style: cBoldTextStyle.copyWith(color: Colors.green)
+                          style: customTheme.boldTextStyle.copyWith(color: Colors.green)
                         ),
                         TextSpan(text: deviceName),
                       ],
@@ -60,7 +63,7 @@ class LoginActivityCard extends StatelessWidget {
                   SizedBox(height: 2.0),
                   Text(
                     location,
-                    style: cSmallExtraLightTextStyle,
+                    style: customTheme.smallExtraLightTextStyle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   )

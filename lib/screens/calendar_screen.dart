@@ -21,6 +21,7 @@ import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/dynamic_object.dart';
+import 'package:task_manager/theme/theme.dart';
 
 import '../constants.dart';
 
@@ -53,6 +54,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
 
   @override
   Widget build(BuildContext context){
+    final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -89,7 +91,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                   slivers: [
 
                     SliverAppBar(
-                      backgroundColor: cBackgroundColor,
+                      backgroundColor: customTheme.backgroundColor,
                       collapsedHeight: appBarHeight,
                       flexibleSpace: WidgetSize(
                         onChange: (Size size){

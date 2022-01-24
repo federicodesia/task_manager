@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class CalendarGroupHour extends StatelessWidget{
 
@@ -45,7 +46,8 @@ class CalendarGroupHourText extends StatelessWidget{
   });
 
   @override
-  Widget build(BuildContext _) {
+  Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
 
     return Opacity(
       opacity: visible ? 1 : 0,
@@ -53,7 +55,7 @@ class CalendarGroupHourText extends StatelessWidget{
         padding: EdgeInsets.only(right: 12.0),
         child: Text(
           text,
-          style: cExtraLightTextStyle,
+          style: customTheme.extraLightTextStyle,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

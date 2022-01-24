@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class FormInputHeader extends StatelessWidget{
 
@@ -8,6 +8,8 @@ class FormInputHeader extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+
     return Padding(
       padding: EdgeInsets.only(
         top: 24.0,
@@ -15,7 +17,7 @@ class FormInputHeader extends StatelessWidget{
       ),
       child: Text(
         text,
-        style: cBoldTextStyle
+        style: customTheme.boldTextStyle
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:task_manager/components/shimmer/shimmer_text.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:intl/intl.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class CheckboxTaskListItem extends StatelessWidget{
 
@@ -64,6 +65,8 @@ class CheckboxTaskListItemContent extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return Row(
       children: [
         Theme(
@@ -77,8 +80,8 @@ class CheckboxTaskListItemContent extends StatelessWidget{
           ),
           child: Checkbox(
             value: isShimmer ? true : (completed ?? false),
-            activeColor: isShimmer ? cCardBackgroundColor : cPrimaryColor,
-            checkColor: isShimmer ? cCardBackgroundColor : null,
+            activeColor: isShimmer ? customTheme.contentBackgroundColor : cPrimaryColor,
+            checkColor: isShimmer ? customTheme.contentBackgroundColor : null,
             onChanged: (value) => onCheckboxChanged != null ? onCheckboxChanged!(value) : null
           ),
         ),
@@ -89,7 +92,7 @@ class CheckboxTaskListItemContent extends StatelessWidget{
           child: ElevatedButton(
             onPressed: onPressed ?? () {},
             style: ElevatedButton.styleFrom(
-              primary: cCardBackgroundColor,
+              primary: customTheme.contentBackgroundColor,
               padding: EdgeInsets.all(cListItemPadding),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(cBorderRadius),
@@ -109,7 +112,7 @@ class CheckboxTaskListItemContent extends StatelessWidget{
                         shimmerMinTextLenght: 25,
                         shimmerMaxTextLenght: 40,
                         text: title,
-                        style: cBoldTextStyle,
+                        style: customTheme.boldTextStyle,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         alignment: Alignment.bottomLeft,
@@ -120,7 +123,7 @@ class CheckboxTaskListItemContent extends StatelessWidget{
 
                     if(dateTime != null) Text(
                       DateFormat("HH:mm a").format(dateTime!).toLowerCase(),
-                      style: cLightTextStyle
+                      style: customTheme.lightTextStyle
                     )
                   ],
                 ),
@@ -135,7 +138,7 @@ class CheckboxTaskListItemContent extends StatelessWidget{
                     shimmerMaxTextLenght: 45,
                     shimmerProbability: 0.5,
                     text: description,
-                    style: cLightTextStyle,
+                    style: customTheme.lightTextStyle,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),

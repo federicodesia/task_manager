@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class OutlinedFormIconButton extends StatelessWidget{
 
@@ -17,6 +18,8 @@ class OutlinedFormIconButton extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return OutlinedButton(
       onPressed: onPressed,
       child: Row(
@@ -29,7 +32,7 @@ class OutlinedFormIconButton extends StatelessWidget{
           Expanded(
             child: Text(
               text,
-              style: cLightTextStyle.copyWith(fontSize: 13.5),
+              style: customTheme.lightTextStyle.copyWith(fontSize: 13.5),
               textAlign: TextAlign.center
             ),
           )

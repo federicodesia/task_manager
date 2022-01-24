@@ -3,6 +3,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/responsive/animated_widget_size.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class ProgressSummary extends StatelessWidget{
 
@@ -22,6 +23,7 @@ class ProgressSummary extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
 
     String _description;
     if(completed == 0 && initialDescription != null) _description = initialDescription!;
@@ -32,7 +34,7 @@ class ProgressSummary extends StatelessWidget{
 
     return Container(
       decoration: BoxDecoration(
-        color: cCardBackgroundColor,
+        color: customTheme.contentBackgroundColor,
         borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
       ),
       padding: EdgeInsets.all(cPadding),
@@ -44,7 +46,7 @@ class ProgressSummary extends StatelessWidget{
               children: [
                 Text(
                   header,
-                  style: cBoldTextStyle,
+                  style: customTheme.boldTextStyle,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -55,7 +57,7 @@ class ProgressSummary extends StatelessWidget{
                     child: Text(
                       _description,
                       key: Key(_description),
-                      style: cLightTextStyle,
+                      style: customTheme.lightTextStyle,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -76,7 +78,7 @@ class ProgressSummary extends StatelessWidget{
             percent: _percent,
             center: Text(
               "${(_percent * 100).toStringAsFixed(0)}%",
-              style: cTextStyle,
+              style: customTheme.textStyle,
             ),
             circularStrokeCap: CircularStrokeCap.round,
             backgroundColor: cChartBackgroundColor.withOpacity(0.35),

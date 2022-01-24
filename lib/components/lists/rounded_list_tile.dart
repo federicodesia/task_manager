@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class RoundedListTile extends StatelessWidget {
 
@@ -25,6 +26,8 @@ class RoundedListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(cBorderRadius),
@@ -43,12 +46,12 @@ class RoundedListTile extends StatelessWidget {
                         padding: EdgeInsets.all(10.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                          color: Color.alphaBlend(color.withOpacity(0.1), cBackgroundColor),
+                          color: Color.alphaBlend(color.withOpacity(0.1), Theme.of(context).scaffoldBackgroundColor),
                           //color: color
                         ),
                         child: Icon(
                           icon,
-                          //color: color == cCardBackgroundColor ? Colors.white.withOpacity(0.5) : Colors.white,
+                          //color: color == customTheme.contentBackgroundColor ? Colors.white.withOpacity(0.5) : Colors.white,
                           color: color,
                           size: 16.0,
                         )
@@ -59,7 +62,7 @@ class RoundedListTile extends StatelessWidget {
                       Expanded(
                         child: Text(
                           title,
-                          style: cLightTextStyle,
+                          style: customTheme.lightTextStyle,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -75,7 +78,7 @@ class RoundedListTile extends StatelessWidget {
                       Expanded(
                         child: Text(
                           description!,
-                          style: cSmallExtraLightTextStyle,
+                          style: customTheme.smallExtraLightTextStyle,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -92,7 +95,7 @@ class RoundedListTile extends StatelessWidget {
               padding: EdgeInsets.only(right: 16.0),
               child: Text(
                 value ?? "",
-                style: cExtraLightTextStyle,
+                style: customTheme.extraLightTextStyle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -110,7 +113,7 @@ class RoundedListTile extends StatelessWidget {
               child: Text(
                 counter ?? "",
                 textAlign: TextAlign.center,
-                style: cSmallLightTextStyle,
+                style: customTheme.smallLightTextStyle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               )
@@ -159,6 +162,8 @@ class _RoundedListTileSwitchState extends State<RoundedListTileSwitch> {
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+
     return RoundedListTile(
       title: widget.title,
       description: widget.description,
@@ -168,7 +173,7 @@ class _RoundedListTileSwitchState extends State<RoundedListTileSwitch> {
         height: double.minPositive,
         child: Switch(
           activeColor: cPrimaryColor,
-          inactiveThumbColor: Color.alphaBlend(cLightGrayColor, cBackgroundColor),
+          inactiveThumbColor: Color.alphaBlend(cLightGrayColor, customTheme.backgroundColor),
           value: switchValue,
           onChanged: (value) {},
         ),

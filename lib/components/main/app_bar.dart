@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/rounded_button.dart';
+import 'package:task_manager/theme/theme.dart';
 
 import '../../constants.dart';
 
@@ -17,6 +18,8 @@ class MyAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -32,14 +35,14 @@ class MyAppBar extends StatelessWidget {
                 children: [
                   Text(
                     header,
-                    style: cHeaderTextStyle,
+                    style: customTheme.headerTextStyle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
 
                   Text(
                     description,
-                    style: cLightTextStyle,
+                    style: customTheme.lightTextStyle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -49,7 +52,7 @@ class MyAppBar extends StatelessWidget {
               // Profile
               RoundedButton(
                 width: cButtonSize,
-                color: cCardBackgroundColor,
+                color: customTheme.contentBackgroundColor,
                 child: Image.asset(
                   "assets/icons/profile.png"
                 ),

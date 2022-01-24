@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class ModalBottomSheet{
 
@@ -14,11 +15,12 @@ class ModalBottomSheet{
   });
 
   void show(){
+    final customTheme = Theme.of(context).customTheme;
 
     showModalBottomSheet(
       isScrollControlled: true,
       barrierColor: cModalBottomSheetBarrierColor,
-      backgroundColor: cBackgroundColor,
+      backgroundColor: customTheme.backgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(cBottomSheetBorderRadius),
@@ -50,7 +52,7 @@ class ModalBottomSheet{
 
                 Text(
                   title,
-                  style: cTitleTextStyle,
+                  style: customTheme.titleTextStyle,
                 ),
 
                 content,

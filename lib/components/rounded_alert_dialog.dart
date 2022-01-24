@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class RoundedAlertDialog{
 
@@ -21,6 +22,8 @@ class RoundedAlertDialog{
   });
 
   void show(){
+    final customTheme = Theme.of(buildContext).customTheme;
+
     showDialog(
       context: buildContext,
       barrierColor: cModalBottomSheetBarrierColor,
@@ -32,7 +35,7 @@ class RoundedAlertDialog{
               Padding(
                 padding: EdgeInsets.all(32.0),
                 child: Card(
-                  color: cBackgroundColor,
+                  color: customTheme.backgroundColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(cBorderRadius),
                   ),
@@ -53,7 +56,7 @@ class RoundedAlertDialog{
 
                         Text(
                           title,
-                          style: cSubtitleTextStyle,
+                          style: customTheme.subtitleTextStyle,
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -62,7 +65,7 @@ class RoundedAlertDialog{
 
                         Text(
                           description,
-                          style: cSmallLightTextStyle,
+                          style: customTheme.smallLightTextStyle,
                           textAlign: TextAlign.center,
                           maxLines: 4,
                           overflow: TextOverflow.ellipsis,
@@ -90,7 +93,7 @@ class RoundedAlertDialog{
       )
       
       /*builder: (_) => AlertDialog(
-        backgroundColor: cBackgroundColor,
+        backgroundColor: customTheme.backgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
         ),
@@ -98,12 +101,12 @@ class RoundedAlertDialog{
         actionsPadding: EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
         title: title != null ? Text(
           title!,
-          style: cSubtitleTextStyle,
+          style: customTheme.subtitleTextStyle,
           textAlign: TextAlign.center
         ) : null,
         content: description != null ? Text(
           description!,
-          style: cSmallLightTextStyle,
+          style: customTheme.smallLightTextStyle,
           textAlign: TextAlign.center,
         ) : null,
         actionsAlignment: MainAxisAlignment.center,
@@ -126,10 +129,12 @@ class RoundedAlertDialogButton extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+
     return TextButton(
       child: Text(
         text,
-        style: cLightTextStyle,
+        style: customTheme.lightTextStyle,
       ),
       onPressed: onPressed,
       style: TextButton.styleFrom(

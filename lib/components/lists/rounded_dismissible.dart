@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class RoundedDismissible extends StatelessWidget{
 
@@ -21,6 +22,8 @@ class RoundedDismissible extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
       child: Dismissible(
@@ -34,7 +37,7 @@ class RoundedDismissible extends StatelessWidget{
             children: [
               Text(
                 text,
-                style: cTextStyle,
+                style: customTheme.textStyle,
               ),
               SizedBox(width: 12.0),
               Icon(
@@ -50,7 +53,7 @@ class RoundedDismissible extends StatelessWidget{
               begin: Alignment.center,
               end: Alignment.centerRight,
               colors: [
-                cBackgroundColor,
+                customTheme.backgroundColor,
                 color
               ]
             )

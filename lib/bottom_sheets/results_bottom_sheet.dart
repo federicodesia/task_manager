@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/category_screen_bloc/category_screen_bloc.dart';
@@ -7,6 +6,7 @@ import 'package:task_manager/components/forms/form_input_header.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/task_filter.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class ResultsBottomSheet extends StatefulWidget{
 
@@ -32,6 +32,7 @@ class _ResultsBottomSheetState extends State<ResultsBottomSheet>{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
 
     return BlocBuilder<CategoryScreenBloc, CategoryScreenState>(
       bloc: categoryScreenBloc,
@@ -76,7 +77,7 @@ class _ResultsBottomSheetState extends State<ResultsBottomSheet>{
                 width: double.infinity,
                 child: Text(
                   "Done",
-                  style: cBoldTextStyle,
+                  style: customTheme.boldTextStyle,
                 ),
                 onPressed: (){
                   if(taskFilter != null) categoryScreenBloc.add(CategoryScreenFilterUpdated(filter: taskFilter!));

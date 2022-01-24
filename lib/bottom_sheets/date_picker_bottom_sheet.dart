@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/theme/theme.dart';
 
 import '../constants.dart';
 
@@ -16,13 +17,15 @@ class DatePickerBottomSheet extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: cPadding),
       child: Theme(
         data: ThemeData.dark().copyWith(
           colorScheme: ColorScheme.dark(
             primary: cPrimaryColor,
-            surface: cBackgroundColor,
+            surface: customTheme.backgroundColor,
           ),
         ),
         child: Column(
@@ -40,7 +43,7 @@ class DatePickerBottomSheet extends StatelessWidget{
               width: double.infinity,
               child: Text(
                 "Select",
-                style: cBoldTextStyle,
+                style: customTheme.boldTextStyle,
               ),
               onPressed: () {
                 Navigator.of(context).pop();

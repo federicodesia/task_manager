@@ -6,8 +6,6 @@ const double cLineSize = 6.0;
 const double cDotSize = 7.0;
 
 // Colors
-
-Color cBackgroundColor = Color(0xFF1E1F25);
 const Color cPrimaryColor = Color(0xFF7E42FF);
 
 Color cIconColor = Colors.white.withOpacity(0.75);
@@ -22,7 +20,6 @@ Color cBorderColor = Color(0xFF616164);
 Color cModalBottomSheetColorIndicator = Color(0xFF2A2E3D);
 Color cModalBottomSheetBarrierColor = Colors.black26;
 
-const Color cCardBackgroundColor = Color(0xFF272735);
 const Color cOutlinedButtonColor = Color(0xFF2B3039);
 Color cCheckBoxUnselectedColor = Color(0xFF2C2F39);
 
@@ -60,25 +57,4 @@ const double cSnackBarBorderRadius = 12.0;
 
 // Text
 
-Color cTextColor = Color(0xFFFBFAFC);
-Color cLightTextColor = cTextColor.withOpacity(0.75);
 Color cTextButtonColor = Color(0xFF9E6AF8);
-
-TextStyle cTextStyle = TextStyle(
-  fontSize: 14.0,
-  fontFamily: "Poppins",
-  fontWeight: FontWeight.w400,
-  color: cTextColor
-);
-
-TextStyle cBoldTextStyle = cTextStyle.copyWith(fontWeight: FontWeight.w500);
-
-TextStyle cLightTextStyle = cTextStyle.copyWith(fontWeight: FontWeight.w400, color: cLightTextColor);
-TextStyle cExtraLightTextStyle = cLightTextStyle.copyWith(fontWeight: FontWeight.w300);
-TextStyle cSmallLightTextStyle = cLightTextStyle.copyWith(fontSize: 13.0);
-TextStyle cSmallExtraLightTextStyle = cLightTextStyle.copyWith(fontSize: 13.0, fontWeight: FontWeight.w300);
-
-TextStyle cTitleTextStyle = cTextStyle.copyWith(fontWeight: FontWeight.w500, fontSize: 18.0);
-TextStyle cSubtitleTextStyle = cTitleTextStyle.copyWith(fontSize: 16.0);
-
-TextStyle cHeaderTextStyle = cTextStyle.copyWith(fontSize: 20.0, fontWeight: FontWeight.w600);

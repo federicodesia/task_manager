@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class CalendarMonthPicker extends StatefulWidget{
 
@@ -52,6 +53,7 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
 
     return Row(
       children: [
@@ -88,7 +90,7 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       DateFormat('MMMM y').format(monthList[index]),
-                      style: cBoldTextStyle,
+                      style: customTheme.boldTextStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,

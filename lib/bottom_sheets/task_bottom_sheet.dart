@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/date_picker_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/time_picker_bottom_sheet.dart';
-import 'package:task_manager/components/animated_chip.dart';
 import 'package:task_manager/components/forms/form_input_header.dart';
 import 'package:task_manager/components/forms/form_validator.dart';
 import 'package:task_manager/components/rounded_button.dart';
@@ -13,9 +11,8 @@ import 'package:task_manager/components/forms/outlined_form_icon_button.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
-import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
-import 'package:uuid/uuid.dart';
+import 'package:task_manager/theme/theme.dart';
 
 import 'modal_bottom_sheet.dart';
 
@@ -49,8 +46,8 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
 
   @override
   Widget build(BuildContext context) {
-
-    ThemeData themeData = Theme.of(context);
+    final themeData = Theme.of(context);
+    final customTheme = Theme.of(context).customTheme;
 
     return Form(
       key: formKey,
@@ -184,7 +181,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                           textColor: isSelected ? category.color : null,
                           backgroundColor: isSelected ? Color.alphaBlend(
                             category.color.withOpacity(0.1),
-                            cBackgroundColor
+                            customTheme.backgroundColor
                           ) : null,
                           isLastItem: isLastItem,
                           onTap: () {
@@ -211,7 +208,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
               width: double.infinity,
               child: Text(
                 "Done",
-                style: cBoldTextStyle,
+                style: customTheme.boldTextStyle,
               ),
               onPressed: (){
 

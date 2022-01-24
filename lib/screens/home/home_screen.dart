@@ -1,26 +1,17 @@
-import 'package:boxy/flex.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
-import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
-import 'package:task_manager/components/aligned_animated_switcher.dart';
-import 'package:task_manager/components/cards/category_card.dart';
-import 'package:task_manager/components/header.dart';
-import 'package:task_manager/components/lists/declarative_animated_list.dart';
-import 'package:task_manager/components/lists/list_item_animation.dart';
 import 'package:task_manager/components/main/app_bar.dart';
-import 'package:task_manager/components/shimmer/shimmer_list.dart';
-import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/screens/home/today_tab.dart';
 import 'package:task_manager/screens/home/upcoming_tab.dart';
+import 'package:task_manager/theme/theme.dart';
 
 import '../../constants.dart';
 
@@ -75,9 +66,9 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context){
+    final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
       floatingActionButton: AnimatedFloatingActionButton(
         visible: showFloatingActionButton,
         onPressed: () {
@@ -102,7 +93,6 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
               slivers: [
 
                 SliverAppBar(
-                  backgroundColor: cBackgroundColor,
                   collapsedHeight: appBarHeight,
                   flexibleSpace: WidgetSize(
                     onChange: (Size size){
@@ -185,11 +175,11 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                                   ).show();
                                                 },
                                                 style: ElevatedButton.styleFrom(
-                                                  primary: cBackgroundColor,
+                                                  primary: customTheme.backgroundColor,
                                                   padding: EdgeInsets.all(8.0),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(cBorderRadius),
-                                                    side: BorderSide(color: cCardBackgroundColor, width: 1.5)
+                                                    side: BorderSide(color: customTheme.contentBackgroundColor, width: 1.5)
                                                   ),
                                                 ),
                                                 child: Column(
@@ -203,7 +193,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
                                                     Text(
                                                       "Add new",
-                                                      style: cLightTextStyle,
+                                                      style: customTheme.lightTextStyle,
                                                       textAlign: TextAlign.center,
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
@@ -241,7 +231,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Theme(
-                              data: ThemeData(
+                              data: Theme.of(context).copyWith(
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
                                 hoverColor: Colors.transparent,
@@ -264,9 +254,9 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                 /*indicator: TabIndicatorDecoration(),
                                 labelPadding: EdgeInsets.symmetric(horizontal: cPadding),*/
                                 
-                                labelStyle: cLightTextStyle,
-                                labelColor: cTextColor,
-                                unselectedLabelColor: cLightTextColor,
+                                labelStyle: customTheme.lightTextStyle,
+                                labelColor: customTheme.textColor,
+                                unselectedLabelColor: customTheme.lightTextColor,
 
                                 tabs: List.generate(tabList.length, (index){
                                   return Tab(

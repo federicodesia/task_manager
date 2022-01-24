@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class CalendarCard extends StatelessWidget{
 
@@ -16,6 +17,7 @@ class CalendarCard extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
 
     return GestureDetector(
       child: AnimatedContainer(
@@ -33,7 +35,7 @@ class CalendarCard extends StatelessWidget{
           children: [
             Text(
               DateFormat('d').format(dateTime),
-              style: cSubtitleTextStyle.copyWith(color: isSelected ? cTextColor : cLightTextColor),
+              style: customTheme.subtitleTextStyle.copyWith(color: isSelected ? customTheme.textColor : customTheme.lightTextColor),
             ),
             SizedBox(height: 4.0),
 
@@ -45,13 +47,13 @@ class CalendarCard extends StatelessWidget{
                   opacity: 0.0,
                   child: Text(
                     "aaaa",
-                    style: cSmallLightTextStyle,
+                    style: customTheme.smallLightTextStyle,
                   ),
                 ),
 
                 Text(
                   DateFormat('E').format(dateTime),
-                  style: cSmallLightTextStyle.copyWith(color: isSelected ? cTextColor : cLightTextColor),
+                  style: customTheme.smallLightTextStyle.copyWith(color: isSelected ? customTheme.textColor : customTheme.lightTextColor),
                 )
               ],
             ),

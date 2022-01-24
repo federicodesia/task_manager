@@ -11,6 +11,7 @@ import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/screens/category_screen.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class CategoryCard extends StatelessWidget{
 
@@ -114,13 +115,15 @@ class CategoryCardContent extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return IgnorePointer(
       ignoring: isShimmer,
       child: ElevatedButton(
         onPressed: () => onPressed != null ? onPressed!() : null,
         onLongPress: () => onLongPress != null ? onLongPress!() : null,
         style: ElevatedButton.styleFrom(
-          primary: cCardBackgroundColor,
+          primary: customTheme.contentBackgroundColor,
           padding: EdgeInsets.all(cPadding),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(cBorderRadius),
@@ -136,7 +139,7 @@ class CategoryCardContent extends StatelessWidget{
               shimmerMinTextLenght: 15,
               shimmerMaxTextLenght: 25,
               text: name,
-              style: cBoldTextStyle,
+              style: customTheme.boldTextStyle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -149,7 +152,7 @@ class CategoryCardContent extends StatelessWidget{
               shimmerMinTextLenght: 12,
               shimmerMaxTextLenght: 22,
               text: description,
-              style: cLightTextStyle,
+              style: customTheme.lightTextStyle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

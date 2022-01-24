@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:task_manager/components/rounded_button.dart';
+import 'package:task_manager/theme/theme.dart';
 
 import '../constants.dart';
 
@@ -14,6 +16,8 @@ class TimePickerBottomSheet extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return CupertinoTheme(
       data: CupertinoThemeData(
         brightness: Brightness.dark
@@ -34,7 +38,7 @@ class TimePickerBottomSheet extends StatelessWidget{
               width: double.infinity,
               child: Text(
                 "Select",
-                style: cBoldTextStyle,
+                style: customTheme.boldTextStyle,
               ),
               onPressed: () {
                 Navigator.of(context).pop();

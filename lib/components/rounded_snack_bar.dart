@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class RoundedSnackBar{
 
@@ -14,6 +15,8 @@ class RoundedSnackBar{
   });
 
   void show(){
+    final customTheme = Theme.of(context).customTheme;
+    
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -26,7 +29,7 @@ class RoundedSnackBar{
         ),
         content: Text(
           text,
-          style: cTextStyle.copyWith(fontSize: 13.5),
+          style: customTheme.textStyle.copyWith(fontSize: 13.5),
         ),
         action: action
       )

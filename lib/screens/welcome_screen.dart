@@ -9,6 +9,7 @@ import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/models/sliding_page.dart';
 import 'package:task_manager/router/router.gr.dart';
+import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -52,9 +53,10 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
 
   @override
   Widget build(BuildContext context){
+    final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      backgroundColor: cBackgroundColor,
+      backgroundColor: customTheme.backgroundColor,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (_, constraints) {
@@ -136,9 +138,9 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                             widthFactor: 0.75,
                             child: Text(
                               "By continuing, you agree Terms of Service and Privacy Policy.",
-                              style: cExtraLightTextStyle.copyWith(
+                              style: customTheme.extraLightTextStyle.copyWith(
                                 fontSize: 13.0,
-                                color: cLightTextColor.withOpacity(0.5)
+                                color: customTheme.lightTextColor.withOpacity(0.5)
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,

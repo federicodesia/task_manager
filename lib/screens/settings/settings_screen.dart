@@ -6,7 +6,9 @@ import 'package:task_manager/components/lists/rounded_list_tile.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
+import 'package:task_manager/cubits/theme_cubit.dart';
 import 'package:task_manager/router/router.gr.dart';
+import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -32,9 +34,10 @@ class _SettingsScreenState extends State<_SettingsScreen>{
 
   @override
   Widget build(BuildContext context){
+    final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      backgroundColor: cBackgroundColor,
+      //backgroundColor: customTheme.backgroundColor,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints){
@@ -66,7 +69,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                             children: [
                               RoundedButton(
                                 width: cButtonSize,
-                                color: cCardBackgroundColor,
+                                color: customTheme.contentBackgroundColor,
                                 child: Image.asset(
                                   "assets/icons/profile.png"
                                 ),
@@ -81,7 +84,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                                   children: [
                                     Text(
                                       "Federico De Sía",
-                                      style: cSubtitleTextStyle,
+                                      style: customTheme.subtitleTextStyle,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -89,7 +92,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
 
                                     Text(
                                       "desiafederico@gmail.com",
-                                      style: cLightTextStyle,
+                                      style: customTheme.lightTextStyle,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -114,7 +117,9 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                         RoundedListTileSwitch(
                           title: "Dark mode",
                           icon: Icons.dark_mode_rounded,
-                          onChanged: (value) {},
+                          onChanged: (darkMode) {
+                            context.read<ThemeCubit>().toggle();
+                          },
                         ),
 
                         RoundedListTile(

@@ -7,6 +7,7 @@ import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/category.dart';
+import 'package:task_manager/theme/theme.dart';
 import 'package:uuid/uuid.dart';
 
 List<Color> colors = [
@@ -45,6 +46,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
 
     return Form(
       key: formKey,
@@ -130,7 +132,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
               width: double.infinity,
               child: Text(
                 "Done",
-                style: cBoldTextStyle,
+                style: customTheme.boldTextStyle,
               ),
               onPressed: (){
                 setState(() => formValidated = true);

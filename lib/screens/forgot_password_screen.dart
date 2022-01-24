@@ -7,6 +7,7 @@ import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/forgot_password_cubit.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
+import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
@@ -33,9 +34,10 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
 
   @override
   Widget build(BuildContext context){
+    final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      backgroundColor: cBackgroundColor,
+      backgroundColor: customTheme.backgroundColor,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints){
@@ -94,11 +96,11 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                                   ),
 
                                   RoundedButton(
-                                    color: cCardBackgroundColor,
+                                    color: customTheme.contentBackgroundColor,
                                     width: double.infinity,
                                     child: Text(
                                       "Continue",
-                                      style: cBoldTextStyle,
+                                      style: customTheme.boldTextStyle,
                                     ),
                                     onPressed: () async {
                                       context.read<ForgotPasswordCubit>().submitted(
@@ -116,10 +118,10 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                                   GestureDetector(
                                     child: RichText(
                                       text: TextSpan(
-                                        style: cSmallLightTextStyle,
+                                        style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
                                           TextSpan(text: "Remember your password? "),
-                                          TextSpan(text: "Sign In", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                          TextSpan(text: "Sign In", style: customTheme.smallLightTextStyle.copyWith(color: cTextButtonColor)),
                                           TextSpan(text: "\n")
                                         ],
                                       ),

@@ -7,6 +7,7 @@ import 'package:task_manager/components/forms/verification_code.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/email_verification_cubit.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
+import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class EmailVerificationScreen extends StatelessWidget {
@@ -37,9 +38,10 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
 
   @override
   Widget build(BuildContext context){
+    final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      backgroundColor: cBackgroundColor,
+      backgroundColor: customTheme.backgroundColor,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints){
@@ -98,11 +100,11 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                                   ),
 
                                   RoundedButton(
-                                    color: cCardBackgroundColor,
+                                    color: customTheme.contentBackgroundColor,
                                     width: double.infinity,
                                     child: Text(
                                       "Confirm",
-                                      style: cBoldTextStyle,
+                                      style: customTheme.boldTextStyle,
                                     ),
                                     onPressed: () {
                                       context.read<EmailVerificationCubit>().submitted(
@@ -119,7 +121,7 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                                     builder: (time) {
                                       return Text(
                                         "Resend code in ${time.minutes}:${time.seconds}\n",
-                                        style: cSmallLightTextStyle,
+                                        style: customTheme.smallLightTextStyle,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.center,
@@ -129,10 +131,10 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                                       return GestureDetector(
                                         child: RichText(
                                           text: TextSpan(
-                                            style: cSmallLightTextStyle,
+                                            style: customTheme.smallLightTextStyle,
                                             children: <TextSpan>[
                                               TextSpan(text: "Didn't receive the code? "),
-                                              TextSpan(text: "Resend", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                              TextSpan(text: "Resend", style: customTheme.smallLightTextStyle.copyWith(color: cTextButtonColor)),
                                               TextSpan(text: "\n")
                                             ],
                                           ),

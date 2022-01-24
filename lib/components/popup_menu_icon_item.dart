@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class PopupMenuIconItem extends StatelessWidget{
 
@@ -13,6 +14,8 @@ class PopupMenuIconItem extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return Row(
       children: [
         Icon(
@@ -22,7 +25,7 @@ class PopupMenuIconItem extends StatelessWidget{
         SizedBox(width: 12.0),
         Text(
           text,
-          style: cLightTextStyle,
+          style: customTheme.lightTextStyle,
         )
       ],
     );

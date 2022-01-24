@@ -7,6 +7,7 @@ import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:intl/intl.dart';
 import 'package:collection/collection.dart';
+import 'package:task_manager/theme/theme.dart';
 
 import 'calendar_group_hour.dart';
 
@@ -79,6 +80,8 @@ class CalendarTaskListItemContent extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return Row(
       children: [
         CalendarGroupHourText(text: "12:00", visible: false),
@@ -87,7 +90,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
           child: ElevatedButton(
             onPressed: onPressed ?? () {},
             style: ElevatedButton.styleFrom(
-              primary: cCardBackgroundColor,
+              primary: customTheme.contentBackgroundColor,
               padding: EdgeInsets.all(cListItemPadding),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(cBorderRadius),
@@ -120,7 +123,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                                 shimmerMinTextLenght: 15,
                                 shimmerMaxTextLenght: 25,
                                 text: categoryName,
-                                style: cSmallLightTextStyle,
+                                style: customTheme.smallLightTextStyle,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -130,7 +133,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
 
                             if(dateTime != null) Text(
                               DateFormat("HH:mm a").format(dateTime!).toLowerCase(),
-                              style: cLightTextStyle
+                              style: customTheme.lightTextStyle
                             )
                           ],
                         ),
@@ -142,7 +145,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                           shimmerMinTextLenght: 25,
                           shimmerMaxTextLenght: 40,
                           text: title,
-                          style: cBoldTextStyle,
+                          style: customTheme.boldTextStyle,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                         ),
@@ -152,7 +155,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                           padding: EdgeInsets.only(top: 8.0),
                           child: Text(
                             description!,
-                            style: cExtraLightTextStyle,
+                            style: customTheme.extraLightTextStyle,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),

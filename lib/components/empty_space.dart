@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class EmptySpace extends StatelessWidget{
 
@@ -32,6 +33,8 @@ class EmptySpace extends StatelessWidget{
   
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return Padding(
       padding: padding,
       child: Column(
@@ -45,7 +48,7 @@ class EmptySpace extends StatelessWidget{
           Text(
             header + (List.generate(headerFillLines ? headerMaxLines : 0, (_) => "\n").join()),
             textAlign: TextAlign.center,
-            style: cTitleTextStyle,
+            style: customTheme.titleTextStyle,
             maxLines: headerMaxLines,
             overflow: TextOverflow.ellipsis,
           ),
@@ -56,7 +59,7 @@ class EmptySpace extends StatelessWidget{
             child: Text(
               description + (List.generate(descriptionFillLines ? descriptionMaxLines : 0, (_) => "\n").join()),
               textAlign: TextAlign.center,
-              style: cLightTextStyle,
+              style: customTheme.lightTextStyle,
               maxLines: descriptionMaxLines,
               overflow: TextOverflow.ellipsis,
             ),

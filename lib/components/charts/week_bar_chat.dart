@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/charts/week_bar_chart_group_data.dart';
 import 'package:task_manager/models/task.dart';
+import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
 import '../aligned_animated_switcher.dart';
 
@@ -21,12 +22,13 @@ class WeekBarChart extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
 
     int completedWeekTasks = weekTasksList.where((task) => task.isCompleted).length;
 
     return Container(
       decoration: BoxDecoration(
-        color: cCardBackgroundColor,
+        color: customTheme.contentBackgroundColor,
         borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
       ),
       padding: EdgeInsets.all(cPadding),
@@ -35,7 +37,7 @@ class WeekBarChart extends StatelessWidget{
         children: [
           Text(
             header,
-            style: cLightTextStyle,
+            style: customTheme.lightTextStyle,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -57,7 +59,7 @@ class WeekBarChart extends StatelessWidget{
                   bottomTitles: SideTitles(
                     showTitles: true,
                     margin: 12.0,
-                    getTextStyles: (context, value) => cLightTextStyle,
+                    getTextStyles: (context, value) => customTheme.lightTextStyle,
                     getTitles: (double value) => weekDays[value.toInt()],
                   )
                 ),
@@ -86,7 +88,7 @@ class WeekBarChart extends StatelessWidget{
                     child: Text(
                       "$completedWeekTasks Completed",
                       key: Key("$completedWeekTasks Completed"),
-                      style: cBoldTextStyle.copyWith(color: cChartPrimaryColor),
+                      style: customTheme.boldTextStyle.copyWith(color: cChartPrimaryColor),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     )
@@ -102,7 +104,7 @@ class WeekBarChart extends StatelessWidget{
                     opacity: 0,
                     child: Text(
                       "100 Completed",
-                      style: cBoldTextStyle,
+                      style: customTheme.boldTextStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -115,7 +117,7 @@ class WeekBarChart extends StatelessWidget{
                       child: Text(
                         "${weekTasksList.length - completedWeekTasks} Remaining",
                         key: Key("${weekTasksList.length - completedWeekTasks} Remaining"),
-                        style: cBoldTextStyle.copyWith(color: cChartBackgroundColor),
+                        style: customTheme.boldTextStyle.copyWith(color: cChartBackgroundColor),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

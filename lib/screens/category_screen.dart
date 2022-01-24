@@ -26,6 +26,7 @@ import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task_filter.dart';
+import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -61,9 +62,10 @@ class _CategoryScreenState extends State<_CategoryScreen>{
 
   @override
   Widget build(BuildContext context){
+    final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      backgroundColor: cBackgroundColor,
+      backgroundColor: customTheme.backgroundColor,
       floatingActionButton: AnimatedFloatingActionButton(
         visible: showFloatingActionButton,
         onPressed: () {
@@ -131,7 +133,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                     SizedBox(width: 8.0),
                                     Text(
                                       category.name,
-                                      style: cSubtitleTextStyle.copyWith(height: 1.0),
+                                      style: customTheme.subtitleTextStyle.copyWith(height: 1.0),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     )
@@ -140,7 +142,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                 actions: [
                                   PopupMenuButton(
                                     key: popupMenuKey,
-                                    color: cCardBackgroundColor,
+                                    color: customTheme.contentBackgroundColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(8.0)),
                                     ),
@@ -222,7 +224,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                       child: Container(
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
-                                          color: cCardBackgroundColor
+                                          color: customTheme.contentBackgroundColor
                                         ),
                                         child: Padding(
                                           padding: EdgeInsets.all(16.0),
@@ -235,7 +237,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                               SizedBox(width: 12.0),
                                               Text(
                                                 "Search task...",
-                                                style: cLightTextStyle.copyWith(height: 1.0),
+                                                style: customTheme.lightTextStyle.copyWith(height: 1.0),
                                               )
                                             ],
                                           ),
@@ -247,7 +249,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                     RoundedButton(
                                       width: 56.0,
                                       height: 56.0,
-                                      color: cCardBackgroundColor,
+                                      color: customTheme.contentBackgroundColor,
                                       child: Icon(
                                         Icons.tune_rounded,
                                         color: cIconColor

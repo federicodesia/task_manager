@@ -7,6 +7,7 @@ import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
+import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -38,9 +39,10 @@ class _RegisterScreenState extends State<_RegisterScreen>{
 
   @override
   Widget build(BuildContext context){
+    final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      backgroundColor: cBackgroundColor,
+      backgroundColor: customTheme.backgroundColor,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints){
@@ -69,7 +71,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   SizedBox(height: cPadding),
                                   Text(
                                     "Create new account",
-                                    style: cTitleTextStyle,
+                                    style: customTheme.titleTextStyle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -77,7 +79,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
 
                                   Text(
                                     "Please fill in the form to continue",
-                                    style: cLightTextStyle,
+                                    style: customTheme.lightTextStyle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -142,11 +144,11 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   ),
 
                                   RoundedButton(
-                                    color: cCardBackgroundColor,
+                                    color: customTheme.contentBackgroundColor,
                                     width: double.infinity,
                                     child: Text(
                                       "Sign Up",
-                                      style: cBoldTextStyle,
+                                      style: customTheme.boldTextStyle,
                                     ),
                                     onPressed: (){
 
@@ -162,10 +164,10 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   GestureDetector(
                                     child: RichText(
                                       text: TextSpan(
-                                        style: cSmallLightTextStyle,
+                                        style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
                                           TextSpan(text: "Already have an Account? "),
-                                          TextSpan(text: "Sign In", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                          TextSpan(text: "Sign In", style: customTheme.smallLightTextStyle.copyWith(color: cTextButtonColor)),
                                           TextSpan(text: "\n")
                                         ],
                                       ),

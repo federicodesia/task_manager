@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class DotIndicatorList extends StatelessWidget{
 
@@ -13,6 +14,8 @@ class DotIndicatorList extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -25,7 +28,7 @@ class DotIndicatorList extends StatelessWidget{
           margin: EdgeInsets.symmetric(horizontal: 2.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(cDotSize),
-            color: index == selectedIndex ? cPrimaryColor : Color.alphaBlend(cLightGrayColor, cBackgroundColor),
+            color: index == selectedIndex ? cPrimaryColor : Color.alphaBlend(cLightGrayColor, customTheme.backgroundColor),
           ),
         );
       }),

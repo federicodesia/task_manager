@@ -7,6 +7,7 @@ import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/login_cubit.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
+import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -37,9 +38,10 @@ class _LoginScreenState extends State<_LoginScreen>{
 
   @override
   Widget build(BuildContext context){
+    final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      backgroundColor: cBackgroundColor,
+      backgroundColor: customTheme.backgroundColor,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints){
@@ -68,7 +70,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                   SizedBox(height: cPadding),
                                   Text(
                                     "Welcome back!",
-                                    style: cTitleTextStyle,
+                                    style: customTheme.titleTextStyle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -76,7 +78,7 @@ class _LoginScreenState extends State<_LoginScreen>{
 
                                   Text(
                                     "Please sign in to your account",
-                                    style: cLightTextStyle,
+                                    style: customTheme.lightTextStyle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -126,7 +128,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                       GestureDetector(
                                         child: Text(
                                           "Forgot Password?",
-                                          style: cSmallLightTextStyle,
+                                          style: customTheme.smallLightTextStyle,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -152,11 +154,11 @@ class _LoginScreenState extends State<_LoginScreen>{
                                   ),
 
                                   RoundedButton(
-                                    color: cCardBackgroundColor,
+                                    color: customTheme.contentBackgroundColor,
                                     width: double.infinity,
                                     child: Text(
                                       "Sign In",
-                                      style: cBoldTextStyle,
+                                      style: customTheme.boldTextStyle,
                                     ),
                                     onPressed: () {
                                       context.read<LoginCubit>().submitted(
@@ -170,10 +172,10 @@ class _LoginScreenState extends State<_LoginScreen>{
                                   GestureDetector(
                                     child: RichText(
                                       text: TextSpan(
-                                        style: cSmallLightTextStyle,
+                                        style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
                                           TextSpan(text: "Don't have an Account? "),
-                                          TextSpan(text: "Sign Up", style: cSmallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                          TextSpan(text: "Sign Up", style: customTheme.smallLightTextStyle.copyWith(color: cTextButtonColor)),
                                           TextSpan(text: "\n")
                                         ],
                                       ),

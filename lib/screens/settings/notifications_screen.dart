@@ -5,6 +5,7 @@ import 'package:task_manager/components/lists/rounded_list_tile.dart';
 import 'package:task_manager/components/main/center_app_bar.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
+import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
 
 class NotificationsScreen extends StatelessWidget {
@@ -29,9 +30,10 @@ class _NotificationsScreenState extends State<_NotificationsScreen>{
 
   @override
   Widget build(BuildContext context){
+    final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      backgroundColor: cBackgroundColor,
+      backgroundColor: customTheme.backgroundColor,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints){
@@ -55,7 +57,7 @@ class _NotificationsScreenState extends State<_NotificationsScreen>{
                     child: CenterAppBar(
                       center: Text(
                         "Notifications",
-                        style: cSubtitleTextStyle,
+                        style: customTheme.subtitleTextStyle,
                       )
                     ),
                   )

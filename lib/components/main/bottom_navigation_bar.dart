@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class MyBottomNavigationBar extends StatelessWidget{
 
@@ -14,6 +15,8 @@ class MyBottomNavigationBar extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -24,9 +27,9 @@ class MyBottomNavigationBar extends StatelessWidget{
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
               colors: [
-                cBackgroundColor,
+                customTheme.backgroundColor,
                 cPrimaryColor.withOpacity(0.25),
-                cBackgroundColor
+                customTheme.backgroundColor
               ],
               stops: [
                 0.1,
