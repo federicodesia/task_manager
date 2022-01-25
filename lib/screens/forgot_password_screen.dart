@@ -96,11 +96,10 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                                   ),
 
                                   RoundedButton(
-                                    color: customTheme.contentBackgroundColor,
                                     width: double.infinity,
                                     child: Text(
                                       "Continue",
-                                      style: customTheme.boldTextStyle,
+                                      style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: () async {
                                       context.read<ForgotPasswordCubit>().submitted(
@@ -121,7 +120,7 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                                         style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
                                           TextSpan(text: "Remember your password? "),
-                                          TextSpan(text: "Sign In", style: customTheme.smallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                          TextSpan(text: "Sign In", style: customTheme.smallTextButtonStyle),
                                           TextSpan(text: "\n")
                                         ],
                                       ),

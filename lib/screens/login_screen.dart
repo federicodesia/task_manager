@@ -112,7 +112,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                             ),
                                           ),
                                           splashRadius: 24.0,
-                                          color: cLightGrayColor,
+                                          color: customTheme.lightColor,
                                           onPressed: () {
                                             setState(() => obscurePassword = !obscurePassword);
                                           },
@@ -128,7 +128,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                       GestureDetector(
                                         child: Text(
                                           "Forgot Password?",
-                                          style: customTheme.smallLightTextStyle,
+                                          style: customTheme.smallTextStyle,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -154,11 +154,10 @@ class _LoginScreenState extends State<_LoginScreen>{
                                   ),
 
                                   RoundedButton(
-                                    color: customTheme.contentBackgroundColor,
                                     width: double.infinity,
                                     child: Text(
                                       "Sign In",
-                                      style: customTheme.boldTextStyle,
+                                      style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: () {
                                       context.read<LoginCubit>().submitted(
@@ -172,10 +171,10 @@ class _LoginScreenState extends State<_LoginScreen>{
                                   GestureDetector(
                                     child: RichText(
                                       text: TextSpan(
-                                        style: customTheme.smallLightTextStyle,
+                                        style: customTheme.smallTextStyle,
                                         children: <TextSpan>[
                                           TextSpan(text: "Don't have an Account? "),
-                                          TextSpan(text: "Sign Up", style: customTheme.smallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                          TextSpan(text: "Sign Up", style: customTheme.smallTextButtonStyle),
                                           TextSpan(text: "\n")
                                         ],
                                       ),

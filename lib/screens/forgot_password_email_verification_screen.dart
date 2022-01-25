@@ -107,11 +107,10 @@ class _ForgotPasswordEmailVerificationScreenState extends State<_ForgotPasswordE
                                   ),
 
                                   RoundedButton(
-                                    color: customTheme.contentBackgroundColor,
                                     width: double.infinity,
                                     child: Text(
                                       "Confirm",
-                                      style: customTheme.boldTextStyle,
+                                      style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: () async {
                                       context.read<ForgotPasswordEmailVerificationCubit>().submitted(
@@ -144,7 +143,7 @@ class _ForgotPasswordEmailVerificationScreenState extends State<_ForgotPasswordE
                                             style: customTheme.smallLightTextStyle,
                                             children: <TextSpan>[
                                               TextSpan(text: "Didn't receive the code? "),
-                                              TextSpan(text: "Resend", style: customTheme.smallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                              TextSpan(text: "Resend", style: customTheme.smallTextButtonStyle),
                                               TextSpan(text: "\n")
                                             ],
                                           ),

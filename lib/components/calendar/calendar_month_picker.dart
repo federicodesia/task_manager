@@ -60,7 +60,7 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
 
         IconButton(
           icon: Icon(Icons.chevron_left_rounded),
-          color: cGrayColor,
+          color: customTheme.lightColor,
           splashRadius: cSmallSplashRadius,
           onPressed: (){
             if(currentPage % 1 == 0) pageController.animateToPage(
@@ -107,7 +107,7 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
 
         IconButton(
           icon: Icon(Icons.chevron_right_rounded),
-          color: cGrayColor,
+          color: customTheme.lightColor,
           splashRadius: cSmallSplashRadius,
           onPressed: (){
             if(currentPage % 1 == 0) pageController.animateToPage(

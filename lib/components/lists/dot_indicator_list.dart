@@ -28,7 +28,7 @@ class DotIndicatorList extends StatelessWidget{
           margin: EdgeInsets.symmetric(horizontal: 2.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(cDotSize),
-            color: index == selectedIndex ? cPrimaryColor : Color.alphaBlend(cLightGrayColor, customTheme.backgroundColor),
+            color: index == selectedIndex ? cPrimaryColor : Color.alphaBlend(customTheme.extraLightColor, customTheme.backgroundColor),
           ),
         );
       }),

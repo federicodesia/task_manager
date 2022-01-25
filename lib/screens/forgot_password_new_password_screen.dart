@@ -97,7 +97,7 @@ class _ForgotPasswordNewPasswordScreenState extends State<_ForgotPasswordNewPass
                                               ),
                                             ),
                                             splashRadius: 24.0,
-                                            color: cLightGrayColor,
+                                            color: customTheme.lightColor,
                                             onPressed: () {
                                               setState(() => obscurePassword = !obscurePassword);
                                             },
@@ -121,11 +121,10 @@ class _ForgotPasswordNewPasswordScreenState extends State<_ForgotPasswordNewPass
                                   ),
 
                                   RoundedButton(
-                                    color: customTheme.contentBackgroundColor,
                                     width: double.infinity,
                                     child: Text(
                                       "Confirm",
-                                      style: customTheme.boldTextStyle,
+                                      style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: () async {
                                       context.read<ForgotPasswordNewPasswordCubit>().submitted(
@@ -144,7 +143,7 @@ class _ForgotPasswordNewPasswordScreenState extends State<_ForgotPasswordNewPass
                                         style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
                                           TextSpan(text: "Remember your password? "),
-                                          TextSpan(text: "Sign In", style: customTheme.smallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                          TextSpan(text: "Sign In", style: customTheme.smallTextButtonStyle),
                                           TextSpan(text: "\n")
                                         ],
                                       ),

@@ -69,7 +69,7 @@ class RoundedTextFormField extends StatelessWidget{
       keyboardType: textInputType,
       minLines: minLines,
       maxLines: maxLines,
-      style: customTheme.lightTextStyle,
+      style: customTheme.textStyle,
       textInputAction: textInputAction,
 
       obscureText: obscureText,
@@ -81,9 +81,9 @@ class RoundedTextFormField extends StatelessWidget{
 
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: customTheme.extraLightTextStyle,
+        hintStyle: customTheme.textFieldTextStyle,
         labelText: labelText,
-        labelStyle: customTheme.extraLightTextStyle,
+        labelStyle: customTheme.textFieldTextStyle,
         floatingLabelBehavior: FloatingLabelBehavior.never,
 
         border: OutlineInputBorder(

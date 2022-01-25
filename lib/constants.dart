@@ -6,11 +6,9 @@ const double cLineSize = 6.0;
 const double cDotSize = 7.0;
 
 // Colors
-const Color cPrimaryColor = Color(0xFF7E42FF);
+const Color cPrimaryColor = Color(0xFF525298);
 
 Color cIconColor = Colors.white.withOpacity(0.75);
-Color cGrayColor = Colors.white.withOpacity(0.5);
-Color cLightGrayColor = Colors.white.withOpacity(0.25);
 Color cRedColor = Color(0xFFD32F2F);
 
 Color cDividerColor = Colors.white.withOpacity(0.08);

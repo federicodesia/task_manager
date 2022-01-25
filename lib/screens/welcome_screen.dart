@@ -138,10 +138,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                             widthFactor: 0.75,
                             child: Text(
                               "By continuing, you agree Terms of Service and Privacy Policy.",
-                              style: customTheme.extraLightTextStyle.copyWith(
-                                fontSize: 13.0,
-                                color: customTheme.lightTextColor.withOpacity(0.5)
-                              ),
+                              style: customTheme.smallLightTextStyle.copyWith(color: customTheme.extraLightTextColor),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,

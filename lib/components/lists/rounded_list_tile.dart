@@ -173,7 +173,7 @@ class _RoundedListTileSwitchState extends State<RoundedListTileSwitch> {
         height: double.minPositive,
         child: Switch(
           activeColor: cPrimaryColor,
-          inactiveThumbColor: Color.alphaBlend(cLightGrayColor, customTheme.backgroundColor),
+          inactiveThumbColor: Color.alphaBlend(customTheme.extraLightColor, customTheme.backgroundColor),
           value: switchValue,
           onChanged: (value) {},
         ),

@@ -163,7 +163,7 @@ class CategoryCardContent extends StatelessWidget{
               lineHeight: cLineSize,
               padding: EdgeInsets.zero,
               progressColor: color,
-              backgroundColor: isShimmer ? cShimmerColor : cLightGrayColor,
+              backgroundColor: isShimmer ? cShimmerColor : customTheme.extraLightColor,
               percent: tasksCount > 0 ? completedTasks / tasksCount : 0,
               animation: true,
               animateFromLastPercent: true,

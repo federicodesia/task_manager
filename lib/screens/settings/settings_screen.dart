@@ -159,7 +159,9 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                         RoundedListTile(
                           title: "Sign out",
                           icon: Icons.logout_rounded,
-                          onTap: () {},
+                          onTap: () {
+                            context.read<AuthBloc>().add(AuthLogoutRequested());
+                          },
                         ),
                       ],
                     ),

@@ -119,7 +119,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                             ),
                                           ),
                                           splashRadius: 24.0,
-                                          color: cLightGrayColor,
+                                          color: customTheme.lightColor,
                                           onPressed: () {
                                             setState(() => obscurePassword = !obscurePassword);
                                           },
@@ -144,11 +144,10 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   ),
 
                                   RoundedButton(
-                                    color: customTheme.contentBackgroundColor,
                                     width: double.infinity,
                                     child: Text(
                                       "Sign Up",
-                                      style: customTheme.boldTextStyle,
+                                      style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: (){
 
@@ -164,10 +163,10 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   GestureDetector(
                                     child: RichText(
                                       text: TextSpan(
-                                        style: customTheme.smallLightTextStyle,
+                                        style: customTheme.smallTextStyle,
                                         children: <TextSpan>[
                                           TextSpan(text: "Already have an Account? "),
-                                          TextSpan(text: "Sign In", style: customTheme.smallLightTextStyle.copyWith(color: cTextButtonColor)),
+                                          TextSpan(text: "Sign In", style: customTheme.smallTextButtonStyle),
                                           TextSpan(text: "\n")
                                         ],
                                       ),

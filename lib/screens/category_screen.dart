@@ -232,7 +232,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                             children: [
                                               Icon(
                                                 Icons.search_rounded,
-                                                color: cLightGrayColor,
+                                                color: customTheme.extraLightColor,
                                               ),
                                               SizedBox(width: 12.0),
                                               Text(
