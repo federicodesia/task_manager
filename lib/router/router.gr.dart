@@ -9,8 +9,9 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i16;
+import 'package:flutter/material.dart' as _i17;
 
+import '../screens/calendar_screen.dart' as _i15;
 import '../screens/email_verification_screen.dart' as _i3;
 import '../screens/forgot_password_email_verification_screen.dart' as _i9;
 import '../screens/forgot_password_new_password_screen.dart' as _i10;
@@ -21,13 +22,13 @@ import '../screens/main_screen.dart' as _i11;
 import '../screens/register_screen.dart' as _i7;
 import '../screens/settings/notifications_screen.dart' as _i13;
 import '../screens/settings/security_screen.dart' as _i12;
-import '../screens/settings/settings_screen.dart' as _i15;
+import '../screens/settings/settings_screen.dart' as _i16;
 import '../screens/splash_screen.dart' as _i1;
 import '../screens/welcome_screen.dart' as _i5;
 import 'wrappers/main_router_wrapper.dart' as _i4;
 
 class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i16.GlobalKey<_i16.NavigatorState>? navigatorKey])
+  AppRouter([_i17.GlobalKey<_i17.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -90,9 +91,13 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: _i14.HomeScreen());
     },
+    CalendarRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: _i15.CalendarScreen());
+    },
     SettingsRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i15.SettingsScreen());
+          routeData: routeData, child: _i16.SettingsScreen());
     }
   };
 
@@ -128,6 +133,8 @@ class AppRouter extends _i2.RootStackRouter {
                   children: [
                     _i2.RouteConfig(HomeRoute.name,
                         path: 'home-screen', parent: MainRoute.name),
+                    _i2.RouteConfig(CalendarRoute.name,
+                        path: 'calendar-screen', parent: MainRoute.name),
                     _i2.RouteConfig(SettingsRoute.name,
                         path: 'settings-screen', parent: MainRoute.name)
                   ]),
@@ -277,7 +284,15 @@ class HomeRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i15.SettingsScreen]
+/// [_i15.CalendarScreen]
+class CalendarRoute extends _i2.PageRouteInfo<void> {
+  const CalendarRoute() : super(CalendarRoute.name, path: 'calendar-screen');
+
+  static const String name = 'CalendarRoute';
+}
+
+/// generated route for
+/// [_i16.SettingsScreen]
 class SettingsRoute extends _i2.PageRouteInfo<void> {
   const SettingsRoute() : super(SettingsRoute.name, path: 'settings-screen');
 

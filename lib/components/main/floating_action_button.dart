@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
+import 'package:task_manager/theme/theme.dart';
 
 import '../../constants.dart';
 
@@ -64,6 +65,8 @@ class AnimatedFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return AlignedAnimatedSwitcher(
       alignment: Alignment.bottomRight,
       duration: cFastAnimationDuration,
@@ -71,12 +74,14 @@ class AnimatedFloatingActionButton extends StatelessWidget {
         height: cButtonSize,
         width: cButtonSize,
         child: FloatingActionButton(
-          elevation: 0,
+          elevation: customTheme.isDark ? 0.0 : 2.0,
+          splashColor: customTheme.shadowColor,
+          
           backgroundColor: cPrimaryColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
           ),
-          child: Icon(icon),
+          child: Icon(icon, color: Colors.white),
           onPressed: onPressed,
           heroTag: null,
         ),

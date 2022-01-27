@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class ShimmerText extends StatelessWidget{
 
@@ -31,6 +31,7 @@ class ShimmerText extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
 
     if(!isShimmer) return Text(
       text ?? "",
@@ -54,7 +55,7 @@ class ShimmerText extends StatelessWidget{
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(6.0)),
-            color: cShimmerColor
+            color: customTheme.shimmerColor
           ),
           child: Opacity(
             opacity: 0,

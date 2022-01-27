@@ -21,36 +21,28 @@ class DatePickerBottomSheet extends StatelessWidget{
     
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: cPadding),
-      child: Theme(
-        data: ThemeData.dark().copyWith(
-          colorScheme: ColorScheme.dark(
-            primary: cPrimaryColor,
-            surface: customTheme.backgroundColor,
-          ),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: cPadding),
-              child: CalendarDatePicker(
-                initialDate: initialDate,
-                firstDate: getDate(DateTime.now()),
-                lastDate: DateTime.now().add(Duration(days: 365)),
-                onDateChanged: onDateChanged
-              ),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: cPadding),
+            child: CalendarDatePicker(
+              initialDate: initialDate,
+              firstDate: getDate(DateTime.now()),
+              lastDate: DateTime.now().add(Duration(days: 365)),
+              onDateChanged: onDateChanged
             ),
-            RoundedButton(
-              width: double.infinity,
-              child: Text(
-                "Select",
-                style: customTheme.boldTextStyle,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        )
+          ),
+          RoundedButton(
+            width: double.infinity,
+            child: Text(
+              "Select",
+              style: customTheme.primaryColorButtonTextStyle,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
       ),
     );
   }

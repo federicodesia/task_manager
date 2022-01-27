@@ -105,7 +105,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                     width: cLineSize,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                      color: isShimmer ? cShimmerColor : categoryColor
+                      color: isShimmer ? customTheme.shimmerColor : categoryColor
                     )
                   ),
                   SizedBox(width: 16.0),
@@ -155,7 +155,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                           padding: EdgeInsets.only(top: 8.0),
                           child: Text(
                             description!,
-                            style: customTheme.extraLightTextStyle,
+                            style: customTheme.lightTextStyle,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),

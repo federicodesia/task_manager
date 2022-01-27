@@ -28,9 +28,16 @@ import '../constants.dart';
 class CalendarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AvailableSpaceCubit(),
-      child: _CalendarScreen(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => AvailableSpaceCubit()),
+        BlocProvider(create: (_) => CalendarBloc(taskBloc: context.read<TaskBloc>())..add(CalendarLoaded(
+          startMonth: DateTime(DateTime.now().year, DateTime.now().month - 1),
+          endMonth: DateTime(DateTime.now().year, DateTime.now().month + 2),
+          selectedDate: getDate(DateTime.now())
+        ))),
+      ],
+      child: _CalendarScreen()
     );
   }
 }
@@ -57,7 +64,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
     final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: customTheme.backgroundColor,
       floatingActionButton: AnimatedFloatingActionButton(
         visible: showFloatingActionButton,
         onPressed: () {

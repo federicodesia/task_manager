@@ -37,7 +37,8 @@ class _SettingsScreenState extends State<_SettingsScreen>{
     final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
-      //backgroundColor: customTheme.backgroundColor,
+      backgroundColor: customTheme.backgroundColor,
+
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints){
@@ -83,7 +84,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Federico De Sía",
+                                      authState.user.name,
                                       style: customTheme.subtitleTextStyle,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -91,7 +92,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                                     SizedBox(height: 2.0),
 
                                     Text(
-                                      "desiafederico@gmail.com",
+                                      authState.user.email,
                                       style: customTheme.lightTextStyle,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -112,7 +113,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                     padding: EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
                     child: Column(
                       children: [
-                        Divider(color: cDividerColor),
+                        Divider(),
 
                         RoundedListTileSwitch(
                           title: "Dark mode",
@@ -129,7 +130,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                           value: "English",
                           onTap: () {},
                         ),
-                        //Divider(color: cDividerColor),
+                        //Divider(),
                         
                         RoundedListTile(
                           title: "Security",
@@ -144,7 +145,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                           onTap: () => AutoRouter.of(context).navigate(NotificationsRoute()),
                         ),
 
-                        Divider(color: cDividerColor),
+                        Divider(),
 
                         RoundedListTile(
                           title: "Help",

@@ -24,7 +24,7 @@ class DotIndicatorList extends StatelessWidget{
         return AnimatedContainer(
           duration: cFastAnimationDuration,
           height: cDotSize,
-          width: index == selectedIndex ? cDotSize * 2 : cDotSize,
+          width: index == selectedIndex ? cSelectedDotSize : cDotSize,
           margin: EdgeInsets.symmetric(horizontal: 2.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(cDotSize),

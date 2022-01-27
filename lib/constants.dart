@@ -4,30 +4,16 @@ const double cPadding = 24.0;
 const double cBorderRadius = 18.0;
 const double cLineSize = 6.0;
 const double cDotSize = 7.0;
+const double cSelectedDotSize = 14.0;
 
 // Colors
-const Color cPrimaryColor = Color(0xFF525298);
+const Color cPrimaryColor = Color(0xFF5C5D9D);
+const Color cTextButtonColor = Color(0xFF9E6AF8);
 
-Color cIconColor = Colors.white.withOpacity(0.75);
-Color cRedColor = Color(0xFFD32F2F);
+const Color cRedColor = Color(0xFFD32F2F);
+const Color cBarrierColor = Colors.black26;
 
-Color cDividerColor = Colors.white.withOpacity(0.08);
-Color cShimmerColor = Colors.white.withOpacity(0.03);
-Color cBorderColor = Color(0xFF616164);
-
-Color cModalBottomSheetColorIndicator = Color(0xFF2A2E3D);
-Color cModalBottomSheetBarrierColor = Colors.black26;
-
-const Color cOutlinedButtonColor = Color(0xFF2B3039);
-Color cCheckBoxUnselectedColor = Color(0xFF2C2F39);
-
-Color cChartPrimaryColor = Color(0xFFF5A1FD);
-Color cChartBackgroundColor = Color(0xFF9E6AF8);
-
-// Bottom Navigation Bar
-const double cBottomNavigationBarSeparatorHeight = 2.0;
-const double cBottomNavigationBarPadding = 12.0;
-const double cBottomNavigationBarIconSize = 22.0;
+Color cChartBackgroundColor = cPrimaryColor.withOpacity(0.64);
 
 // Buttons
 const double cButtonSize = 48.0;
@@ -48,11 +34,3 @@ const Duration cAnimatedListDuration = Duration(milliseconds: 600);
 
 // BottomSheet
 const double cBottomSheetBorderRadius = 28.0;
-
-// SnackBar
-Color cSnackBarBackgroundColor = Color(0xFF262833);
-const double cSnackBarBorderRadius = 12.0;
-
-// Text
-
-Color cTextButtonColor = Color(0xFF9E6AF8);

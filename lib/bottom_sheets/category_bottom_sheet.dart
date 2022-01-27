@@ -16,8 +16,6 @@ List<Color> colors = [
   Color(0xFF00C0FD),
   Color(0xFF07B9AE),
   Color(0xFF00B96D),
-  Color(0xFFDDBC10),
-  Color(0xFFFFF2AE),
   Color(0xFFFF6B55),
   Color(0xFFEC0039),
   Color(0xFFBE118E),
@@ -96,7 +94,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                               duration: cFastAnimationDuration,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: isSelected ? cBorderColor : Colors.transparent,
+                                  color: isSelected ? customTheme.lightColor : Colors.transparent,
                                   width: 1.5
                                 ),
                                 borderRadius: BorderRadius.all(Radius.circular(12.0))
@@ -132,7 +130,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
               width: double.infinity,
               child: Text(
                 "Done",
-                style: customTheme.boldTextStyle,
+                style: customTheme.primaryColorButtonTextStyle,
               ),
               onPressed: (){
                 setState(() => formValidated = true);

@@ -1,5 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
-import '../../constants.dart';
+import 'package:task_manager/constants.dart';
 
 BarChartGroupData weekBarChartGroupData({
   required int index,
@@ -12,7 +12,7 @@ BarChartGroupData weekBarChartGroupData({
     barRods: [
       BarChartRodData(
         y: height,
-        colors: [cChartPrimaryColor],
+        colors: [cPrimaryColor],
         backDrawRodData: BackgroundBarChartRodData(
           show: true,
           y: backgroundHeight,

@@ -204,7 +204,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                       }
                                     },
                                     child: IconButton(
-                                      color: cIconColor,
+                                      color: customTheme.lightColor,
                                       icon: Icon(Icons.more_vert_rounded),
                                       splashRadius: cSplashRadius,
                                       onPressed: () {
@@ -232,7 +232,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                             children: [
                                               Icon(
                                                 Icons.search_rounded,
-                                                color: customTheme.extraLightColor,
+                                                color: customTheme.lightColor,
                                               ),
                                               SizedBox(width: 12.0),
                                               Text(
@@ -252,7 +252,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                       color: customTheme.contentBackgroundColor,
                                       child: Icon(
                                         Icons.tune_rounded,
-                                        color: cIconColor
+                                        color: customTheme.lightColor
                                       ),
                                       onPressed: () {
                                         ModalBottomSheet(

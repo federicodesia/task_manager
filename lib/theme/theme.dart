@@ -8,11 +8,13 @@ ThemeData _baseThemeData(ThemeData base) {
 }
 
 ThemeData lightThemeData = _baseThemeData(ThemeData.light()).copyWith(
-  scaffoldBackgroundColor: Color(0xFFF3F3F7),
+  colorScheme: ColorScheme.light(primary: cPrimaryColor),
+  scaffoldBackgroundColor: Color(0xFFFFFFFF),
 );
 
 ThemeData darkThemeData = _baseThemeData(ThemeData.dark()).copyWith(
-  scaffoldBackgroundColor: Color(0xFF1F1D2C)
+  colorScheme: ColorScheme.dark(primary: cPrimaryColor),
+  scaffoldBackgroundColor: Color(0xFF1F1D2C),
 );
 
 extension CustomThemeDataExtension on ThemeData {
@@ -41,47 +43,69 @@ class CustomThemeData {
     color: lightTextColor
   );
 
-  TextStyle get textFieldTextStyle => textStyle.copyWith(fontSize: 13.5);
-  TextStyle get smallTextStyle => textStyle.copyWith(fontSize: 13.0, color: lightTextColor);
+  TextStyle get smallTextStyle => textStyle.copyWith(fontSize: 13.5);
   
   TextStyle get extraLightTextStyle => lightTextStyle.copyWith(fontWeight: FontWeight.w300);
   TextStyle get smallLightTextStyle => lightTextStyle.copyWith(fontSize: 13.0);
   TextStyle get smallTextButtonStyle => smallLightTextStyle.copyWith(color: cTextButtonColor, fontWeight: FontWeight.w500);
-  TextStyle get smallExtraLightTextStyle => lightTextStyle.copyWith(fontSize: 13.0, fontWeight: FontWeight.w300);
 
   Color get extraLightTextColor => textColor.withOpacity(0.5);
 
+  final bool isDark;
   final Color backgroundColor;
   final Color contentBackgroundColor;
   final Color textColor;
   final Color lightColor;
+  final Color mediumLightColor;
   final Color extraLightColor;
+  final Color shimmerColor;
+  final double elevation;
+  final Color shadowColor;
+  final Color unselectedCheckboxColor;
 
   const CustomThemeData({
+    required this.isDark,
     required this.backgroundColor,
     required this.contentBackgroundColor,
     required this.textColor,
     required this.lightColor,
-    required this.extraLightColor
+    required this.mediumLightColor,
+    required this.extraLightColor,
+    required this.shimmerColor,
+    required this.elevation,
+    required this.shadowColor,
+    required this.unselectedCheckboxColor
   });
 
   static CustomThemeData get dark {
     return CustomThemeData(
+      isDark: true,
       backgroundColor: Color(0xFF1F1D2C),
       contentBackgroundColor: Color(0xFF272735),
       textColor: Color(0xFFFBFAFC),
       lightColor: Colors.white.withOpacity(0.5),
-      extraLightColor: Colors.white.withOpacity(0.25)
+      mediumLightColor: Colors.white.withOpacity(0.25),
+      extraLightColor: Colors.white.withOpacity(0.05),
+      shimmerColor: Colors.white.withOpacity(0.03),
+      elevation: 0.0,
+      shadowColor: Colors.transparent,
+      unselectedCheckboxColor: Color(0xFF2C2F39)
     );
   }
 
   static CustomThemeData get light {
     return CustomThemeData(
-      backgroundColor: Color(0xFFFFFFFF),
-      contentBackgroundColor: Color(0xFFF5F5F5),
+      isDark: false,
+      backgroundColor: Color(0xFFF0F2F5),
+      contentBackgroundColor: Color(0xFFFFFFFF),
       textColor: Color(0xFF333649),
       lightColor: Color(0xFF798090),
-      extraLightColor: Color(0xFFE3E3E3)
+      mediumLightColor: Color(0xFFE3E3E3),
+      extraLightColor: Color(0xFFE3E3E3),
+      shimmerColor: Colors.black.withOpacity(0.04),
+      elevation: 4.0,
+      shadowColor: Colors.black.withOpacity(0.08),
+      unselectedCheckboxColor: Color(0xFF798090)
     );
   }
 }

@@ -46,8 +46,10 @@ class RoundedListTile extends StatelessWidget {
                         padding: EdgeInsets.all(10.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                          color: Color.alphaBlend(color.withOpacity(0.1), Theme.of(context).scaffoldBackgroundColor),
-                          //color: color
+                          color: Color.alphaBlend(
+                            color.withOpacity(0.25),
+                            customTheme.backgroundColor
+                          ),
                         ),
                         child: Icon(
                           icon,
@@ -62,7 +64,7 @@ class RoundedListTile extends StatelessWidget {
                       Expanded(
                         child: Text(
                           title,
-                          style: customTheme.lightTextStyle,
+                          style: customTheme.textStyle,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -78,7 +80,7 @@ class RoundedListTile extends StatelessWidget {
                       Expanded(
                         child: Text(
                           description!,
-                          style: customTheme.smallExtraLightTextStyle,
+                          style: customTheme.lightTextStyle,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -95,7 +97,7 @@ class RoundedListTile extends StatelessWidget {
               padding: EdgeInsets.only(right: 16.0),
               child: Text(
                 value ?? "",
-                style: customTheme.extraLightTextStyle,
+                style: customTheme.lightTextStyle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

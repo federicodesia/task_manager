@@ -75,6 +75,7 @@ class TaskListItem extends StatelessWidget{
             text: "Task deleted",
             action: SnackBarAction(
               label: "Undo",
+              textColor: cPrimaryColor,
               onPressed: () => onUndoDismissed(tempTask)
             )
           ).show();

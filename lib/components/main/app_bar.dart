@@ -42,7 +42,7 @@ class MyAppBar extends StatelessWidget {
 
                   Text(
                     description,
-                    style: customTheme.lightTextStyle,
+                    style: customTheme.textStyle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

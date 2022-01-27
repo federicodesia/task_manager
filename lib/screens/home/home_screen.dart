@@ -1,10 +1,20 @@
+import 'package:boxy/flex.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
+import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
+import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
+import 'package:task_manager/components/aligned_animated_switcher.dart';
+import 'package:task_manager/components/cards/category_card.dart';
+import 'package:task_manager/components/header.dart';
+import 'package:task_manager/components/lists/declarative_animated_list.dart';
+import 'package:task_manager/components/lists/list_item_animation.dart';
 import 'package:task_manager/components/main/app_bar.dart';
+import 'package:task_manager/components/shimmer/shimmer_list.dart';
+import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
@@ -69,6 +79,8 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
     final customTheme = Theme.of(context).customTheme;
 
     return Scaffold(
+      backgroundColor: customTheme.backgroundColor,
+
       floatingActionButton: AnimatedFloatingActionButton(
         visible: showFloatingActionButton,
         onPressed: () {
@@ -116,7 +128,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        /*Header(text: "Categories"),
+                        Header(text: "Categories"),
                         SizedBox(height: cPadding),
 
                         BlocBuilder<CategoryBloc, CategoryState>(
@@ -179,15 +191,17 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                                   padding: EdgeInsets.all(8.0),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(cBorderRadius),
-                                                    side: BorderSide(color: customTheme.contentBackgroundColor, width: 1.5)
+                                                    side: BorderSide(color: customTheme.extraLightColor, width: 1.5)
                                                   ),
+                                                  elevation: customTheme.elevation,
+                                                  shadowColor: customTheme.shadowColor
                                                 ),
                                                 child: Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
                                                     Icon(
                                                       Icons.add_rounded,
-                                                      color: cGrayColor,
+                                                      color: customTheme.lightColor,
                                                     ),
                                                     SizedBox(height: 6.0),
 
@@ -223,7 +237,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                           },
                         ),
 
-                        SizedBox(height: cPadding),*/
+                        SizedBox(height: cPadding),
 
                         // Tabs
                         Padding(
@@ -254,7 +268,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                 /*indicator: TabIndicatorDecoration(),
                                 labelPadding: EdgeInsets.symmetric(horizontal: cPadding),*/
                                 
-                                labelStyle: customTheme.lightTextStyle,
+                                labelStyle: customTheme.textStyle,
                                 labelColor: customTheme.textColor,
                                 unselectedLabelColor: customTheme.lightTextColor,
 

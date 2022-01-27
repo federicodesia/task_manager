@@ -76,13 +76,13 @@ class CheckboxTaskListItemContent extends StatelessWidget{
                 borderRadius: BorderRadius.circular(4.0),
               ),
             ),
-            unselectedWidgetColor: cCheckBoxUnselectedColor,
+            unselectedWidgetColor: customTheme.unselectedCheckboxColor,
           ),
           child: Checkbox(
             value: isShimmer ? true : (completed ?? false),
             activeColor: isShimmer ? customTheme.contentBackgroundColor : cPrimaryColor,
             checkColor: isShimmer ? customTheme.contentBackgroundColor : null,
-            onChanged: (value) => onCheckboxChanged != null ? onCheckboxChanged!(value) : null
+            onChanged: (value) => onCheckboxChanged != null ? onCheckboxChanged!(value) : null,
           ),
         ),
 
@@ -97,7 +97,8 @@ class CheckboxTaskListItemContent extends StatelessWidget{
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(cBorderRadius),
               ),
-              elevation: 0
+              elevation: customTheme.elevation,
+              shadowColor: customTheme.shadowColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -128,6 +128,8 @@ class CategoryCardContent extends StatelessWidget{
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(cBorderRadius),
           ),
+          elevation: customTheme.elevation,
+          shadowColor: customTheme.shadowColor
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -163,7 +165,7 @@ class CategoryCardContent extends StatelessWidget{
               lineHeight: cLineSize,
               padding: EdgeInsets.zero,
               progressColor: color,
-              backgroundColor: isShimmer ? cShimmerColor : customTheme.extraLightColor,
+              backgroundColor: isShimmer ? customTheme.shimmerColor : customTheme.extraLightColor,
               percent: tasksCount > 0 ? completedTasks / tasksCount : 0,
               animation: true,
               animateFromLastPercent: true,

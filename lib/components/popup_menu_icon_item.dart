@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/constants.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class PopupMenuIconItem extends StatelessWidget{
@@ -20,7 +19,7 @@ class PopupMenuIconItem extends StatelessWidget{
       children: [
         Icon(
           icon,
-          color: cIconColor,
+          color: customTheme.lightColor,
         ),
         SizedBox(width: 12.0),
         Text(

@@ -14,15 +14,14 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   TaskBloc({required this.taskRepository}) : super(TaskLoadInProgress()){
 
     on<TaskLoaded>((event, emit) async{
-      /*final tasks = await taskRepository.getTasks();
+      final tasks = await taskRepository.getTasks();
       if(tasks != null) emit(TaskLoadSuccess(tasks));
-      else emit(TaskLoadFailure());*/
+      else emit(TaskLoadFailure());
     });
 
     on<TaskAdded>((event, emit) async{
       if(state is TaskLoadSuccess){
-        final task = await taskRepository.createTask(event.task);
-        if(task != null) emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks..add(task)));
+        emit(TaskLoadSuccess((state as TaskLoadSuccess).tasks..add(event.task)));
       }
     });
 

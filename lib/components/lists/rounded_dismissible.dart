@@ -37,7 +37,7 @@ class RoundedDismissible extends StatelessWidget{
             children: [
               Text(
                 text,
-                style: customTheme.textStyle,
+                style: customTheme.textStyle.copyWith(color: Colors.white),
               ),
               SizedBox(width: 12.0),
               Icon(

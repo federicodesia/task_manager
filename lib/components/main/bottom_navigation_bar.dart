@@ -6,11 +6,11 @@ import 'package:task_manager/theme/theme.dart';
 class MyBottomNavigationBar extends StatelessWidget{
 
   final TabsRouter tabsRouter;
-  final List<MyBottomNavigationBarItem> items;
+  final List<IconData> icons;
 
   MyBottomNavigationBar({
     required this.tabsRouter,
-    required this.items
+    required this.icons
   });
 
   @override
@@ -20,7 +20,7 @@ class MyBottomNavigationBar extends StatelessWidget{
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
+        /*Container(
           height: cBottomNavigationBarSeparatorHeight,
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -38,15 +38,26 @@ class MyBottomNavigationBar extends StatelessWidget{
               ]
             )
           ),
-        ),
+        ),*/
 
-        Padding(
-          padding: EdgeInsets.all(cBottomNavigationBarPadding),
+        Container(
+          decoration: BoxDecoration(
+            color: customTheme.contentBackgroundColor,
+            borderRadius: BorderRadius.all(Radius.circular(24.0)),
+            boxShadow: [
+              BoxShadow(
+                color: customTheme.shadowColor,
+                blurRadius: 256.0
+              )
+            ]
+          ),
+          margin: EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+          padding: EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(items.length, (index){
+            children: List.generate(icons.length, (index){
               return MyBottomNavigationBarIcon(
-                item: items.elementAt(index),
+                icon: icons.elementAt(index),
                 isSelected: tabsRouter.activeIndex == index,
                 onPressed: () => index < tabsRouter.stack.length ? tabsRouter.setActiveIndex(index) : null
               );
@@ -58,50 +69,38 @@ class MyBottomNavigationBar extends StatelessWidget{
   }
 }
 
-class MyBottomNavigationBarItem{
-  final String icon;
-  final String selectedIcon;
-
-  MyBottomNavigationBarItem({
-    required this.icon,
-    required this.selectedIcon
-  });
-}
-
 class MyBottomNavigationBarIcon extends StatelessWidget{
   
-  final MyBottomNavigationBarItem item;
+  final IconData icon;
   final bool isSelected;
   final Function() onPressed;
 
   MyBottomNavigationBarIcon({
-    required this.item,
+    required this.icon,
     required this.isSelected,
     required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
         IconButton(
-          iconSize: cBottomNavigationBarIconSize,
-          icon: SizedBox(
-            height: cBottomNavigationBarIconSize,
-            width: cBottomNavigationBarIconSize,
-            child: AnimatedSwitcher(
-              duration: cFastAnimationDuration,
-              switchOutCurve: Curves.fastOutSlowIn,
-              switchInCurve: Curves.fastOutSlowIn,
-              child: Opacity(
-                key: Key("MyBottomNavigationBarIcon: " + (isSelected ? item.selectedIcon : item.icon)),
-                opacity: isSelected ? 0.9 : 0.5,
-                child: Image.asset("assets/icons/${isSelected ? item.selectedIcon : item.icon}")
-              )
-            ),
+          iconSize: 22.0,
+          icon: AnimatedSwitcher(
+            duration: cFastAnimationDuration,
+            switchOutCurve: Curves.fastOutSlowIn,
+            switchInCurve: Curves.fastOutSlowIn,
+            child: Icon(
+              icon,
+              key: Key("${icon}KeyValue:$isSelected"),
+              color: isSelected ? cPrimaryColor : customTheme.lightColor,
+            )
           ),
-          splashRadius: cBottomNavigationBarIconSize,
+          splashRadius: cSmallSplashRadius,
           color: isSelected ? Colors.white.withOpacity(0.9) : Colors.white.withOpacity(0.5),
           onPressed: onPressed,
         ),
@@ -109,7 +108,7 @@ class MyBottomNavigationBarIcon extends StatelessWidget{
         AnimatedContainer(
           duration: cTransitionDuration,
           height: 5.0,
-          width: 5.0,
+          width: 8.0,
           decoration: BoxDecoration(
             color: isSelected ? cPrimaryColor : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(5.0))

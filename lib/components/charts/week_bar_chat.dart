@@ -88,7 +88,7 @@ class WeekBarChart extends StatelessWidget{
                     child: Text(
                       "$completedWeekTasks Completed",
                       key: Key("$completedWeekTasks Completed"),
-                      style: customTheme.boldTextStyle.copyWith(color: cChartPrimaryColor),
+                      style: customTheme.boldTextStyle.copyWith(color: cPrimaryColor),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class RoundedButton extends StatelessWidget{
 
@@ -25,6 +26,8 @@ class RoundedButton extends StatelessWidget{
   
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     return Container(
       width: !autoWidth ? width : null,
       height: height,
@@ -37,8 +40,8 @@ class RoundedButton extends StatelessWidget{
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
           ),
-          elevation: 0,
-          shadowColor: Theme.of(context).shadowColor.withOpacity(0.25)
+          elevation: customTheme.elevation,
+          shadowColor: customTheme.shadowColor,
         ),
       ),
     );

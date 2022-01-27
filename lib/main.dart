@@ -95,37 +95,5 @@ class _MyAppState extends State<MyApp> {
         ),
       )
     );
-
-    /*return MultiBlocProvider(
-      providers: [
-        BlocProvider<TaskBloc>(
-            create: (context) =>
-                TaskBloc(taskRepository: TaskRepository())..add(TaskLoaded())),
-        BlocProvider<CategoryBloc>(
-            create: (context) => CategoryBloc(
-                categoryRepository: CategoryRepository(),
-                taskBloc: BlocProvider.of<TaskBloc>(context))
-              ..add(CategoryLoaded())),
-        BlocProvider<UpcomingBloc>(
-            create: (context) =>
-                UpcomingBloc(taskBloc: BlocProvider.of<TaskBloc>(context))
-                  ..add(UpcomingLoaded())),
-        BlocProvider<CalendarBloc>(
-          create: (context) =>
-              CalendarBloc(taskBloc: BlocProvider.of<TaskBloc>(context))
-                ..add(CalendarLoaded(
-                    startMonth:
-                        DateTime(DateTime.now().year, DateTime.now().month - 1),
-                    endMonth:
-                        DateTime(DateTime.now().year, DateTime.now().month + 2),
-                    selectedDate: getDate(DateTime.now()))),
-        ),
-      ],
-      child: MaterialApp.router(
-          routerDelegate: _appRouter.delegate(),
-          routeInformationParser: _appRouter.defaultRouteParser(),
-          debugShowCheckedModeBanner: false),
-    );*/
-
   }
 }

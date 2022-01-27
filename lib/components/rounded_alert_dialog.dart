@@ -26,7 +26,7 @@ class RoundedAlertDialog{
 
     showDialog(
       context: buildContext,
-      barrierColor: cModalBottomSheetBarrierColor,
+      barrierColor: cBarrierColor,
       builder: (_) => Center(
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),

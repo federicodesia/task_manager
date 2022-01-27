@@ -22,7 +22,7 @@ class DialogService {
             autoWidth: true,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 32.0),
-              child: Text("Got it", style: customTheme.boldTextStyle),
+              child: Text("Got it", style: customTheme.primaryColorButtonTextStyle),
             ),
             onPressed: () => Navigator.of(context, rootNavigator: true).pop()
           ),
@@ -47,7 +47,7 @@ class DialogService {
             autoWidth: true,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 32.0),
-              child: Text("Got it", style: customTheme.boldTextStyle),
+              child: Text("Got it", style: customTheme.primaryColorButtonTextStyle),
             ),
             onPressed: () => Navigator.of(context, rootNavigator: true).pop()
           ),

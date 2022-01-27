@@ -128,7 +128,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                       GestureDetector(
                                         child: Text(
                                           "Forgot Password?",
-                                          style: customTheme.smallTextStyle,
+                                          style: customTheme.smallLightTextStyle,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -171,7 +171,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                   GestureDetector(
                                     child: RichText(
                                       text: TextSpan(
-                                        style: customTheme.smallTextStyle,
+                                        style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
                                           TextSpan(text: "Don't have an Account? "),
                                           TextSpan(text: "Sign Up", style: customTheme.smallTextButtonStyle),

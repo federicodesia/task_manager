@@ -28,16 +28,21 @@ class LoginActivityCard extends StatelessWidget {
         padding: EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Container(
-              padding: EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                color: customTheme.contentBackgroundColor
-              ),
-              child: Icon(
-                Icons.place_outlined,
-                color: Colors.grey,
-                size: 18.0,
+            Material(
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+              elevation: customTheme.elevation,
+              shadowColor: customTheme.shadowColor,
+              child: Container(
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                  color: customTheme.contentBackgroundColor
+                ),
+                child: Icon(
+                  Icons.place_outlined,
+                  color: Colors.grey,
+                  size: 18.0,
+                ),
               ),
             ),
 
@@ -48,7 +53,7 @@ class LoginActivityCard extends StatelessWidget {
                 children: [
                   RichText(
                     text: TextSpan(
-                      style: customTheme.lightTextStyle,
+                      style: customTheme.textStyle,
                       children: <TextSpan>[
                         if(isThisDevice) TextSpan(
                           text: "This device  ",
@@ -63,7 +68,7 @@ class LoginActivityCard extends StatelessWidget {
                   SizedBox(height: 2.0),
                   Text(
                     location,
-                    style: customTheme.smallExtraLightTextStyle,
+                    style: customTheme.smallLightTextStyle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   )

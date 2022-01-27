@@ -35,7 +35,9 @@ class CalendarCard extends StatelessWidget{
           children: [
             Text(
               DateFormat('d').format(dateTime),
-              style: customTheme.subtitleTextStyle.copyWith(color: isSelected ? customTheme.textColor : customTheme.lightTextColor),
+              style: customTheme.subtitleTextStyle.copyWith(
+                color: isSelected ? Colors.white : customTheme.lightTextColor
+              ),
             ),
             SizedBox(height: 4.0),
 
@@ -53,7 +55,9 @@ class CalendarCard extends StatelessWidget{
 
                 Text(
                   DateFormat('E').format(dateTime),
-                  style: customTheme.smallLightTextStyle.copyWith(color: isSelected ? customTheme.textColor : customTheme.lightTextColor),
+                  style: customTheme.smallLightTextStyle.copyWith(
+                    color: isSelected ? Colors.white : customTheme.lightTextColor
+                  ),
                 )
               ],
             ),

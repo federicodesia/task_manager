@@ -32,60 +32,65 @@ class ProgressSummary extends StatelessWidget{
 
     double _percent = total > 0 ? completed / total : 0.0;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: customTheme.contentBackgroundColor,
-        borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
-      ),
-      padding: EdgeInsets.all(cPadding),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  header,
-                  style: customTheme.boldTextStyle,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: 8.0),
+    return Material(
+      borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
+      elevation: customTheme.elevation,
+      shadowColor: customTheme.shadowColor,
+      child: Container(
+        decoration: BoxDecoration(
+          color: customTheme.contentBackgroundColor,
+          borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
+        ),
+        padding: EdgeInsets.all(cPadding),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    header,
+                    style: customTheme.boldTextStyle,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 8.0),
 
-                AnimatedWidgetSize(
-                  child: AlignedAnimatedSwitcher(
-                    child: Text(
-                      _description,
-                      key: Key(_description),
-                      style: customTheme.lightTextStyle,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
+                  AnimatedWidgetSize(
+                    child: AlignedAnimatedSwitcher(
+                      child: Text(
+                        _description,
+                        key: Key(_description),
+                        style: customTheme.lightTextStyle,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
-          SizedBox(width: 16.0),
+            SizedBox(width: 16.0),
 
-          CircularPercentIndicator(
-            radius: 56.0,
-            lineWidth: cLineSize,
-            animation: true,
-            animateFromLastPercent: true,
-            animationDuration: cAnimationDuration.inMilliseconds,
-            percent: _percent,
-            center: Text(
-              "${(_percent * 100).toStringAsFixed(0)}%",
-              style: customTheme.textStyle,
-            ),
-            circularStrokeCap: CircularStrokeCap.round,
-            backgroundColor: cChartBackgroundColor.withOpacity(0.35),
-            progressColor: cChartBackgroundColor,
-          )
-        ],
-      )
+            CircularPercentIndicator(
+              radius: 56.0,
+              lineWidth: cLineSize,
+              animation: true,
+              animateFromLastPercent: true,
+              animationDuration: cAnimationDuration.inMilliseconds,
+              percent: _percent,
+              center: Text(
+                "${(_percent * 100).toStringAsFixed(0)}%",
+                style: customTheme.textStyle,
+              ),
+              circularStrokeCap: CircularStrokeCap.round,
+              backgroundColor: cChartBackgroundColor,
+              progressColor: cPrimaryColor,
+            )
+          ],
+        )
+      ),
     );
   }
 }

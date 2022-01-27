@@ -20,7 +20,7 @@ class TimePickerBottomSheet extends StatelessWidget{
     
     return CupertinoTheme(
       data: CupertinoThemeData(
-        brightness: Brightness.dark
+        brightness: customTheme.isDark ? Brightness.dark : Brightness.light,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: cPadding),
@@ -38,7 +38,7 @@ class TimePickerBottomSheet extends StatelessWidget{
               width: double.infinity,
               child: Text(
                 "Select",
-                style: customTheme.boldTextStyle,
+                style: customTheme.primaryColorButtonTextStyle,
               ),
               onPressed: () {
                 Navigator.of(context).pop();

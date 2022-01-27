@@ -163,7 +163,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   GestureDetector(
                                     child: RichText(
                                       text: TextSpan(
-                                        style: customTheme.smallTextStyle,
+                                        style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
                                           TextSpan(text: "Already have an Account? "),
                                           TextSpan(text: "Sign In", style: customTheme.smallTextButtonStyle),

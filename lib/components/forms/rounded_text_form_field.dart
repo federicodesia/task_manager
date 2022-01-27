@@ -56,56 +56,62 @@ class RoundedTextFormField extends StatelessWidget{
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
     
-    return TextFormField(
-      controller: controller,
-      focusNode: focusNode,
+    return Material(
+      color: customTheme.backgroundColor,
+      borderRadius: BorderRadius.circular(cBorderRadius),
+      elevation: customTheme.elevation,
+      shadowColor: customTheme.shadowColor,
+      child: TextFormField(
+        controller: controller,
+        focusNode: focusNode,
 
-      initialValue: initialValue,
-      validator: validator,
-      onSaved: onSaved,
-      onChanged: onChanged,
-      onFieldSubmitted: onFieldSubmitted,
+        initialValue: initialValue,
+        validator: validator,
+        onSaved: onSaved,
+        onChanged: onChanged,
+        onFieldSubmitted: onFieldSubmitted,
 
-      keyboardType: textInputType,
-      minLines: minLines,
-      maxLines: maxLines,
-      style: customTheme.textStyle,
-      textInputAction: textInputAction,
+        keyboardType: textInputType,
+        minLines: minLines,
+        maxLines: maxLines,
+        style: customTheme.textStyle,
+        textInputAction: textInputAction,
 
-      obscureText: obscureText,
-      enableSuggestions: enableSuggestions,
-      autocorrect: autocorrect,
+        obscureText: obscureText,
+        enableSuggestions: enableSuggestions,
+        autocorrect: autocorrect,
 
-      maxLength: maxLength,
-      textAlign: textAlign,
+        maxLength: maxLength,
+        textAlign: textAlign,
 
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: customTheme.textFieldTextStyle,
-        labelText: labelText,
-        labelStyle: customTheme.textFieldTextStyle,
-        floatingLabelBehavior: FloatingLabelBehavior.never,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: customTheme.smallTextStyle,
+          labelText: labelText,
+          labelStyle: customTheme.smallTextStyle,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
 
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(cBorderRadius),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(cBorderRadius),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(cBorderRadius),
+            borderSide: BorderSide(style: BorderStyle.none),
+          ),
+          
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 24.0,
+            vertical: 20.0
+          ),
+          filled: true,
+          fillColor: customTheme.contentBackgroundColor,
+
+          suffixIcon: suffixIcon,
+          counterText: counterText,
+
+          errorText: errorText,
+          errorStyle: errorStyle
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(cBorderRadius),
-          borderSide: BorderSide(style: BorderStyle.none),
-        ),
-        
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 24.0,
-          vertical: 20.0
-        ),
-        filled: true,
-        fillColor: customTheme.contentBackgroundColor,
-
-        suffixIcon: suffixIcon,
-        counterText: counterText,
-
-        errorText: errorText,
-        errorStyle: errorStyle
       ),
     );
   }

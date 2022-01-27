@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/theme/theme.dart';
 
 class CenterAppBar extends StatelessWidget {
 
@@ -17,6 +18,8 @@ class CenterAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
     final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
     final bool canPop = parentRoute?.canPop ?? false;
 
@@ -30,8 +33,8 @@ class CenterAppBar extends StatelessWidget {
               children: [
                 if(leading != null) leading!
                 else if(automaticallyImplyLeading && canPop) IconButton(
-                  color: cIconColor,
-                  icon: Icon(Icons.navigate_before_rounded),
+                  color: customTheme.lightColor,
+                  icon: Icon(Icons.navigate_before_rounded,),
                   splashRadius: cSplashRadius,
                   onPressed: () => Navigator.of(context).maybePop()
                 ),

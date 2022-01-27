@@ -12,7 +12,7 @@ class OutlinedFormIconButton extends StatelessWidget{
   OutlinedFormIconButton({
     required this.icon,
     required this.text,
-    this.outlineColor = cOutlinedButtonColor,
+    this.outlineColor,
     required this.onPressed
   });
 
@@ -26,7 +26,7 @@ class OutlinedFormIconButton extends StatelessWidget{
         children: [
           Icon(
             icon,
-            color: cBorderColor
+            color: customTheme.lightColor
           ),
 
           Expanded(
@@ -44,8 +44,8 @@ class OutlinedFormIconButton extends StatelessWidget{
           vertical: 10.0
         ),
         side: BorderSide(
-          width: 1.0,
-          color: outlineColor ?? cOutlinedButtonColor
+          width: 1.5,
+          color: outlineColor ?? customTheme.extraLightColor
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(cBorderRadius),

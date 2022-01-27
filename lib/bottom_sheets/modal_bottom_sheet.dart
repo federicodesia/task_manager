@@ -19,7 +19,7 @@ class ModalBottomSheet{
 
     showModalBottomSheet(
       isScrollControlled: true,
-      barrierColor: cModalBottomSheetBarrierColor,
+      barrierColor: cBarrierColor,
       backgroundColor: customTheme.backgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -43,7 +43,7 @@ class ModalBottomSheet{
                   height: 4.0,
                   width: 48.0,
                   decoration: BoxDecoration(
-                    color: cModalBottomSheetColorIndicator,
+                    color: customTheme.extraLightColor,
                     borderRadius: BorderRadius.all(Radius.circular(8.0))
                   ),
                 ),
