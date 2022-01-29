@@ -14,13 +14,13 @@ class TaskRepository{
 
   late Dio _dio = Dio(
     BaseOptions(
-      baseUrl: "https://yusuf007r.dev/task-manager/task",
+      baseUrl: "https://yusuf007r.dev/task-manager/sync/tasks",
       connectTimeout: 5000,
       receiveTimeout: 3000,
     )
   )..interceptors.add(AccessTokenInterceptor());
 
-  Future<List<Task>?> getTasks() async {
+  /*Future<List<Task>?> getTasks() async {
     try{
       final response = await _dio.get(
         "/",
@@ -75,6 +75,49 @@ class TaskRepository{
     }
     catch (error){
       onResponseError(error: error);
+    }
+  }*/
+
+  Future<List<Task>?> syncPull({
+    required DateTime? lastSync
+  }) async {
+    try{
+      final response = await _dio.get(
+        "/${lastSync != null ? lastSync : DateTime(1970)}",
+        options: Options(headers: {"Authorization": "Bearer " + authBloc.state.credentials.accessToken})
+      );
+      return List<Task>.from(response.data
+        .map((task) => Task.fromJson(task))
+        .where(((task) => task.id != null))
+      );
+    }
+    catch (error){
+      onResponseError(error: error);
+
+      if(error is DioError) print(error.response?.data["message"]);
+      else print(error);
+    }
+  }
+
+  Future<List<Task>?> syncPush({
+    required List<Task> tasks
+  }) async {
+    try{
+      final response = await _dio.post(
+        "/",
+        options: Options(headers: {"Authorization": "Bearer " + authBloc.state.credentials.accessToken}),
+        data: jsonEncode(tasks),
+      );
+      return List<Task>.from(response.data
+        .map((task) => Task.fromJson(task))
+        .where(((task) => task.id != null))
+      );
+    }
+    catch (error){
+      onResponseError(error: error);
+      
+      if(error is DioError) print(error.response?.data["message"]);
+      else print(error);
     }
   }
 }

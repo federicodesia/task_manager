@@ -20,15 +20,8 @@ class TaskDeleted extends TaskEvent {
   TaskDeleted(this.task);
 }
 
-class TaskCompleted extends TaskEvent {
-  final Task task;
-  final bool value;
-
-  TaskCompleted({
-    required this.task,
-    required this.value
-  });
-}
+class TaskSyncPullRequested extends TaskEvent {}
+class TaskSyncPushRequested extends TaskEvent {}
 
 class TasksUpdated extends TaskEvent {
   final List<Task> tasks;

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
@@ -13,7 +11,6 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
   final CategoryRepository categoryRepository;
   final TaskBloc taskBloc;
-  late StreamSubscription tasksSubscription;
 
   CategoryBloc({
     required this.categoryRepository,
@@ -59,11 +56,5 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         }
       }
     });
-  }
-
-  @override
-  Future<void> close() {
-    tasksSubscription.cancel();
-    return super.close();
   }
 }

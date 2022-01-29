@@ -65,7 +65,7 @@ class RoundedAlertDialog{
 
                         Text(
                           description,
-                          style: customTheme.smallLightTextStyle,
+                          style: customTheme.lightTextStyle,
                           textAlign: TextAlign.center,
                           maxLines: 4,
                           overflow: TextOverflow.ellipsis,
@@ -91,27 +91,6 @@ class RoundedAlertDialog{
           ),
         ),
       )
-      
-      /*builder: (_) => AlertDialog(
-        backgroundColor: customTheme.backgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
-        ),
-        contentPadding: EdgeInsets.all(cPadding),
-        actionsPadding: EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
-        title: title != null ? Text(
-          title!,
-          style: customTheme.subtitleTextStyle,
-          textAlign: TextAlign.center
-        ) : null,
-        content: description != null ? Text(
-          description!,
-          style: customTheme.smallLightTextStyle,
-          textAlign: TextAlign.center,
-        ) : null,
-        actionsAlignment: MainAxisAlignment.center,
-        actions: actions
-      )*/
     );
   }
 }
@@ -134,17 +113,21 @@ class RoundedAlertDialogButton extends StatelessWidget{
     return TextButton(
       child: Text(
         text,
-        style: customTheme.lightTextStyle,
+        style: customTheme.lightTextStyle.copyWith(
+          color: backgroundColor != null ? Colors.white : null
+        ),
       ),
       onPressed: onPressed,
       style: TextButton.styleFrom(
         backgroundColor: backgroundColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
         ),
+        elevation: backgroundColor != null ? customTheme.elevation : null,
+        shadowColor: backgroundColor != null ? customTheme.shadowColor : null,
         padding: EdgeInsets.symmetric(
-          vertical: 8.0,
-          horizontal: 16.0
+          vertical: 12.0,
+          horizontal: 28.0
         )
       ),
     );

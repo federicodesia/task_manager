@@ -27,6 +27,7 @@ import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task_filter.dart';
 import 'package:task_manager/theme/theme.dart';
+import 'package:collection/collection.dart';
 import '../constants.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -55,8 +56,6 @@ class _CategoryScreen extends StatefulWidget{
 class _CategoryScreenState extends State<_CategoryScreen>{
 
   double appBarHeight = 500.0;
-  GlobalKey<PopupMenuButtonState> popupMenuKey = GlobalKey<PopupMenuButtonState>();
-  bool categoryDeleted = false;
 
   bool showFloatingActionButton = true;
 
@@ -94,7 +93,10 @@ class _CategoryScreenState extends State<_CategoryScreen>{
 
                   BlocBuilder<CategoryBloc, CategoryState>(
                     buildWhen: (previousState, currentState){
-                      if(currentState is CategoryLoadSuccess) return !categoryDeleted;
+                      if(currentState is CategoryLoadSuccess){
+                        if(currentState.categories.firstWhereOrNull((c) => c.id == widget.categoryId) != null) return true;
+                        return false;
+                      }
                       return true;
                     },
                     builder: (_, categoryState){
@@ -140,78 +142,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                   ],
                                 ),
                                 actions: [
-                                  PopupMenuButton(
-                                    key: popupMenuKey,
-                                    color: customTheme.contentBackgroundColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                                    ),
-                                    elevation: 4,
-                                    itemBuilder: (context) => [
-                                      PopupMenuItem(
-                                        value: 0,
-                                        enabled: !category.isGeneral,
-                                        child: PopupMenuIconItem(
-                                          icon: Icons.edit_outlined,
-                                          text: "Edit"
-                                        ),
-                                      ),
-
-                                      PopupMenuItem(
-                                        value: 1,
-                                        enabled: !category.isGeneral,
-                                        child: PopupMenuIconItem(
-                                          icon: Icons.delete_outlined,
-                                          text: "Delete"
-                                        ),
-                                      ),
-                                    ],
-                                    onSelected: (value){
-                                      if(value == 0){
-                                        ModalBottomSheet(
-                                          title: "Edit category", 
-                                          context: context, 
-                                          content: CategoryBottomSheet(editCategory: category)
-                                        ).show();
-                                      }
-                                      else if(value == 1){
-                                        RoundedAlertDialog(
-                                          buildContext: context,
-                                          title: "Delete this category?",
-                                          description: "Do you really want to delete this category? All tasks will be unlinked without being deleted. This process cannot be undone.",
-                                          actions: [
-                                            RoundedAlertDialogButton(
-                                              text: "Cancel",
-                                              onPressed: () => Navigator.of(context).pop()
-                                            ),
-
-                                            RoundedAlertDialogButton(
-                                              text: "Delete",
-                                              backgroundColor: cRedColor,
-                                              onPressed: (){
-                                                // Close AlertDialog
-                                                Navigator.of(context).pop();
-
-                                                setState(() => categoryDeleted = true);
-                                                BlocProvider.of<CategoryBloc>(context).add(CategoryDeleted(category));
-                                                
-                                                // Close screen
-                                                Navigator.of(context).pop();
-                                              },
-                                            )
-                                          ],
-                                        ).show();
-                                      }
-                                    },
-                                    child: IconButton(
-                                      color: customTheme.lightColor,
-                                      icon: Icon(Icons.more_vert_rounded),
-                                      splashRadius: cSplashRadius,
-                                      onPressed: () {
-                                        popupMenuKey.currentState!.showButtonMenu();
-                                      },
-                                    ),
-                                  )
+                                  _CategoryScreenPopupButton(category: category)
                                 ],
                               ),
                               SizedBox(height: cPadding - 16.0),
@@ -345,6 +276,88 @@ class _CategoryScreenState extends State<_CategoryScreen>{
             );
           }
         ),
+      ),
+    );
+  }
+}
+
+class _CategoryScreenPopupButton extends StatelessWidget{
+
+  final Category category;
+  _CategoryScreenPopupButton({required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    final popupMenuKey = GlobalKey<PopupMenuButtonState>();
+
+    return PopupMenuButton(
+      key: popupMenuKey,
+      color: customTheme.contentBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+      ),
+      elevation: 4,
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 0,
+          enabled: !category.isGeneral,
+          child: PopupMenuIconItem(
+            icon: Icons.edit_outlined,
+            text: "Edit"
+          ),
+        ),
+
+        PopupMenuItem(
+          value: 1,
+          enabled: !category.isGeneral,
+          child: PopupMenuIconItem(
+            icon: Icons.delete_outlined,
+            text: "Delete"
+          ),
+        ),
+      ],
+      onSelected: (value){
+        if(value == 0){
+          ModalBottomSheet(
+            title: "Edit category", 
+            context: context, 
+            content: CategoryBottomSheet(editCategory: category)
+          ).show();
+        }
+        else if(value == 1){
+          RoundedAlertDialog(
+            buildContext: context,
+            title: "Delete this category?",
+            description: "Do you really want to delete this category? All tasks will be unlinked without being deleted. This process cannot be undone.",
+            actions: [
+              RoundedAlertDialogButton(
+                text: "Delete",
+                backgroundColor: cRedColor,
+                onPressed: (){
+                  // Close AlertDialog
+                  Navigator.of(context, rootNavigator: true).pop();
+                  BlocProvider.of<CategoryBloc>(context).add(CategoryDeleted(category));
+                  // Close screen
+                  Navigator.of(context).pop();
+                },
+              ),
+
+              RoundedAlertDialogButton(
+                text: "Cancel",
+                onPressed: () => Navigator.of(context, rootNavigator: true).pop()
+              ),
+            ],
+          ).show();
+        }
+      },
+      child: IconButton(
+        color: customTheme.lightColor,
+        icon: Icon(Icons.more_vert_rounded),
+        splashRadius: cSplashRadius,
+        onPressed: () {
+          popupMenuKey.currentState!.showButtonMenu();
+        },
       ),
     );
   }

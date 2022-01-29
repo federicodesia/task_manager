@@ -7,12 +7,15 @@ part of 'task.dart';
 // **************************************************************************
 
 Task _$TaskFromJson(Map<String, dynamic> json) => Task(
-      id: json['id'] as String?,
+      id: json['id'] as String,
       categoryId: json['categoryId'] as String?,
       title: json['title'] as String,
       description: json['description'] as String,
-      date: DateTime.parse(json['date'] as String),
+      date: dateTimefromJson(json['date'] as String),
       isCompleted: json['isCompleted'] as bool? ?? false,
+      createdAt: dateTimefromJson(json['createdAt'] as String),
+      updatedAt: dateTimefromJson(json['updatedAt'] as String),
+      deletedAt: nullableDateTimefromJson(json['deletedAt'] as String?),
     );
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
@@ -20,6 +23,9 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'categoryId': instance.categoryId,
       'title': instance.title,
       'description': instance.description,
-      'date': instance.date.toIso8601String(),
+      'date': dateTimeToJson(instance.date),
       'isCompleted': instance.isCompleted,
+      'createdAt': dateTimeToJson(instance.createdAt),
+      'updatedAt': dateTimeToJson(instance.updatedAt),
+      'deletedAt': nullableDateTimeToJson(instance.deletedAt),
     };

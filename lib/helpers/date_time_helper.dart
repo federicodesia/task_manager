@@ -35,3 +35,9 @@ int daysInMonth(DateTime date){
   DateTime nextMonth = DateTime(date.year, date.month + 1, 0);
   return nextMonth.difference(thisMonth).inDays;
 }
+
+DateTime dateTimefromJson(String date) => DateTime.parse(date).toLocal();
+String dateTimeToJson(DateTime date) => date.toUtc().toIso8601String();
+
+DateTime? nullableDateTimefromJson(String? date) => date != null ? dateTimefromJson(date) : null;
+String? nullableDateTimeToJson(DateTime? date) => date != null ? dateTimeToJson(date) : null;

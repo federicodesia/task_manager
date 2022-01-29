@@ -1,23 +1,34 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 
 part 'task.g.dart';
 
 @JsonSerializable()
 class Task{
-  final String? id;
+  final String id;
   final String? categoryId;
   final String title;
   final String description;
+  @JsonKey(fromJson: dateTimefromJson, toJson: dateTimeToJson)
   final DateTime date;
   final bool isCompleted;
+  @JsonKey(fromJson: dateTimefromJson, toJson: dateTimeToJson)
+  final DateTime createdAt;
+  @JsonKey(fromJson: dateTimefromJson, toJson: dateTimeToJson)
+  final DateTime updatedAt;
+  @JsonKey(fromJson: nullableDateTimefromJson, toJson: nullableDateTimeToJson)
+  final DateTime? deletedAt;
 
   Task({ 
-    this.id,
+    required this.id,
     this.categoryId,
     required this.title,
     required this.description,
     required this.date,
-    this.isCompleted = false
+    this.isCompleted = false,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt
   });
 
   Task copyWith({
@@ -25,7 +36,8 @@ class Task{
     String? title,
     String? description,
     DateTime? date,
-    bool? isCompleted
+    bool? isCompleted,
+    DateTime? deletedAt
   }){
     return Task(
       id: this.id,
@@ -33,7 +45,10 @@ class Task{
       title: title ?? this.title,
       description: description ?? this.description,
       date: date ?? this.date,
-      isCompleted: isCompleted ?? this.isCompleted
+      isCompleted: isCompleted ?? this.isCompleted,
+      createdAt: this.createdAt,
+      updatedAt: DateTime.now(),
+      deletedAt: deletedAt ?? this.deletedAt
     );
   }
 

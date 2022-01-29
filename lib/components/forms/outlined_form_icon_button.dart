@@ -38,7 +38,7 @@ class OutlinedFormIconButton extends StatelessWidget{
           )
         ],
       ),
-      style: ElevatedButton.styleFrom(
+      style: OutlinedButton.styleFrom(
         padding: EdgeInsets.symmetric(
           horizontal: 16.0,
           vertical: 10.0

@@ -52,7 +52,7 @@ class TaskListItem extends StatelessWidget{
           task: task,
           onPressed: onPressed,
           onChanged: (value) => BlocProvider.of<TaskBloc>(context).add(
-            TaskCompleted(task: task, value: value!)
+            TaskUpdated(task.copyWith(isCompleted: value))
           ),
         );
         break;

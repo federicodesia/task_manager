@@ -169,11 +169,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                             setState(() {
                                               tabWidth = size.width;
                                               if(!scrolledToInitialOffset){
-                                                scrollController.animateTo(
-                                                  (calendarState.selectedDay.day - 1) * size.width,
-                                                  duration: cAnimationDuration,
-                                                  curve: Curves.ease
-                                                );
+                                                scrollController.jumpTo((calendarState.selectedDay.day - 1) * size.width);
                                                 scrolledToInitialOffset = true;
                                               }
                                             });
