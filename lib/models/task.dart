@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 
 part 'task.g.dart';
 
 @JsonSerializable()
-class Task{
+class Task extends Equatable{
   final String id;
   final String? categoryId;
   final String title;
@@ -47,11 +48,17 @@ class Task{
       date: date ?? this.date,
       isCompleted: isCompleted ?? this.isCompleted,
       createdAt: this.createdAt,
-      updatedAt: DateTime.now(),
+      updatedAt: copyDateTimeWith(DateTime.now(), microsecond: 0),
       deletedAt: deletedAt ?? this.deletedAt
     );
   }
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
   Map<String, dynamic> toJson() => _$TaskToJson(this);
+
+  @override
+  List<Object?> get props => [id, categoryId, title, description, date, isCompleted, createdAt, updatedAt, deletedAt];
+
+  @override
+  bool get stringify => true;
 }

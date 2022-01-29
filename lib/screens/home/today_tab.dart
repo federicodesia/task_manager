@@ -58,6 +58,7 @@ class _TodayTabState extends State<TodayTab>{
             );
           }
           else{
+            // TODO: Delete the comment below.
             //List<Task> todayTasks = tasksList.where((task) => dateDifference(task.date, DateTime.now()) == 0).toList();
             List<Task> todayTasks = tasksList;
             List<Task> remainingTasks = todayTasks.where((task) => !task.isCompleted).toList();

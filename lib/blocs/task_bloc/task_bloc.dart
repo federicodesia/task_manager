@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/repositories/task_repository.dart';
 import 'package:collection/collection.dart';
+import 'package:uuid/uuid.dart';
 
 part 'task_event.dart';
 part 'task_state.dart';
@@ -16,10 +19,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   TaskBloc({required this.taskRepository}) : super(TaskLoadInProgress()){
 
     on<TaskLoaded>((event, emit) async{
-      /*final tasks = await taskRepository.getTasks();
-      if(tasks != null) emit(TaskLoadSuccess(tasks));
-      else emit(TaskLoadFailure());*/
-      //add(TaskSyncPullRequested());
+      add(TaskSyncPullRequested());
     });
 
     on<TaskAdded>((event, emit) async{
@@ -43,85 +43,76 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     on<TaskDeleted>((event, emit){
       final taskState = state;
       if(taskState is TaskLoadSuccess){
-        emit(taskState.copyWith(tasks: taskState.tasks
-          .where((task) => task.id != event.task.id).toList()));
+        emit(taskState.copyWith(tasks: taskState.tasks.map((task){
+          return task.id == event.task.id ? event.task.copyWith(deletedAt: DateTime.now()) : task;
+        }).toList()));
         add(TaskSyncPushRequested());
       }
     });
 
     on<TaskSyncPullRequested>((event, emit) async{
+      final eventId = Uuid().v4();
+      print("$eventId | SyncPull requested");
+      
+      print("$eventId | Enviando peticion a la API...");
       final taskState = state;
+      final responseTasks = await taskRepository.syncPull(
+        lastSync: taskState is TaskLoadSuccess ? taskState.lastSyncPull : null
+      );
 
-      if(taskState is TaskLoadSuccess){
-        print("SyncPull requested");
-        final tasks = await taskRepository.syncPull(lastSync: taskState.lastSyncPull);
-        print("Tasks: $tasks");
-        if(tasks != null){
-          
-          final newTaskState = state;
-          if(newTaskState is TaskLoadSuccess){
+      await Future.delayed(Duration(seconds: 2));
+      print("$eventId | Respuesta de la API recibida...");
 
-            final modifiedTasks = newTaskState.tasks.where((n){
-              final pulledTask = tasks.firstWhereOrNull((t) => t.id == n.id);
-              if(pulledTask != null) return n.updatedAt.isAfter(pulledTask.updatedAt);
-              return false;
-            }).toList();
-            print("ModifiedTasks: $modifiedTasks");
+      if(responseTasks != null){
+        print("$eventId | Remplazando nuevo estado con las tasks recibidas de la API...");
 
-            final updatedTasks = tasks..removeWhere((t){
-              final modifiedTask = modifiedTasks.firstWhereOrNull((m) => m.id == t.id);
-              return modifiedTask != null ? true : false;
-            });
-            print("UpdatedTasks: $updatedTasks");
+        final emitState = taskState is TaskLoadSuccess ? taskState : TaskLoadSuccess(); 
 
-            final result = newTaskState.tasks.map((t){
-              final updatedTask = updatedTasks.firstWhereOrNull((u) => u.id == t.id);
-              return updatedTask ?? t;
-            }).toList();
-
-            updatedTasks.forEach((u) {
-              if(result.firstWhereOrNull((t) => t.id == u.id) == null) result.add(u);
-            });
-
-            print("Result: $result");
-
-            emit(newTaskState.copyWith(
-              lastSyncPull: DateTime.now(),
-              tasks: result
-            ));
-          }
-        }
+        emit(TaskLoadSuccess(
+          lastSyncPull: DateTime.now(),
+          tasks: emitState.tasks.map((t){
+            final r = responseTasks.firstWhereOrNull((r) => r.id == t.id);
+            responseTasks.remove(r);
+            return r ?? t;
+          }).toList()..addAll(responseTasks)
+        ));
       }
-    });
+    },
+    transformer: restartable());
 
     on<TaskSyncPushRequested>((event, emit) async{
-      final taskState = state;
-      print("SyncPush requested");
+      final eventId = Uuid().v4();
+      print("$eventId | SyncPush requested");
+      
 
+      final taskState = state;
       if(taskState is TaskLoadSuccess){
 
         final lastSyncPush = taskState.lastSyncPush;
-        final updatedTasks;
+        print("$eventId | Enviando peticion a la API...");
+        final responseTasks = await taskRepository.syncPush(tasks: lastSyncPush != null
+          ? taskState.tasks.where((t) => t.updatedAt.isAfter(lastSyncPush)).toList()
+          : taskState.tasks
+        );
 
-        if(lastSyncPush != null) updatedTasks = taskState.tasks.where((t) => t.updatedAt.isAfter(lastSyncPush)).toList();
-        else updatedTasks = taskState.tasks;
-        print("UpdatedTasks: $updatedTasks");
-        
-        final tasks = await taskRepository.syncPush(tasks: updatedTasks);
-        print("Tasks: ${jsonEncode(tasks)}");
+        await Future.delayed(Duration(seconds: 2));
+        print("$eventId | Respuesta de la API recibida...");
 
-        if(tasks != null){
+        if(responseTasks != null){
+          print("$eventId | Remplazando nuevo estado con las tasks recibidas de la API...");
           emit(taskState.copyWith(
             lastSyncPush: DateTime.now(),
             tasks: taskState.tasks.map((t){
-              final pushedTask = tasks.firstWhereOrNull((p) => p.id == t.id);
-              return pushedTask ?? t;
+              final r = responseTasks.firstWhereOrNull((r) => r.id == t.id);
+              responseTasks.remove(r);
+              return r ?? t;
             }).toList()
           ));
         }
       }
-    });
-
+    },
+    transformer: restartable());
+    
     on<TasksUpdated>((event, emit){
       final taskState = state;
       if(taskState is TaskLoadSuccess){
