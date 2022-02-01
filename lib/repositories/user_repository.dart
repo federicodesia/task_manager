@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/models/auth_credentials.dart';
+import 'package:task_manager/models/either.dart';
 import 'package:task_manager/models/user.dart';
 import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
 
@@ -26,11 +26,11 @@ class UserRepository {
         "/",
         options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
       );
-      return right(User.fromJson(response.data));
+      return Right(User.fromJson(response.data));
     }
     catch (error){
       final errorMessages = await onResponseError(error: error);
-      if(errorMessages != null) return left(errorMessages.first);
+      if(errorMessages != null) return Left(errorMessages.first);
       return null;
     }
   }

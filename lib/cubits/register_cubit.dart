@@ -43,15 +43,15 @@ class RegisterCubit extends Cubit<RegisterState> {
       messageKeys: ["name", "email", "password"]
     );
 
-    if(response != null) response.fold(
-      (responseMessages) => emit(RegisterState(
+    if(response != null) response.when(
+      left: (responseMessages) => emit(RegisterState(
         isLoading: false,
         nameError: validateName(name) ?? getResponseMessage(responseMessages, key: "name"),
         emailError: validateEmail(email) ?? getResponseMessage(responseMessages, key: "email"),
         passwordError: validatePassword(password) ?? getResponseMessage(responseMessages, key: "password"),
       )),
 
-      (authCredentials){
+      right: (authCredentials){
         emit(RegisterState(isLoading: false));
         authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
       }, 

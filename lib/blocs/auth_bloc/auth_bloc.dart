@@ -43,9 +43,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       if(credentials.accessTokenType == TokenType.access && credentials.isVerified){
         final response = await userRepository.getUser(authCredentials: credentials);
-        if(response != null) response.fold(
-          (error) {},
-          (user) => emit(state.copyWith(user: user))
+        if(response != null) response.when(
+          left: (error) {},
+          right: (user) => emit(state.copyWith(user: user))
         );
       }
     });
@@ -68,9 +68,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if(credentials.isNotEmpty){
       final response = await authRepository.accessToken(authCredentials: credentials);
 
-      response.fold(
-        (error) => add(AuthCredentialsChanged(credentials: AuthCredentials.empty)),
-        (authCredentials) => add(AuthCredentialsChanged(credentials: authCredentials))
+      response.when(
+        left: (error) => add(AuthCredentialsChanged(credentials: AuthCredentials.empty)),
+        right: (authCredentials) => add(AuthCredentialsChanged(credentials: authCredentials))
       );
     }
     else Future.delayed(Duration(seconds: 1), () {

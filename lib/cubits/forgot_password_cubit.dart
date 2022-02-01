@@ -25,8 +25,8 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     emit(ForgotPasswordState(isLoading: true));
     final response = await authRepository.sendPasswordResetCode(email: email);
 
-    if(response != null) response.fold(
-      (message){
+    if(response != null) response.when(
+      left: (message){
         final dateTime = DateTime.tryParse(message);
         if(dateTime != null) emit(ForgotPasswordState(emailSent: true));
         else emit(ForgotPasswordState(
@@ -35,7 +35,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         ));
       },
 
-      (sent) => emit(ForgotPasswordState(emailSent: true))
+      right: (sent) => emit(ForgotPasswordState(emailSent: true))
     );
     else emit(ForgotPasswordState(isLoading: false));
   }

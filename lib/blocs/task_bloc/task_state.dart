@@ -6,24 +6,20 @@ abstract class TaskState {}
 class TaskLoadInProgress extends TaskState {}
 
 class TaskLoadSuccess extends TaskState {
-  final DateTime? lastSyncPull;
-  final DateTime? lastSyncPush;
+  final SyncPushStatus syncPushStatus;
   final List<Task> tasks;
 
   TaskLoadSuccess({
     this.tasks = const [],
-    this.lastSyncPull,
-    this.lastSyncPush
+    this.syncPushStatus = SyncPushStatus.idle,
   });
 
   TaskLoadSuccess copyWith({
-    DateTime? lastSyncPull,
-    DateTime? lastSyncPush,
+    SyncPushStatus? syncPushStatus,
     List<Task>? tasks
   }){
     return TaskLoadSuccess(
-      lastSyncPull: lastSyncPull ?? this.lastSyncPull,
-      lastSyncPush: lastSyncPush ?? this.lastSyncPush,
+      syncPushStatus: syncPushStatus ?? SyncPushStatus.pending,
       tasks: tasks ?? this.tasks
     );
   }

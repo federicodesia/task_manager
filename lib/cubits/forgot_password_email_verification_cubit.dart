@@ -35,13 +35,13 @@ class ForgotPasswordEmailVerificationCubit extends Cubit<ForgotPasswordEmailVeri
       code: code
     );
 
-    if(response != null) response.fold(
-      (message) => emit(ForgotPasswordEmailVerificationState(
+    if(response != null) response.when(
+      left: (message) => emit(ForgotPasswordEmailVerificationState(
         isLoading: false,
         codeError: validateEmailVerificationCode(code) ?? message
       )),
 
-      (credentials){
+      right: (credentials){
         emit(ForgotPasswordEmailVerificationState(verified: true));
         authBloc.add(AuthCredentialsChanged(credentials: credentials));
       }, 

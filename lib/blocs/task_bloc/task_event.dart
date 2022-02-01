@@ -27,3 +27,8 @@ class TasksUpdated extends TaskEvent {
   final List<Task> tasks;
   TasksUpdated(this.tasks);
 }
+
+class TaskStateUpdated extends TaskEvent {
+  final TaskState state;
+  TaskStateUpdated(this.state);
+}

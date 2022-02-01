@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/models/auth_credentials.dart';
+import 'package:task_manager/models/either.dart';
 import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
 
 class AuthRepository {
@@ -26,11 +26,11 @@ class AuthRepository {
         "email": email,
         "password": password,
       });
-      return right(AuthCredentials.fromJson(response.data));
+      return Right(AuthCredentials.fromJson(response.data));
     }
     catch (error){
       final errorMessages = await onResponseError(error: error, messageKeys: messageKeys);
-      if(errorMessages != null) return left(errorMessages);
+      if(errorMessages != null) return Left(errorMessages);
       return null;
     }
   }
@@ -48,11 +48,11 @@ class AuthRepository {
         "email": email,
         "password": password,
       });
-      return right(AuthCredentials.fromJson(response.data));
+      return Right(AuthCredentials.fromJson(response.data));
     }
     catch (error){
       final errorMessages = await onResponseError(error: error, messageKeys: messageKeys);
-      if(errorMessages != null) return left(errorMessages);
+      if(errorMessages != null) return Left(errorMessages);
       return null;
     }
   }
@@ -66,11 +66,11 @@ class AuthRepository {
         "/access-token",
         options: Options(headers: {"Authorization": "Bearer " + authCredentials.refreshToken})
       );
-      return right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
+      return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
     }
     catch (error){
       final errorMessages = await onResponseError(error: error);
-      return left(errorMessages != null && errorMessages.isNotEmpty ? errorMessages.first : "");
+      return Left(errorMessages != null && errorMessages.isNotEmpty ? errorMessages.first : "");
     }
   }
 
@@ -117,11 +117,11 @@ class AuthRepository {
         },
         options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
       );
-      return right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
+      return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
     }
     catch(error){
       final errorMessages = await onResponseError(error: error);
-      if(errorMessages != null) return left(errorMessages.first);
+      if(errorMessages != null) return Left(errorMessages.first);
       return null;
     }
   }
@@ -137,11 +137,11 @@ class AuthRepository {
           "email": email
         }
       );
-      return right(() {});
+      return Right(() {});
     }
     catch (error){
       final errorMessages = await onResponseError(error: error);
-      if(errorMessages != null) return left(errorMessages.first);
+      if(errorMessages != null) return Left(errorMessages.first);
       return null;
     }
   }
@@ -159,14 +159,14 @@ class AuthRepository {
           "code": code
         },
       );
-      return right(AuthCredentials(
+      return Right(AuthCredentials(
         refreshToken: "",
         accessToken: response.data["accessToken"]
       ));
     }
     catch (error){
       final errorMessages = await onResponseError(error: error);
-      if(errorMessages != null) return left(errorMessages.first);
+      if(errorMessages != null) return Left(errorMessages.first);
       return null;
     }
   }
@@ -184,11 +184,11 @@ class AuthRepository {
         },
         options: Options(headers: {"Authorization": "Bearer " + credentials.accessToken})
       );
-      return right(() {});
+      return Right(() {});
     }
     catch (error){
       final errorMessages = await onResponseError(error: error);
-      if(errorMessages != null) return left(errorMessages.first);
+      if(errorMessages != null) return Left(errorMessages.first);
       return null;
     }
   }

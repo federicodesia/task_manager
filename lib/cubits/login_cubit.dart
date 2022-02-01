@@ -40,14 +40,14 @@ class LoginCubit extends Cubit<LoginState> {
     );
 
     if(response != null){
-      response.fold(
-        (responseMessages) => emit(LoginState(
+      response.when(
+        left: (responseMessages) => emit(LoginState(
           isLoading: false,
           emailError: validateEmail(email) ?? getResponseMessage(responseMessages, key: "email"),
           passwordError: validatePassword(password) ?? getResponseMessage(responseMessages, key: "password"),
         )),
 
-        (authCredentials){
+        right: (authCredentials){
           emit(LoginState(isLoading: false));
           authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
         }, 

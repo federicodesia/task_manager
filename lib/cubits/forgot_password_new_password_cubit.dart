@@ -34,13 +34,13 @@ class ForgotPasswordNewPasswordCubit extends Cubit<ForgotPasswordNewPasswordStat
       password: password
     );
 
-    if(response != null) response.fold(
-      (message) => emit(ForgotPasswordNewPasswordState(
+    if(response != null) response.when(
+      left: (message) => emit(ForgotPasswordNewPasswordState(
         isLoading: false,
         passwordError: validatePassword(password) ?? message
       )),
 
-      (changed){
+      right: (changed){
         emit(ForgotPasswordNewPasswordState(changed: true));
         authBloc.add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
       }, 
