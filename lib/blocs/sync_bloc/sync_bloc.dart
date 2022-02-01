@@ -1,20 +1,23 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/sync_object.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/repositories/sync_repository.dart';
-import 'package:collection/collection.dart';
+import 'package:uuid/uuid.dart';
 
 part 'sync_event.dart';
 part 'sync_state.dart';
 
+part 'sync_bloc.g.dart';
+
 enum SyncPushStatus { idle, pending }
 
-class SyncBloc extends Bloc<SyncEvent, SyncState> {
+class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
 
   final SyncRepository syncRepository;
 
@@ -33,30 +36,43 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     });
 
     on<SyncPushRequested>((event, emit) async{
-      /*final eventId = Uuid().v4();
+      final eventId = Uuid().v4();
       print("$eventId | SyncPush requested");
-      print("$eventId | Enviando peticion a la API...");
-      await Future.delayed(Duration(seconds: 2));*/
 
-      event.syncObject.when(
+      final tempDate = DateTime.now();
+
+      await event.syncObject.when(
         task: (tasks) async{
 
-          final updatedTasks = _itemsUpdatedAfterDate<Task>(date: null, items: tasks);
+          final updatedTasks = _itemsUpdatedAfterDate<Task>(
+            date: state.lastTaskPush,
+            items: tasks
+          );
           if(updatedTasks == null) return;
 
+          print("$eventId | Enviando peticion a la API...");
+          await Future.delayed(Duration(seconds: 2));
+      
           final responseItems = await syncRepository.push<Task>(
             queryPath: "tasks",
             items: updatedTasks
           );
-          //print("$eventId | Respuesta de la API recibida...");
+          if(responseItems == null) return;
+          print("$eventId | Respuesta de la API recibida...");
 
-          if(responseItems != null){
-            final taskState = taskBloc.state;
-            if(taskState is TaskLoadSuccess) taskBloc.add(TaskStateUpdated(taskState.copyWith(
-              syncPushStatus: SyncPushStatus.idle,
-              tasks: _replaceItems<Task>(items: taskState.tasks, replace: responseItems)
-            )));
-          }
+          final taskState = taskBloc.state;
+          if(taskState is! TaskLoadSuccess) return;
+
+          taskBloc.add(TaskStateUpdated(taskState.copyWith(
+            syncPushStatus: SyncPushStatus.idle,
+            tasks: _replaceUnupdatedItems<Task>(
+              date: tempDate,
+              items: taskState.tasks,
+              replace: responseItems
+            )
+          )));
+
+          emit(state.copyWith(lastTaskPush: tempDate));
         },
         category: (categories){
 
@@ -79,12 +95,15 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     catch(_){}
   }
 
-  List<T>? _replaceItems<T>({
+  List<T>? _replaceUnupdatedItems<T>({
+    required DateTime? date,
     required List<dynamic> items,
     required List<dynamic> replace
   }){
     try{
       return List<T>.from(items.map((i){
+        if(date != null && i.updatedAt.isAfter(date)) return i;
+
         final r = replace.firstWhereOrNull((r) => r.id == i.id);
         if(r != null) replace.remove(r);
         return r ?? i;
@@ -97,5 +116,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   Future<void> close() {
     taskBlocSubscription.cancel();
     return super.close();
+  }
+
+  @override
+  SyncState? fromJson(Map<String, dynamic> json) {
+    try{return SyncState.fromJson(json);}
+    catch(error) {}
+  }
+
+  @override
+  Map<String, dynamic>? toJson(SyncState state) {
+    try{return state.toJson();}
+    catch(error) {}
   }
 }

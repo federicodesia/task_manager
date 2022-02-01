@@ -88,18 +88,13 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
 
   @override
   TaskState? fromJson(Map<String, dynamic> json) {
-    print("fromJson");
     try{
-      /*final lastSyncPullString = json["lastSyncPull"];
-      final lastSyncPushString = json["lastSyncPush"];*/
-
+      print("fromJson");
       final tasks = List<Task>.from(jsonDecode(json["tasks"])
         .map((task) => Task.fromJson(task))
         .where(((task) => task.id != null))
       );
       return TaskLoadSuccess(
-        /*lastSyncPull: nullableDateTimefromJson(lastSyncPullString),
-        lastSyncPush: nullableDateTimefromJson(lastSyncPushString),*/
         tasks: tasks,
       );
     }
@@ -110,14 +105,11 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
 
   @override
   Map<String, dynamic>? toJson(TaskState state) {
-    print("toJson");
     try{
+      print("toJson");
       if(state is TaskLoadSuccess){
-        final tasks = jsonEncode(state.tasks.map((task) => task.toJson()).toList());
         return {
-          /*"lastSyncPull": nullableDateTimeToJson(state.lastSyncPull),
-          "lastSyncPush": nullableDateTimeToJson(state.lastSyncPush),*/
-          "tasks": tasks,
+          "tasks": jsonEncode(state.tasks.map((task) => task.toJson()).toList()),
         };
       }
     }
