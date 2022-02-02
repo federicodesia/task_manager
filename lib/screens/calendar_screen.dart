@@ -211,7 +211,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                 items: items,
                                 taskListItemType: TaskListItemType.Calendar,
                                 context: context,
-                                onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task)),
+                                onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
                                 objectBuilder: (object){
                                   return (object is DateTime) ? CalendarGroupHour(dateTime: object) : Container();
                                 }

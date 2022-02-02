@@ -13,8 +13,9 @@ part 'task_state.dart';
 class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
 
   final TaskRepository taskRepository;
-  TaskBloc({required this.taskRepository}) : super(TaskLoadSuccess(tasks: [])){
+  TaskBloc({required this.taskRepository}) : super(TaskLoadSuccess(tasks: [], deletedTasks: [])){
 
+    // TODO: Remove event
     on<TaskLoaded>((event, emit){});
 
     on<TaskAdded>((event, emit) async{
@@ -36,9 +37,20 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     on<TaskDeleted>((event, emit){
       final taskState = state;
       if(taskState is TaskLoadSuccess){
-        emit(taskState.copyWith(tasks: taskState.tasks.map((task){
-          return task.id == event.task.id ? event.task.copyWith(deletedAt: DateTime.now()) : task;
-        }).toList()));
+        emit(taskState.copyWith(
+          tasks: taskState.tasks..removeWhere((t) => t.id == event.task.id),
+          deletedTasks: taskState.deletedTasks..add(event.task.copyWith(deletedAt: DateTime.now()))
+        ));
+      }
+    });
+
+    on<TaskUndoDeleted>((event, emit){
+      final taskState = state;
+      if(taskState is TaskLoadSuccess){
+        emit(taskState.copyWith(
+          tasks: taskState.tasks..add(event.task.copyWith(deletedAt: null)),
+          deletedTasks: taskState.deletedTasks..removeWhere((t) => t.id == event.task.id)
+        ));
       }
     });
 
@@ -81,6 +93,11 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
 
     on<TaskStateUpdated>((event, emit){
       print("Actualizando TaskState...");
+      final taskState = state;
+      if(taskState is TaskLoadSuccess){
+        print("Tasks: ${taskState.tasks}");
+        print("DeletedTasks: ${taskState.deletedTasks}");
+      }
       emit(event.state);
     },
     transformer: restartable());
@@ -90,12 +107,15 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   TaskState? fromJson(Map<String, dynamic> json) {
     try{
       print("fromJson");
-      final tasks = List<Task>.from(jsonDecode(json["tasks"])
-        .map((task) => Task.fromJson(task))
-        .where(((task) => task.id != null))
-      );
       return TaskLoadSuccess(
-        tasks: tasks,
+        tasks: List<Task>.from(jsonDecode(json["tasks"])
+          .map((task) => Task.fromJson(task))
+          .where(((task) => task.id != null))
+        ),
+        deletedTasks: List<Task>.from(jsonDecode(json["deletedTasks"])
+          .map((task) => Task.fromJson(task))
+          .where(((task) => task.id != null))
+        ),
       );
     }
     catch(error) {
@@ -110,6 +130,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
       if(state is TaskLoadSuccess){
         return {
           "tasks": jsonEncode(state.tasks.map((task) => task.toJson()).toList()),
+          "deletedTasks": jsonEncode(state.deletedTasks.map((task) => task.toJson()).toList()),
         };
       }
     }

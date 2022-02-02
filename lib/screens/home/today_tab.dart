@@ -99,7 +99,7 @@ class _TodayTabState extends State<TodayTab>{
                   items: items,
                   taskListItemType: TaskListItemType.Checkbox,
                   context: context,
-                  onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task)),
+                  onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
                   objectBuilder: (object){
                     return (object is String) ? ListHeader(object) : Container();
                   }

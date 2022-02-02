@@ -20,6 +20,11 @@ class TaskDeleted extends TaskEvent {
   TaskDeleted(this.task);
 }
 
+class TaskUndoDeleted extends TaskEvent {
+  final Task task;
+  TaskUndoDeleted(this.task);
+}
+
 class TaskSyncPullRequested extends TaskEvent {}
 class TaskSyncPushRequested extends TaskEvent {}
 

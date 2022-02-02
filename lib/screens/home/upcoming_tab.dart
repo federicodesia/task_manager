@@ -91,7 +91,7 @@ class _UpcomingTabState extends State<_UpcomingTab>{
                   items: items,
                   taskListItemType: TaskListItemType.Checkbox,
                   context: context,
-                  onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskAdded(task)),
+                  onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
                   objectBuilder: (object){
                     if(object is DateTime){
                       DateTime now = DateTime.now();

@@ -8,6 +8,7 @@ import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/sync_object.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/repositories/sync_repository.dart';
+import 'package:tuple/tuple.dart';
 import 'package:uuid/uuid.dart';
 
 part 'sync_event.dart';
@@ -30,8 +31,9 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
   }) : super(SyncState()){
 
     taskBlocSubscription = taskBloc.stream.listen((taskState){
+      // TODO: SyncPushStatus not working
       if(taskState is TaskLoadSuccess && taskState.syncPushStatus == SyncPushStatus.pending){
-        add(SyncPushRequested(syncObject: SyncObject.task(items: taskState.tasks)));
+        add(SyncPushRequested(syncObject: SyncObject.task(items: taskState.tasks + taskState.deletedTasks)));
       }
     });
 
@@ -63,13 +65,18 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
           final taskState = taskBloc.state;
           if(taskState is! TaskLoadSuccess) return;
 
+          final mergedTasks = _mergeItems<Task>(
+            date: tempDate,
+            currentItems: taskState.tasks,
+            currentDeletedItems: taskState.deletedTasks,
+            replaceItems: responseItems
+          );
+          if(mergedTasks == null) return;
+
           taskBloc.add(TaskStateUpdated(taskState.copyWith(
             syncPushStatus: SyncPushStatus.idle,
-            tasks: _replaceUnupdatedItems<Task>(
-              date: tempDate,
-              items: taskState.tasks,
-              replace: responseItems
-            )
+            tasks: mergedTasks.item1,
+            deletedTasks: mergedTasks.item2
           )));
 
           emit(state.copyWith(lastTaskPush: tempDate));
@@ -95,19 +102,28 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
     catch(_){}
   }
 
-  List<T>? _replaceUnupdatedItems<T>({
-    required DateTime? date,
-    required List<dynamic> items,
-    required List<dynamic> replace
+  Tuple2<List<T>, List<T>>? _mergeItems<T>({
+    required DateTime date,
+    required List<dynamic> currentItems,
+    required List<dynamic> currentDeletedItems,
+    required List<dynamic> replaceItems
   }){
     try{
-      return List<T>.from(items.map((i){
-        if(date != null && i.updatedAt.isAfter(date)) return i;
+      final updatedItems = [];
+      final deletedItems = [];
+      replaceItems.forEach((r) => r.deletedAt != null ? deletedItems.add(r) : updatedItems.add(r));
 
-        final r = replace.firstWhereOrNull((r) => r.id == i.id);
-        if(r != null) replace.remove(r);
-        return r ?? i;
-      }));
+      currentDeletedItems.removeWhere((c) => !c.deletedAt.isAfter(date) && deletedItems.any((d) => c.id == d.id));
+      
+      currentItems = currentItems.map((c){
+        if(c.updatedAt.isAfter(date)) return c;
+        return updatedItems.firstWhereOrNull((u) => u.id == c.id) ?? c;
+      }).toList();
+      
+      return Tuple2(
+        List<T>.from(currentItems),
+        List<T>.from(currentDeletedItems)
+      );
     }
     catch(_){}
   }
