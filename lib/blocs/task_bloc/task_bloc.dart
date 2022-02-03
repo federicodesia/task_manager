@@ -93,7 +93,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
 
     on<TaskStateUpdated>((event, emit){
       print("Actualizando TaskState...");
-      final taskState = state;
+      final taskState = event.state;
       if(taskState is TaskLoadSuccess){
         print("Tasks: ${taskState.tasks}");
         print("DeletedTasks: ${taskState.deletedTasks}");

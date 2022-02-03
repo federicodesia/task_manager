@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 DateTime copyDateTimeWith(
   DateTime src,
   {
@@ -36,8 +38,13 @@ int daysInMonth(DateTime date){
   return nextMonth.difference(thisMonth).inDays;
 }
 
-DateTime dateTimefromJson(String date) => DateTime.parse(date).toLocal();
-String dateTimeToJson(DateTime date) => date.toUtc().toIso8601String();
+DateTime dateTimefromJson(String dateUtc){
+  return DateFormat("yyyy-MM-ddTHH:mm:ss.SSS").parse(dateUtc, true).toLocal();
+}
+
+String dateTimeToJson(DateTime localDate){
+  return DateFormat("yyyy-MM-ddTHH:mm:ss.SSS").format(localDate.toUtc()) + "Z";
+}
 
 DateTime? nullableDateTimefromJson(String? date) => date != null ? dateTimefromJson(date) : null;
 String? nullableDateTimeToJson(DateTime? date) => date != null ? dateTimeToJson(date) : null;

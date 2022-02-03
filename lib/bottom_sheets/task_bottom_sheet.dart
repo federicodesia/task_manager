@@ -240,8 +240,8 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                       hour: time!.hour,
                       minute: time!.minute,
                     ),
-                    createdAt: DateTime.now(),
-                    updatedAt: DateTime.now()
+                    createdAt: copyDateTimeWith(DateTime.now(), microsecond: 0),
+                    updatedAt: copyDateTimeWith(DateTime.now(), microsecond: 0)
                   )));
                   
                   Navigator.pop(context);
