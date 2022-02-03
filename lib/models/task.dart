@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:uuid/uuid.dart';
 
 part 'task.g.dart';
 
@@ -31,6 +32,25 @@ class Task extends Equatable{
     required this.updatedAt,
     this.deletedAt
   });
+
+  static Task create({
+    String? categoryId,
+    required String title,
+    required String description,
+    required DateTime date,
+    bool isCompleted = false
+  }){
+    return Task(
+      id: Uuid().v4(),
+      categoryId: categoryId,
+      title: title,
+      description: description,
+      date: date,
+      isCompleted: isCompleted,
+      createdAt: copyDateTimeWith(DateTime.now(), microsecond: 0),
+      updatedAt: copyDateTimeWith(DateTime.now(), microsecond: 0)
+    );
+  }
 
   Task copyWith({
     String? categoryId = "",

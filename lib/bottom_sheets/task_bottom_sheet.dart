@@ -16,7 +16,6 @@ import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/theme/theme.dart';
-import 'package:uuid/uuid.dart';
 
 import 'modal_bottom_sheet.dart';
 
@@ -219,29 +218,24 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                 if(formKey.currentState!.validate()){
                   formKey.currentState!.save();
 
+                  final dateTime = copyDateTimeWith(
+                    date!,
+                    hour: time!.hour,
+                    minute: time!.minute,
+                  );
+
                   if(editTask != null) context.read<TaskBloc>().add(TaskUpdated(editTask!.copyWith(
                     categoryId: categoryId,
                     title: title,
                     description: description,
-                    date: copyDateTimeWith(
-                      date!,
-                      hour: time!.hour,
-                      minute: time!.minute,
-                    )
+                    date: dateTime
                   )));
-                  
-                  else context.read<TaskBloc>().add(TaskAdded(Task(
-                    id: Uuid().v4(),
+
+                  else context.read<TaskBloc>().add(TaskAdded(Task.create(
                     categoryId: categoryId,
                     title: title,
                     description: description,
-                    date: copyDateTimeWith(
-                      date!,
-                      hour: time!.hour,
-                      minute: time!.minute,
-                    ),
-                    createdAt: copyDateTimeWith(DateTime.now(), microsecond: 0),
-                    updatedAt: copyDateTimeWith(DateTime.now(), microsecond: 0)
+                    date: dateTime
                   )));
                   
                   Navigator.pop(context);
