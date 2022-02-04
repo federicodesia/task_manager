@@ -18,15 +18,20 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$SyncObjectTearOff {
   const _$SyncObjectTearOff();
 
-  SyncObjectTask task({required List<Task> items}) {
+  SyncObjectTask task(
+      {required List<Task> items, required List<SyncItemError> failedItems}) {
     return SyncObjectTask(
       items: items,
+      failedItems: failedItems,
     );
   }
 
-  SyncObjectCategory category({required List<Category> items}) {
+  SyncObjectCategory category(
+      {required List<Category> items,
+      required List<SyncItemError> failedItems}) {
     return SyncObjectCategory(
       items: items,
+      failedItems: failedItems,
     );
   }
 }
@@ -36,22 +41,29 @@ const $SyncObject = _$SyncObjectTearOff();
 
 /// @nodoc
 mixin _$SyncObject {
+  List<SyncItemError> get failedItems => throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<Task> items) task,
-    required TResult Function(List<Category> items) category,
+    required TResult Function(List<Task> items, List<SyncItemError> failedItems)
+        task,
+    required TResult Function(
+            List<Category> items, List<SyncItemError> failedItems)
+        category,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Task> items)? task,
-    TResult Function(List<Category> items)? category,
+    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
+    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+        category,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Task> items)? task,
-    TResult Function(List<Category> items)? category,
+    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
+    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+        category,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -74,6 +86,10 @@ mixin _$SyncObject {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $SyncObjectCopyWith<SyncObject> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -81,6 +97,7 @@ abstract class $SyncObjectCopyWith<$Res> {
   factory $SyncObjectCopyWith(
           SyncObject value, $Res Function(SyncObject) then) =
       _$SyncObjectCopyWithImpl<$Res>;
+  $Res call({List<SyncItemError> failedItems});
 }
 
 /// @nodoc
@@ -90,14 +107,28 @@ class _$SyncObjectCopyWithImpl<$Res> implements $SyncObjectCopyWith<$Res> {
   final SyncObject _value;
   // ignore: unused_field
   final $Res Function(SyncObject) _then;
+
+  @override
+  $Res call({
+    Object? failedItems = freezed,
+  }) {
+    return _then(_value.copyWith(
+      failedItems: failedItems == freezed
+          ? _value.failedItems
+          : failedItems // ignore: cast_nullable_to_non_nullable
+              as List<SyncItemError>,
+    ));
+  }
 }
 
 /// @nodoc
-abstract class $SyncObjectTaskCopyWith<$Res> {
+abstract class $SyncObjectTaskCopyWith<$Res>
+    implements $SyncObjectCopyWith<$Res> {
   factory $SyncObjectTaskCopyWith(
           SyncObjectTask value, $Res Function(SyncObjectTask) then) =
       _$SyncObjectTaskCopyWithImpl<$Res>;
-  $Res call({List<Task> items});
+  @override
+  $Res call({List<Task> items, List<SyncItemError> failedItems});
 }
 
 /// @nodoc
@@ -113,12 +144,17 @@ class _$SyncObjectTaskCopyWithImpl<$Res> extends _$SyncObjectCopyWithImpl<$Res>
   @override
   $Res call({
     Object? items = freezed,
+    Object? failedItems = freezed,
   }) {
     return _then(SyncObjectTask(
       items: items == freezed
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<Task>,
+      failedItems: failedItems == freezed
+          ? _value.failedItems
+          : failedItems // ignore: cast_nullable_to_non_nullable
+              as List<SyncItemError>,
     ));
   }
 }
@@ -126,14 +162,17 @@ class _$SyncObjectTaskCopyWithImpl<$Res> extends _$SyncObjectCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SyncObjectTask extends SyncObjectTask {
-  const _$SyncObjectTask({required this.items}) : super._();
+  const _$SyncObjectTask({required this.items, required this.failedItems})
+      : super._();
 
   @override
   final List<Task> items;
+  @override
+  final List<SyncItemError> failedItems;
 
   @override
   String toString() {
-    return 'SyncObject.task(items: $items)';
+    return 'SyncObject.task(items: $items, failedItems: $failedItems)';
   }
 
   @override
@@ -141,12 +180,16 @@ class _$SyncObjectTask extends SyncObjectTask {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is SyncObjectTask &&
-            const DeepCollectionEquality().equals(other.items, items));
+            const DeepCollectionEquality().equals(other.items, items) &&
+            const DeepCollectionEquality()
+                .equals(other.failedItems, failedItems));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(items));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(items),
+      const DeepCollectionEquality().hash(failedItems));
 
   @JsonKey(ignore: true)
   @override
@@ -156,30 +199,35 @@ class _$SyncObjectTask extends SyncObjectTask {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<Task> items) task,
-    required TResult Function(List<Category> items) category,
+    required TResult Function(List<Task> items, List<SyncItemError> failedItems)
+        task,
+    required TResult Function(
+            List<Category> items, List<SyncItemError> failedItems)
+        category,
   }) {
-    return task(items);
+    return task(items, failedItems);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Task> items)? task,
-    TResult Function(List<Category> items)? category,
+    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
+    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+        category,
   }) {
-    return task?.call(items);
+    return task?.call(items, failedItems);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Task> items)? task,
-    TResult Function(List<Category> items)? category,
+    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
+    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+        category,
     required TResult orElse(),
   }) {
     if (task != null) {
-      return task(items);
+      return task(items, failedItems);
     }
     return orElse();
   }
@@ -217,21 +265,28 @@ class _$SyncObjectTask extends SyncObjectTask {
 }
 
 abstract class SyncObjectTask extends SyncObject {
-  const factory SyncObjectTask({required List<Task> items}) = _$SyncObjectTask;
+  const factory SyncObjectTask(
+      {required List<Task> items,
+      required List<SyncItemError> failedItems}) = _$SyncObjectTask;
   const SyncObjectTask._() : super._();
 
   List<Task> get items;
+  @override
+  List<SyncItemError> get failedItems;
+  @override
   @JsonKey(ignore: true)
   $SyncObjectTaskCopyWith<SyncObjectTask> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SyncObjectCategoryCopyWith<$Res> {
+abstract class $SyncObjectCategoryCopyWith<$Res>
+    implements $SyncObjectCopyWith<$Res> {
   factory $SyncObjectCategoryCopyWith(
           SyncObjectCategory value, $Res Function(SyncObjectCategory) then) =
       _$SyncObjectCategoryCopyWithImpl<$Res>;
-  $Res call({List<Category> items});
+  @override
+  $Res call({List<Category> items, List<SyncItemError> failedItems});
 }
 
 /// @nodoc
@@ -248,12 +303,17 @@ class _$SyncObjectCategoryCopyWithImpl<$Res>
   @override
   $Res call({
     Object? items = freezed,
+    Object? failedItems = freezed,
   }) {
     return _then(SyncObjectCategory(
       items: items == freezed
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<Category>,
+      failedItems: failedItems == freezed
+          ? _value.failedItems
+          : failedItems // ignore: cast_nullable_to_non_nullable
+              as List<SyncItemError>,
     ));
   }
 }
@@ -261,14 +321,17 @@ class _$SyncObjectCategoryCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SyncObjectCategory extends SyncObjectCategory {
-  const _$SyncObjectCategory({required this.items}) : super._();
+  const _$SyncObjectCategory({required this.items, required this.failedItems})
+      : super._();
 
   @override
   final List<Category> items;
+  @override
+  final List<SyncItemError> failedItems;
 
   @override
   String toString() {
-    return 'SyncObject.category(items: $items)';
+    return 'SyncObject.category(items: $items, failedItems: $failedItems)';
   }
 
   @override
@@ -276,12 +339,16 @@ class _$SyncObjectCategory extends SyncObjectCategory {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is SyncObjectCategory &&
-            const DeepCollectionEquality().equals(other.items, items));
+            const DeepCollectionEquality().equals(other.items, items) &&
+            const DeepCollectionEquality()
+                .equals(other.failedItems, failedItems));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(items));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(items),
+      const DeepCollectionEquality().hash(failedItems));
 
   @JsonKey(ignore: true)
   @override
@@ -291,30 +358,35 @@ class _$SyncObjectCategory extends SyncObjectCategory {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<Task> items) task,
-    required TResult Function(List<Category> items) category,
+    required TResult Function(List<Task> items, List<SyncItemError> failedItems)
+        task,
+    required TResult Function(
+            List<Category> items, List<SyncItemError> failedItems)
+        category,
   }) {
-    return category(items);
+    return category(items, failedItems);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Task> items)? task,
-    TResult Function(List<Category> items)? category,
+    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
+    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+        category,
   }) {
-    return category?.call(items);
+    return category?.call(items, failedItems);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Task> items)? task,
-    TResult Function(List<Category> items)? category,
+    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
+    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+        category,
     required TResult orElse(),
   }) {
     if (category != null) {
-      return category(items);
+      return category(items, failedItems);
     }
     return orElse();
   }
@@ -352,11 +424,15 @@ class _$SyncObjectCategory extends SyncObjectCategory {
 }
 
 abstract class SyncObjectCategory extends SyncObject {
-  const factory SyncObjectCategory({required List<Category> items}) =
-      _$SyncObjectCategory;
+  const factory SyncObjectCategory(
+      {required List<Category> items,
+      required List<SyncItemError> failedItems}) = _$SyncObjectCategory;
   const SyncObjectCategory._() : super._();
 
   List<Category> get items;
+  @override
+  List<SyncItemError> get failedItems;
+  @override
   @JsonKey(ignore: true)
   $SyncObjectCategoryCopyWith<SyncObjectCategory> get copyWith =>
       throw _privateConstructorUsedError;

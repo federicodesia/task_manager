@@ -53,6 +53,7 @@ class Task extends Equatable{
   }
 
   Task copyWith({
+    String? id,
     String? categoryId = "",
     String? title,
     String? description,
@@ -61,7 +62,7 @@ class Task extends Equatable{
     DateTime? deletedAt
   }){
     return Task(
-      id: this.id,
+      id: id ?? this.id,
       categoryId: categoryId == "" ? this.categoryId : categoryId,
       title: title ?? this.title,
       description: description ?? this.description,

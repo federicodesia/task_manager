@@ -13,9 +13,13 @@ class Category{
 
   bool get isGeneral => id == null;
 
-  Category copyWith({String? name, Color? color}){
+  Category copyWith({
+    String? id,
+    String? name,
+    Color? color
+  }){
     return Category(
-      id: this.id,
+      id: id ?? this.id,
       name: name ?? this.name,
       color: color ?? this.color
     );
