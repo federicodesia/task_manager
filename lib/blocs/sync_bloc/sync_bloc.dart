@@ -49,21 +49,16 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
 
           final updatedTasks = _itemsUpdatedAfterDate<Task>(
             date: state.lastTaskPush,
-            items: tasks
+            items: tasks,
+            failedItems: failedTasks
           );
           if(updatedTasks == null) return;
-
-          final tasksToSync = _removeBlacklistItems<Task>(
-            failedItems: failedTasks,
-            items: updatedTasks
-          );
-          if(tasksToSync == null) return;
 
           print("$eventId | Enviando peticion a la API...");
           await Future.delayed(Duration(seconds: 2));
           final responseItems = await syncRepository.push<Task>(
             queryPath: "tasks",
-            items: tasksToSync
+            items: updatedTasks
           );
           print("$eventId | Respuesta de la API recibida...");
 
@@ -118,25 +113,24 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
     });
   }
 
-  Tuple2<List<T>, List<SyncItemError>>? _mergeDuplicatedId<T>({
+  Tuple2<List<T>, Map<String, SyncErrorType>>? _mergeDuplicatedId<T>({
     required List<dynamic> items,
-    required List<SyncItemError> failedItems,
+    required Map<String, SyncErrorType> failedItems,
     required String duplicatedId
   }){
     try{
 
-      final failedIndex = failedItems.indexWhere((i) => i.id == duplicatedId);
-      if(failedIndex != -1){
-        final failed = failedItems.elementAt(failedIndex);
-        if(failed.error == SyncErrorType.duplicatedId)
-          failedItems[failedIndex] = failed.copyWith(error: SyncErrorType.blacklist);
+      final failedItem = failedItems[duplicatedId];
+      if(failedItem != null){
+        if(failedItem == SyncErrorType.duplicatedId)
+          failedItems[duplicatedId] = SyncErrorType.blacklist;
       }
       else{
-        final itemIndex = items.lastIndexWhere((i) => i.id == duplicatedId);
-        if(itemIndex != -1){
+        final index = items.lastIndexWhere((i) => i.id == duplicatedId);
+        if(index != -1){
           final newId = Uuid().v4();
-          failedItems.add(SyncItemError(id: newId, error: SyncErrorType.duplicatedId));
-          items[itemIndex] = items.elementAt(itemIndex).copyWith(id: newId);
+          failedItems[newId] = SyncErrorType.duplicatedId;
+          items[index] = items.elementAt(index).copyWith(id: newId);
         }
       }
 
@@ -148,34 +142,26 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
     catch(_){}
   }
 
-  List<SyncItemError>? _removeDuplicatedId({
-    required List<SyncItemError> failedItems,
+  Map<String, SyncErrorType>? _removeDuplicatedId({
+    required Map<String, SyncErrorType> failedItems,
     required List<dynamic> replaceItems,
   }){
     try{
-      return failedItems..removeWhere((f) => replaceItems.any((r) => f.id == r.id));
-    }
-    catch(_){}
-  }
-
-  List<T>? _removeBlacklistItems<T>({
-    required List<dynamic> items,
-    required List<SyncItemError> failedItems
-  }){
-    try{
-      final blacklist = failedItems.where((f) => f.error == SyncErrorType.blacklist);
-      return List<T>.from(items..removeWhere((i) => blacklist.any((b) => b.id == i.id)));
+      replaceItems.forEach((item) => failedItems.remove(item.key));
+      return failedItems;
     }
     catch(_){}
   }
 
   List<T>? _itemsUpdatedAfterDate<T>({
     required DateTime? date,
-    required List<dynamic> items
+    required List<dynamic> items,
+    required Map<String, SyncErrorType> failedItems
   }){
     try{
-      if(date != null) return List<T>.from(items.where((i) => i.updatedAt.isAfter(date)));
-      return List<T>.from(items);
+      if(date != null) items = items..removeWhere((i) => failedItems[i.id] == SyncErrorType.blacklist || !i.updatedAt.isAfter(date));
+      else items = items..removeWhere((i) => failedItems[i.id] == SyncErrorType.blacklist);
+      return items.isNotEmpty ? List<T>.from(items) : null;
     }
     catch(_){}
   }

@@ -27,8 +27,6 @@ class SyncRepository{
     required List<T> items
   }) async {
     try{
-      if(items.isEmpty) return null;
-      
       final response = await _dio.post(
         "/$queryPath/",
         options: Options(headers: {"Authorization": "Bearer " + authBloc.state.credentials.accessToken}),

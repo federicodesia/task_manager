@@ -19,7 +19,8 @@ class _$SyncObjectTearOff {
   const _$SyncObjectTearOff();
 
   SyncObjectTask task(
-      {required List<Task> items, required List<SyncItemError> failedItems}) {
+      {required List<Task> items,
+      required Map<String, SyncErrorType> failedItems}) {
     return SyncObjectTask(
       items: items,
       failedItems: failedItems,
@@ -28,7 +29,7 @@ class _$SyncObjectTearOff {
 
   SyncObjectCategory category(
       {required List<Category> items,
-      required List<SyncItemError> failedItems}) {
+      required Map<String, SyncErrorType> failedItems}) {
     return SyncObjectCategory(
       items: items,
       failedItems: failedItems,
@@ -41,28 +42,34 @@ const $SyncObject = _$SyncObjectTearOff();
 
 /// @nodoc
 mixin _$SyncObject {
-  List<SyncItemError> get failedItems => throw _privateConstructorUsedError;
+  Map<String, SyncErrorType> get failedItems =>
+      throw _privateConstructorUsedError;
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<Task> items, List<SyncItemError> failedItems)
+    required TResult Function(
+            List<Task> items, Map<String, SyncErrorType> failedItems)
         task,
     required TResult Function(
-            List<Category> items, List<SyncItemError> failedItems)
+            List<Category> items, Map<String, SyncErrorType> failedItems)
         category,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
-    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+    TResult Function(List<Task> items, Map<String, SyncErrorType> failedItems)?
+        task,
+    TResult Function(
+            List<Category> items, Map<String, SyncErrorType> failedItems)?
         category,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
-    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+    TResult Function(List<Task> items, Map<String, SyncErrorType> failedItems)?
+        task,
+    TResult Function(
+            List<Category> items, Map<String, SyncErrorType> failedItems)?
         category,
     required TResult orElse(),
   }) =>
@@ -97,7 +104,7 @@ abstract class $SyncObjectCopyWith<$Res> {
   factory $SyncObjectCopyWith(
           SyncObject value, $Res Function(SyncObject) then) =
       _$SyncObjectCopyWithImpl<$Res>;
-  $Res call({List<SyncItemError> failedItems});
+  $Res call({Map<String, SyncErrorType> failedItems});
 }
 
 /// @nodoc
@@ -116,7 +123,7 @@ class _$SyncObjectCopyWithImpl<$Res> implements $SyncObjectCopyWith<$Res> {
       failedItems: failedItems == freezed
           ? _value.failedItems
           : failedItems // ignore: cast_nullable_to_non_nullable
-              as List<SyncItemError>,
+              as Map<String, SyncErrorType>,
     ));
   }
 }
@@ -128,7 +135,7 @@ abstract class $SyncObjectTaskCopyWith<$Res>
           SyncObjectTask value, $Res Function(SyncObjectTask) then) =
       _$SyncObjectTaskCopyWithImpl<$Res>;
   @override
-  $Res call({List<Task> items, List<SyncItemError> failedItems});
+  $Res call({List<Task> items, Map<String, SyncErrorType> failedItems});
 }
 
 /// @nodoc
@@ -154,7 +161,7 @@ class _$SyncObjectTaskCopyWithImpl<$Res> extends _$SyncObjectCopyWithImpl<$Res>
       failedItems: failedItems == freezed
           ? _value.failedItems
           : failedItems // ignore: cast_nullable_to_non_nullable
-              as List<SyncItemError>,
+              as Map<String, SyncErrorType>,
     ));
   }
 }
@@ -168,7 +175,7 @@ class _$SyncObjectTask extends SyncObjectTask {
   @override
   final List<Task> items;
   @override
-  final List<SyncItemError> failedItems;
+  final Map<String, SyncErrorType> failedItems;
 
   @override
   String toString() {
@@ -199,10 +206,11 @@ class _$SyncObjectTask extends SyncObjectTask {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<Task> items, List<SyncItemError> failedItems)
+    required TResult Function(
+            List<Task> items, Map<String, SyncErrorType> failedItems)
         task,
     required TResult Function(
-            List<Category> items, List<SyncItemError> failedItems)
+            List<Category> items, Map<String, SyncErrorType> failedItems)
         category,
   }) {
     return task(items, failedItems);
@@ -211,8 +219,10 @@ class _$SyncObjectTask extends SyncObjectTask {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
-    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+    TResult Function(List<Task> items, Map<String, SyncErrorType> failedItems)?
+        task,
+    TResult Function(
+            List<Category> items, Map<String, SyncErrorType> failedItems)?
         category,
   }) {
     return task?.call(items, failedItems);
@@ -221,8 +231,10 @@ class _$SyncObjectTask extends SyncObjectTask {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
-    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+    TResult Function(List<Task> items, Map<String, SyncErrorType> failedItems)?
+        task,
+    TResult Function(
+            List<Category> items, Map<String, SyncErrorType> failedItems)?
         category,
     required TResult orElse(),
   }) {
@@ -267,12 +279,12 @@ class _$SyncObjectTask extends SyncObjectTask {
 abstract class SyncObjectTask extends SyncObject {
   const factory SyncObjectTask(
       {required List<Task> items,
-      required List<SyncItemError> failedItems}) = _$SyncObjectTask;
+      required Map<String, SyncErrorType> failedItems}) = _$SyncObjectTask;
   const SyncObjectTask._() : super._();
 
   List<Task> get items;
   @override
-  List<SyncItemError> get failedItems;
+  Map<String, SyncErrorType> get failedItems;
   @override
   @JsonKey(ignore: true)
   $SyncObjectTaskCopyWith<SyncObjectTask> get copyWith =>
@@ -286,7 +298,7 @@ abstract class $SyncObjectCategoryCopyWith<$Res>
           SyncObjectCategory value, $Res Function(SyncObjectCategory) then) =
       _$SyncObjectCategoryCopyWithImpl<$Res>;
   @override
-  $Res call({List<Category> items, List<SyncItemError> failedItems});
+  $Res call({List<Category> items, Map<String, SyncErrorType> failedItems});
 }
 
 /// @nodoc
@@ -313,7 +325,7 @@ class _$SyncObjectCategoryCopyWithImpl<$Res>
       failedItems: failedItems == freezed
           ? _value.failedItems
           : failedItems // ignore: cast_nullable_to_non_nullable
-              as List<SyncItemError>,
+              as Map<String, SyncErrorType>,
     ));
   }
 }
@@ -327,7 +339,7 @@ class _$SyncObjectCategory extends SyncObjectCategory {
   @override
   final List<Category> items;
   @override
-  final List<SyncItemError> failedItems;
+  final Map<String, SyncErrorType> failedItems;
 
   @override
   String toString() {
@@ -358,10 +370,11 @@ class _$SyncObjectCategory extends SyncObjectCategory {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<Task> items, List<SyncItemError> failedItems)
+    required TResult Function(
+            List<Task> items, Map<String, SyncErrorType> failedItems)
         task,
     required TResult Function(
-            List<Category> items, List<SyncItemError> failedItems)
+            List<Category> items, Map<String, SyncErrorType> failedItems)
         category,
   }) {
     return category(items, failedItems);
@@ -370,8 +383,10 @@ class _$SyncObjectCategory extends SyncObjectCategory {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
-    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+    TResult Function(List<Task> items, Map<String, SyncErrorType> failedItems)?
+        task,
+    TResult Function(
+            List<Category> items, Map<String, SyncErrorType> failedItems)?
         category,
   }) {
     return category?.call(items, failedItems);
@@ -380,8 +395,10 @@ class _$SyncObjectCategory extends SyncObjectCategory {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Task> items, List<SyncItemError> failedItems)? task,
-    TResult Function(List<Category> items, List<SyncItemError> failedItems)?
+    TResult Function(List<Task> items, Map<String, SyncErrorType> failedItems)?
+        task,
+    TResult Function(
+            List<Category> items, Map<String, SyncErrorType> failedItems)?
         category,
     required TResult orElse(),
   }) {
@@ -426,12 +443,12 @@ class _$SyncObjectCategory extends SyncObjectCategory {
 abstract class SyncObjectCategory extends SyncObject {
   const factory SyncObjectCategory(
       {required List<Category> items,
-      required List<SyncItemError> failedItems}) = _$SyncObjectCategory;
+      required Map<String, SyncErrorType> failedItems}) = _$SyncObjectCategory;
   const SyncObjectCategory._() : super._();
 
   List<Category> get items;
   @override
-  List<SyncItemError> get failedItems;
+  Map<String, SyncErrorType> get failedItems;
   @override
   @JsonKey(ignore: true)
   $SyncObjectCategoryCopyWith<SyncObjectCategory> get copyWith =>

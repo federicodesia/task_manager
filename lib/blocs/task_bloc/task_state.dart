@@ -9,7 +9,7 @@ class TaskLoadSuccess extends TaskState {
   final SyncStatus syncPushStatus;
   final List<Task> tasks;
   final List<Task> deletedTasks;
-  final List<SyncItemError> failedTasks;
+  final Map<String, SyncErrorType> failedTasks;
 
   TaskLoadSuccess({
     this.syncPushStatus = SyncStatus.idle,
@@ -23,7 +23,7 @@ class TaskLoadSuccess extends TaskState {
       syncPushStatus: SyncStatus.idle,
       tasks: [],
       deletedTasks: [],
-      failedTasks: []
+      failedTasks: {}
     );
   }
 
@@ -31,7 +31,7 @@ class TaskLoadSuccess extends TaskState {
     SyncStatus? syncPushStatus,
     List<Task>? tasks,
     List<Task>? deletedTasks,
-    List<SyncItemError>? failedTasks
+    Map<String, SyncErrorType>? failedTasks
   }){
     return TaskLoadSuccess(
       syncPushStatus: syncPushStatus ?? SyncStatus.pending,

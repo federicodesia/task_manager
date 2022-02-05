@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:task_manager/helpers/enum_helper.dart';
 import 'package:task_manager/models/sync_item_error.dart';
 import 'package:task_manager/models/sync_status.dart';
 import 'package:task_manager/models/task.dart';
@@ -112,7 +111,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     try{
       print("fromJson");
       return TaskLoadSuccess(
-        syncPushStatus: enumFromString(SyncStatus.values, json["syncPushStatus"]) ?? SyncStatus.idle,
+        syncPushStatus: SyncStatus.values.byName(json["syncPushStatus"]),
         tasks: List<Task>.from(jsonDecode(json["tasks"])
           .map((task) => Task.fromJson(task))
           .where(((task) => task.id != null))
@@ -121,9 +120,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
           .map((task) => Task.fromJson(task))
           .where(((task) => task.id != null))
         ),
-        failedTasks: List<SyncItemError>.from(jsonDecode(json["failedTasks"])
-          .map((failed) => SyncItemError.fromJson(failed))
-        )
+        failedTasks: json["failedTasks"].map((key, value) => MapEntry(key, SyncErrorType.values.byName(value))).cast<String, SyncErrorType>()
       );
     }
     catch(error) {
@@ -140,7 +137,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
           "syncPushStatus": state.syncPushStatus.name,
           "tasks": jsonEncode(state.tasks.map((task) => task.toJson()).toList()),
           "deletedTasks": jsonEncode(state.deletedTasks.map((task) => task.toJson()).toList()),
-          "failedTasks": jsonEncode(state.failedTasks.map((failed) => failed.toJson()).toList()),
+          "failedTasks": state.failedTasks.map((key, value) => MapEntry(key, value.name)),
         };
       }
     }

@@ -11,12 +11,12 @@ class SyncObject with _$SyncObject {
 
   const factory SyncObject.task({
     required List<Task> items,
-    required List<SyncItemError> failedItems
+    required Map<String, SyncErrorType> failedItems
   }) = SyncObjectTask;
 
   const factory SyncObject.category({
     required List<Category> items,
-    required List<SyncItemError> failedItems
+    required Map<String, SyncErrorType> failedItems
   }) = SyncObjectCategory;
 
   static List<T>? listFromJson<T>(dynamic json){
