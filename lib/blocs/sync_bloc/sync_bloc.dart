@@ -8,7 +8,6 @@ import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/serializers/datetime_serializer.dart';
 import 'package:task_manager/models/sync_item_error.dart';
-import 'package:task_manager/models/sync_object.dart';
 import 'package:task_manager/models/sync_status.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/repositories/sync_repository.dart';
@@ -37,151 +36,182 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
 
     taskBlocSubscription = taskBloc.stream.listen((taskState){
       if(taskState is TaskLoadSuccess && taskState.syncPushStatus == SyncStatus.pending){
-        add(SyncPushRequested(syncObject: SyncObject.task(
-          items: taskState.tasks + taskState.deletedTasks,
-          failedItems: taskState.failedTasks
-        )));
+        add(SyncPushTaskRequested(
+          tasks: taskState.tasks + taskState.deletedTasks,
+          failedTasks: taskState.failedTasks
+        ));
       }
     });
 
     categoryBlocSubscription = categoryBloc.stream.listen((categoryState){
       if(categoryState is CategoryLoadSuccess && categoryState.syncPushStatus == SyncStatus.pending){
-        add(SyncPushRequested(syncObject: SyncObject.category(
-          items: categoryState.categories + categoryState.deletedCategories,
-          failedItems: categoryState.failedCategories
-        )));
+        add(SyncPushCategoryRequested(
+          categories: categoryState.categories + categoryState.deletedCategories,
+          failedCategories: categoryState.failedCategories
+        ));
       }
     });
 
-    on<SyncPushRequested>((event, emit) async{
-      final eventId = Uuid().v4();
-      print("$eventId | SyncPush requested");
-
-      final tempDate = DateTime.now();
-
-      await event.syncObject.when(
-        task: (tasks, failedTasks) async{
-
-          final updatedTasks = _itemsUpdatedAfterDate<Task>(
-            date: state.lastTaskPush,
-            items: tasks,
-            failedItems: failedTasks
-          );
-          if(updatedTasks == null) return;
-
-          print("$eventId | Enviando peticion a la API...");
-          await Future.delayed(Duration(seconds: 2));
-          final responseItems = await syncRepository.push<Task>(
-            queryPath: "tasks",
-            items: updatedTasks
-          );
-          print("$eventId | Respuesta de la API recibida...");
-
-          final taskState = taskBloc.state;
-          if(taskState is! TaskLoadSuccess) return;
-
-          if(responseItems != null) responseItems.when(
-            left: (duplicatedId) {
-              final mergedDuplicatedId = _mergeDuplicatedId<Task>(
-                items: taskState.tasks,
-                failedItems: taskState.failedTasks,
-                duplicatedId: duplicatedId
-              );
-              if(mergedDuplicatedId == null) return;
-
-              taskBloc.add(TaskStateUpdated(taskState.copyWith(
-                syncPushStatus: SyncStatus.pending,
-                tasks: mergedDuplicatedId.item1,
-                failedTasks: mergedDuplicatedId.item2
-              )));
-            },
-            right: (items){
-              final mergedTasks = _mergeItems<Task>(
-                date: tempDate,
-                currentItems: taskState.tasks,
-                currentDeletedItems: taskState.deletedTasks,
-                replaceItems: items
-              );
-              if(mergedTasks == null) return;
-
-              taskBloc.add(TaskStateUpdated(taskState.copyWith(
-                syncPushStatus: SyncStatus.idle,
-                tasks: mergedTasks.item1,
-                deletedTasks: mergedTasks.item2,
-                failedTasks: _removeDuplicatedId(
-                  failedItems: taskState.failedTasks,
-                  replaceItems: items
-                )
-              )));
-
-              emit(state.copyWith(lastTaskPush: tempDate));
-            }
-          );
-        },
-
-        category: (categories, failedCategories) async{
-
-          final updatedCategories = _itemsUpdatedAfterDate<Category>(
-            date: state.lastTaskPush,
-            items: categories,
-            failedItems: failedCategories
-          );
-          if(updatedCategories == null) return;
-
-          print("$eventId | Enviando peticion a la API...");
-          await Future.delayed(Duration(seconds: 2));
-          final responseItems = await syncRepository.push<Category>(
-            queryPath: "categories",
-            items: updatedCategories
-          );
-          print("$eventId | Respuesta de la API recibida...");
-
-          final categoryState = categoryBloc.state;
-          if(categoryState is! CategoryLoadSuccess) return;
-
-          if(responseItems != null) responseItems.when(
-            left: (duplicatedId) {
-              final mergedDuplicatedId = _mergeDuplicatedId<Category>(
-                items: categoryState.categories,
-                failedItems: categoryState.failedCategories,
-                duplicatedId: duplicatedId
-              );
-              if(mergedDuplicatedId == null) return;
-
-              categoryBloc.add(CategoryStateUpdated(categoryState.copyWith(
-                syncPushStatus: SyncStatus.pending,
-                categories: mergedDuplicatedId.item1,
-                failedCategories: mergedDuplicatedId.item2
-              )));
-            },
-            right: (items){
-              final mergedCategories = _mergeItems<Category>(
-                date: tempDate,
-                currentItems: categoryState.categories,
-                currentDeletedItems: categoryState.deletedCategories,
-                replaceItems: items
-              );
-              if(mergedCategories == null) return;
-
-              categoryBloc.add(CategoryStateUpdated(categoryState.copyWith(
-                syncPushStatus: SyncStatus.idle,
-                categories: mergedCategories.item1,
-                deletedCategories: mergedCategories.item2,
-                failedCategories: _removeDuplicatedId(
-                  failedItems: categoryState.failedCategories,
-                  replaceItems: items
-                )
-              )));
-
-              emit(state.copyWith(lastCategoryPush: tempDate));
-            }
-          );
-        }
-      );
-    },
-    transformer: (events, mapper){
-      return events.debounceTime(Duration(seconds: 3)).switchMap(mapper);
+    on<SyncEvent>((_onEvent), transformer: (events, mapper){
+      final pushTask = events
+        .where((event) => event is SyncPushTaskRequested)
+        .debounceTime(Duration(seconds: 5));
+      final pushCategory = events
+        .where((event) => event is SyncPushCategoryRequested)
+        .debounceTime(Duration(seconds: 5));
+      
+      return MergeStream([pushCategory, pushTask]).asyncExpand(mapper);
     });
+  }
+
+  @override
+  Future<void> close() {
+    taskBlocSubscription.cancel();
+    categoryBlocSubscription.cancel();
+    return super.close();
+  }
+
+  @override
+  SyncState? fromJson(Map<String, dynamic> json) {
+    try{return SyncState.fromJson(json);}
+    catch(error) {}
+  }
+
+  @override
+  Map<String, dynamic>? toJson(SyncState state) {
+    try{return state.toJson();}
+    catch(error) {}
+  }
+
+  void _onEvent(SyncEvent event, Emitter<SyncState> emit) {
+    if(event is SyncPushTaskRequested) return _onSyncPushTaskRequested(event, emit);
+    if(event is SyncPushCategoryRequested) return _onSyncPushCategoryRequested(event, emit);
+  }
+
+  void _onSyncPushTaskRequested(SyncPushTaskRequested event, Emitter<SyncState> emit) async{
+    final eventId = Uuid().v4();
+    print("$eventId | SyncPush Task requested");
+
+    final tempDate = DateTime.now();
+
+    final updatedTasks = _itemsUpdatedAfterDate<Task>(
+      date: state.lastTaskPush,
+      items: event.tasks,
+      failedItems: event.failedTasks
+    );
+    if(updatedTasks == null) return;
+
+    print("$eventId | Enviando peticion a la API...");
+    await Future.delayed(Duration(seconds: 2));
+    final responseItems = await syncRepository.push<Task>(
+      queryPath: "tasks",
+      items: updatedTasks
+    );
+    print("$eventId | Respuesta de la API recibida...");
+
+    final taskState = taskBloc.state;
+    if(taskState is! TaskLoadSuccess) return;
+
+    if(responseItems != null) responseItems.when(
+      left: (duplicatedId) {
+        final mergedDuplicatedId = _mergeDuplicatedId<Task>(
+          items: taskState.tasks,
+          failedItems: taskState.failedTasks,
+          duplicatedId: duplicatedId
+        );
+        if(mergedDuplicatedId == null) return;
+
+        taskBloc.add(TaskStateUpdated(taskState.copyWith(
+          syncPushStatus: SyncStatus.pending,
+          tasks: mergedDuplicatedId.item1,
+          failedTasks: mergedDuplicatedId.item2
+        )));
+      },
+      right: (items){
+        final mergedTasks = _mergeItems<Task>(
+          date: tempDate,
+          currentItems: taskState.tasks,
+          currentDeletedItems: taskState.deletedTasks,
+          replaceItems: items
+        );
+        if(mergedTasks == null) return;
+
+        taskBloc.add(TaskStateUpdated(taskState.copyWith(
+          syncPushStatus: SyncStatus.idle,
+          tasks: mergedTasks.item1,
+          deletedTasks: mergedTasks.item2,
+          failedTasks: _removeDuplicatedId(
+            failedItems: taskState.failedTasks,
+            replaceItems: items
+          )
+        )));
+
+        emit(state.copyWith(lastTaskPush: tempDate));
+      }
+    );
+  }
+
+  void _onSyncPushCategoryRequested(SyncPushCategoryRequested event, Emitter<SyncState> emit) async{
+    final eventId = Uuid().v4();
+    print("$eventId | SyncPush Category requested");
+
+    final tempDate = DateTime.now();
+
+    final updatedCategories = _itemsUpdatedAfterDate<Category>(
+      date: state.lastCategoryPush,
+      items: event.categories,
+      failedItems: event.failedCategories
+    );
+    if(updatedCategories == null) return;
+
+    print("$eventId | Enviando peticion a la API...");
+    await Future.delayed(Duration(seconds: 2));
+    final responseItems = await syncRepository.push<Category>(
+      queryPath: "categories",
+      items: updatedCategories
+    );
+    print("$eventId | Respuesta de la API recibida...");
+
+    final categoryState = categoryBloc.state;
+    if(categoryState is! CategoryLoadSuccess) return;
+
+    if(responseItems != null) responseItems.when(
+      left: (duplicatedId) {
+        final mergedDuplicatedId = _mergeDuplicatedId<Category>(
+          items: categoryState.categories,
+          failedItems: categoryState.failedCategories,
+          duplicatedId: duplicatedId
+        );
+        if(mergedDuplicatedId == null) return;
+
+        categoryBloc.add(CategoryStateUpdated(categoryState.copyWith(
+          syncPushStatus: SyncStatus.pending,
+          categories: mergedDuplicatedId.item1,
+          failedCategories: mergedDuplicatedId.item2
+        )));
+      },
+      right: (items){
+        final mergedCategories = _mergeItems<Category>(
+          date: tempDate,
+          currentItems: categoryState.categories,
+          currentDeletedItems: categoryState.deletedCategories,
+          replaceItems: items
+        );
+        if(mergedCategories == null) return;
+
+        categoryBloc.add(CategoryStateUpdated(categoryState.copyWith(
+          syncPushStatus: SyncStatus.idle,
+          categories: mergedCategories.item1,
+          deletedCategories: mergedCategories.item2,
+          failedCategories: _removeDuplicatedId(
+            failedItems: categoryState.failedCategories,
+            replaceItems: items
+          )
+        )));
+
+        emit(state.copyWith(lastCategoryPush: tempDate));
+      }
+    );
   }
 
   Tuple2<List<T>, Map<String, SyncErrorType>>? _mergeDuplicatedId<T>({
@@ -261,24 +291,5 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
       );
     }
     catch(_){}
-  }
-
-  @override
-  Future<void> close() {
-    taskBlocSubscription.cancel();
-    categoryBlocSubscription.cancel();
-    return super.close();
-  }
-
-  @override
-  SyncState? fromJson(Map<String, dynamic> json) {
-    try{return SyncState.fromJson(json);}
-    catch(error) {}
-  }
-
-  @override
-  Map<String, dynamic>? toJson(SyncState state) {
-    try{return state.toJson();}
-    catch(error) {}
   }
 }

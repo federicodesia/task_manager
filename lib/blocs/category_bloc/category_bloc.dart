@@ -48,16 +48,15 @@ class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
           categories: categoryState.categories..removeWhere((c) => c.id == event.category.id),
           deletedCategories: categoryState.deletedCategories..add(event.category.copyWith(deletedAt: DateTime.now()))
         ));
-
-        // TODO: Category duplicated.
-        /*final taskBlocState = taskBloc.state;
+        
+        final taskBlocState = taskBloc.state;
         if(taskBlocState is TaskLoadSuccess){
           taskBloc.add(TaskStateUpdated(taskBlocState.copyWith(
             tasks: taskBlocState.tasks.map((task){
               return task.categoryId == event.category.id ? task.copyWith(categoryId: null) : task;
             }).toList()
           )));
-        }*/
+        }
       }
     });
 

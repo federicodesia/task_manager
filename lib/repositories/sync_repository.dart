@@ -4,8 +4,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/helpers/response_errors.dart';
+import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/either.dart';
-import 'package:task_manager/models/sync_object.dart';
+import 'package:task_manager/models/task.dart';
 import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
 
 class SyncRepository{
@@ -33,7 +34,7 @@ class SyncRepository{
         data: jsonEncode(items)
       );
 
-      return Right(SyncObject.listFromJson<T>(response.data) ?? []);
+      return Right(_listFromJson<T>(response.data) ?? []);
     }
     catch (error){
       if(error is DioError){
@@ -47,5 +48,13 @@ class SyncRepository{
       }
       onResponseError(error: error);
     }
+  }
+
+  List<T>? _listFromJson<T>(dynamic json){
+    try{
+      if(T == Task) return List<T>.from(json.map((t) => Task.fromJson(t)));
+      if(T == Category) return List<T>.from(json.map((c) => Category.fromJson(c)));
+    }
+    catch(_){}
   }
 }
