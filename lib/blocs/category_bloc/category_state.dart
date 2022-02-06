@@ -22,7 +22,13 @@ class CategoryLoadSuccess extends CategoryState {
   static CategoryLoadSuccess initial(){
     return CategoryLoadSuccess(
       syncPushStatus: SyncStatus.idle,
-      categories: [],
+      categories: [
+        Category.create(
+          isGeneral: true,
+          name: "General",
+          color: Colors.grey.withOpacity(0.65)
+        )
+      ],
       deletedCategories: [],
       failedCategories: {}
     );

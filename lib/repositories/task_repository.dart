@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
@@ -78,6 +77,7 @@ class TaskRepository{
     }
   }*/
 
+  // TODO: Remove this.
   Future<List<Task>?> syncPull({
     required DateTime? lastSync
   }) async {
@@ -94,28 +94,6 @@ class TaskRepository{
     catch (error){
       onResponseError(error: error);
 
-      if(error is DioError) print(error.response?.data["message"]);
-      else print(error);
-    }
-  }
-
-  Future<List<Task>?> syncPush({
-    required List<Task> tasks
-  }) async {
-    try{
-      final response = await _dio.post(
-        "/",
-        options: Options(headers: {"Authorization": "Bearer " + authBloc.state.credentials.accessToken}),
-        data: jsonEncode(tasks),
-      );
-      return List<Task>.from(response.data
-        .map((task) => Task.fromJson(task))
-        .where(((task) => task.id != null))
-      );
-    }
-    catch (error){
-      onResponseError(error: error);
-      
       if(error is DioError) print(error.response?.data["message"]);
       else print(error);
     }

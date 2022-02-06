@@ -33,12 +33,12 @@ class Category extends Equatable{
   bool get isGeneral => id == null;
 
   static Category create({
-    String? categoryId,
+    bool isGeneral = false,
     required String name,
     required Color color
   }){
     return Category(
-      id: Uuid().v4(),
+      id: isGeneral ? null : Uuid().v4(),
       name: name,
       color: color,
       createdAt: copyDateTimeWith(DateTime.now(), microsecond: 0),

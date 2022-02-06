@@ -8,7 +8,6 @@ import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/components/shimmer/shimmer_text.dart';
 import 'package:task_manager/constants.dart';
-import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/screens/category_screen.dart';
 import 'package:collection/collection.dart';

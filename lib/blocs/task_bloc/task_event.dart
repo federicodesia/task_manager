@@ -3,8 +3,6 @@ part of 'task_bloc.dart';
 @immutable
 abstract class TaskEvent {}
 
-class TaskLoaded extends TaskEvent {}
-
 class TaskAdded extends TaskEvent {
   final Task task;
   TaskAdded(this.task);
@@ -24,9 +22,6 @@ class TaskUndoDeleted extends TaskEvent {
   final Task task;
   TaskUndoDeleted(this.task);
 }
-
-class TaskSyncPullRequested extends TaskEvent {}
-class TaskSyncPushRequested extends TaskEvent {}
 
 class TasksUpdated extends TaskEvent {
   final List<Task> tasks;

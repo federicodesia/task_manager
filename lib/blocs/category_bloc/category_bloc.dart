@@ -1,12 +1,11 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/sync_item_error.dart';
 import 'package:task_manager/models/sync_status.dart';
-import 'package:task_manager/repositories/category_repository.dart';
 
 part 'category_event.dart';
 part 'category_state.dart';
@@ -14,17 +13,9 @@ part 'category_state.dart';
 part 'category_bloc.g.dart';
 
 class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
-
-  final CategoryRepository categoryRepository;
+  
   final TaskBloc taskBloc;
-
-  CategoryBloc({
-    required this.categoryRepository,
-    required this.taskBloc
-  }) : super(CategoryLoadSuccess.initial()){
-
-    // TODO: Remove event
-    on<CategoryLoaded>((event, emit) async{});
+  CategoryBloc({required this.taskBloc}) : super(CategoryLoadSuccess.initial()){
 
     on<CategoryAdded>((event, emit){
       final categoryState = state;
@@ -78,23 +69,17 @@ class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
   @override
   CategoryState? fromJson(Map<String, dynamic> json) {
     try{
-      print("categoryBloc fromJson");
       return CategoryLoadSuccess.fromJson(json);
     }
-    catch(error) {
-      print("categoryBloc fromJson error: $error");
-    }
+    catch(error) {}
   }
 
   @override
   Map<String, dynamic>? toJson(CategoryState state) {
     try{
-      print("categoryBloc toJson");
       final categoryState = state;
       if(categoryState is CategoryLoadSuccess) return categoryState.toJson();
     }
-    catch(error) {
-      print("categoryBloc toJson error: $error");
-    }
+    catch(error) {}
   }
 }

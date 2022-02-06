@@ -17,9 +17,6 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   final TaskRepository taskRepository;
   TaskBloc({required this.taskRepository}) : super(TaskLoadSuccess.initial()){
 
-    // TODO: Remove event
-    on<TaskLoaded>((event, emit){});
-
     on<TaskAdded>((event, emit) async{
       final taskState = state;
       if(taskState is TaskLoadSuccess){
@@ -110,23 +107,17 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   @override
   TaskState? fromJson(Map<String, dynamic> json) {
     try{
-      print("taskBloc fromJson");
       return TaskLoadSuccess.fromJson(json);
     }
-    catch(error) {
-      print("taskBloc fromJson error: $error");
-    }
+    catch(error) {}
   }
 
   @override
   Map<String, dynamic>? toJson(TaskState state) {
     try{
-      print("taskBloc toJson");
       final taskState = state;
       if(taskState is TaskLoadSuccess) return taskState.toJson();
     }
-    catch(error) {
-      print("taskBloc toJson error: $error");
-    }
+    catch(error) {}
   }
 }

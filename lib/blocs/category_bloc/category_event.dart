@@ -3,8 +3,6 @@ part of 'category_bloc.dart';
 @immutable
 abstract class CategoryEvent {}
 
-class CategoryLoaded extends CategoryEvent {}
-
 class CategoryAdded extends CategoryEvent {
   final Category category;
   CategoryAdded(this.category);
