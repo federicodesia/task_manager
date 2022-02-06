@@ -109,7 +109,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   @override
   TaskState? fromJson(Map<String, dynamic> json) {
     try{
-      print("fromJson");
+      print("taskBloc fromJson");
       return TaskLoadSuccess(
         syncPushStatus: SyncStatus.values.byName(json["syncPushStatus"]),
         tasks: List<Task>.from(jsonDecode(json["tasks"])
@@ -124,14 +124,14 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
       );
     }
     catch(error) {
-      print("fromJson error $error");
+      print("taskBloc fromJson error: $error");
     }
   }
 
   @override
   Map<String, dynamic>? toJson(TaskState state) {
     try{
-      print("toJson");
+      print("taskBloc toJson");
       if(state is TaskLoadSuccess){
         return {
           "syncPushStatus": state.syncPushStatus.name,
@@ -142,7 +142,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
       }
     }
     catch(error) {
-      print("toJson error $error");
+      print("taskBloc toJson error: $error");
     }
   }
 }

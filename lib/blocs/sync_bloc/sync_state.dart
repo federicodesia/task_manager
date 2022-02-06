@@ -3,24 +3,34 @@ part of 'sync_bloc.dart';
 @JsonSerializable()
 class SyncState {
 
-  @JsonKey(fromJson: nullableDateTimefromJson, toJson: nullableDateTimeToJson)
+  @NullableDateTimeSerializer()
   final DateTime? lastTaskPull;
-
-  @JsonKey(fromJson: nullableDateTimefromJson, toJson: nullableDateTimeToJson)
+  @NullableDateTimeSerializer()
   final DateTime? lastTaskPush;
+
+  @NullableDateTimeSerializer()
+  final DateTime? lastCategoryPull;
+  @NullableDateTimeSerializer()
+  final DateTime? lastCategoryPush;
 
   SyncState({
     this.lastTaskPull,
-    this.lastTaskPush
+    this.lastTaskPush,
+    this.lastCategoryPull,
+    this.lastCategoryPush
   });
 
   SyncState copyWith({
     DateTime? lastTaskPull,
-    DateTime? lastTaskPush
+    DateTime? lastTaskPush,
+    DateTime? lastCategoryPull,
+    DateTime? lastCategoryPush
   }){
     return SyncState(
       lastTaskPull: lastTaskPull ?? this.lastTaskPull,
-      lastTaskPush: lastTaskPush ?? this.lastTaskPush
+      lastTaskPush: lastTaskPush ?? this.lastTaskPush,
+      lastCategoryPull: lastCategoryPull ?? this.lastCategoryPull,
+      lastCategoryPush: lastCategoryPush ?? this.lastCategoryPush
     );
   }
 

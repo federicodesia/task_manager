@@ -41,6 +41,9 @@ class SyncRepository{
         if(message is String && message.startsWith("duplicated id")){
           return Left(message.split(":").last);
         }
+        else{
+          print("error: $message");
+        }
       }
       onResponseError(error: error);
     }

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/models/serializers/datetime_serializer.dart';
 import 'package:uuid/uuid.dart';
 
 part 'task.g.dart';
@@ -11,14 +12,14 @@ class Task extends Equatable{
   final String? categoryId;
   final String title;
   final String description;
-  @JsonKey(fromJson: dateTimefromJson, toJson: dateTimeToJson)
+  @DateTimeSerializer()
   final DateTime date;
   final bool isCompleted;
-  @JsonKey(fromJson: dateTimefromJson, toJson: dateTimeToJson)
+  @DateTimeSerializer()
   final DateTime createdAt;
-  @JsonKey(fromJson: dateTimefromJson, toJson: dateTimeToJson)
+  @DateTimeSerializer()
   final DateTime updatedAt;
-  @JsonKey(fromJson: nullableDateTimefromJson, toJson: nullableDateTimeToJson)
+  @NullableDateTimeSerializer()
   final DateTime? deletedAt;
 
   Task({ 

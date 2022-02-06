@@ -36,9 +36,13 @@ class CategoryBottomSheet extends StatefulWidget{
 
 class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
 
+  late Category? editCategory = widget.editCategory;
+
+  late String categoryName = editCategory != null ? editCategory!.name : "";
+  late Color categoryColor = editCategory != null ? editCategory!.color : colors.first;
+
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool formValidated = false;
-  late Category category = widget.editCategory ?? Category(id: Uuid().v4(), name: "", color: colors.first);
 
   double? colorWidth;
 
@@ -61,10 +65,8 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                 FormInputHeader("Name"),
                 RoundedTextFormField(
                   hintText: "Category name",
-                  initialValue: category.name,
-                  onChanged: (value){
-                    category = category.copyWith(name: value);
-                  },
+                  initialValue: categoryName,
+                  onChanged: (value) => categoryName = value,
                   validator: (value){
                     value = value ?? "";
                     if(value.isEmpty) return "Please enter a name";
@@ -84,8 +86,8 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                       spacing: colorWidth == null ? 2.0 : (constraints.maxWidth - colorsPerRow * colorWidth!) / colorsPerRow,
                       runSpacing: 2.0,
                       children: List.generate(colors.length, (index){
-                        Color color = colors[index];
-                        bool isSelected = category.color == color;
+                        final color = colors[index];
+                        final isSelected = categoryColor == color;
 
                         return GestureDetector(
                           child: WidgetSize(
@@ -110,9 +112,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                               ),
                             ),
                           ),
-                          onTap: () {
-                            setState(() => category = category.copyWith(color: color));
-                          },
+                          onTap: () => setState(() => categoryColor = color)
                         );
                       }),
                     );
@@ -137,8 +137,15 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                 if (formKey.currentState!.validate()){
                   formKey.currentState!.save();
 
-                  if(widget.editCategory != null) BlocProvider.of<CategoryBloc>(context).add(CategoryUpdated(category));
-                  else BlocProvider.of<CategoryBloc>(context).add(CategoryAdded(category));
+                  if(editCategory != null) BlocProvider.of<CategoryBloc>(context).add(CategoryUpdated(editCategory!.copyWith(
+                    name: categoryName,
+                    color: categoryColor
+                  )));
+
+                  else BlocProvider.of<CategoryBloc>(context).add(CategoryAdded(Category.create(
+                    name: categoryName,
+                    color: categoryColor
+                  )));
 
                   Navigator.pop(context);
                 }

@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
-import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/models/category.dart';
+import 'package:task_manager/models/serializers/datetime_serializer.dart';
 import 'package:task_manager/models/sync_item_error.dart';
 import 'package:task_manager/models/sync_object.dart';
 import 'package:task_manager/models/sync_status.dart';
@@ -22,11 +24,15 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
 
   final SyncRepository syncRepository;
   final TaskBloc taskBloc;
+  final CategoryBloc categoryBloc;
+
   late StreamSubscription taskBlocSubscription;
+  late StreamSubscription categoryBlocSubscription;
   
   SyncBloc({
     required this.syncRepository,
-    required this.taskBloc
+    required this.taskBloc,
+    required this.categoryBloc
   }) : super(SyncState()){
 
     taskBlocSubscription = taskBloc.stream.listen((taskState){
@@ -34,6 +40,15 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
         add(SyncPushRequested(syncObject: SyncObject.task(
           items: taskState.tasks + taskState.deletedTasks,
           failedItems: taskState.failedTasks
+        )));
+      }
+    });
+
+    categoryBlocSubscription = categoryBloc.stream.listen((categoryState){
+      if(categoryState is CategoryLoadSuccess && categoryState.syncPushStatus == SyncStatus.pending){
+        add(SyncPushRequested(syncObject: SyncObject.category(
+          items: categoryState.categories + categoryState.deletedCategories,
+          failedItems: categoryState.failedCategories
         )));
       }
     });
@@ -103,8 +118,64 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
             }
           );
         },
-        category: (categories, failedCategories){
 
+        category: (categories, failedCategories) async{
+
+          final updatedCategories = _itemsUpdatedAfterDate<Category>(
+            date: state.lastTaskPush,
+            items: categories,
+            failedItems: failedCategories
+          );
+          if(updatedCategories == null) return;
+
+          print("$eventId | Enviando peticion a la API...");
+          await Future.delayed(Duration(seconds: 2));
+          final responseItems = await syncRepository.push<Category>(
+            queryPath: "categories",
+            items: updatedCategories
+          );
+          print("$eventId | Respuesta de la API recibida...");
+
+          final categoryState = categoryBloc.state;
+          if(categoryState is! CategoryLoadSuccess) return;
+
+          if(responseItems != null) responseItems.when(
+            left: (duplicatedId) {
+              final mergedDuplicatedId = _mergeDuplicatedId<Category>(
+                items: categoryState.categories,
+                failedItems: categoryState.failedCategories,
+                duplicatedId: duplicatedId
+              );
+              if(mergedDuplicatedId == null) return;
+
+              categoryBloc.add(CategoryStateUpdated(categoryState.copyWith(
+                syncPushStatus: SyncStatus.pending,
+                categories: mergedDuplicatedId.item1,
+                failedCategories: mergedDuplicatedId.item2
+              )));
+            },
+            right: (items){
+              final mergedCategories = _mergeItems<Category>(
+                date: tempDate,
+                currentItems: categoryState.categories,
+                currentDeletedItems: categoryState.deletedCategories,
+                replaceItems: items
+              );
+              if(mergedCategories == null) return;
+
+              categoryBloc.add(CategoryStateUpdated(categoryState.copyWith(
+                syncPushStatus: SyncStatus.idle,
+                categories: mergedCategories.item1,
+                deletedCategories: mergedCategories.item2,
+                failedCategories: _removeDuplicatedId(
+                  failedItems: categoryState.failedCategories,
+                  replaceItems: items
+                )
+              )));
+
+              emit(state.copyWith(lastCategoryPush: tempDate));
+            }
+          );
         }
       );
     },
@@ -195,6 +266,7 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
   @override
   Future<void> close() {
     taskBlocSubscription.cancel();
+    categoryBlocSubscription.cancel();
     return super.close();
   }
 

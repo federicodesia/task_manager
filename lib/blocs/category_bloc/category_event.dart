@@ -19,3 +19,8 @@ class CategoryDeleted extends CategoryEvent {
   final Category category;
   CategoryDeleted(this.category);
 }
+
+class CategoryStateUpdated extends CategoryEvent {
+  final CategoryState state;
+  CategoryStateUpdated(this.state);
+}

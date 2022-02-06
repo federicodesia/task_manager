@@ -11,6 +11,7 @@ import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/screens/category_screen.dart';
+import 'package:collection/collection.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class CategoryCard extends StatelessWidget{
@@ -30,18 +31,14 @@ class CategoryCard extends StatelessWidget{
       builder: (_, taskState) {
 
         return BlocBuilder<CategoryBloc, CategoryState>(
-          buildWhen: (previousState, currentState){
-            if(currentState is CategoryLoadSuccess){
-              if(currentState.categories.where((c) => c.id == categoryId).isEmpty) return false;
-            }
-            return true;
-          },
           builder: (_, categoryState) {
 
             if(isShimmer) return CategoryCardContent(isShimmer: true);
 
             if(taskState is TaskLoadSuccess && categoryState is CategoryLoadSuccess){
-              Category category = categoryState.categories.firstWhere((c) => c.id == categoryId);
+              final category = categoryState.categories.firstWhereOrNull((c) => c.id == categoryId);
+              if(category == null) return Container();
+
               List<Task> categoryTasks = taskState.tasks.where((t) => t.categoryId == categoryId).toList();
 
               String description;

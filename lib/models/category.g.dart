@@ -1,18 +1,15 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'task.dart';
+part of 'category.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Task _$TaskFromJson(Map<String, dynamic> json) => Task(
-      id: json['id'] as String,
-      categoryId: json['categoryId'] as String?,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      date: const DateTimeSerializer().fromJson(json['date'] as String),
-      isCompleted: json['isCompleted'] as bool? ?? false,
+Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
+      id: json['id'] as String?,
+      name: json['name'] as String,
+      color: const ColorSerializer().fromJson(json['color'] as int),
       createdAt:
           const DateTimeSerializer().fromJson(json['createdAt'] as String),
       updatedAt:
@@ -21,13 +18,10 @@ Task _$TaskFromJson(Map<String, dynamic> json) => Task(
           .fromJson(json['deletedAt'] as String?),
     );
 
-Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
+Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
       'id': instance.id,
-      'categoryId': instance.categoryId,
-      'title': instance.title,
-      'description': instance.description,
-      'date': const DateTimeSerializer().toJson(instance.date),
-      'isCompleted': instance.isCompleted,
+      'name': instance.name,
+      'color': const ColorSerializer().toJson(instance.color),
       'createdAt': const DateTimeSerializer().toJson(instance.createdAt),
       'updatedAt': const DateTimeSerializer().toJson(instance.updatedAt),
       'deletedAt':

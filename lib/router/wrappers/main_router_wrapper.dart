@@ -32,7 +32,8 @@ class MainRouteWrapper extends StatelessWidget {
 
           BlocProvider(create: (context) => SyncBloc(
             syncRepository: context.read<SyncRepository>(),
-            taskBloc: context.read<TaskBloc>()
+            taskBloc: context.read<TaskBloc>(),
+            categoryBloc: context.read<CategoryBloc>()
           ), lazy: false),
         ],
         child: AutoRouter(),

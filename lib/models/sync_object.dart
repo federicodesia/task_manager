@@ -22,6 +22,7 @@ class SyncObject with _$SyncObject {
   static List<T>? listFromJson<T>(dynamic json){
     try{
       if(T == Task) return List<T>.from(json.map((t) => Task.fromJson(t)));
+      if(T == Category) return List<T>.from(json.map((c) => Category.fromJson(c)));
     }
     catch(_){}
   }

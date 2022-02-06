@@ -1,11 +1,7 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:task_manager/models/category.dart';
-import 'package:uuid/uuid.dart';
-
 class CategoryRepository{
 
-  Future<List<Category>> fetchCategories() async{
+  // TODO: Remove this.
+  /*Future<List<Category>> fetchCategories() async{
 
     await Future.delayed(Duration(milliseconds: 2000));
     final List<Category> categories = [];
@@ -17,5 +13,5 @@ class CategoryRepository{
     categories.add(Category(id: Uuid().v4(), name: "Groceries", color: Color(0xFFDDBC10)));
 
     return categories;
-  }
+  }*/
 }

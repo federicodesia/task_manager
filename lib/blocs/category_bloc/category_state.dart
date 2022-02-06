@@ -6,8 +6,40 @@ abstract class CategoryState {}
 class CategoryLoadInProgress extends CategoryState {}
 
 class CategoryLoadSuccess extends CategoryState {
+  final SyncStatus syncPushStatus;
   final List<Category> categories;
-  CategoryLoadSuccess([this.categories = const []]);
+  final List<Category> deletedCategories;
+  final Map<String, SyncErrorType> failedCategories;
+
+  CategoryLoadSuccess({
+    this.syncPushStatus = SyncStatus.idle,
+    required this.categories,
+    required this.deletedCategories,
+    required this.failedCategories
+  });
+
+  static CategoryLoadSuccess initial(){
+    return CategoryLoadSuccess(
+      syncPushStatus: SyncStatus.idle,
+      categories: [],
+      deletedCategories: [],
+      failedCategories: {}
+    );
+  }
+
+  CategoryLoadSuccess copyWith({
+    SyncStatus? syncPushStatus,
+    List<Category>? categories,
+    List<Category>? deletedCategories,
+    Map<String, SyncErrorType>? failedCategories
+  }){
+    return CategoryLoadSuccess(
+      syncPushStatus: syncPushStatus ?? SyncStatus.pending,
+      categories: categories ?? this.categories,
+      deletedCategories: deletedCategories ?? this.deletedCategories,
+      failedCategories: failedCategories ?? this.failedCategories
+    );
+  }
 }
 
 class CategoryLoadFailure extends CategoryState {}

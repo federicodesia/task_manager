@@ -1,13 +1,18 @@
-import 'package:bloc/bloc.dart';
+import 'dart:convert';
+
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/models/category.dart';
+import 'package:task_manager/models/sync_item_error.dart';
+import 'package:task_manager/models/sync_status.dart';
 import 'package:task_manager/repositories/category_repository.dart';
 
 part 'category_event.dart';
 part 'category_state.dart';
 
-class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
+class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
 
   final CategoryRepository categoryRepository;
   final TaskBloc taskBloc;
@@ -15,46 +20,96 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   CategoryBloc({
     required this.categoryRepository,
     required this.taskBloc
-  }) : super(CategoryLoadInProgress()){
+  }) : super(CategoryLoadSuccess.initial()){
 
-    on<CategoryLoaded>((event, emit) async{
-      try{
-        final categories = await categoryRepository.fetchCategories();
-        emit(CategoryLoadSuccess(categories));
-      }
-      catch(_){
-        emit(CategoryLoadFailure());
-      }
-    });
+    // TODO: Remove event
+    on<CategoryLoaded>((event, emit) async{});
 
     on<CategoryAdded>((event, emit){
-      if(state is CategoryLoadSuccess){
-        emit(CategoryLoadSuccess((state as CategoryLoadSuccess).categories..add(event.category)));
+      final categoryState = state;
+      if(categoryState is CategoryLoadSuccess){
+        emit(categoryState.copyWith(categories: categoryState.categories..add(event.category)));
       }
     });
 
     on<CategoryUpdated>((event, emit){
-      if(state is CategoryLoadSuccess){
-        emit(CategoryLoadSuccess((state as CategoryLoadSuccess).categories.map((category){
+      final categoryState = state;
+      if(categoryState is CategoryLoadSuccess){
+        emit(categoryState.copyWith(categories: categoryState.categories.map((category){
           return category.id == event.category.id ? event.category : category;
         }).toList()));
       }
     });
 
     on<CategoryDeleted>((event, emit){
-      if(state is CategoryLoadSuccess){
-        emit(CategoryLoadSuccess((state as CategoryLoadSuccess).categories
-          .where((category) => category.id != event.category.id).toList()));
-        
-        TaskState taskBlocState = taskBloc.state;
+      final categoryState = state;
+      if(categoryState is CategoryLoadSuccess){
+        emit(categoryState.copyWith(
+          categories: categoryState.categories..removeWhere((c) => c.id == event.category.id),
+          deletedCategories: categoryState.deletedCategories..add(event.category.copyWith(deletedAt: DateTime.now()))
+        ));
+
+        // TODO: Category duplicated.
+        /*final taskBlocState = taskBloc.state;
         if(taskBlocState is TaskLoadSuccess){
-          taskBloc.add(TasksUpdated(
-            taskBlocState.tasks.map((task){
+          taskBloc.add(TaskStateUpdated(taskBlocState.copyWith(
+            tasks: taskBlocState.tasks.map((task){
               return task.categoryId == event.category.id ? task.copyWith(categoryId: null) : task;
-            }).toList())
-          );
-        }
+            }).toList()
+          )));
+        }*/
       }
     });
+
+    on<CategoryStateUpdated>((event, emit){
+      print("Actualizando CategoryState...");
+      final categoryState = event.state;
+      if(categoryState is CategoryLoadSuccess){
+        print("SyncPushStatus: " + categoryState.syncPushStatus.name);
+        print("Categories: ${categoryState.categories}");
+        print("DeletedCategories: ${categoryState.deletedCategories}");
+        print("FailedCategories: ${categoryState.failedCategories}");
+      }
+      emit(event.state);
+    },
+    transformer: restartable());
+  }
+
+  @override
+  CategoryState? fromJson(Map<String, dynamic> json) {
+    try{
+      print("categoryBloc fromJson");
+      return CategoryLoadSuccess(
+        syncPushStatus: SyncStatus.values.byName(json["syncPushStatus"]),
+        categories: List<Category>.from(jsonDecode(json["categories"])
+          .map((category) => Category.fromJson(category))
+        ),
+        deletedCategories: List<Category>.from(jsonDecode(json["deletedCategories"])
+          .map((category) => Category.fromJson(category))
+        ),
+        failedCategories: json["failedCategories"].map((key, value) => MapEntry(key, SyncErrorType.values.byName(value))).cast<String, SyncErrorType>()
+      );
+    }
+    catch(error) {
+      print("categoryBloc fromJson error: $error");
+    }
+  }
+
+  @override
+  Map<String, dynamic>? toJson(CategoryState state) {
+    try{
+      print("categoryBloc toJson");
+      if(state is CategoryLoadSuccess){
+        return {
+          "syncPushStatus": state.syncPushStatus.name,
+          "categories": jsonEncode(state.categories.map((category) => category.toJson()).toList()),
+          "deletedCategories": jsonEncode(state.deletedCategories.map((category) => category.toJson()).toList()),
+          "failedCategories": state.failedCategories.map((key, value) => MapEntry(key, value.name)),
+        };
+      }
+    }
+    catch(error) {
+      print("categoryBloc toJson error: $error");
+    }
   }
 }
