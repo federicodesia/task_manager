@@ -5,6 +5,7 @@ abstract class CategoryState {}
 
 class CategoryLoadInProgress extends CategoryState {}
 
+@JsonSerializable()
 class CategoryLoadSuccess extends CategoryState {
   final SyncStatus syncPushStatus;
   final List<Category> categories;
@@ -40,6 +41,9 @@ class CategoryLoadSuccess extends CategoryState {
       failedCategories: failedCategories ?? this.failedCategories
     );
   }
+
+  factory CategoryLoadSuccess.fromJson(Map<String, dynamic> json) => _$CategoryLoadSuccessFromJson(json);
+  Map<String, dynamic> toJson() => _$CategoryLoadSuccessToJson(this);
 }
 
 class CategoryLoadFailure extends CategoryState {}

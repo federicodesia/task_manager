@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/models/category.dart';
@@ -11,6 +10,8 @@ import 'package:task_manager/repositories/category_repository.dart';
 
 part 'category_event.dart';
 part 'category_state.dart';
+
+part 'category_bloc.g.dart';
 
 class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
 
@@ -78,16 +79,7 @@ class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
   CategoryState? fromJson(Map<String, dynamic> json) {
     try{
       print("categoryBloc fromJson");
-      return CategoryLoadSuccess(
-        syncPushStatus: SyncStatus.values.byName(json["syncPushStatus"]),
-        categories: List<Category>.from(jsonDecode(json["categories"])
-          .map((category) => Category.fromJson(category))
-        ),
-        deletedCategories: List<Category>.from(jsonDecode(json["deletedCategories"])
-          .map((category) => Category.fromJson(category))
-        ),
-        failedCategories: json["failedCategories"].map((key, value) => MapEntry(key, SyncErrorType.values.byName(value))).cast<String, SyncErrorType>()
-      );
+      return CategoryLoadSuccess.fromJson(json);
     }
     catch(error) {
       print("categoryBloc fromJson error: $error");
@@ -98,14 +90,8 @@ class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
   Map<String, dynamic>? toJson(CategoryState state) {
     try{
       print("categoryBloc toJson");
-      if(state is CategoryLoadSuccess){
-        return {
-          "syncPushStatus": state.syncPushStatus.name,
-          "categories": jsonEncode(state.categories.map((category) => category.toJson()).toList()),
-          "deletedCategories": jsonEncode(state.deletedCategories.map((category) => category.toJson()).toList()),
-          "failedCategories": state.failedCategories.map((key, value) => MapEntry(key, value.name)),
-        };
-      }
+      final categoryState = state;
+      if(categoryState is CategoryLoadSuccess) return categoryState.toJson();
     }
     catch(error) {
       print("categoryBloc toJson error: $error");

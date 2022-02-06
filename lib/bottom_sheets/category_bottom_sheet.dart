@@ -8,7 +8,6 @@ import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/theme/theme.dart';
-import 'package:uuid/uuid.dart';
 
 List<Color> colors = [
   Color(0xFF0063AE),

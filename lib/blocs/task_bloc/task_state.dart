@@ -5,7 +5,9 @@ abstract class TaskState {}
 
 class TaskLoadInProgress extends TaskState {}
 
+@JsonSerializable()
 class TaskLoadSuccess extends TaskState {
+
   final SyncStatus syncPushStatus;
   final List<Task> tasks;
   final List<Task> deletedTasks;
@@ -40,6 +42,9 @@ class TaskLoadSuccess extends TaskState {
       failedTasks: failedTasks ?? this.failedTasks
     );
   }
+
+  factory TaskLoadSuccess.fromJson(Map<String, dynamic> json) => _$TaskLoadSuccessFromJson(json);
+  Map<String, dynamic> toJson() => _$TaskLoadSuccessToJson(this);
 }
 
 class TaskLoadFailure extends TaskState {}

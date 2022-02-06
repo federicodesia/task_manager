@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:task_manager/models/sync_item_error.dart';
 import 'package:task_manager/models/sync_status.dart';
@@ -10,6 +9,8 @@ import 'package:task_manager/repositories/task_repository.dart';
 
 part 'task_event.dart';
 part 'task_state.dart';
+
+part 'task_bloc.g.dart';
 
 class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
 
@@ -110,18 +111,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   TaskState? fromJson(Map<String, dynamic> json) {
     try{
       print("taskBloc fromJson");
-      return TaskLoadSuccess(
-        syncPushStatus: SyncStatus.values.byName(json["syncPushStatus"]),
-        tasks: List<Task>.from(jsonDecode(json["tasks"])
-          .map((task) => Task.fromJson(task))
-          .where(((task) => task.id != null))
-        ),
-        deletedTasks: List<Task>.from(jsonDecode(json["deletedTasks"])
-          .map((task) => Task.fromJson(task))
-          .where(((task) => task.id != null))
-        ),
-        failedTasks: json["failedTasks"].map((key, value) => MapEntry(key, SyncErrorType.values.byName(value))).cast<String, SyncErrorType>()
-      );
+      return TaskLoadSuccess.fromJson(json);
     }
     catch(error) {
       print("taskBloc fromJson error: $error");
@@ -132,14 +122,8 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   Map<String, dynamic>? toJson(TaskState state) {
     try{
       print("taskBloc toJson");
-      if(state is TaskLoadSuccess){
-        return {
-          "syncPushStatus": state.syncPushStatus.name,
-          "tasks": jsonEncode(state.tasks.map((task) => task.toJson()).toList()),
-          "deletedTasks": jsonEncode(state.deletedTasks.map((task) => task.toJson()).toList()),
-          "failedTasks": state.failedTasks.map((key, value) => MapEntry(key, value.name)),
-        };
-      }
+      final taskState = state;
+      if(taskState is TaskLoadSuccess) return taskState.toJson();
     }
     catch(error) {
       print("taskBloc toJson error: $error");
