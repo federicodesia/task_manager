@@ -2,35 +2,24 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/either.dart';
 import 'package:task_manager/models/task.dart';
-import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
+import 'package:task_manager/repositories/base_repository.dart';
 
 class SyncRepository{
 
-  final AuthBloc authBloc;
-  SyncRepository({required this.authBloc});
-
-  late Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: "https://yusuf007r.dev/task-manager/sync",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-    )
-  )..interceptors.add(AccessTokenInterceptor());
-  
+  final BaseRepository base;
+  SyncRepository({required this.base});
 
   Future<Either<String, List<T>>?> push<T>({
     required String queryPath,
     required List<T> items
   }) async {
     try{
-      final response = await _dio.post(
-        "/$queryPath/",
-        options: Options(headers: {"Authorization": "Bearer " + authBloc.state.credentials.accessToken}),
+      final response = await base.dioAccessToken.post(
+        "/sync/$queryPath/",
         data: jsonEncode(items)
       );
 

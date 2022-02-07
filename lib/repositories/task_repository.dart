@@ -1,23 +1,9 @@
-import 'dart:async';
-
-import 'package:dio/dio.dart';
-import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
-import 'package:task_manager/helpers/response_errors.dart';
-import 'package:task_manager/models/task.dart';
-import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
+import 'package:task_manager/repositories/base_repository.dart';
 
 class TaskRepository{
 
-  final AuthBloc authBloc;
-  TaskRepository({required this.authBloc});
-
-  late Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: "https://yusuf007r.dev/task-manager/sync/tasks",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-    )
-  )..interceptors.add(AccessTokenInterceptor());
+  final BaseRepository base;
+  TaskRepository({required this.base});
 
   /*Future<List<Task>?> getTasks() async {
     try{
@@ -78,13 +64,12 @@ class TaskRepository{
   }*/
 
   // TODO: Remove this.
-  Future<List<Task>?> syncPull({
+  /*Future<List<Task>?> syncPull({
     required DateTime? lastSync
   }) async {
     try{
-      final response = await _dio.get(
-        "/${lastSync != null ? lastSync : DateTime(1970)}",
-        options: Options(headers: {"Authorization": "Bearer " + authBloc.state.credentials.accessToken})
+      final response = await base.dioAccessToken.get(
+        "/sync/tasks/${lastSync != null ? lastSync : DateTime(1970)}"
       );
       return List<Task>.from(response.data
         .map((task) => Task.fromJson(task))
@@ -97,5 +82,5 @@ class TaskRepository{
       if(error is DioError) print(error.response?.data["message"]);
       else print(error);
     }
-  }
+  }*/
 }

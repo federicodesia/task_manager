@@ -48,8 +48,6 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
   }
 
   void sendAccountVerificationCode(){
-    authRepository.sendAccountVerificationCode(
-      authCredentials: authBloc.state.credentials
-    );
+    authRepository.sendAccountVerificationCode();
   }
 }

@@ -29,10 +29,7 @@ class ForgotPasswordNewPasswordCubit extends Cubit<ForgotPasswordNewPasswordStat
   void submitted({required String password}) async{
     emit(ForgotPasswordNewPasswordState(isLoading: true));
 
-    final response = await authRepository.changeForgotPassword(
-      credentials: authBloc.state.credentials,
-      password: password
-    );
+    final response = await authRepository.changeForgotPassword(password: password);
 
     if(response != null) response.when(
       left: (message) => emit(ForgotPasswordNewPasswordState(

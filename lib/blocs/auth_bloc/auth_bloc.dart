@@ -42,7 +42,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ));
 
       if(credentials.accessTokenType == TokenType.access && credentials.isVerified){
-        final response = await userRepository.getUser(authCredentials: credentials);
+        final response = await userRepository.getUser();
         if(response != null) response.when(
           left: (error) {},
           right: (user) => emit(state.copyWith(user: user))
@@ -51,7 +51,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<AuthLogoutRequested>((event, emit){
-      authRepository.logout(authCredentials: state.credentials);
+      authRepository.logout();
       add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
     });
   }

@@ -1,19 +1,13 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/either.dart';
-import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
+import 'package:task_manager/repositories/base_repository.dart';
 
-class AuthRepository {
+class AuthRepository{
 
-  late Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: "https://yusuf007r.dev/task-manager/auth",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-    )
-  )..interceptors.add(AccessTokenInterceptor());
+  final BaseRepository base;
+  AuthRepository({required this.base});
 
   Future<Either<List<String>, AuthCredentials>?> login({
     required String email,
@@ -22,10 +16,13 @@ class AuthRepository {
   }) async {
 
     try{
-      final response = await _dio.post("/login", data: {
-        "email": email,
-        "password": password,
-      });
+      final response = await base.dio.post(
+        "/auth/login",
+        data: {
+          "email": email,
+          "password": password,
+        }
+      );
       return Right(AuthCredentials.fromJson(response.data));
     }
     catch (error){
@@ -43,11 +40,14 @@ class AuthRepository {
   }) async {
 
     try{
-      final response = await _dio.post("/register", data: {
-        "name": name,
-        "email": email,
-        "password": password,
-      });
+      final response = await base.dio.post(
+        "/auth/register",
+        data: {
+          "name": name,
+          "email": email,
+          "password": password,
+        }
+      );
       return Right(AuthCredentials.fromJson(response.data));
     }
     catch (error){
@@ -62,10 +62,7 @@ class AuthRepository {
   }) async {
 
     try{
-      final response = await _dio.get(
-        "/access-token",
-        options: Options(headers: {"Authorization": "Bearer " + authCredentials.refreshToken})
-      );
+      final response = await base.dioRefreshToken.get("/auth/access-token");
       return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
     }
     catch (error){
@@ -74,30 +71,18 @@ class AuthRepository {
     }
   }
 
-  Future<void> logout({
-    required AuthCredentials authCredentials
-  }) async {
-    
+  Future<void> logout() async {
     try{
-      await _dio.post(
-        "/logout",
-        options: Options(headers: {"Authorization": "Bearer " + authCredentials.refreshToken})
-      );
+      await base.dioRefreshToken.post("/auth/logout");
     }
     catch (error){
       await onResponseError(error: error);
     }
   }
 
-  Future<void> sendAccountVerificationCode({
-    required AuthCredentials authCredentials
-  }) async {
-
+  Future<void> sendAccountVerificationCode() async {
     try{
-      await _dio.post(
-        "/send-account-verification-code",
-        options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
-      );
+      await base.dioAccessToken.post("/auth/send-account-verification-code");
     }
     catch (error){
       await onResponseError(error: error);
@@ -110,12 +95,11 @@ class AuthRepository {
   }) async {
 
     try{
-      final response = await _dio.post(
-        "/verify-account-code",
+      final response = await base.dioAccessToken.post(
+        "/auth/verify-account-code",
         data: {
           "code": code
         },
-        options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
       );
       return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
     }
@@ -131,8 +115,8 @@ class AuthRepository {
   }) async {
 
     try{
-      await _dio.post(
-        "/send-password-reset-code",
+      await base.dio.post(
+        "/auth/send-password-reset-code",
         data: {
           "email": email
         }
@@ -152,8 +136,8 @@ class AuthRepository {
   }) async {
 
     try{
-      final response = await _dio.post(
-        "/verify-password-code",
+      final response = await base.dio.post(
+        "/auth/verify-password-code",
         data: {
           "email": email,
           "code": code
@@ -172,17 +156,15 @@ class AuthRepository {
   }
 
   Future<Either<String, void>?> changeForgotPassword({
-    required AuthCredentials credentials,
     required String password
   }) async {
 
     try{
-      await _dio.post(
-        "/change-forgot-password",
+      await base.dioAccessToken.post(
+        "/auth/change-forgot-password",
         data: {
           "password": password
-        },
-        options: Options(headers: {"Authorization": "Bearer " + credentials.accessToken})
+        }
       );
       return Right(() {});
     }

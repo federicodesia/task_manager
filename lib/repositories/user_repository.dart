@@ -1,31 +1,19 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_errors.dart';
-import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/either.dart';
 import 'package:task_manager/models/user.dart';
-import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
+import 'package:task_manager/repositories/base_repository.dart';
 
 class UserRepository {
 
-  late Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: "https://yusuf007r.dev/task-manager/user",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-    )
-  )..interceptors.add(AccessTokenInterceptor());
+  final BaseRepository base;
+  UserRepository({required this.base});
   
-  Future<Either<String, User>?> getUser({
-    required AuthCredentials authCredentials,
-  }) async {
+  Future<Either<String, User>?> getUser() async {
 
     try{
-      final response = await _dio.get(
-        "/",
-        options: Options(headers: {"Authorization": "Bearer " + authCredentials.accessToken})
-      );
+      final response = await base.dioAccessToken.get("/user/");
       return Right(User.fromJson(response.data));
     }
     catch (error){

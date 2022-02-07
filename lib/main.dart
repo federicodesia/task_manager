@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/cubits/theme_cubit.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
+import 'package:task_manager/repositories/base_repository.dart';
 import 'package:task_manager/repositories/user_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/services/context_service.dart';
@@ -51,8 +52,9 @@ class _MyAppState extends State<MyApp> {
 
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(create: (context) => AuthRepository()),
-        RepositoryProvider(create: (context) => UserRepository()),
+        RepositoryProvider(create: (context) => BaseRepository()),
+        RepositoryProvider(create: (context) => AuthRepository(base: context.read<BaseRepository>())),
+        RepositoryProvider(create: (context) => UserRepository(base: context.read<BaseRepository>())),
       ],
       child: MultiBlocProvider(
         providers: [
