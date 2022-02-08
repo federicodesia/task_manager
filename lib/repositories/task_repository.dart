@@ -62,25 +62,4 @@ class TaskRepository{
       onResponseError(error: error);
     }
   }*/
-
-  // TODO: Remove this.
-  /*Future<List<Task>?> syncPull({
-    required DateTime? lastSync
-  }) async {
-    try{
-      final response = await base.dioAccessToken.get(
-        "/sync/tasks/${lastSync != null ? lastSync : DateTime(1970)}"
-      );
-      return List<Task>.from(response.data
-        .map((task) => Task.fromJson(task))
-        .where(((task) => task.id != null))
-      );
-    }
-    catch (error){
-      onResponseError(error: error);
-
-      if(error is DioError) print(error.response?.data["message"]);
-      else print(error);
-    }
-  }*/
 }

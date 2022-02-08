@@ -117,7 +117,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                       description: "Have a nice day!",
                       onButtonPressed: () {
                         // TODO: Remove event.
-                        context.read<SyncBloc>().add(SyncPullTaskRequested());
+                        context.read<SyncBloc>().add(SyncRequested());
                       },
                     )
                   )

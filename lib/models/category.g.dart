@@ -9,7 +9,7 @@ part of 'category.dart';
 Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
       id: json['id'] as String?,
       name: json['name'] as String,
-      color: const ColorSerializer().fromJson(json['color'] as int),
+      color: const ColorSerializer().fromJson(json['color'] as String),
       createdAt:
           const DateTimeSerializer().fromJson(json['createdAt'] as String),
       updatedAt:

@@ -3,6 +3,28 @@ import 'package:tuple/tuple.dart';
 import 'package:uuid/uuid.dart';
 import 'package:collection/collection.dart';
 
+List<T> itemsUpdatedAfterDate<T>({
+  required DateTime? date,
+  required List<dynamic> items,
+  required Map<String, SyncErrorType> failedItems
+}){
+  try{
+    if(date != null) items = items..removeWhere((i) => 
+      i.id == null
+      || failedItems[i.id] == SyncErrorType.blacklist
+      || !i.updatedAt.isAfter(date)
+    );
+    else items = items..removeWhere((i) => 
+      i.id == null
+      || failedItems[i.id] == SyncErrorType.blacklist
+    );
+    return List<T>.from(items);
+  }
+  catch(_){
+    return List<T>.empty();
+  }
+}
+
 Tuple2<List<T>, Map<String, SyncErrorType>>? mergeDuplicatedId<T>({
   required List<dynamic> items,
   required Map<String, SyncErrorType> failedItems,
@@ -32,58 +54,40 @@ Tuple2<List<T>, Map<String, SyncErrorType>>? mergeDuplicatedId<T>({
   catch(_){}
 }
 
-Map<String, SyncErrorType>? removeDuplicatedId({
-  required Map<String, SyncErrorType> failedItems,
-  required List<dynamic> replaceItems,
-}){
-  try{
-    replaceItems.forEach((item) => failedItems.remove(item.key));
-    return failedItems;
-  }
-  catch(_){}
-}
-
-List<T>? itemsUpdatedAfterDate<T>({
-  required DateTime? date,
-  required List<dynamic> items,
-  required Map<String, SyncErrorType> failedItems
-}){
-  try{
-    if(date != null) items = items..removeWhere((i) => 
-      i.id == null
-      || failedItems[i.id] == SyncErrorType.blacklist
-      || !i.updatedAt.isAfter(date)
-    );
-    else items = items..removeWhere((i) => 
-      i.id == null
-      || failedItems[i.id] == SyncErrorType.blacklist
-    );
-    return items.isNotEmpty ? List<T>.from(items) : null;
-  }
-  catch(_){}
-}
-
-Tuple2<List<T>, List<T>>? mergeItems<T>({
+Tuple3<
+  List<T>,
+  List<T>,
+  Map<String, SyncErrorType>
+>? mergeItems<T>({
   required DateTime date,
   required List<dynamic> currentItems,
   required List<dynamic> currentDeletedItems,
+  required Map<String, SyncErrorType> currentFailedItems,
   required List<dynamic> replaceItems
 }){
   try{
     final updatedItems = [];
     final deletedItems = [];
-    replaceItems.forEach((r) => r.deletedAt != null ? deletedItems.add(r) : updatedItems.add(r));
+
+    replaceItems.forEach((r){
+      r.deletedAt != null ? deletedItems.add(r) : updatedItems.add(r);
+      currentFailedItems.remove(r.id);
+    });
 
     currentDeletedItems.removeWhere((c) => !c.deletedAt.isAfter(date) && deletedItems.any((d) => c.id == d.id));
     
     currentItems = currentItems.map((c){
+      final updated = updatedItems.firstWhereOrNull((u) => u.id == c.id);
+      updatedItems.remove(updated);
+
       if(c.updatedAt.isAfter(date)) return c;
-      return updatedItems.firstWhereOrNull((u) => u.id == c.id) ?? c;
-    }).toList();
+      return updated ?? c;
+    }).toList()..addAll(updatedItems);
     
-    return Tuple2(
+    return Tuple3(
       List<T>.from(currentItems),
-      List<T>.from(currentDeletedItems)
+      List<T>.from(currentDeletedItems),
+      currentFailedItems
     );
   }
   catch(_){}

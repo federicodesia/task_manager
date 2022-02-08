@@ -52,36 +52,6 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
         ));
       }
     });
-
-    /*on<TaskSyncPullRequested>((event, emit) async{
-      final eventId = Uuid().v4();
-      print("$eventId | SyncPull requested");
-      
-      print("$eventId | Enviando peticion a la API...");
-      final taskState = state;
-      final responseTasks = await taskRepository.syncPull(
-        lastSync: taskState is TaskLoadSuccess ? taskState.lastSyncPull : null
-      );
-
-      await Future.delayed(Duration(seconds: 2));
-      print("$eventId | Respuesta de la API recibida...");
-
-      if(responseTasks != null){
-        print("$eventId | Remplazando nuevo estado con las tasks recibidas de la API...");
-
-        final emitState = taskState is TaskLoadSuccess ? taskState : TaskLoadSuccess(); 
-
-        emit(TaskLoadSuccess(
-          lastSyncPull: DateTime.now(),
-          tasks: emitState.tasks.map((t){
-            final r = responseTasks.firstWhereOrNull((r) => r.id == t.id);
-            responseTasks.remove(r);
-            return r ?? t;
-          }).toList()..addAll(responseTasks)
-        ));
-      }
-    },
-    transformer: restartable());*/
     
     on<TasksUpdated>((event, emit){
       final taskState = state;
