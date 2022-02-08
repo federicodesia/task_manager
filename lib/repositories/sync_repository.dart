@@ -26,7 +26,7 @@ class SyncRepository{
       final response = await base.dioAccessToken.post(
         "/sync",
         data: {
-          "lastSync": DateTimeSerializer().toJson(lastSync ?? DateTime(1970)),
+          "lastSync": NullableDateTimeSerializer().toJson(lastSync),
           "tasks": tasks,
           "categories": categories
         }

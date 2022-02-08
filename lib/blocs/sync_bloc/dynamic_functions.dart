@@ -59,7 +59,6 @@ Tuple3<
   List<T>,
   Map<String, SyncErrorType>
 >? mergeItems<T>({
-  required DateTime date,
   required List<dynamic> currentItems,
   required List<dynamic> currentDeletedItems,
   required Map<String, SyncErrorType> currentFailedItems,
@@ -74,14 +73,24 @@ Tuple3<
       currentFailedItems.remove(r.id);
     });
 
-    currentDeletedItems.removeWhere((c) => !c.deletedAt.isAfter(date) && deletedItems.any((d) => c.id == d.id));
+    currentDeletedItems.removeWhere((c){
+      final deleted = deletedItems.firstWhereOrNull((d) => d.id == c.id);
+      if(deleted != null && deleted.deletedAt.isAfter(c.deletedAt)) return true;
+      return false;
+    });
+
+    currentItems.removeWhere((c){
+      final deleted = deletedItems.firstWhereOrNull((d) => d.id == c.id);
+      if(deleted != null && deleted.updatedAt.isAfter(c.updatedAt)) return true;
+      return false;
+    });
     
     currentItems = currentItems.map((c){
       final updated = updatedItems.firstWhereOrNull((u) => u.id == c.id);
       updatedItems.remove(updated);
 
-      if(c.updatedAt.isAfter(date)) return c;
-      return updated ?? c;
+      if(updated != null && updated.updatedAt.isAfter(c.updatedAt)) return updated;
+      return c;
     }).toList()..addAll(updatedItems);
     
     return Tuple3(

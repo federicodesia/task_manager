@@ -123,7 +123,6 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
 
             if(replaceTasks.isNotEmpty){
               final mergedTasks = mergeItems<Task>(
-                date: tempDate,
                 currentItems: newTaskState.tasks,
                 currentDeletedItems: newTaskState.deletedTasks,
                 currentFailedItems: newTaskState.failedTasks,
@@ -140,7 +139,6 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
 
             if(replaceCategories.isNotEmpty){
               final mergedCategories = mergeItems<Category>(
-                date: tempDate,
                 currentItems: newCategoryState.categories,
                 currentDeletedItems: newCategoryState.deletedCategories,
                 currentFailedItems: newCategoryState.failedCategories,
