@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
               userRepository: context.read<UserRepository>()
-            ),
+            )..add(AuthLoaded()),
           ),
         ],
         child: BlocBuilder<ThemeCubit, ThemeMode>(

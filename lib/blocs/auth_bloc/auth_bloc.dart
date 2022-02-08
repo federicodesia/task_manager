@@ -1,5 +1,6 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/user.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
@@ -8,7 +9,9 @@ import 'package:task_manager/repositories/user_repository.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-class AuthBloc extends Bloc<AuthEvent, AuthState> {
+part 'auth_bloc.g.dart';
+
+class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
   final AuthRepository authRepository;
   final UserRepository userRepository;
@@ -18,8 +21,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required this.authRepository,
     required this.userRepository
-  }) : super(AuthState(status: AuthStatus.loading)){
-    autoLogin();
+  }) : super(AuthState()){
+
+    on<AuthLoaded>((event, emit) async{
+
+      final String? refreshToken = await secureStorage.read(key: "refreshToken");
+      final String? accessToken = await secureStorage.read(key: "accessToken");
+
+      emit(state.copyWith(
+        credentials: state.credentials.copyWith(
+          refreshToken: refreshToken,
+          accessToken: accessToken
+        )
+      ));
+
+      final credentials = state.credentials;
+      if(credentials.isNotEmpty){
+        final response = await authRepository.accessToken(authCredentials: credentials);
+
+        response.when(
+          left: (error) => add(AuthCredentialsChanged(credentials: AuthCredentials.empty)),
+          right: (authCredentials) => add(AuthCredentialsChanged(credentials: authCredentials))
+        );
+      }
+      else Future.delayed(Duration(seconds: 1), () {
+        add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+      });
+    });
     
     on<AuthCredentialsChanged>((event, emit) async{
       final credentials = event.credentials;
@@ -56,25 +84,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
   }
 
-  void autoLogin() async{
-    final String? refreshToken = await secureStorage.read(key: "refreshToken");
-    final String? accessToken = await secureStorage.read(key: "accessToken");
-
-    final credentials = AuthCredentials(
-      refreshToken: refreshToken ?? "",
-      accessToken: accessToken ?? ""
-    );
-
-    if(credentials.isNotEmpty){
-      final response = await authRepository.accessToken(authCredentials: credentials);
-
-      response.when(
-        left: (error) => add(AuthCredentialsChanged(credentials: AuthCredentials.empty)),
-        right: (authCredentials) => add(AuthCredentialsChanged(credentials: authCredentials))
-      );
+  @override
+  AuthState? fromJson(Map<String, dynamic> json) {
+    try{
+      return AuthState.fromJson(json);
     }
-    else Future.delayed(Duration(seconds: 1), () {
-      add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
-    });
+    catch(error) {}
+  }
+
+  @override
+  Map<String, dynamic>? toJson(AuthState state) {
+    try{
+      return state.toJson();
+    }
+    catch(error) {}
   }
 }
