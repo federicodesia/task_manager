@@ -174,4 +174,15 @@ class AuthRepository{
       return null;
     }
   }
+
+  Future<void> setFirebaseMessagingToken({
+    required String token
+  }) async {
+    try{
+      await base.dioRefreshToken.post("/auth/set-fcm-token/$token");
+    }
+    catch (error){
+      await onResponseError(error: error);
+    }
+  }
 }

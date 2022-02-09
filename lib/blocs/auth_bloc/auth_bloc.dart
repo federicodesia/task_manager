@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -17,11 +20,18 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   final UserRepository userRepository;
 
   FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  late StreamSubscription firebaseMessagingTokenSubscription;
 
   AuthBloc({
     required this.authRepository,
     required this.userRepository
   }) : super(AuthState()){
+
+    firebaseMessagingTokenSubscription = firebaseMessaging.onTokenRefresh.listen((token) async {
+      print("FirebaseMessagingTokenSubscription: $token");
+      await authRepository.setFirebaseMessagingToken(token: token);
+    });
 
     on<AuthLoaded>((event, emit) async{
 
@@ -46,6 +56,10 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       }
       else Future.delayed(Duration(seconds: 1), () {
         add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+      });
+      
+      await firebaseMessaging.getToken().then((token) async{
+        if(token != null) await authRepository.setFirebaseMessagingToken(token: token);
       });
     });
     
@@ -83,6 +97,13 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
     });
   }
+
+  @override
+  Future<void> close() {
+    firebaseMessagingTokenSubscription.cancel();
+    return super.close();
+  }
+
 
   @override
   AuthState? fromJson(Map<String, dynamic> json) {

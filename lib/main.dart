@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/cubits/theme_cubit.dart';
+import 'package:task_manager/firebase_options.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/repositories/base_repository.dart';
 import 'package:task_manager/repositories/user_repository.dart';
@@ -19,6 +21,11 @@ void main() async{
   setupLocator();
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   final storage = await HydratedStorage.build(
     storageDirectory: await getTemporaryDirectory(),
   );
