@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -16,6 +17,14 @@ import 'package:task_manager/services/dialog_service.dart';
 import 'package:task_manager/services/locator_service.dart';
 import 'package:task_manager/theme/theme.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+}
+
 void main() async{
   Paint.enableDithering = true;
   setupLocator();
@@ -26,8 +35,11 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  final storageDirectory = await getTemporaryDirectory();
   final storage = await HydratedStorage.build(
-    storageDirectory: await getTemporaryDirectory(),
+    storageDirectory: storageDirectory,
   );
   HydratedBlocOverrides.runZoned(
     () => runApp(MyApp()),

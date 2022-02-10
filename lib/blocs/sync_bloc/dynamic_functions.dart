@@ -25,8 +25,9 @@ List<T> itemsUpdatedAfterDate<T>({
   }
 }
 
-Tuple2<List<T>, Map<String, SyncErrorType>>? mergeDuplicatedId<T>({
+Tuple3<List<T>, List<T>, Map<String, SyncErrorType>>? mergeDuplicatedId<T>({
   required List<dynamic> items,
+  required List<dynamic> deletedItems,
   required Map<String, SyncErrorType> failedItems,
   required String duplicatedId
 }){
@@ -46,8 +47,9 @@ Tuple2<List<T>, Map<String, SyncErrorType>>? mergeDuplicatedId<T>({
       }
     }
 
-    return Tuple2(
+    return Tuple3(
       List<T>.from(items),
+      List<T>.from(deletedItems),
       failedItems
     );
   }

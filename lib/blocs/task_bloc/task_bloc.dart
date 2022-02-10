@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 import 'package:task_manager/models/sync_item_error.dart';
 import 'package:task_manager/models/sync_status.dart';
 import 'package:task_manager/models/task.dart';
-import 'package:task_manager/repositories/task_repository.dart';
 
 part 'task_event.dart';
 part 'task_state.dart';
@@ -13,9 +12,7 @@ part 'task_state.dart';
 part 'task_bloc.g.dart';
 
 class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
-
-  final TaskRepository taskRepository;
-  TaskBloc({required this.taskRepository}) : super(TaskLoadSuccess.initial()){
+  TaskBloc() : super(TaskLoadSuccess.initial()){
 
     on<TaskAdded>((event, emit) async{
       final taskState = state;
