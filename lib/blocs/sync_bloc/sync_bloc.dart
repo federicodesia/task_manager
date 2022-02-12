@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
-import 'package:task_manager/blocs/sync_bloc/sync_service.dart';
+import 'package:task_manager/blocs/sync_bloc/dynamic_functions.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
+import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/serializers/datetime_serializer.dart';
 import 'package:task_manager/models/sync_status.dart';
+import 'package:task_manager/models/task.dart';
 import 'package:task_manager/repositories/sync_repository.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tuple/tuple.dart';
 
 part 'sync_event.dart';
 part 'sync_state.dart';
@@ -44,52 +45,118 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
     });
 
     on<SyncRequested>((event, emit) async{
-      final syncService = SyncService();
+      print("Sync requested");
 
-      await syncService.sync(
+      final taskState = taskBloc.state;
+      final categoryState = categoryBloc.state;
+      if(taskState is! TaskLoadSuccess || categoryState is! CategoryLoadSuccess) return;
+
+      final tempDate = DateTime.now();
+
+      final updatedTasks = itemsUpdatedAfterDate<Task>(
+        date: state.lastSync,
+        items: taskState.tasks + taskState.deletedTasks,
+        failedItems: taskState.failedTasks
+      );
+
+      final updatedCategories = itemsUpdatedAfterDate<Category>(
+        date: state.lastSync,
+        items: categoryState.categories + categoryState.deletedCategories,
+        failedItems: categoryState.failedCategories
+      );
+
+      print("Sync | Enviando peticion a la API...");
+      await Future.delayed(Duration(seconds: 2));
+      final responseItems = await syncRepository.sync(
         lastSync: state.lastSync,
-        syncRepository: syncRepository,
+        tasks: updatedTasks,
+        categories: updatedCategories
+      );
+      print("Sync | Respuesta de la API recibida...");
 
-        onGetTasks: () {
-          final taskState = taskBloc.state;
-          if(taskState is TaskLoadSuccess) return Tuple3(
-            taskState.tasks,
-            taskState.deletedTasks,
-            taskState.failedTasks
-          );
-        },
+      if(responseItems != null){
 
-        onGetCategories: () {
-          final categoryState = categoryBloc.state;
-          if(categoryState is CategoryLoadSuccess) return Tuple3(
-            categoryState.categories,
-            categoryState.deletedCategories,
-            categoryState.failedCategories
-          );
-        },
+        final newTaskState = taskBloc.state;
+        final newCategoryState = categoryBloc.state;
+        if(newTaskState is! TaskLoadSuccess || newCategoryState is! CategoryLoadSuccess) return;
 
-        onMergeTasks: (syncStatus, mergedTasks){
-          final taskState = taskBloc.state;
-          if(taskState is TaskLoadSuccess) taskBloc.add(TaskStateUpdated(taskState.copyWith(
-            syncPushStatus: syncStatus,
-            tasks: mergedTasks.item1,
-            deletedTasks: mergedTasks.item2,
-            failedTasks: mergedTasks.item3
-          )));
-        },
+        responseItems.when(
+          left: (duplicated){
 
-        onMergeCategories: (syncStatus, mergedCategories){
-          final categoryState = categoryBloc.state;
-          if(categoryState is CategoryLoadSuccess) categoryBloc.add(CategoryStateUpdated(categoryState.copyWith(
-            syncPushStatus: syncStatus,
-            categories: mergedCategories.item1,
-            deletedCategories: mergedCategories.item2,
-            failedCategories: mergedCategories.item3
-          )));
-        },
-      ).then((lastSync){
-        if(lastSync != null) emit(state.copyWith(lastSync: lastSync));
-      });
+            final duplicatedId = duplicated.item1;
+            final objectType = duplicated.item2;
+
+            if(objectType is Task){
+              final mergedDuplicatedId = mergeDuplicatedId<Task>(
+                items: newTaskState.tasks,
+                failedItems: newTaskState.failedTasks,
+                duplicatedId: duplicatedId
+              );
+              if(mergedDuplicatedId == null) return;
+
+              taskBloc.add(TaskStateUpdated(newTaskState.copyWith(
+                syncPushStatus: SyncStatus.pending,
+                tasks: mergedDuplicatedId.item1,
+                failedTasks: mergedDuplicatedId.item2
+              )));
+            }
+            else if(objectType is Category){
+              final mergedDuplicatedId = mergeDuplicatedId<Category>(
+                items: newCategoryState.categories,
+                failedItems: newCategoryState.failedCategories,
+                duplicatedId: duplicatedId
+              );
+              if(mergedDuplicatedId == null) return;
+
+              categoryBloc.add(CategoryStateUpdated(newCategoryState.copyWith(
+                syncPushStatus: SyncStatus.pending,
+                categories: mergedDuplicatedId.item1,
+                failedCategories: mergedDuplicatedId.item2
+              )));
+            }
+          },
+
+          right: (replaceItems){
+
+            final replaceTasks = replaceItems.item1;
+            final replaceCategories = replaceItems.item2;
+
+            if(replaceTasks.isNotEmpty){
+              final mergedTasks = mergeItems<Task>(
+                currentItems: newTaskState.tasks,
+                currentDeletedItems: newTaskState.deletedTasks,
+                currentFailedItems: newTaskState.failedTasks,
+                replaceItems: replaceItems.item1
+              );
+
+              if(mergedTasks != null) taskBloc.add(TaskStateUpdated(taskState.copyWith(
+                syncPushStatus: SyncStatus.idle,
+                tasks: mergedTasks.item1,
+                deletedTasks: mergedTasks.item2,
+                failedTasks: mergedTasks.item3
+              )));
+            }
+
+            if(replaceCategories.isNotEmpty){
+              final mergedCategories = mergeItems<Category>(
+                currentItems: newCategoryState.categories,
+                currentDeletedItems: newCategoryState.deletedCategories,
+                currentFailedItems: newCategoryState.failedCategories,
+                replaceItems: replaceItems.item2
+              );
+
+              if(mergedCategories != null) categoryBloc.add(CategoryStateUpdated(newCategoryState.copyWith(
+                syncPushStatus: SyncStatus.idle,
+                categories: mergedCategories.item1,
+                deletedCategories: mergedCategories.item2,
+                failedCategories: mergedCategories.item3
+              )));
+            }
+
+            emit(state.copyWith(lastSync: tempDate));
+          }
+        );
+      }
     },
     transformer: (events, mapper) {
       return events.debounceTime(const Duration(seconds: 5)).switchMap(mapper);
