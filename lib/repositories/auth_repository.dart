@@ -62,7 +62,8 @@ class AuthRepository{
   }) async {
 
     try{
-      final response = await base.dioRefreshToken.get("/auth/access-token");
+      final dio = await base.dioRefreshToken();
+      final response = await dio.get("/auth/access-token");
       return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
     }
     catch (error){
@@ -73,7 +74,8 @@ class AuthRepository{
 
   Future<void> logout() async {
     try{
-      await base.dioRefreshToken.post("/auth/logout");
+      final dio = await base.dioRefreshToken();
+      await dio.post("/auth/logout");
     }
     catch (error){
       await onResponseError(error: error);
@@ -82,7 +84,8 @@ class AuthRepository{
 
   Future<void> sendAccountVerificationCode() async {
     try{
-      await base.dioAccessToken.post("/auth/send-account-verification-code");
+      final dio = await base.dioAccessToken();
+      await dio.post("/auth/send-account-verification-code");
     }
     catch (error){
       await onResponseError(error: error);
@@ -95,7 +98,8 @@ class AuthRepository{
   }) async {
 
     try{
-      final response = await base.dioAccessToken.post(
+      final dio = await base.dioAccessToken();
+      final response = await dio.post(
         "/auth/verify-account-code",
         data: {
           "code": code
@@ -160,7 +164,8 @@ class AuthRepository{
   }) async {
 
     try{
-      await base.dioAccessToken.post(
+      final dio = await base.dioAccessToken();
+      await dio.post(
         "/auth/change-forgot-password",
         data: {
           "password": password
@@ -179,7 +184,8 @@ class AuthRepository{
     required String token
   }) async {
     try{
-      await base.dioRefreshToken.post("/auth/set-fcm-token/$token");
+      final dio = await base.dioRefreshToken();
+      await dio.post("/auth/set-fcm-token/$token");
     }
     catch (error){
       await onResponseError(error: error);

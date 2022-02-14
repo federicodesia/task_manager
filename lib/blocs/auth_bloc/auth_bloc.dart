@@ -59,6 +59,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       });
       
       await firebaseMessaging.getToken().then((token) async{
+        print("FirebaseMessagingToken: $token");
         if(token != null) await authRepository.setFirebaseMessagingToken(token: token);
       });
     });

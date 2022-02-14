@@ -1,13 +1,17 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/helpers/enum_helper.dart';
 import 'package:task_manager/models/auth_credentials.dart';
-import 'package:task_manager/services/context_service.dart';
-import 'package:task_manager/services/locator_service.dart';
 
 class AccessTokenInterceptor extends Interceptor {
+
+  final Future<String?> Function() getRefreshToken;
+  final Function(AuthCredentials) onAuthCredentialsChanged; 
+
+  AccessTokenInterceptor({
+    required this.getRefreshToken,
+    required this.onAuthCredentialsChanged
+  });
 
   late Dio _dio = Dio(
     BaseOptions(
@@ -70,22 +74,25 @@ class AccessTokenInterceptor extends Interceptor {
   }
 
   Future<Response<dynamic>?> _retry(RequestOptions options) async{
-    final context = locator<ContextService>().context;
-    final authBloc = BlocProvider.of<AuthBloc>(context);
-    final authCredentials = authBloc.state.credentials;
-
     try{
+      final refreshToken = await getRefreshToken();
+      if(refreshToken == null) return null;
+
       final response = await _dio.get(
         "/access-token",
         options: Options(headers: {
-          "Authorization": "Bearer " + authCredentials.refreshToken,
+          "Authorization": "Bearer " + refreshToken,
           "ValidateAccessToken": false
         })
       );
 
-      final newCredentials = authCredentials.copyWith(accessToken: response.data["accessToken"]);
-      authBloc.add(AuthCredentialsChanged(credentials: newCredentials));
-      options.headers["Authorization"] = "Bearer " + newCredentials.accessToken;
+      final authCredentials = AuthCredentials(
+        refreshToken: refreshToken,
+        accessToken: response.data["accessToken"]
+      );
+
+      onAuthCredentialsChanged(authCredentials);
+      options.headers["Authorization"] = "Bearer " + authCredentials.accessToken;
       options.headers["ValidateAccessToken"] = false;
 
       try{

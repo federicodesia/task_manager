@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 import 'package:task_manager/models/sync_item_error.dart';
 import 'package:task_manager/models/sync_status.dart';
 import 'package:task_manager/models/task.dart';
-import 'package:task_manager/repositories/task_repository.dart';
 
 part 'task_event.dart';
 part 'task_state.dart';
@@ -14,8 +13,7 @@ part 'task_bloc.g.dart';
 
 class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
 
-  final TaskRepository taskRepository;
-  TaskBloc({required this.taskRepository}) : super(TaskLoadSuccess.initial()){
+  TaskBloc() : super(TaskLoadSuccess.initial()){
 
     on<TaskAdded>((event, emit) async{
       final taskState = state;
@@ -72,11 +70,20 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
       emit(event.state);
     },
     transformer: restartable());
+
+    on<TaskReloadStateRequested>((event, emit) async{
+      final json = event.json;
+      if(json == null) return;
+      final taskState = fromJson(json);
+      if(taskState != null) emit(taskState);
+    },
+    transformer: restartable());
   }
 
   @override
   TaskState? fromJson(Map<String, dynamic> json) {
     try{
+      print("taskBloc fromJson");
       return TaskLoadSuccess.fromJson(json);
     }
     catch(error) {}
@@ -85,6 +92,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   @override
   Map<String, dynamic>? toJson(TaskState state) {
     try{
+      print("taskBloc toJson");
       final taskState = state;
       if(taskState is TaskLoadSuccess) return taskState.toJson();
     }

@@ -64,11 +64,20 @@ class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
       emit(event.state);
     },
     transformer: restartable());
+
+    on<CategoryReloadStateRequested>((event, emit) async{
+      final json = event.json;
+      if(json == null) return;
+      final categoryState = fromJson(json);
+      if(categoryState != null) emit(categoryState);
+    },
+    transformer: restartable());
   }
 
   @override
   CategoryState? fromJson(Map<String, dynamic> json) {
     try{
+      print("categoryBloc fromJson");
       return CategoryLoadSuccess.fromJson(json);
     }
     catch(error) {}
@@ -77,6 +86,7 @@ class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
   @override
   Map<String, dynamic>? toJson(CategoryState state) {
     try{
+      print("categoryBloc toJson");
       final categoryState = state;
       if(categoryState is CategoryLoadSuccess) return categoryState.toJson();
     }

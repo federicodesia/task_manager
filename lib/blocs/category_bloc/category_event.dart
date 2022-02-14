@@ -22,3 +22,8 @@ class CategoryStateUpdated extends CategoryEvent {
   final CategoryState state;
   CategoryStateUpdated(this.state);
 }
+
+class CategoryReloadStateRequested extends CategoryEvent {
+  final Map<String, dynamic>? json;
+  CategoryReloadStateRequested({required this.json});
+}

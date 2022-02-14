@@ -23,7 +23,8 @@ class SyncRepository{
     required List<Category> categories
   }) async {
     try{
-      final response = await base.dioAccessToken.post(
+      final dio = await base.dioAccessToken();
+      final response = await dio.post(
         "/sync",
         data: {
           "lastSync": NullableDateTimeSerializer().toJson(lastSync),

@@ -13,7 +13,8 @@ class UserRepository {
   Future<Either<String, User>?> getUser() async {
 
     try{
-      final response = await base.dioAccessToken.get("/user/");
+      final dio = await base.dioAccessToken();
+      final response = await dio.get("/user/");
       return Right(User.fromJson(response.data));
     }
     catch (error){
