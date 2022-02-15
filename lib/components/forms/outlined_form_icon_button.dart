@@ -33,7 +33,9 @@ class OutlinedFormIconButton extends StatelessWidget{
             child: Text(
               text,
               style: customTheme.lightTextStyle.copyWith(fontSize: 13.5),
-              textAlign: TextAlign.center
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           )
         ],

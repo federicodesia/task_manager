@@ -2,11 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
+import 'package:task_manager/blocs/settings_bloc/settings_bloc.dart';
 import 'package:task_manager/components/lists/rounded_list_tile.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
-import 'package:task_manager/cubits/theme_cubit.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/theme/theme.dart';
@@ -119,9 +119,8 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                         RoundedListTileSwitch(
                           title: context.l10n.settings_darkMode,
                           icon: Icons.dark_mode_rounded,
-                          onChanged: (darkMode) {
-                            context.read<ThemeCubit>().toggle();
-                          },
+                          value: Theme.of(context).brightness == Brightness.dark,
+                          onSwitch: () => context.read<SettingsBloc>().add(ThemeModeToggled(context))
                         ),
 
                         RoundedListTile(

@@ -96,8 +96,7 @@ class _SecurityScreenState extends State<_SecurityScreen>{
                         ListHeader(context.l10n.securitySettings_relatedNotifications),
                         RoundedListTileSwitch(
                           title: context.l10n.securitySettings_loginOnNewDevice,
-                          icon: Icons.smartphone_outlined,
-                          onChanged: (value) {},
+                          icon: Icons.smartphone_outlined
                         ),
 
                         SizedBox(height: 8.0),

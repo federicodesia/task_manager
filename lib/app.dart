@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
-import 'package:task_manager/cubits/theme_cubit.dart';
+import 'package:task_manager/blocs/settings_bloc/settings_bloc.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/repositories/base_repository.dart';
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => ThemeCubit()),
+          BlocProvider(create: (context) => SettingsBloc()),
           BlocProvider(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
@@ -52,8 +52,8 @@ class _MyAppState extends State<MyApp> {
             )..add(AuthLoaded()),
           ),
         ],
-        child: BlocBuilder<ThemeCubit, ThemeMode>(
-          builder: (context, themeMode) {
+        child: BlocBuilder<SettingsBloc, SettingsState>(
+          builder: (context, settings) {
 
             return BlocBuilder<AuthBloc, AuthState>(
               builder: (context, authState) {
@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
                 return MaterialApp.router(
                   theme: lightThemeData,
                   darkTheme: darkThemeData,
-                  themeMode: themeMode,
+                  themeMode: settings.themeMode,
 
                   routerDelegate: AutoRouterDelegate.declarative(
                     _appRouter,

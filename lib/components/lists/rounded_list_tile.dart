@@ -136,53 +136,44 @@ class RoundedListTile extends StatelessWidget {
   }
 }
 
-class RoundedListTileSwitch extends StatefulWidget{
+class RoundedListTileSwitch extends StatelessWidget {
 
   RoundedListTileSwitch({
     required this.title,
     this.description,
     required this.icon,
     this.color = Colors.grey,
-    this.initialValue = true,
-    this.onChanged
+    this.value = true,
+    this.onSwitch
   });
 
   final String title;
   final String? description;
   final IconData icon;
   final Color color;
-  final bool initialValue;
-  final void Function(bool)? onChanged;
-
-  @override
-  State<RoundedListTileSwitch> createState() => _RoundedListTileSwitchState();
-}
-
-class _RoundedListTileSwitchState extends State<RoundedListTileSwitch> {
-
-  late bool switchValue = widget.initialValue;
+  final bool value;
+  final void Function()? onSwitch;
 
   @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
 
     return RoundedListTile(
-      title: widget.title,
-      description: widget.description,
-      icon: widget.icon,
-      color: widget.color,
+      title: title,
+      description: description,
+      icon: icon,
+      color: color,
       suffix: SizedBox(
         height: double.minPositive,
         child: Switch(
           activeColor: cPrimaryColor,
           inactiveThumbColor: Color.alphaBlend(customTheme.extraLightColor, customTheme.backgroundColor),
-          value: switchValue,
+          value: value,
           onChanged: (value) {},
         ),
       ),
       onTap: (){
-        setState(() => switchValue = !switchValue);
-        if(widget.onChanged != null) widget.onChanged!(switchValue);
+        if(onSwitch != null) onSwitch!();
       },
     );
   }
