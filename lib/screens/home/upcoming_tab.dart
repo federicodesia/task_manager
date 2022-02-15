@@ -15,6 +15,7 @@ import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/task.dart';
 
@@ -65,8 +66,8 @@ class _UpcomingTabState extends State<_UpcomingTab>{
                 svgHeight: MediaQuery.of(context).orientation == Orientation.portrait ? 
                           MediaQuery.of(context).size.width * 0.4 :
                           MediaQuery.of(context).size.height * 0.4,
-                header: "You haven't tasks for later!",
-                description: "Add tasks to organize your day, optimize your time and receive reminders!",
+                header: context.l10n.emptySpace_youHaventTasksForLater,
+                description: context.l10n.emptySpace_youHaventTasksForLater_description,
               ),
             );
           }
@@ -81,7 +82,7 @@ class _UpcomingTabState extends State<_UpcomingTab>{
                   child: Padding(
                     padding: EdgeInsets.only(bottom: 12.0),
                     child: WeekBarChart(
-                      header: "Tasks in this week",
+                      header: context.l10n.upcomingTab_tasksInThisWeek,
                       weekTasksList: weekTasksList,
                     ),
                   ),
@@ -111,8 +112,8 @@ class _UpcomingTabState extends State<_UpcomingTab>{
                   availableSpaceCubit: widget.availableSpaceCubit,
                   subtractHeight: weekBarChartHeight,
                   child: EmptySpace(
-                    header: "You haven't tasks for later!",
-                    description: "Add tasks to organize your day, optimize your time and receive reminders!",
+                    header: context.l10n.emptySpace_youHaventTasksForLater,
+                    description: context.l10n.emptySpace_youHaventTasksForLater_description,
                   ),
                 )
               ],

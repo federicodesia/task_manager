@@ -3,6 +3,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/responsive/animated_widget_size.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class ProgressSummary extends StatelessWidget{
@@ -10,15 +11,11 @@ class ProgressSummary extends StatelessWidget{
   final String header;
   final int completed;
   final int total;
-  final String? initialDescription;
-  final String? finishedDescription;
 
   ProgressSummary({
     required this.header,
     required this.completed,
-    required this.total,
-    this.initialDescription,
-    this.finishedDescription
+    required this.total
   });
 
   @override
@@ -26,9 +23,9 @@ class ProgressSummary extends StatelessWidget{
     final customTheme = Theme.of(context).customTheme;
 
     String _description;
-    if(completed == 0 && initialDescription != null) _description = initialDescription!;
-    else if(completed == total && finishedDescription != null) _description = finishedDescription!;
-    else _description = "$completed of $total completed 🎉";
+    if(completed == 0) _description = context.l10n.progressSummary_description;
+    else if(completed == total) _description = context.l10n.progressSummary_finished_description;
+    else _description = context.l10n.progressSummary_inProgress_description(completed, total);
 
     double _percent = total > 0 ? completed / total : 0.0;
 

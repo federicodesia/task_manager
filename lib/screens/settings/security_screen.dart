@@ -6,6 +6,7 @@ import 'package:task_manager/components/lists/rounded_list_tile.dart';
 import 'package:task_manager/components/main/center_app_bar.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
 
@@ -57,7 +58,7 @@ class _SecurityScreenState extends State<_SecurityScreen>{
                     },
                     child: CenterAppBar(
                       center: Text(
-                        "Security",
+                        context.l10n.settings_security,
                         style: customTheme.subtitleTextStyle,
                       )
                     ),
@@ -71,36 +72,36 @@ class _SecurityScreenState extends State<_SecurityScreen>{
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ListHeader("Login security"),
+                        ListHeader(context.l10n.securitySettings_loginSecurity),
                         RoundedListTile(
-                          title: "Change email",
+                          title: context.l10n.securitySettings_changeEmail,
                           icon: Icons.email_outlined,
                           color: Color(0xFF6A69E0),
                           onTap: () {},
                         ),
                         RoundedListTile(
-                          title: "Change password",
+                          title: context.l10n.securitySettings_changePassword,
                           icon: Icons.lock_outlined,
                           color: Color(0xFF31A7E1),
                           onTap: () {},
                         ),
                         RoundedListTile(
-                          title: "Sign out on all devices",
+                          title: context.l10n.securitySettings_signOutOnAllDevices,
                           icon: Icons.logout_outlined,
                           color: Color(0xFFF57170),
                           onTap: () {},
                         ),
 
                         SizedBox(height: 8.0),
-                        ListHeader("Related notifications"),
+                        ListHeader(context.l10n.securitySettings_relatedNotifications),
                         RoundedListTileSwitch(
-                          title: "Login on a new device",
+                          title: context.l10n.securitySettings_loginOnNewDevice,
                           icon: Icons.smartphone_outlined,
                           onChanged: (value) {},
                         ),
 
                         SizedBox(height: 8.0),
-                        ListHeader("Login activity"),
+                        ListHeader(context.l10n.securitySettings_loginActivity),
                         
                         LoginActivityCard(
                           deviceName: "Galaxy J2 Prime",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class LoginActivityCard extends StatelessWidget {
@@ -56,7 +57,7 @@ class LoginActivityCard extends StatelessWidget {
                       style: customTheme.textStyle,
                       children: <TextSpan>[
                         if(isThisDevice) TextSpan(
-                          text: "This device  ",
+                          text: context.l10n.securitySettings_thisDevice + "  ",
                           style: customTheme.boldTextStyle.copyWith(color: Colors.green)
                         ),
                         TextSpan(text: deviceName),

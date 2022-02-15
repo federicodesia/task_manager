@@ -15,6 +15,7 @@ import 'package:task_manager/components/lists/declarative_animated_list.dart';
 import 'package:task_manager/components/lists/list_item_animation.dart';
 import 'package:task_manager/components/main/app_bar.dart';
 import 'package:task_manager/components/shimmer/shimmer_list.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
@@ -27,16 +28,28 @@ import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
 
 class HomeScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
+    final availableSpaceCubit = AvailableSpaceCubit();
+
     return BlocProvider(
-      create: (_) => AvailableSpaceCubit(),
-      child: _HomeScreen(),
+      create: (_) => availableSpaceCubit,
+      child: _HomeScreen(
+        tabList: [
+          MyTab(name: context.l10n.homeScreen_todayTab, content: TodayTab(availableSpaceCubit: availableSpaceCubit)),
+          MyTab(name: context.l10n.homeScreen_upcomingTab, content: UpcomingTab(availableSpaceCubit: availableSpaceCubit)),
+          MyTab(name: context.l10n.homeScreen_previousTab, content: Container()),
+        ]
+      ),
     );
   }
 }
 
 class _HomeScreen extends StatefulWidget{
+
+  final List<MyTab> tabList;
+  _HomeScreen({required this.tabList});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -44,7 +57,7 @@ class _HomeScreen extends StatefulWidget{
 
 class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
-  late List<MyTab> tabList;
+  late List<MyTab> tabList = widget.tabList;
 
   late PageController pageController;
   late TabController tabController;
@@ -57,14 +70,6 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
   
   @override
   void initState() {
-    final availableSpaceCubit = BlocProvider.of<AvailableSpaceCubit>(context);
-
-    tabList = [
-      MyTab(name: "Today", content: TodayTab(availableSpaceCubit: availableSpaceCubit)),
-      MyTab(name: "Upcoming", content: UpcomingTab(availableSpaceCubit: availableSpaceCubit)),
-      MyTab(name: "Previous", content: Container()),
-    ];
-
     pageController = PageController();
 
     tabController = TabController(
@@ -86,7 +91,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
         visible: showFloatingActionButton,
         onPressed: () {
           ModalBottomSheet(
-            title: "Create a task",
+            title: context.l10n.bottomSheet_createTask,
             context: context,
             content: TaskBottomSheet(),
           ).show();
@@ -113,8 +118,8 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                       context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height - contentHeight);
                     },
                     child: MyAppBar(
-                      header: "Hello 👋",
-                      description: "Have a nice day!",
+                      header: context.l10n.homeScreen_header,
+                      description: context.l10n.homeScreen_description,
                       onButtonPressed: () {
                         // TODO: Remove event.
                         context.read<SyncBloc>().add(SyncRequested());
@@ -132,7 +137,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Header(text: "Categories"),
+                        Header(text: context.l10n.categories),
                         SizedBox(height: cPadding),
 
                         BlocBuilder<CategoryBloc, CategoryState>(
@@ -185,7 +190,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                               child: ElevatedButton(
                                                 onPressed: () {
                                                   ModalBottomSheet(
-                                                    title: "Create category",
+                                                    title: context.l10n.bottomSheet_createCategory,
                                                     context: context,
                                                     content: CategoryBottomSheet()
                                                   ).show();
@@ -210,7 +215,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                                     SizedBox(height: 6.0),
 
                                                     Text(
-                                                      "Add new",
+                                                      context.l10n.addNewCategory_button,
                                                       style: customTheme.lightTextStyle,
                                                       textAlign: TextAlign.center,
                                                       maxLines: 1,

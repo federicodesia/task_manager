@@ -24,6 +24,7 @@ import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task_filter.dart';
 import 'package:task_manager/theme/theme.dart';
@@ -69,7 +70,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
         visible: showFloatingActionButton,
         onPressed: () {
           ModalBottomSheet(
-            title: "Create a task",
+            title: context.l10n.bottomSheet_createTask,
             context: context,
             content: TaskBottomSheet(
               initialcategoryId: widget.categoryId,
@@ -167,7 +168,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                               ),
                                               SizedBox(width: 12.0),
                                               Text(
-                                                "Search task...",
+                                                context.l10n.searchTask,
                                                 style: customTheme.lightTextStyle.copyWith(height: 1.0),
                                               )
                                             ],
@@ -187,7 +188,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                       ),
                                       onPressed: () {
                                         ModalBottomSheet(
-                                          title: "Results", 
+                                          title: context.l10n.results, 
                                           context: context, 
                                           content: ResultsBottomSheet(
                                             categoryScreenBloc: context.read<CategoryScreenBloc>(),
@@ -248,11 +249,11 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                       ? MediaQuery.of(context).size.width * 0.4
                                       : MediaQuery.of(context).size.height * 0.4,
                                     header: state.activeFilter == TaskFilter.All
-                                      ? "You haven't tasks in this category!"
-                                      : "You haven't ${getEnumValue(state.activeFilter).toLowerCase()} tasks!",
+                                      ? context.l10n.emptySpace_youHaventTasksInCategory
+                                      : context.l10n.emptySpace_youHaventTasksWithActiveFilter(state.activeFilter.name.toLowerCase()),
                                     description: state.activeFilter == TaskFilter.All
-                                      ? "Categories help you organize easily. Add a new task by pressing the button below."
-                                      : "There are no tasks with the current filter. Change it by pressing the button above.",
+                                      ? context.l10n.emptySpace_youHaventTasksInCategory_description
+                                      : context.l10n.emptySpace_youHaventTasksWithActiveFilter_description,
                                   )
                                 )
                               ),
@@ -304,7 +305,7 @@ class _CategoryScreenPopupButton extends StatelessWidget{
           enabled: !category.isGeneral,
           child: PopupMenuIconItem(
             icon: Icons.edit_outlined,
-            text: "Edit"
+            text: context.l10n.edit
           ),
         ),
 
@@ -313,14 +314,14 @@ class _CategoryScreenPopupButton extends StatelessWidget{
           enabled: !category.isGeneral,
           child: PopupMenuIconItem(
             icon: Icons.delete_outlined,
-            text: "Delete"
+            text: context.l10n.delete
           ),
         ),
       ],
       onSelected: (value){
         if(value == 0){
           ModalBottomSheet(
-            title: "Edit category", 
+            title: context.l10n.bottomSheet_editCategory, 
             context: context, 
             content: CategoryBottomSheet(editCategory: category)
           ).show();
@@ -328,11 +329,11 @@ class _CategoryScreenPopupButton extends StatelessWidget{
         else if(value == 1){
           RoundedAlertDialog(
             buildContext: context,
-            title: "Delete this category?",
-            description: "Do you really want to delete this category? All tasks will be unlinked without being deleted. This process cannot be undone.",
+            title: context.l10n.alertDialog_deleteCategory,
+            description: context.l10n.alertDialog_deleteCategory_description,
             actions: [
               RoundedAlertDialogButton(
-                text: "Delete",
+                text: context.l10n.delete,
                 backgroundColor: cRedColor,
                 onPressed: (){
                   // Close AlertDialog
@@ -344,7 +345,7 @@ class _CategoryScreenPopupButton extends StatelessWidget{
               ),
 
               RoundedAlertDialogButton(
-                text: "Cancel",
+                text: context.l10n.cancel,
                 onPressed: () => Navigator.of(context, rootNavigator: true).pop()
               ),
             ],

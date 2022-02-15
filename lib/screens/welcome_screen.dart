@@ -34,6 +34,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
   late AvailableSpaceCubit availableSpaceCubit = BlocProvider.of<AvailableSpaceCubit>(context);
   int currentSlidingPage = 0;
 
+  // TODO: Internationalize
   List<SlidingPage> slidingPages = [
     SlidingPage(
       header: "Organize your works",

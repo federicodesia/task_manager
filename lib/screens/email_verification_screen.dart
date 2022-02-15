@@ -6,6 +6,7 @@ import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/forms/verification_code.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/email_verification_cubit.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
@@ -73,8 +74,8 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                                         ? MediaQuery.of(context).size.width * 0.35
                                         : MediaQuery.of(context).size.height * 0.35,
                                       svgBottomMargin: 64.0,
-                                      header: "Verify your email",
-                                      description: "Please enter the 4 character verification code sent to your email address.",
+                                      header: context.l10n.emptySpace_verifyYourEmail,
+                                      description: context.l10n.emptySpace_verifyYourEmail_description,
                                     ),
 
                                     SizedBox(height: cPadding),
@@ -102,7 +103,7 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                                   RoundedButton(
                                     width: double.infinity,
                                     child: Text(
-                                      "Confirm",
+                                      context.l10n.confirm,
                                       style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: () {
@@ -119,7 +120,7 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                                     end: Duration(),
                                     builder: (time) {
                                       return Text(
-                                        "Resend code in ${time.minutes}:${time.seconds}\n",
+                                        context.l10n.emailVerification_resendCodeIn("${time.minutes}:${time.seconds}\n"),
                                         style: customTheme.smallLightTextStyle,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
@@ -132,8 +133,9 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                                           text: TextSpan(
                                             style: customTheme.smallLightTextStyle,
                                             children: <TextSpan>[
-                                              TextSpan(text: "Didn't receive the code? "),
-                                              TextSpan(text: "Resend", style: customTheme.smallTextButtonStyle),
+                                              TextSpan(text: context.l10n.emailVerification_didntReceiveCode),
+                                              TextSpan(text: " "),
+                                              TextSpan(text: context.l10n.emailVerification_resend, style: customTheme.smallTextButtonStyle),
                                               TextSpan(text: "\n")
                                             ],
                                           ),

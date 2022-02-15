@@ -5,6 +5,7 @@ import 'package:task_manager/components/animated_chip.dart';
 import 'package:task_manager/components/forms/form_input_header.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/task_filter.dart';
 import 'package:task_manager/theme/theme.dart';
 
@@ -44,7 +45,7 @@ class _ResultsBottomSheetState extends State<ResultsBottomSheet>{
 
             Padding(
               padding: EdgeInsets.symmetric(horizontal: cPadding),
-              child: FormInputHeader("Task status"),
+              child: FormInputHeader(context.l10n.taskStatus),
             ),
             SizedBox(height: 4.0),
 
@@ -76,7 +77,7 @@ class _ResultsBottomSheetState extends State<ResultsBottomSheet>{
               child: RoundedButton(
                 width: double.infinity,
                 child: Text(
-                  "Done",
+                  context.l10n.done_button,
                   style: customTheme.primaryColorButtonTextStyle,
                 ),
                 onPressed: (){

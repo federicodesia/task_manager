@@ -20,6 +20,7 @@ import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/theme/theme.dart';
 
@@ -71,7 +72,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
           CalendarState calendarState = BlocProvider.of<CalendarBloc>(context).state;
 
           ModalBottomSheet(
-            title: "Create a task",
+            title: context.l10n.bottomSheet_createTask,
             context: context,
             content: TaskBottomSheet(
               initialDate: (calendarState is CalendarLoadSuccess) ? calendarState.selectedDay : null,
@@ -106,8 +107,8 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                           context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height - contentHeight);
                         },
                         child: MyAppBar(
-                          header: "Calendar",
-                          description: "Let's organize!",
+                          header: context.l10n.calendarScreen_title,
+                          description: context.l10n.calendarScreen_description,
                           onButtonPressed: () {},
                         )
                       )
@@ -222,8 +223,8 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                   svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
                                     ? MediaQuery.of(context).size.width * 0.4
                                     : MediaQuery.of(context).size.height * 0.4,
-                                  header: "You haven't tasks on this day!",
-                                  description: "There is nothing scheduled on this day. Add a new task by pressing the button below.",
+                                  header: context.l10n.emptySpace_youHaventTasksOnThisDay,
+                                  description: context.l10n.emptySpace_youHaventTasksOnThisDay_description,
                                 )
                               ),
                             ) : Padding(

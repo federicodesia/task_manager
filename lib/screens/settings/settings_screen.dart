@@ -7,6 +7,7 @@ import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/cubits/theme_cubit.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
@@ -116,7 +117,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                         Divider(),
 
                         RoundedListTileSwitch(
-                          title: "Dark mode",
+                          title: context.l10n.settings_darkMode,
                           icon: Icons.dark_mode_rounded,
                           onChanged: (darkMode) {
                             context.read<ThemeCubit>().toggle();
@@ -124,7 +125,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                         ),
 
                         RoundedListTile(
-                          title: "Language",
+                          title: context.l10n.settings_language,
                           icon: Icons.language_rounded,
                           color: Color(0xFF6A69E0),
                           value: "English",
@@ -133,13 +134,13 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                         //Divider(),
                         
                         RoundedListTile(
-                          title: "Security",
+                          title: context.l10n.settings_security,
                           icon: Icons.lock_rounded,
                           color: Color(0xFF31A7E1),
                           onTap: () => AutoRouter.of(context).navigate(SecurityRoute()),
                         ),
                         RoundedListTile(
-                          title: "Notifications",
+                          title: context.l10n.settings_notifications,
                           icon: Icons.notifications_rounded,
                           color: Color(0xFFB548C5),
                           onTap: () => AutoRouter.of(context).navigate(NotificationsRoute()),
@@ -148,17 +149,17 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                         Divider(),
 
                         RoundedListTile(
-                          title: "Help",
+                          title: context.l10n.settings_help,
                           icon: Icons.help_rounded,
                           onTap: () {},
                         ),
                         RoundedListTile(
-                          title: "Information",
+                          title: context.l10n.settings_information,
                           icon: Icons.info_rounded,
                           onTap: () {},
                         ),
                         RoundedListTile(
-                          title: "Sign out",
+                          title: context.l10n.settings_signOut,
                           icon: Icons.logout_rounded,
                           onTap: () {
                             context.read<AuthBloc>().add(AuthLogoutRequested());

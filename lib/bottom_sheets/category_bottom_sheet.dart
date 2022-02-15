@@ -6,6 +6,7 @@ import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/theme/theme.dart';
 
@@ -61,20 +62,20 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                FormInputHeader("Name"),
+                FormInputHeader(context.l10n.textField_name),
                 RoundedTextFormField(
-                  hintText: "Category name",
+                  hintText: context.l10n.category,
                   initialValue: categoryName,
                   onChanged: (value) => categoryName = value,
                   validator: (value){
                     value = value ?? "";
-                    if(value.isEmpty) return "Please enter a name";
-                    if(value.length > 20) return "Maximum 20 characters";
+                    if(value.isEmpty) return context.l10n.error_enterName;
+                    if(value.length > 20) return context.l10n.error_maxLength(20);
                     return null;
                   },
                 ),
 
-                FormInputHeader("Select a color"),
+                FormInputHeader(context.l10n.selectColor),
                 SizedBox(height: 4.0),
 
                 LayoutBuilder(
@@ -128,7 +129,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
             child: RoundedButton(
               width: double.infinity,
               child: Text(
-                "Done",
+                context.l10n.done_button,
                 style: customTheme.primaryColorButtonTextStyle,
               ),
               onPressed: (){

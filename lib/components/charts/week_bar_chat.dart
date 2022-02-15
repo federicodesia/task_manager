@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/charts/week_bar_chart_group_data.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
@@ -86,7 +87,7 @@ class WeekBarChart extends StatelessWidget{
                 children: [
                   AlignedAnimatedSwitcher(
                     child: Text(
-                      "$completedWeekTasks Completed",
+                      "$completedWeekTasks " + context.l10n.completed,
                       key: Key("$completedWeekTasks Completed"),
                       style: customTheme.boldTextStyle.copyWith(color: cPrimaryColor),
                       maxLines: 1,
@@ -103,7 +104,7 @@ class WeekBarChart extends StatelessWidget{
                   Opacity(
                     opacity: 0,
                     child: Text(
-                      "100 Completed",
+                      "100 " + context.l10n.completed,
                       style: customTheme.boldTextStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -115,7 +116,7 @@ class WeekBarChart extends StatelessWidget{
                     child: AlignedAnimatedSwitcher(
                       duration: cAnimationDuration,
                       child: Text(
-                        "${weekTasksList.length - completedWeekTasks} Remaining",
+                        "${weekTasksList.length - completedWeekTasks} " + context.l10n.remaining,
                         key: Key("${weekTasksList.length - completedWeekTasks} Remaining"),
                         style: customTheme.boldTextStyle.copyWith(color: cChartBackgroundColor),
                         maxLines: 1,

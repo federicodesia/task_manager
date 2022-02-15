@@ -5,6 +5,7 @@ import 'package:task_manager/components/lists/rounded_list_tile.dart';
 import 'package:task_manager/components/main/center_app_bar.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
 
@@ -56,7 +57,7 @@ class _NotificationsScreenState extends State<_NotificationsScreen>{
                     },
                     child: CenterAppBar(
                       center: Text(
-                        "Notifications",
+                        context.l10n.settings_notifications,
                         style: customTheme.subtitleTextStyle,
                       )
                     ),
@@ -71,18 +72,18 @@ class _NotificationsScreenState extends State<_NotificationsScreen>{
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         
-                        ListHeader("Task reminders"),
+                        ListHeader(context.l10n.notificationsSettings_taskReminders),
                         RoundedListTileSwitch(
-                          title: "Before schedule",
-                          description: "Receive a notification 15 minutes before a task starts.",
+                          title: context.l10n.notificationsSettings_beforeSchedule,
+                          description: context.l10n.notificationsSettings_beforeSchedule_description,
                           icon: Icons.schedule_outlined,
                           color: Color(0xFF6B68E1),
                           onChanged: (value) {},
                         ),
 
                         RoundedListTileSwitch(
-                          title: "Task schedule",
-                          description: "Receive a notification at the moment a task starts.",
+                          title: context.l10n.notificationsSettings_taskSchedule,
+                          description: context.l10n.notificationsSettings_taskSchedule_description,
                           icon: Icons.schedule_outlined,
                           color: Color(0xFF31A8E1),
                           onChanged: (value) {},
@@ -90,24 +91,24 @@ class _NotificationsScreenState extends State<_NotificationsScreen>{
                         
 
                         RoundedListTileSwitch(
-                          title: "Uncompleted task",
-                          description: "Receive a notification 1 hour later if the task was not completed.",
+                          title: context.l10n.notificationsSettings_uncompletedTask,
+                          description: context.l10n.notificationsSettings_uncompletedTask_description,
                           icon: Icons.schedule_outlined,
                           color: Color(0xFFB548C6),
                           onChanged: (value) {},
                         ),
 
                         SizedBox(height: 8.0),
-                        ListHeader("Other"),
+                        ListHeader(context.l10n.notificationsSettings_other),
                         RoundedListTileSwitch(
-                          title: "New updates available",
+                          title: context.l10n.notificationsSettings_newUpdatesAvailable,
                           icon: Icons.system_update_alt_outlined,
                           color: Color(0xFF21B17D),
                           onChanged: (value) {},
                         ),
 
                         RoundedListTileSwitch(
-                          title: "Announcements and offers",
+                          title: context.l10n.notificationsSettings_announcementsAndOffers,
                           icon: Icons.local_offer_outlined,
                           color: Color(0xFFFF8801),
                           onChanged: (value) {},

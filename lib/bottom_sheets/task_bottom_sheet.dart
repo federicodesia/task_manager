@@ -13,6 +13,7 @@ import 'package:task_manager/components/forms/outlined_form_icon_button.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/theme/theme.dart';
@@ -63,22 +64,22 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                  FormInputHeader("Task"),
+                  FormInputHeader(context.l10n.task),
                   RoundedTextFormField(
-                    hintText: "Task title",
+                    hintText: context.l10n.task,
                     initialValue: title,
                     onChanged: (value) => title = value,
                     validator: (value) {
                       value = value ?? "";
-                      if(value.isEmpty) return "Please enter a title";
-                      if(value.length > 30) return "Maximum 30 characters";
+                      if(value.isEmpty) return context.l10n.error_enterTitle;
+                      if(value.length > 30) return context.l10n.error_maxLength(30);
                       return null;
                     },
                   ),
 
-                  FormInputHeader("Description"),
+                  FormInputHeader(context.l10n.description),
                   RoundedTextFormField(
-                    hintText: "Description",
+                    hintText: context.l10n.description,
                     initialValue: description,
                     onChanged: (value) => description = value,
                     textInputType: TextInputType.multiline,
@@ -86,12 +87,12 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                     textInputAction: TextInputAction.newline,
                     validator: (value){
                       value = value ?? "";
-                      if(value.length > 60) return "Maximum 60 characters";
+                      if(value.length > 60) return context.l10n.error_maxLength(60);
                       return null;
                     },
                   ),
 
-                  FormInputHeader("Choose date & time"),
+                  FormInputHeader(context.l10n.chooseDateTime),
 
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,13 +101,13 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                         child: FormValidator(
                           widget: (state) => OutlinedFormIconButton(
                             icon: Icons.event_rounded,
-                            text: date == null ? "Select a date" : DateFormat("dd/MM/yyyy").format(date!),
+                            text: date == null ? context.l10n.selectDate_button : DateFormat("dd/MM/yyyy").format(date!),
                             outlineColor: state.hasError ? themeData.errorColor : null,
                             onPressed: () {
                               FocusScope.of(context).requestFocus(new FocusNode());
                               ModalBottomSheet(
                                 context: context,
-                                title: "Select a date",
+                                title: context.l10n.bottomSheet_selectDate,
                                 content: DatePickerBottomSheet(
                                   initialDate: date ?? DateTime.now(),
                                   onDateChanged: (value) => date = value,
@@ -115,7 +116,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                             }
                           ),
                           validator: (value){
-                            if(date == null) return "Please select a date";
+                            if(date == null) return context.l10n.error_selectDate;
                             return null;
                           }
                         )
@@ -126,13 +127,13 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                         child: FormValidator(
                           widget: (state) => OutlinedFormIconButton(
                             icon: Icons.watch_later_rounded,
-                            text: time == null ? "Select a time" : DateFormat("HH:mm a").format(time!),
+                            text: time == null ? context.l10n.selectTime_button : DateFormat("HH:mm a").format(time!),
                             outlineColor: state.hasError ? themeData.errorColor : null,
                             onPressed: () {
                               FocusScope.of(context).requestFocus(new FocusNode());
                               ModalBottomSheet(
                                 context: context,
-                                title: "Select Time",
+                                title: context.l10n.bottomSheet_selectTime,
                                 content: TimePickerBottomSheet(
                                   initialTime: Duration(
                                     hours: time != null ? time!.hour : DateTime.now().hour,
@@ -148,7 +149,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                             }
                           ),
                           validator: (value){
-                            if(time == null) return "Please select a time";
+                            if(time == null) return context.l10n.error_selectTime;
                             return null;
                           }
                         )
@@ -156,7 +157,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                     ],
                   ),
 
-                  FormInputHeader("Category"),
+                  FormInputHeader(context.l10n.category),
                   SizedBox(height: 4.0),
               ],
             ),
@@ -210,7 +211,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
             child: RoundedButton(
               width: double.infinity,
               child: Text(
-                "Done",
+                context.l10n.done_button,
                 style: customTheme.primaryColorButtonTextStyle,
               ),
               onPressed: (){

@@ -13,6 +13,7 @@ import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/task.dart';
 
@@ -52,8 +53,8 @@ class _TodayTabState extends State<TodayTab>{
                 svgHeight: MediaQuery.of(context).orientation == Orientation.portrait ? 
                           MediaQuery.of(context).size.width * 0.4 :
                           MediaQuery.of(context).size.height * 0.4,
-                header: "Start creating your first task",
-                description: "Add tasks to organize your day, optimize your time and receive reminders!",
+                header: context.l10n.emptySpace_createYourFirstTask_description,
+                description: context.l10n.emptySpace_createYourFirstTask_description,
               ),
             );
           }
@@ -65,12 +66,12 @@ class _TodayTabState extends State<TodayTab>{
             List<DynamicObject> items = [];
 
             if(remainingTasks.isNotEmpty){
-              items.add(DynamicObject(object: "Tasks"));
+              items.add(DynamicObject(object: context.l10n.tasks));
               items.addAll(remainingTasks.map((task) => DynamicObject(object: task)));
             }
 
             if(completedTasks.isNotEmpty){
-              items.add(DynamicObject(object: "Completed"));
+              items.add(DynamicObject(object: context.l10n.completed));
               items.addAll(completedTasks.map((task) => DynamicObject(object: task)));
             }
 
@@ -84,11 +85,9 @@ class _TodayTabState extends State<TodayTab>{
                   child: Padding(
                     padding: EdgeInsets.only(bottom: 12.0),
                     child: ProgressSummary(
-                      header: "Today's progress summary",
+                      header: context.l10n.progressSummary_title,
                       completed: completedTasks.length,
                       total: todayTasks.length,
-                      initialDescription: "Let's start to complete! 🚀",
-                      finishedDescription: "You completed all the tasks! 🎉",
                     ),
                   ),
                 ),
@@ -106,8 +105,8 @@ class _TodayTabState extends State<TodayTab>{
                   availableSpaceCubit: widget.availableSpaceCubit,
                   subtractHeight: progressSummaryHeight,
                   child: EmptySpace(
-                    header: "You haven't tasks for today!",
-                    description: "Add tasks to organize your day, optimize your time and receive reminders!",
+                    header: context.l10n.emptySpace_youHaventTasksToday,
+                    description: context.l10n.emptySpace_youHaventTasksToday_description,
                   ),
                 )
               ],

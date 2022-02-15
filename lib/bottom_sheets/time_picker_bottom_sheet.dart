@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/rounded_button.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/theme/theme.dart';
 
 import '../constants.dart';
@@ -37,7 +38,7 @@ class TimePickerBottomSheet extends StatelessWidget{
             RoundedButton(
               width: double.infinity,
               child: Text(
-                "Select",
+                context.l10n.select_button,
                 style: customTheme.primaryColorButtonTextStyle,
               ),
               onPressed: () {

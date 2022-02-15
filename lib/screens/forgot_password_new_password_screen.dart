@@ -6,6 +6,7 @@ import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/forgot_password_new_password_cubit.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/theme/theme.dart';
@@ -72,15 +73,15 @@ class _ForgotPasswordNewPasswordScreenState extends State<_ForgotPasswordNewPass
                                         ? MediaQuery.of(context).size.width * 0.35
                                         : MediaQuery.of(context).size.height * 0.35,
                                       svgBottomMargin: 64.0,
-                                      header: "Create new password",
-                                      description: "We are ready! Now enter your new password that you will use to log in.",
+                                      header: context.l10n.forgotPassword_createNewPassword,
+                                      description: context.l10n.forgotPassword_createNewPassword_description,
                                     ),
 
                                     SizedBox(height: cPadding),
 
                                     RoundedTextFormField(
                                       controller: passwordController,
-                                      hintText: "New password",
+                                      hintText: context.l10n.textField_newPassword,
                                       obscureText: obscurePassword,
                                       enableSuggestions: false,
                                       autocorrect: false,
@@ -123,7 +124,7 @@ class _ForgotPasswordNewPasswordScreenState extends State<_ForgotPasswordNewPass
                                   RoundedButton(
                                     width: double.infinity,
                                     child: Text(
-                                      "Confirm",
+                                      context.l10n.confirm,
                                       style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: () async {
@@ -142,8 +143,9 @@ class _ForgotPasswordNewPasswordScreenState extends State<_ForgotPasswordNewPass
                                       text: TextSpan(
                                         style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
-                                          TextSpan(text: "Remember your password? "),
-                                          TextSpan(text: "Sign In", style: customTheme.smallTextButtonStyle),
+                                          TextSpan(text: context.l10n.forgotPassword_rememberYourPassword),
+                                          TextSpan(text: " "),
+                                          TextSpan(text: context.l10n.signIn_button, style: customTheme.smallTextButtonStyle),
                                           TextSpan(text: "\n")
                                         ],
                                       ),

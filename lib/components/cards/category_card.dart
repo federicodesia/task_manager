@@ -8,6 +8,7 @@ import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/components/shimmer/shimmer_text.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:task_manager/screens/category_screen.dart';
 import 'package:collection/collection.dart';
@@ -43,11 +44,10 @@ class CategoryCard extends StatelessWidget{
               String description;
               int tasksCount = categoryTasks.length;
               int completedTasks = categoryTasks.where((task) => task.isCompleted).length;
-              if(tasksCount > 0 && tasksCount == completedTasks) description = "All done";
+              if(tasksCount > 0 && tasksCount == completedTasks) description = context.l10n.categoryCard_allDone_description;
               else{
                 int remainingTasks = tasksCount - completedTasks;
-                if(remainingTasks == 1) description = "$remainingTasks task";
-                else description = "$remainingTasks tasks";
+                description = context.l10n.categoryCard_taskCount_description(remainingTasks);
               }
 
               return CategoryCardContent(
@@ -66,7 +66,7 @@ class CategoryCard extends StatelessWidget{
                 },
                 onLongPress: () {
                   if(!category.isGeneral) ModalBottomSheet(
-                    title: "Edit category",
+                    title: context.l10n.bottomSheet_editCategory,
                     context: context,
                     content: CategoryBottomSheet(editCategory: category)
                   ).show();

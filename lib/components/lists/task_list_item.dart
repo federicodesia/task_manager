@@ -6,6 +6,7 @@ import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/calendar/calendar_task_list_item.dart';
 import 'package:task_manager/components/lists/rounded_dismissible.dart';
 import 'package:task_manager/components/lists/checkbox_task_list_item.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/task.dart';
 
 import '../../constants.dart';
@@ -33,7 +34,7 @@ class TaskListItem extends StatelessWidget{
   Widget build(BuildContext _) {
 
     final Function() onPressed = ModalBottomSheet(
-      title: "Edit task",
+      title: context.l10n.bottomSheet_editTask,
       context: context,
       content: TaskBottomSheet(editTask: task)
     ).show;
@@ -62,7 +63,7 @@ class TaskListItem extends StatelessWidget{
       padding: EdgeInsets.only(bottom: cListItemSpace),
       child: RoundedDismissible(
         key: UniqueKey(),
-        text: "Delete task",
+        text: context.l10n.dismissible_deleteTask,
         icon: Icons.delete_rounded,
         color: cRedColor,
         child: item,
@@ -72,9 +73,9 @@ class TaskListItem extends StatelessWidget{
 
           RoundedSnackBar(
             context: context,
-            text: "Task deleted",
+            text: context.l10n.snackBar_taskDeleted,
             action: SnackBarAction(
-              label: "Undo",
+              label: context.l10n.snackBar_undo,
               textColor: cPrimaryColor,
               onPressed: () => onUndoDismissed(tempTask)
             )
