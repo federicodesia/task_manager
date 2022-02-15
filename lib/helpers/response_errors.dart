@@ -16,9 +16,12 @@ Future<List<String>?> onResponseError({
   }
 
   if(error is DioError){
-    final responseMessages = generateResponseMessage(error.response?.data["message"]);
-    if(messageKeys == null || (responseMessages.any((m) => messageKeys.any((k) => m.contains(k))))
-    ) return responseMessages;
+    try{
+      final responseMessages = generateResponseMessage(error.response?.data["message"]);
+      if(messageKeys == null || (responseMessages.any((m) => messageKeys.any((k) => m.contains(k))))) return responseMessages;
+    }
+    catch(error){}
+    
   }
   
   locator<DialogService>().showSomethingWentWrongDialog();

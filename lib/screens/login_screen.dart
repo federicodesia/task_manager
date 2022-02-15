@@ -5,6 +5,7 @@ import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/login_cubit.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/theme/theme.dart';
@@ -69,7 +70,7 @@ class _LoginScreenState extends State<_LoginScreen>{
 
                                   SizedBox(height: cPadding),
                                   Text(
-                                    "Welcome back!",
+                                    context.l10n.loginScreen_title,
                                     style: customTheme.titleTextStyle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -77,7 +78,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                   SizedBox(height: 8.0),
 
                                   Text(
-                                    "Please sign in to your account",
+                                    context.l10n.loginScreen_description,
                                     style: customTheme.lightTextStyle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -86,7 +87,7 @@ class _LoginScreenState extends State<_LoginScreen>{
 
                                   RoundedTextFormField(
                                     controller: emailController,
-                                    hintText: "Email",
+                                    hintText: context.l10n.textField_email,
                                     textInputType: TextInputType.emailAddress,
                                     errorText: formState.emailError
                                   ),
@@ -94,7 +95,7 @@ class _LoginScreenState extends State<_LoginScreen>{
 
                                   RoundedTextFormField(
                                     controller: passwordController,
-                                    hintText: "Password",
+                                    hintText: context.l10n.textField_password,
                                     errorText: formState.passwordError,
                                     enableSuggestions: false,
                                     autocorrect: false,
@@ -127,7 +128,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                     children: [
                                       GestureDetector(
                                         child: Text(
-                                          "Forgot Password?",
+                                          context.l10n.loginScreen_forgotPassword,
                                           style: customTheme.smallLightTextStyle,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -156,7 +157,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                   RoundedButton(
                                     width: double.infinity,
                                     child: Text(
-                                      "Sign In",
+                                      context.l10n.signIn_button,
                                       style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: () {
@@ -173,8 +174,9 @@ class _LoginScreenState extends State<_LoginScreen>{
                                       text: TextSpan(
                                         style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
-                                          TextSpan(text: "Don't have an Account? "),
-                                          TextSpan(text: "Sign Up", style: customTheme.smallTextButtonStyle),
+                                          TextSpan(text: context.l10n.loginScreen_dontHaveAnAccount),
+                                          TextSpan(text: " "),
+                                          TextSpan(text: context.l10n.signUp_button, style: customTheme.smallTextButtonStyle),
                                           TextSpan(text: "\n")
                                         ],
                                       ),

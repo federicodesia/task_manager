@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/cubits/theme_cubit.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/repositories/base_repository.dart';
 import 'package:task_manager/repositories/user_repository.dart';
@@ -11,6 +12,7 @@ import 'package:task_manager/services/context_service.dart';
 import 'package:task_manager/services/dialog_service.dart';
 import 'package:task_manager/services/locator_service.dart';
 import 'package:task_manager/theme/theme.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyApp extends StatefulWidget {
   @override
@@ -74,6 +76,13 @@ class _MyAppState extends State<MyApp> {
                   ),
                   routeInformationParser: _appRouter.defaultRouteParser(includePrefixMatches: true),
                   debugShowCheckedModeBanner: false,
+                  localizationsDelegates: [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: AppLocalizations.supportedLocales,
                 );
               },
             );

@@ -5,6 +5,7 @@ import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/cubits/register_cubit.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/components/rounded_button.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/theme/theme.dart';
@@ -70,7 +71,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
 
                                   SizedBox(height: cPadding),
                                   Text(
-                                    "Create new account",
+                                    context.l10n.registerScreen_title,
                                     style: customTheme.titleTextStyle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -78,7 +79,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   SizedBox(height: 8.0),
 
                                   Text(
-                                    "Please fill in the form to continue",
+                                    context.l10n.registerScreen_description,
                                     style: customTheme.lightTextStyle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -87,14 +88,14 @@ class _RegisterScreenState extends State<_RegisterScreen>{
 
                                   RoundedTextFormField(
                                     controller: nameController,
-                                    hintText: "Name",
+                                    hintText: context.l10n.textField_name,
                                     errorText: formState.nameError
                                   ),
                                   SizedBox(height: 16.0),
 
                                   RoundedTextFormField(
                                     controller: emailController,
-                                    hintText: "Email",
+                                    hintText: context.l10n.textField_email,
                                     textInputType: TextInputType.emailAddress,
                                     errorText: formState.emailError
                                   ),
@@ -102,7 +103,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
 
                                   RoundedTextFormField(
                                     controller: passwordController,
-                                    hintText: "Password",
+                                    hintText: context.l10n.textField_password,
                                     obscureText: obscurePassword,
                                     enableSuggestions: false,
                                     autocorrect: false,
@@ -146,7 +147,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   RoundedButton(
                                     width: double.infinity,
                                     child: Text(
-                                      "Sign Up",
+                                      context.l10n.signUp_button,
                                       style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: (){
@@ -165,8 +166,9 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                       text: TextSpan(
                                         style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
-                                          TextSpan(text: "Already have an Account? "),
-                                          TextSpan(text: "Sign In", style: customTheme.smallTextButtonStyle),
+                                          TextSpan(text: context.l10n.registerScreen_alreadyHaveAnAccount),
+                                          TextSpan(text: " "),
+                                          TextSpan(text: context.l10n.signIn_button, style: customTheme.smallTextButtonStyle),
                                           TextSpan(text: "\n")
                                         ],
                                       ),

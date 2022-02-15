@@ -7,6 +7,7 @@ import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/responsive/centered_page_view_widget.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/sliding_page.dart';
 import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/theme/theme.dart';
@@ -112,21 +113,21 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                           SizedBox(height: cPadding),
 
                           CenterTextIconButton(
-                            text: "Continue with Facebook",
+                            text: context.l10n.welcomeScreen_continueWithMethod("Facebook"),
                             iconAsset: "assets/icons/facebook.png",
                             onPressed: () {},
                           ),
                           SizedBox(height: 12.0),
 
                           CenterTextIconButton(
-                            text: "Continue with Google",
+                            text: context.l10n.welcomeScreen_continueWithMethod("Google"),
                             iconAsset: "assets/icons/google.png",
                             onPressed: () {},
                           ),
                           SizedBox(height: 12.0),
 
                           CenterTextIconButton(
-                            text: "Continue with email",
+                            text: context.l10n.welcomeScreen_continueWithMethod("email"),
                             iconAsset: "assets/icons/email.png",
                             onPressed: () {
                               AutoRouter.of(context).navigate(LoginRoute());
@@ -137,7 +138,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                           FractionallySizedBox(
                             widthFactor: 0.75,
                             child: Text(
-                              "By continuing, you agree Terms of Service and Privacy Policy.",
+                              context.l10n.welcomeScreen_agreeTerms,
                               style: customTheme.smallLightTextStyle.copyWith(color: customTheme.extraLightTextColor),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
