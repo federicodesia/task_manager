@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class CalendarCard extends StatelessWidget{
@@ -34,7 +35,7 @@ class CalendarCard extends StatelessWidget{
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              DateFormat('d').format(dateTime),
+              DateFormat("d").format(dateTime),
               style: customTheme.subtitleTextStyle.copyWith(
                 color: isSelected ? Colors.white : customTheme.lightTextColor
               ),
@@ -54,7 +55,7 @@ class CalendarCard extends StatelessWidget{
                 ),
 
                 Text(
-                  DateFormat('E').format(dateTime),
+                  dateTime.formatLocalization(context, format: "E"),
                   style: customTheme.smallLightTextStyle.copyWith(
                     color: isSelected ? Colors.white : customTheme.lightTextColor
                   ),

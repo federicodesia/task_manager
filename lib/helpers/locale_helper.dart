@@ -7,6 +7,6 @@ export 'package:flutter_gen/gen_l10n/app_localizations.dart';
 extension LocaleExtension on Locale? {
   String get name{
     final nativeLocaleNames = LocaleNamesLocalizationsDelegate.nativeLocaleNames;
-    return (nativeLocaleNames[this?.languageCode] ?? "Unknown").capitalize();
+    return (nativeLocaleNames[this?.languageCode] ?? "Unknown").capitalize;
   }
 }

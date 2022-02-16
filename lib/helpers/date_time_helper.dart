@@ -1,3 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:task_manager/helpers/string_helper.dart';
+import 'package:task_manager/l10n/l10n.dart';
+
 DateTime copyDateTimeWith(
   DateTime src,
   {
@@ -34,4 +39,21 @@ int daysInMonth(DateTime date){
   DateTime thisMonth = DateTime(date.year, date.month, 0);
   DateTime nextMonth = DateTime(date.year, date.month + 1, 0);
   return nextMonth.difference(thisMonth).inDays;
+}
+
+extension DateTimeExtension on DateTime {
+  String formatLocalization(BuildContext context, {String? format}){
+    final languageCode = Localizations.localeOf(context).languageCode;
+    return DateFormat(format, languageCode).format(this).capitalize;
+  }
+
+  String humanFormat(BuildContext context){
+    final now = DateTime.now();
+    final difference = dateDifference(this, now);
+    if(difference == -1) return context.l10n.dateTime_yasterday;
+    if(difference == 0) return context.l10n.dateTime_today;
+    if(difference == 1) return context.l10n.dateTime_tomorrow;
+    if(this.year != now.year) return this.formatLocalization(context, format: "E, dd MMM y");
+    return this.formatLocalization(context, format: "E, dd MMM");
+  }
 }

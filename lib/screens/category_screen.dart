@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/category_screen_bloc/category_screen_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
@@ -226,18 +225,8 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                   onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
                                   objectBuilder: (object){
                                     if(object is DateTime){
-                                      DateTime now = DateTime.now();
-                                      DateTime dateTime = object;
-
-                                      String header;
-                                      int difference = dateDifference(dateTime, now);
-                                      if(difference == -1) header = "Yasterday";
-                                      else if(difference == 0) header = "Today";
-                                      else if(difference == 1) header = "Tomorrow";
-                                      else if(dateTime.year != now.year) header = DateFormat('E, dd MMM y').format(dateTime);
-                                      else header = DateFormat('E, dd MMM').format(dateTime);
-
-                                      return ListHeader(header);
+                                      final DateTime dateTime = object;
+                                      return ListHeader(dateTime.humanFormat(context));
                                     }
                                     return Container();
                                   }
@@ -250,7 +239,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                       : MediaQuery.of(context).size.height * 0.4,
                                     header: state.activeFilter == TaskFilter.All
                                       ? context.l10n.emptySpace_youHaventTasksInCategory
-                                      : context.l10n.emptySpace_youHaventTasksWithActiveFilter(state.activeFilter.name.toLowerCase()),
+                                      : context.l10n.emptySpace_youHaventTasksWithActiveFilter(state.activeFilter.nameLocalization(context).toLowerCase()),
                                     description: state.activeFilter == TaskFilter.All
                                       ? context.l10n.emptySpace_youHaventTasksInCategory_description
                                       : context.l10n.emptySpace_youHaventTasksWithActiveFilter_description,

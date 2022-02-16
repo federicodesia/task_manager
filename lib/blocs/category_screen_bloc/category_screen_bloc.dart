@@ -62,7 +62,7 @@ class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> 
 
     tasks = tasks.where((task) => task.categoryId == categoryId).toList();
     if(filter == TaskFilter.Completed) tasks = tasks.where((task) => task.isCompleted).toList();
-    else if(filter == TaskFilter.Uncompleted) tasks = tasks.where((task) => !task.isCompleted).toList();
+    else if(filter == TaskFilter.Remaining) tasks = tasks.where((task) => !task.isCompleted).toList();
 
     if(tasks.isNotEmpty){
       tasks.sort((a, b) => a.date.compareTo(b.date));

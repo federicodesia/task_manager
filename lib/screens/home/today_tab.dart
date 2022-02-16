@@ -71,7 +71,7 @@ class _TodayTabState extends State<TodayTab>{
             }
 
             if(completedTasks.isNotEmpty){
-              items.add(DynamicObject(object: context.l10n.completed));
+              items.add(DynamicObject(object: context.l10n.enum_taskFilter_completed));
               items.addAll(completedTasks.map((task) => DynamicObject(object: task)));
             }
 

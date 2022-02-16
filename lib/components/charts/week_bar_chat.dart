@@ -87,7 +87,7 @@ class WeekBarChart extends StatelessWidget{
                 children: [
                   AlignedAnimatedSwitcher(
                     child: Text(
-                      "$completedWeekTasks " + context.l10n.completed,
+                      "$completedWeekTasks " + context.l10n.enum_taskFilter_completed,
                       key: Key("$completedWeekTasks Completed"),
                       style: customTheme.boldTextStyle.copyWith(color: cPrimaryColor),
                       maxLines: 1,
@@ -104,7 +104,7 @@ class WeekBarChart extends StatelessWidget{
                   Opacity(
                     opacity: 0,
                     child: Text(
-                      "100 " + context.l10n.completed,
+                      "100 " + context.l10n.enum_taskFilter_completed,
                       style: customTheme.boldTextStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -116,7 +116,7 @@ class WeekBarChart extends StatelessWidget{
                     child: AlignedAnimatedSwitcher(
                       duration: cAnimationDuration,
                       child: Text(
-                        "${weekTasksList.length - completedWeekTasks} " + context.l10n.remaining,
+                        "${weekTasksList.length - completedWeekTasks} " + context.l10n.enum_taskFilter_remaining,
                         key: Key("${weekTasksList.length - completedWeekTasks} Remaining"),
                         style: customTheme.boldTextStyle.copyWith(color: cChartBackgroundColor),
                         maxLines: 1,

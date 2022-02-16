@@ -1,6 +1,5 @@
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/theme/theme.dart';
@@ -89,7 +88,7 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
-                      DateFormat('MMMM y').format(monthList[index]),
+                      monthList[index].formatLocalization(context, format: "MMMM y"),
                       style: customTheme.boldTextStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

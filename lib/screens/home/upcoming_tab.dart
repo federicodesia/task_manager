@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/blocs/upcoming_bloc/upcoming_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
@@ -95,15 +94,8 @@ class _UpcomingTabState extends State<_UpcomingTab>{
                   onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
                   objectBuilder: (object){
                     if(object is DateTime){
-                      DateTime now = DateTime.now();
-                      DateTime dateTime = object;
-
-                      String header;
-                      if(dateDifference(dateTime, now) == 1) header = "Tomorrow";
-                      else if(dateTime.year != now.year) header = DateFormat('E, dd MMM y').format(dateTime);
-                      else header = DateFormat('E, dd MMM').format(dateTime);
-
-                      return ListHeader(header);
+                      final DateTime dateTime = object;
+                      return ListHeader(dateTime.humanFormat(context));
                     }
                     return Container();
                   }
