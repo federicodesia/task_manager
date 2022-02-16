@@ -219,6 +219,8 @@
   "@settings_notifications": {},
   "settings_security": "Seguridad",
   "@settings_security": {},
+  "settings_selectLanguage": "Seleccionar idioma",
+  "@settings_selectLanguage": {},
   "settings_signOut": "Cerrar sesión",
   "@settings_signOut": {},
   "signIn_button": "Iniciar sesión",

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/blocs/settings_bloc/settings_bloc.dart';
 import 'package:task_manager/l10n/l10n.dart';
@@ -78,11 +79,13 @@ class _MyAppState extends State<MyApp> {
                   debugShowCheckedModeBanner: false,
                   localizationsDelegates: [
                     AppLocalizations.delegate,
+                    LocaleNamesLocalizationsDelegate(),
                     GlobalMaterialLocalizations.delegate,
                     GlobalWidgetsLocalizations.delegate,
                     GlobalCupertinoLocalizations.delegate,
                   ],
                   supportedLocales: AppLocalizations.supportedLocales,
+                  locale: settings.locale
                 );
               },
             );

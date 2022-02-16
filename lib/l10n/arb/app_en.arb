@@ -219,6 +219,8 @@
   "@settings_notifications": {},
   "settings_security": "Secutiry",
   "@settings_security": {},
+  "settings_selectLanguage": "Select language",
+  "@settings_selectLanguage": {},
   "settings_signOut": "Sign out",
   "@settings_signOut": {},
   "signIn_button": "Sign In",

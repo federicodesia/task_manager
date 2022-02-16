@@ -4,9 +4,12 @@ part of 'settings_bloc.dart';
 class SettingsState{
 
   final ThemeMode themeMode;
+  @LocaleSerializer()
+  final Locale? locale;
 
   SettingsState({
-    required this.themeMode
+    required this.themeMode,
+    this.locale
   });
 
   static SettingsState initial(){
@@ -16,10 +19,12 @@ class SettingsState{
   }
 
   SettingsState copyWith({
-    ThemeMode? themeMode
+    ThemeMode? themeMode,
+    Locale? locale
   }){
     return SettingsState(
-      themeMode: themeMode ?? this.themeMode
+      themeMode: themeMode ?? this.themeMode,
+      locale: locale ?? this.locale
     );
   }
 

@@ -7,3 +7,8 @@ class ThemeModeToggled extends SettingsEvent {
   final BuildContext context;
   ThemeModeToggled(this.context);
 }
+
+class LocaleChangeRequested extends SettingsEvent {
+  final Locale? locale;
+  LocaleChangeRequested(this.locale);
+}

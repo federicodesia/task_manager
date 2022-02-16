@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:task_manager/models/serializers/locale_serializer.dart';
 
 part 'settings_event.dart';
 part 'settings_state.dart';
@@ -13,6 +14,10 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
     on<ThemeModeToggled>((event, emit){
       final brightness = Theme.of(event.context).brightness;
       emit(state.copyWith(themeMode: brightness == Brightness.dark ? ThemeMode.light : ThemeMode.dark));
+    });
+
+    on<LocaleChangeRequested>((event, emit){
+      emit(state.copyWith(locale: event.locale));
     });
   }
 

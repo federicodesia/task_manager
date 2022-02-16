@@ -17,7 +17,7 @@ class RoundedListTile extends StatelessWidget {
 
   final String title;
   final String? description;
-  final IconData icon;
+  final IconData? icon;
   final Color color;
   final String? counter;
   final String? value;
@@ -42,21 +42,24 @@ class RoundedListTile extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                          color: Color.alphaBlend(
-                            color.withOpacity(0.25),
-                            customTheme.backgroundColor
+                      AnimatedOpacity(
+                        opacity: icon != null ? 1.0 : 0.0,
+                        duration: cFastAnimationDuration,
+                        child: Container(
+                          padding: EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                            color: Color.alphaBlend(
+                              color.withOpacity(0.25),
+                              customTheme.backgroundColor
+                            ),
                           ),
+                          child: Icon(
+                            icon,
+                            color: color,
+                            size: 16.0,
+                          )
                         ),
-                        child: Icon(
-                          icon,
-                          //color: color == customTheme.contentBackgroundColor ? Colors.white.withOpacity(0.5) : Colors.white,
-                          color: color,
-                          size: 16.0,
-                        )
                       ),
 
                       SizedBox(width: 16.0),
