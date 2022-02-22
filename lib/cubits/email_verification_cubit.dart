@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/validators/validators.dart';
@@ -25,26 +26,42 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
     sendAccountVerificationCode();
   }
 
-  void submitted({required String code}) async{
-    emit(EmailVerificationState(isLoading: true));
+  void submitted({
+    required BuildContext context,
+    required String code
+  }) async{
 
-    final response = await authRepository.verifyAccountCode(
-      authCredentials: authBloc.state.credentials,
-      code: code
-    );
+    final codeError = Validators.validateEmailVerificationCode(context, code);
 
-    if(response != null) response.when(
-      left: (message) => emit(EmailVerificationState(
+    if(codeError == null){
+      emit(EmailVerificationState(isLoading: true));
+
+      final response = await authRepository.verifyAccountCode(
+        authCredentials: authBloc.state.credentials,
+        code: code,
+        ignoreKeys: ["code"]
+      );
+
+      if(response != null) response.when(
+        left: (responseMessage) => emit(EmailVerificationState(
+          isLoading: false,
+          codeError: Validators.validateEmailVerificationCodeResponse(context, responseMessage)
+            ?? responseMessage.get("code"),
+        )),
+
+        right: (credentials){
+          emit(EmailVerificationState(isLoading: false));
+          authBloc.add(AuthCredentialsChanged(credentials: credentials));
+        }, 
+      );
+      else emit(EmailVerificationState(isLoading: false));
+    }
+    else{
+      emit(EmailVerificationState(
         isLoading: false,
-        codeError: validateEmailVerificationCode(code) ?? message
-      )),
-
-      right: (credentials){
-        emit(EmailVerificationState(isLoading: false));
-        authBloc.add(AuthCredentialsChanged(credentials: credentials));
-      }, 
-    );
-    else emit(EmailVerificationState(isLoading: false));
+        codeError: codeError,
+      ));
+    }
   }
 
   void sendAccountVerificationCode(){

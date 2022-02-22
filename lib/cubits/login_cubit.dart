@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
-import 'package:task_manager/helpers/response_messages.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/validators/validators.dart';
 
@@ -27,31 +27,48 @@ class LoginCubit extends Cubit<LoginState> {
   }) : super(const LoginState());
 
   void submitted({
+    required BuildContext context,
     required String email,
     required String password
   }) async{
 
-    emit(LoginState(isLoading: true));
+    final emailError = Validators.validateEmail(context, email);
+    final passwordError = Validators.validatePassword(context, password);
 
-    final response = await authRepository.login(
-      email: email,
-      password: password,
-      messageKeys: ["email", "password"]
-    );
+    if(emailError == null && passwordError == null){
+      emit(LoginState(isLoading: true));
 
-    if(response != null){
-      response.when(
-        left: (responseMessages) => emit(LoginState(
-          isLoading: false,
-          emailError: validateEmail(email) ?? getResponseMessage(responseMessages, key: "email"),
-          passwordError: validatePassword(password) ?? getResponseMessage(responseMessages, key: "password"),
-        )),
-
-        right: (authCredentials){
-          emit(LoginState(isLoading: false));
-          authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
-        }, 
+      final response = await authRepository.login(
+        email: email,
+        password: password,
+        ignoreKeys: ["user", "email", "password"]
       );
-    } else emit(LoginState(isLoading: false));
+
+      if(response != null){
+        response.when(
+          left: (responseMessage) => emit(LoginState(
+            isLoading: false,
+
+            emailError: Validators.validateEmailResponse(context, responseMessage)
+              ?? (responseMessage.get("user") ?? responseMessage.get("email")),
+
+            passwordError: Validators.validatePasswordResponse(context, responseMessage)
+              ?? responseMessage.get("password")
+          )),
+
+          right: (authCredentials){
+            emit(LoginState(isLoading: false));
+            authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
+          }, 
+        );
+      } else emit(LoginState(isLoading: false));
+    }
+    else{
+      emit(LoginState(
+        isLoading: false,
+        emailError: emailError,
+        passwordError: passwordError,
+      ));
+    }
   }
 }

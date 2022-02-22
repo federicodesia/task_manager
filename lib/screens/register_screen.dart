@@ -153,6 +153,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                     onPressed: (){
 
                                       context.read<RegisterCubit>().submitted(
+                                        context: context,
                                         name: nameController.text.trim(),
                                         email: emailController.text.trim(),
                                         password: passwordController.text

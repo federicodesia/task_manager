@@ -129,6 +129,7 @@ class _ForgotPasswordNewPasswordScreenState extends State<_ForgotPasswordNewPass
                                     ),
                                     onPressed: () async {
                                       context.read<ForgotPasswordNewPasswordCubit>().submitted(
+                                        context: context,
                                         password: passwordController.text
                                       );
 

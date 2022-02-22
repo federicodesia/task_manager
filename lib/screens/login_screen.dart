@@ -162,6 +162,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                     ),
                                     onPressed: () {
                                       context.read<LoginCubit>().submitted(
+                                        context: context,
                                         email: emailController.text.trim(),
                                         password: passwordController.text
                                       );

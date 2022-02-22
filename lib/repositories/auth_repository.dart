@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_errors.dart';
+import 'package:task_manager/helpers/response_messages.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/either.dart';
 import 'package:task_manager/repositories/base_repository.dart';
@@ -9,10 +11,10 @@ class AuthRepository{
   final BaseRepository base;
   AuthRepository({required this.base});
 
-  Future<Either<List<String>, AuthCredentials>?> login({
+  Future<Either<ResponseMessage, AuthCredentials>?> login({
     required String email,
     required String password,
-    List<String>? messageKeys
+    List<String>? ignoreKeys
   }) async {
 
     try{
@@ -26,17 +28,17 @@ class AuthRepository{
       return Right(AuthCredentials.fromJson(response.data));
     }
     catch (error){
-      final errorMessages = await onResponseError(error: error, messageKeys: messageKeys);
-      if(errorMessages != null) return Left(errorMessages);
+      final responseMessage = await ResponseError.validate(error, ignoreKeys);
+      if(responseMessage != null) return Left(responseMessage);
       return null;
     }
   }
   
-  Future<Either<List<String>, AuthCredentials>?> register({
+  Future<Either<ResponseMessage, AuthCredentials>?> register({
     required String name,
     required String email,
     required String password,
-    List<String>? messageKeys
+    List<String>? ignoreKeys
   }) async {
 
     try{
@@ -51,24 +53,23 @@ class AuthRepository{
       return Right(AuthCredentials.fromJson(response.data));
     }
     catch (error){
-      final errorMessages = await onResponseError(error: error, messageKeys: messageKeys);
-      if(errorMessages != null) return Left(errorMessages);
+      final responseMessage = await ResponseError.validate(error, ignoreKeys);
+      if(responseMessage != null) return Left(responseMessage);
       return null;
     }
   }
 
-  Future<Either<String, AuthCredentials>> accessToken({
+  Future<AuthCredentials?> accessToken({
     required AuthCredentials authCredentials
   }) async {
 
     try{
       final dio = await base.dioRefreshToken();
       final response = await dio.get("/auth/access-token");
-      return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
+      return authCredentials.copyWith(accessToken: response.data["accessToken"]);
     }
     catch (error){
-      final errorMessages = await onResponseError(error: error);
-      return Left(errorMessages != null && errorMessages.isNotEmpty ? errorMessages.first : "");
+      await ResponseError.validate(error, null);
     }
   }
 
@@ -78,7 +79,7 @@ class AuthRepository{
       await dio.post("/auth/logout");
     }
     catch (error){
-      await onResponseError(error: error);
+      await ResponseError.validate(error, null);
     }
   }
 
@@ -88,13 +89,14 @@ class AuthRepository{
       await dio.post("/auth/send-account-verification-code");
     }
     catch (error){
-      await onResponseError(error: error);
+      await ResponseError.validate(error, null);
     }
   }
 
-  Future<Either<String, AuthCredentials>?> verifyAccountCode({
+  Future<Either<ResponseMessage, AuthCredentials>?> verifyAccountCode({
     required AuthCredentials authCredentials,
     required String code,
+    List<String>? ignoreKeys
   }) async {
 
     try{
@@ -108,14 +110,28 @@ class AuthRepository{
       return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
     }
     catch(error){
-      final errorMessages = await onResponseError(error: error);
-      if(errorMessages != null) return Left(errorMessages.first);
+
+      if(error is DioError){
+        try{
+          final responseMessages = ResponseMessage(error.response?.data["message"]);
+          if(responseMessages.contains("user already verified")){
+            final response = await accessToken(authCredentials: authCredentials);
+            if(response != null) return Right(authCredentials.copyWith(accessToken: response.accessToken));
+          }
+        }
+        catch(_){}
+      }
+
+      final responseMessage = await ResponseError.validate(error, ignoreKeys);
+      if(responseMessage != null) return Left(responseMessage);
       return null;
     }
   }
 
-  Future<Either<String, void>?> sendPasswordResetCode({
-    required String email
+  Future<Either<ResponseMessage, void>?> sendPasswordResetCode({
+    required String email,
+    List<String>? ignoreKeys,
+    bool Function(String)? ignoreFunction
   }) async {
 
     try{
@@ -125,18 +141,19 @@ class AuthRepository{
           "email": email
         }
       );
-      return Right(() {});
+      return Right(null);
     }
     catch (error){
-      final errorMessages = await onResponseError(error: error);
-      if(errorMessages != null) return Left(errorMessages.first);
+      final responseMessage = await ResponseError.validate(error, ignoreKeys, ignoreFunction: ignoreFunction);
+      if(responseMessage != null) return Left(responseMessage);
       return null;
     }
   }
 
-   Future<Either<String, AuthCredentials>?> verifyPasswordCode({
+   Future<Either<ResponseMessage, AuthCredentials>?> verifyPasswordCode({
     required String email,
-    required String code
+    required String code,
+    List<String>? ignoreKeys
   }) async {
 
     try{
@@ -153,14 +170,15 @@ class AuthRepository{
       ));
     }
     catch (error){
-      final errorMessages = await onResponseError(error: error);
-      if(errorMessages != null) return Left(errorMessages.first);
+      final responseMessage = await ResponseError.validate(error, ignoreKeys);
+      if(responseMessage != null) return Left(responseMessage);
       return null;
     }
   }
 
-  Future<Either<String, void>?> changeForgotPassword({
-    required String password
+  Future<Either<ResponseMessage, void>?> changeForgotPassword({
+    required String password,
+    List<String>? ignoreKeys
   }) async {
 
     try{
@@ -171,11 +189,11 @@ class AuthRepository{
           "password": password
         }
       );
-      return Right(() {});
+      return Right(null);
     }
     catch (error){
-      final errorMessages = await onResponseError(error: error);
-      if(errorMessages != null) return Left(errorMessages.first);
+      final responseMessage = await ResponseError.validate(error, ignoreKeys);
+      if(responseMessage != null) return Left(responseMessage);
       return null;
     }
   }
@@ -188,7 +206,7 @@ class AuthRepository{
       await dio.post("/auth/set-fcm-token/$token");
     }
     catch (error){
-      await onResponseError(error: error);
+      await ResponseError.validate(error, null);
     }
   }
 }

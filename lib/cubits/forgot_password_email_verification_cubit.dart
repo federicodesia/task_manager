@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/validators/validators.dart';
@@ -27,26 +28,42 @@ class ForgotPasswordEmailVerificationCubit extends Cubit<ForgotPasswordEmailVeri
     required this.email
   }) : super(const ForgotPasswordEmailVerificationState());
 
-  void submitted({required String code}) async{
-    emit(ForgotPasswordEmailVerificationState(isLoading: true));
+  void submitted({
+    required BuildContext context,
+    required String code
+  }) async{
 
-    final response = await authRepository.verifyPasswordCode(
-      email: email,
-      code: code
-    );
+    final codeError = Validators.validateEmailVerificationCode(context, code);
 
-    if(response != null) response.when(
-      left: (message) => emit(ForgotPasswordEmailVerificationState(
+    if(codeError == null){
+      emit(ForgotPasswordEmailVerificationState(isLoading: true));
+
+      final response = await authRepository.verifyPasswordCode(
+        email: email,
+        code: code,
+        ignoreKeys: ["code"]
+      );
+
+      if(response != null) response.when(
+        left: (responseMessage) => emit(ForgotPasswordEmailVerificationState(
+          isLoading: false,
+          codeError: Validators.validateEmailVerificationCodeResponse(context, responseMessage)
+            ?? responseMessage.get("code"),
+        )),
+
+        right: (credentials){
+          emit(ForgotPasswordEmailVerificationState(verified: true));
+          authBloc.add(AuthCredentialsChanged(credentials: credentials));
+        }, 
+      );
+      else emit(ForgotPasswordEmailVerificationState(isLoading: false));
+    }
+    else{
+      emit(ForgotPasswordEmailVerificationState(
         isLoading: false,
-        codeError: validateEmailVerificationCode(code) ?? message
-      )),
-
-      right: (credentials){
-        emit(ForgotPasswordEmailVerificationState(verified: true));
-        authBloc.add(AuthCredentialsChanged(credentials: credentials));
-      }, 
-    );
-    else emit(ForgotPasswordEmailVerificationState(isLoading: false));
+        codeError: codeError,
+      ));
+    }
   }
 
   void sendPasswordResetCode(){

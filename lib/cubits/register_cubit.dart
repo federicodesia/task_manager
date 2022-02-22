@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
-import 'package:task_manager/helpers/response_messages.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/validators/validators.dart';
 
@@ -29,33 +29,49 @@ class RegisterCubit extends Cubit<RegisterState> {
   }) : super(const RegisterState());
 
   void submitted({
+    required BuildContext context,
     required String name,
     required String email,
     required String password
   }) async{
 
-    emit(RegisterState(isLoading: true));
+    final nameError = Validators.validateName(context, name);
+    final emailError = Validators.validateEmail(context, email);
+    final passwordError = Validators.validatePassword(context, password);
 
-    final response = await authRepository.register(
-      name: name,
-      email: email,
-      password: password,
-      messageKeys: ["name", "email", "password"]
-    );
+    if(nameError == null && emailError == null && passwordError == null){
+      emit(RegisterState(isLoading: true));
 
-    if(response != null) response.when(
-      left: (responseMessages) => emit(RegisterState(
+      final response = await authRepository.register(
+        name: name,
+        email: email,
+        password: password,
+        ignoreKeys: ["name", "user", "email", "password"]
+      );
+
+      if(response != null) response.when(
+        left: (responseMessage) => emit(RegisterState(
+          isLoading: false,
+          nameError: responseMessage.get("name"),
+          emailError: Validators.validateEmailResponse(context, responseMessage)
+              ?? (responseMessage.get("user") ?? responseMessage.get("email")),
+          passwordError: responseMessage.get("password"),
+        )),
+
+        right: (authCredentials){
+          emit(RegisterState(isLoading: false));
+          authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
+        }, 
+      );
+      else emit(RegisterState(isLoading: false));
+    }
+    else{
+      emit(RegisterState(
         isLoading: false,
-        nameError: validateName(name) ?? getResponseMessage(responseMessages, key: "name"),
-        emailError: validateEmail(email) ?? getResponseMessage(responseMessages, key: "email"),
-        passwordError: validatePassword(password) ?? getResponseMessage(responseMessages, key: "password"),
-      )),
-
-      right: (authCredentials){
-        emit(RegisterState(isLoading: false));
-        authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
-      }, 
-    );
-    else emit(RegisterState(isLoading: false));
+        nameError: nameError,
+        emailError: emailError,
+        passwordError: passwordError,
+      ));
+    }
   }
 }

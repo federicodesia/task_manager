@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/validators/validators.dart';
 
@@ -21,22 +22,44 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   ForgotPasswordCubit({required this.authRepository})
     : super(const ForgotPasswordState());
 
-  void submitted({required String email}) async{
-    emit(ForgotPasswordState(isLoading: true));
-    final response = await authRepository.sendPasswordResetCode(email: email);
+  void submitted({
+    required BuildContext context,
+    required String email
+  }) async{
 
-    if(response != null) response.when(
-      left: (message){
-        final dateTime = DateTime.tryParse(message);
-        if(dateTime != null) emit(ForgotPasswordState(emailSent: true));
-        else emit(ForgotPasswordState(
-          isLoading: false,
-          emailError: validateEmail(email) ?? message,
-        ));
-      },
+    final emailError = Validators.validateEmail(context, email);
 
-      right: (sent) => emit(ForgotPasswordState(emailSent: true))
-    );
-    else emit(ForgotPasswordState(isLoading: false));
+    if(emailError == null){
+      emit(ForgotPasswordState(isLoading: true));
+      final response = await authRepository.sendPasswordResetCode(
+        email: email,
+        ignoreKeys: ["user", "email"],
+        ignoreFunction: (m) => DateTime.tryParse(m.toUpperCase()) != null
+      );
+
+      if(response != null) response.when(
+        left: (responseMessage){
+          final dateTime = DateTime.tryParse(responseMessage.first.toUpperCase());
+
+          if(dateTime != null) emit(ForgotPasswordState(emailSent: true));
+          else{
+            emit(ForgotPasswordState(
+              isLoading: false,
+              emailError: Validators.validateEmailResponse(context, responseMessage)
+                ?? (responseMessage.get("user") ?? responseMessage.get("email")),
+            ));
+          }
+        },
+
+        right: (sent) => emit(ForgotPasswordState(emailSent: true))
+      );
+      else emit(ForgotPasswordState(isLoading: false));
+    }
+    else{
+      emit(ForgotPasswordState(
+        isLoading: false,
+        emailError: emailError,
+      ));
+    }
   }
 }

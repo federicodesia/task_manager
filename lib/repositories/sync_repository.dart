@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/either.dart';
@@ -39,18 +38,17 @@ class SyncRepository{
       ));
     }
     catch (error){
-      if(error is DioError){
-        final message = error.response?.data["message"];
-        if(message is String && message.startsWith("duplicated")){
+      final responseMessage = await ResponseError.validate(error, ["duplicated"]);
+      if(responseMessage == null) return null;
 
-          final duplicatedId = message.split(":").last;
-          if(message.contains("task")) return Left(Tuple2(duplicatedId, Task));
-          if(message.contains("category")) return Left(Tuple2(duplicatedId, Category));
-        }
-        else print("sync error: $message");
-      }
-      print("error: $error");
-      onResponseError(error: error);
+      String? duplicatedMessage = responseMessage.get("duplicated");
+      if(duplicatedMessage == null) return null;
+
+      final duplicatedId = duplicatedMessage.split(":").last;
+      
+      duplicatedMessage = duplicatedMessage.toLowerCase();
+      if(duplicatedMessage.contains("task")) return Left(Tuple2(duplicatedId, Task));
+      if(duplicatedMessage.contains("category")) return Left(Tuple2(duplicatedId, Category));
     }
   }
 }

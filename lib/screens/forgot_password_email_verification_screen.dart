@@ -115,6 +115,7 @@ class _ForgotPasswordEmailVerificationScreenState extends State<_ForgotPasswordE
                                     ),
                                     onPressed: () async {
                                       context.read<ForgotPasswordEmailVerificationCubit>().submitted(
+                                        context: context,
                                         code: codeController.text
                                       );
 

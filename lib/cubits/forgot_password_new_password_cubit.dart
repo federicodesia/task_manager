@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
@@ -26,22 +27,40 @@ class ForgotPasswordNewPasswordCubit extends Cubit<ForgotPasswordNewPasswordStat
     required this.authBloc
   }) : super(const ForgotPasswordNewPasswordState());
 
-  void submitted({required String password}) async{
-    emit(ForgotPasswordNewPasswordState(isLoading: true));
+  void submitted({
+    required BuildContext context,
+    required String password
+  }) async{
 
-    final response = await authRepository.changeForgotPassword(password: password);
+    final passwordError = Validators.validatePassword(context, password);
 
-    if(response != null) response.when(
-      left: (message) => emit(ForgotPasswordNewPasswordState(
+    if(passwordError == null){
+      emit(ForgotPasswordNewPasswordState(isLoading: true));
+
+      final response = await authRepository.changeForgotPassword(
+        password: password,
+        ignoreKeys: ["password"]
+      );
+
+      if(response != null) response.when(
+        left: (responseMessage) => emit(ForgotPasswordNewPasswordState(
+          isLoading: false,
+          passwordError: Validators.validatePasswordResponse(context, responseMessage)
+            ?? responseMessage.get("password")
+        )),
+
+        right: (changed){
+          emit(ForgotPasswordNewPasswordState(changed: true));
+          authBloc.add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+        }, 
+      );
+      else emit(ForgotPasswordNewPasswordState(isLoading: false));
+    }
+    else{
+      emit(ForgotPasswordNewPasswordState(
         isLoading: false,
-        passwordError: validatePassword(password) ?? message
-      )),
-
-      right: (changed){
-        emit(ForgotPasswordNewPasswordState(changed: true));
-        authBloc.add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
-      }, 
-    );
-    else emit(ForgotPasswordNewPasswordState(isLoading: false));
+        passwordError: passwordError,
+      ));
+    }
   }
 }

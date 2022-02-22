@@ -18,8 +18,8 @@ class UserRepository {
       return Right(User.fromJson(response.data));
     }
     catch (error){
-      final errorMessages = await onResponseError(error: error);
-      if(errorMessages != null) return Left(errorMessages.first);
+      final responseMessage = await ResponseError.validate(error, null);
+      if(responseMessage != null) return Left(responseMessage.first);
       return null;
     }
   }

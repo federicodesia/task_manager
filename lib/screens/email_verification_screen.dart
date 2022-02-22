@@ -108,6 +108,7 @@ class _EmailVerificationScreenState extends State<_EmailVerificationScreen>{
                                     ),
                                     onPressed: () {
                                       context.read<EmailVerificationCubit>().submitted(
+                                        context: context,
                                         code: codeController.text
                                       );
                                     },

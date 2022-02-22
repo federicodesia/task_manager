@@ -104,6 +104,7 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                                     ),
                                     onPressed: () async {
                                       context.read<ForgotPasswordCubit>().submitted(
+                                        context: context,
                                         email: emailController.text.trim()
                                       );
 

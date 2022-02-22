@@ -47,12 +47,10 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
       final credentials = state.credentials;
       if(credentials.isNotEmpty){
+        
         final response = await authRepository.accessToken(authCredentials: credentials);
-
-        response.when(
-          left: (error) => add(AuthCredentialsChanged(credentials: AuthCredentials.empty)),
-          right: (authCredentials) => add(AuthCredentialsChanged(credentials: authCredentials))
-        );
+        if(response != null) add(AuthCredentialsChanged(credentials: response));
+        else add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
       }
       else Future.delayed(Duration(seconds: 1), () {
         add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
