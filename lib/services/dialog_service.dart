@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/rounded_alert_dialog.dart';
 import 'package:task_manager/components/rounded_button.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class DialogService {
@@ -15,14 +16,17 @@ class DialogService {
       RoundedAlertDialog(
         buildContext: context,
         svgImage: "assets/svg/stars.svg",
-        title: "Oops! No internet connection",
-        description: "You are not connected to the Internet. Please check your connection.",
+        title: context.l10n.alertDialog_noInternetConnection,
+        description: context.l10n.alertDialog_noInternetConnection_description,
         actions: [
           RoundedButton(
             autoWidth: true,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 32.0),
-              child: Text("Got it", style: customTheme.primaryColorButtonTextStyle),
+              child: Text(
+                context.l10n.gotIt_button,
+                style: customTheme.primaryColorButtonTextStyle
+              ),
             ),
             onPressed: () => Navigator.of(context, rootNavigator: true).pop()
           ),
@@ -40,14 +44,17 @@ class DialogService {
       RoundedAlertDialog(
         buildContext: context,
         svgImage: "assets/svg/stars.svg",
-        title: "Oops! Something went wrong",
-        description: "Sorry, we can't process your request at the moment. Please try again later.",
+        title: context.l10n.alertDialog_somethingWentWrong,
+        description: context.l10n.alertDialog_somethingWentWrong_description,
         actions: [
           RoundedButton(
             autoWidth: true,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 32.0),
-              child: Text("Got it", style: customTheme.primaryColorButtonTextStyle),
+              child: Text(
+                context.l10n.gotIt_button,
+                style: customTheme.primaryColorButtonTextStyle
+              ),
             ),
             onPressed: () => Navigator.of(context, rootNavigator: true).pop()
           ),
