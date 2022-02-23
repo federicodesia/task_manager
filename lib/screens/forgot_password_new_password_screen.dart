@@ -128,13 +128,16 @@ class _ForgotPasswordNewPasswordScreenState extends State<_ForgotPasswordNewPass
                                       style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: () async {
-                                      context.read<ForgotPasswordNewPasswordCubit>().submitted(
-                                        context: context,
-                                        password: passwordController.text
-                                      );
+                                      try{
+                                        context.read<ForgotPasswordNewPasswordCubit>().submitted(
+                                          context: context,
+                                          password: passwordController.text
+                                        );
 
-                                      final nextState = await context.read<ForgotPasswordNewPasswordCubit>().stream.first;
-                                      if(nextState.changed) AutoRouter.of(context).navigate(WelcomeRoute());
+                                        final nextState = await context.read<ForgotPasswordNewPasswordCubit>().stream.first;
+                                        if(nextState.changed) AutoRouter.of(context).navigate(WelcomeRoute());
+                                      }
+                                      catch(_){}
                                     },
                                   ),
                                   SizedBox(height: cPadding),

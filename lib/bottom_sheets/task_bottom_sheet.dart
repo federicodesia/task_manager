@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
+import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/date_picker_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/time_picker_bottom_sheet.dart';
 import 'package:task_manager/components/animated_chip.dart';
@@ -93,6 +94,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                   ),
 
                   FormInputHeader(context.l10n.chooseDateTime),
+                  SizedBox(height: 4.0),
 
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,6 +105,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                             icon: Icons.event_rounded,
                             text: date == null ? context.l10n.selectDate_button : DateFormat("dd/MM/yyyy").format(date!),
                             outlineColor: state.hasError ? themeData.errorColor : null,
+                            expand: true,
                             onPressed: () {
                               FocusScope.of(context).requestFocus(new FocusNode());
                               ModalBottomSheet(
@@ -129,6 +132,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                             icon: Icons.watch_later_rounded,
                             text: time == null ? context.l10n.selectTime_button : DateFormat("HH:mm a").format(time!),
                             outlineColor: state.hasError ? themeData.errorColor : null,
+                            expand: true,
                             onPressed: () {
                               FocusScope.of(context).requestFocus(new FocusNode());
                               ModalBottomSheet(
@@ -163,45 +167,61 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
             ),
           ),
 
-          BlocBuilder<CategoryBloc, CategoryState>(
-            builder: (_, categoryState){
-              if(categoryState is CategoryLoadSuccess){
-                List<Category> categories = categoryState.categories.where((category) => !category.isGeneral).toList();
+          Align(
+            alignment: Alignment.centerLeft,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: cPadding),
+              child: Row(
+                children: [
 
-                return Align(
-                  alignment: Alignment.centerLeft,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(),
-                    padding: EdgeInsets.symmetric(horizontal: cPadding),
-                    child: Row(
-                      children: List.generate(categories.length, (index){
-                        Category category = categories[index];
-                        bool isSelected = categoryId == category.id;
-                        bool isLastItem = index == categories.length - 1;
+                  BlocBuilder<CategoryBloc, CategoryState>(
+                    builder: (_, categoryState){
+                      if(categoryState is CategoryLoadSuccess){
+                        final categories = categoryState.categories.where((category) => !category.isGeneral).toList();
 
-                        return AnimatedChip(
-                          text: category.name,
-                          textColor: isSelected ? category.color : null,
-                          backgroundColor: isSelected ? Color.alphaBlend(
-                            category.color.withOpacity(0.1),
-                            customTheme.backgroundColor
-                          ) : null,
-                          isLastItem: isLastItem,
-                          onTap: () {
-                            setState(() {
-                              if(category.id == categoryId) categoryId = null;
-                              else categoryId = category.id;
-                            });
-                          }
+                        return Row(
+                          children: List.generate(categories.length, (index){
+                            Category category = categories[index];
+                            bool isSelected = categoryId == category.id;
+
+                            return AnimatedChip(
+                              text: category.name,
+                              textColor: isSelected ? category.color : null,
+                              backgroundColor: isSelected ? Color.alphaBlend(
+                                category.color.withOpacity(0.1),
+                                customTheme.backgroundColor
+                              ) : null,
+                              isLastItem: false,
+                              onTap: () {
+                                setState(() {
+                                  if(category.id == categoryId) categoryId = null;
+                                  else categoryId = category.id;
+                                });
+                              }
+                            );
+                          }),
                         );
-                      }),
-                    ),
+                      }
+                      return Container();
+                    }
                   ),
-                );
-              }
-              return Container();
-            }
+
+                  OutlinedFormIconButton(
+                    text: context.l10n.addNewCategory_button,
+                    icon: Icons.add_rounded,
+                    onPressed: () {
+                      ModalBottomSheet(
+                        context: context,
+                        title: context.l10n.bottomSheet_createCategory,
+                        content: CategoryBottomSheet()
+                      ).show();
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
 
           SizedBox(height: 48.0),

@@ -103,15 +103,18 @@ class _ForgotPasswordScreenState extends State<_ForgotPasswordScreen>{
                                       style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: () async {
-                                      context.read<ForgotPasswordCubit>().submitted(
-                                        context: context,
-                                        email: emailController.text.trim()
-                                      );
+                                      try{
+                                        context.read<ForgotPasswordCubit>().submitted(
+                                          context: context,
+                                          email: emailController.text.trim()
+                                        );
 
-                                      final nextState = await context.read<ForgotPasswordCubit>().stream.first;
-                                      if(nextState.emailSent) AutoRouter.of(context).navigate(
-                                        ForgotPasswordEmailVerificationRoute(email: emailController.text)
-                                      );
+                                        final nextState = await context.read<ForgotPasswordCubit>().stream.first;
+                                        if(nextState.emailSent) AutoRouter.of(context).navigate(
+                                          ForgotPasswordEmailVerificationRoute(email: emailController.text)
+                                        );
+                                      }
+                                      catch(_){}
                                     },
                                   ),
                                   SizedBox(height: cPadding),

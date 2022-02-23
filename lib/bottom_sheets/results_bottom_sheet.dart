@@ -60,6 +60,7 @@ class _ResultsBottomSheetState extends State<ResultsBottomSheet>{
 
                   return AnimatedChip(
                     text: filter.nameLocalization(context),
+                    textColor: isSelected ? Colors.white : null,
                     isLastItem: TaskFilter.values.length - 1 == index,
                     backgroundColor: isSelected ? cPrimaryColor : null,
                     onTap: () {
