@@ -110,7 +110,7 @@ class _ForgotPasswordEmailVerificationScreenState extends State<_ForgotPasswordE
                                   RoundedButton(
                                     width: double.infinity,
                                     child: Text(
-                                      "Confirm",
+                                      context.l10n.confirm,
                                       style: customTheme.primaryColorButtonTextStyle,
                                     ),
                                     onPressed: () async {

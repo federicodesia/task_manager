@@ -5,6 +5,7 @@ import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/task.dart';
+import 'package:tuple/tuple.dart';
 
 part 'upcoming_event.dart';
 part 'upcoming_state.dart';
@@ -32,24 +33,55 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
     on<TasksUpdated>((event, emit){
       TaskState taskBlocState = taskBloc.state;
       if(taskBlocState is TaskLoadSuccess){
+        final weekData = _getWeekData(taskBlocState.tasks);
+
         emit(UpcomingLoadSuccess(
-          weekTasks: _getWeekTasks(taskBlocState.tasks),
+          weekCompletedTasksCount: weekData.item1,
+          weekRemainingTasksCount: weekData.item2,
+          weekTasks: weekData.item3,
+          weekCompletedTasks: weekData.item4,
           items: _getGroups(taskBlocState.tasks)
         ));
       }
     });
   }
 
-  List<Task> _getWeekTasks(List<Task> tasks){
-    DateTime now = DateTime.now();
-    int weekday = now.weekday - 1;
+  Tuple4<
+    int,
+    int,
+    Map<DateTime, int>,
+    Map<DateTime, int>
+  > _getWeekData(List<Task> tasks){
 
-    List<Task> weekTasks = tasks.where((task){
-      int difference = dateDifference(task.date, now);
-      return difference >= weekday * -1 && difference < 7 - weekday;
-    }).toList();
+    final now = DateTime.now();
+    final startOfWeek = getDate(now.subtract(Duration(days: now.weekday - 1)));
+    
+    int weekCompletedTasksCount = 0;
+    int weekRemainingTasksCount = 0;
+    Map<DateTime, int> weekTasks = {};
+    Map<DateTime, int> completedWeekTasks = {};
 
-    return weekTasks;
+    for(int i = 0; i < DateTime.daysPerWeek; i++){
+      final weekday = getDate(startOfWeek.add(Duration(days: i)));
+      final weekdayTasks = tasks.where((task) => dateDifference(task.date, weekday) == 0);
+      final weekdayTasksCount = weekdayTasks.length;
+
+      final weekdayCompletedTasks = weekdayTasks.where((task) => task.isCompleted);
+      final weekdayCompletedTasksCount = weekdayCompletedTasks.length;
+
+      weekCompletedTasksCount += weekdayCompletedTasksCount;
+      weekRemainingTasksCount += weekdayTasksCount - weekdayCompletedTasksCount;
+
+      weekTasks[weekday] = weekdayTasksCount;
+      completedWeekTasks[weekday] = weekdayCompletedTasksCount;
+    }
+
+    return Tuple4(
+      weekCompletedTasksCount,
+      weekRemainingTasksCount,
+      weekTasks.values.any((count) => count > 0) ? weekTasks : {},
+      completedWeekTasks
+    );
   }
 
   List<DynamicObject> _getGroups(List<Task> tasks){

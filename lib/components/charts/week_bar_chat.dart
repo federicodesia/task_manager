@@ -1,8 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/charts/week_bar_chart_group_data.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/l10n/l10n.dart';
-import 'package:task_manager/models/task.dart';
 import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
 import '../aligned_animated_switcher.dart';
@@ -11,21 +11,23 @@ class WeekBarChart extends StatelessWidget{
 
   final double chartHeight;
   final String header;
-  final List<Task> weekTasksList;
+  final int weekCompletedTasksCount;
+  final int weekRemainingTasksCount;
+  final Map<DateTime, int> weekTasks;
+  final Map<DateTime, int> weekCompletedTasks;
 
   WeekBarChart({
     this.chartHeight = 100,
     required this.header,
-    required this.weekTasksList
+    required this.weekCompletedTasksCount,
+    required this.weekRemainingTasksCount,
+    required this.weekTasks,
+    required this.weekCompletedTasks
   });
-
-  final List<String> weekDays = ["M", "T", "W", "T", "F", "S", "S"];
 
   @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
-
-    int completedWeekTasks = weekTasksList.where((task) => task.isCompleted).length;
 
     return Container(
       decoration: BoxDecoration(
@@ -61,16 +63,16 @@ class WeekBarChart extends StatelessWidget{
                     showTitles: true,
                     margin: 12.0,
                     getTextStyles: (context, value) => customTheme.lightTextStyle,
-                    getTitles: (double value) => weekDays[value.toInt()],
+                    getTitles: (double value) => weekTasks.keys.elementAt(value.toInt())
+                      .formatLocalization(context, format: "E").substring(0, 1),
                   )
                 ),
 
-                barGroups: List.generate(7, (index){
-                  final weekdayTasksList = weekTasksList.where((task) => task.date.weekday - 1 == index);
+                barGroups: List.generate(weekTasks.length, (index){
                   return weekBarChartGroupData(
                     index: index,
-                    height: weekdayTasksList.where((task) => task.isCompleted).length.toDouble(),
-                    backgroundHeight: weekdayTasksList.length.toDouble()
+                    height: weekCompletedTasks.values.elementAt(index).toDouble(),
+                    backgroundHeight: weekTasks.values.elementAt(index).toDouble()
                   );
                 })
               ),
@@ -87,8 +89,8 @@ class WeekBarChart extends StatelessWidget{
                 children: [
                   AlignedAnimatedSwitcher(
                     child: Text(
-                      "$completedWeekTasks " + context.l10n.enum_taskFilter_completed,
-                      key: Key("$completedWeekTasks Completed"),
+                      "$weekCompletedTasksCount ${context.l10n.enum_taskFilter_completed}",
+                      key: Key("$weekCompletedTasksCount Completed"),
                       style: customTheme.boldTextStyle.copyWith(color: cPrimaryColor),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -116,8 +118,8 @@ class WeekBarChart extends StatelessWidget{
                     child: AlignedAnimatedSwitcher(
                       duration: cAnimationDuration,
                       child: Text(
-                        "${weekTasksList.length - completedWeekTasks} " + context.l10n.enum_taskFilter_remaining,
-                        key: Key("${weekTasksList.length - completedWeekTasks} Remaining"),
+                        "$weekRemainingTasksCount ${context.l10n.enum_taskFilter_remaining}",
+                        key: Key("$weekRemainingTasksCount Remaining"),
                         style: customTheme.boldTextStyle.copyWith(color: cChartBackgroundColor),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

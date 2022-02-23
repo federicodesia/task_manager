@@ -15,8 +15,6 @@ import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/l10n/l10n.dart';
-import 'package:task_manager/models/dynamic_object.dart';
-import 'package:task_manager/models/task.dart';
 
 class UpcomingTab extends StatelessWidget{
   
@@ -54,10 +52,10 @@ class _UpcomingTabState extends State<_UpcomingTab>{
 
         if(state is UpcomingLoadSuccess){
 
-          List<Task> weekTasksList = state.weekTasks;
-          List<DynamicObject> items = state.items;
+          final weekTasks = state.weekTasks;
+          final items = state.items;
 
-          if(weekTasksList.isEmpty && items.isEmpty){
+          if(weekTasks.isEmpty && items.isEmpty){
             child = FillRemainingList(
               availableSpaceCubit: widget.availableSpaceCubit,
               child: EmptySpace(
@@ -74,7 +72,7 @@ class _UpcomingTabState extends State<_UpcomingTab>{
             child = Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if(weekTasksList.isNotEmpty) WidgetSize(
+                if(weekTasks.isNotEmpty) WidgetSize(
                   onChange: (Size size){
                     setState(() => weekBarChartHeight = size.height);
                   },
@@ -82,7 +80,10 @@ class _UpcomingTabState extends State<_UpcomingTab>{
                     padding: EdgeInsets.only(bottom: 12.0),
                     child: WeekBarChart(
                       header: context.l10n.upcomingTab_tasksInThisWeek,
-                      weekTasksList: weekTasksList,
+                      weekCompletedTasksCount: state.weekCompletedTasksCount,
+                      weekRemainingTasksCount: state.weekRemainingTasksCount,
+                      weekTasks: state.weekTasks,
+                      weekCompletedTasks: state.weekCompletedTasks
                     ),
                   ),
                 ),
