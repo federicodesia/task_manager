@@ -11,6 +11,7 @@ const Color cPrimaryColor = Color(0xFF5C5D9D);
 const Color cTextButtonColor = Color(0xFF9E6AF8);
 
 const Color cRedColor = Color(0xFFD32F2F);
+const Color cGoldenColor = Color(0xFFFFBF47);
 const Color cBarrierColor = Colors.black26;
 
 Color cChartBackgroundColor = cPrimaryColor.withOpacity(0.64);

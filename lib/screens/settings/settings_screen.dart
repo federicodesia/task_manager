@@ -70,41 +70,44 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                             vertical: 32.0,
                             horizontal: cPadding
                           ),
-                          child: Row(
-                            children: [
-                              RoundedButton(
-                                width: cButtonSize,
-                                color: customTheme.contentBackgroundColor,
-                                child: Image.asset(
-                                  "assets/icons/profile.png"
+                          child: GestureDetector(
+                            onTap: () => AutoRouter.of(context).navigate(ProfileRoute()),
+                            child: Row(
+                              children: [
+                                RoundedButton(
+                                  width: cButtonSize,
+                                  color: customTheme.contentBackgroundColor,
+                                  child: Image.asset(
+                                    "assets/icons/profile.png"
+                                  ),
+                                  onPressed: () => AutoRouter.of(context).navigate(ProfileRoute()),
                                 ),
-                                onPressed: () {},
-                              ),
-                              SizedBox(width: 16.0),
+                                SizedBox(width: 16.0),
 
-                              Expanded(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      authState.user.name,
-                                      style: customTheme.subtitleTextStyle,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(height: 2.0),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        authState.user.name,
+                                        style: customTheme.subtitleTextStyle,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      SizedBox(height: 2.0),
 
-                                    Text(
-                                      authState.user.email,
-                                      style: customTheme.lightTextStyle,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                                      Text(
+                                        authState.user.email,
+                                        style: customTheme.lightTextStyle,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         );
                       },
