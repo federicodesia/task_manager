@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/components/cards/login_activity_card.dart';
@@ -7,8 +8,9 @@ import 'package:task_manager/components/main/center_app_bar.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/l10n/l10n.dart';
+import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/theme/theme.dart';
-import '../../constants.dart';
+import '../../../constants.dart';
 
 class SecurityScreen extends StatelessWidget {
 
@@ -83,7 +85,7 @@ class _SecurityScreenState extends State<_SecurityScreen>{
                           title: context.l10n.securitySettings_changePassword,
                           icon: Icons.lock_outlined,
                           color: Color(0xFF31A7E1),
-                          onTap: () {},
+                          onTap: () => AutoRouter.of(context).navigate(ChangePasswordRoute()),
                         ),
                         RoundedListTile(
                           title: context.l10n.securitySettings_signOutOnAllDevices,

@@ -23,5 +23,8 @@ class ResponseMessage{
 
   String? get(String key) => _messageList.firstWhereOrNull((m) => m.contains(key.toLowerCase()));
 
+  String? getIgnoring(String key, {required String ignore}) =>
+    _messageList.firstWhereOrNull((m) => m.contains(key.toLowerCase()) && !m.contains(ignore.toLowerCase()));
+
   bool checkFunction(bool Function(String) function) => _messageList.any((m) => function(m));
 }

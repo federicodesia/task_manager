@@ -9,7 +9,8 @@ import 'package:task_manager/screens/home/home_screen.dart';
 import 'package:task_manager/screens/login_screen.dart';
 import 'package:task_manager/screens/register_screen.dart';
 import 'package:task_manager/screens/settings/notifications_screen.dart';
-import 'package:task_manager/screens/settings/security_screen.dart';
+import 'package:task_manager/screens/settings/security/change_password_screen.dart';
+import 'package:task_manager/screens/settings/security/security_screen.dart';
 import 'package:task_manager/screens/settings/settings_screen.dart';
 import 'package:task_manager/screens/splash_screen.dart';
 import 'package:task_manager/screens/main_screen.dart';
@@ -52,6 +53,8 @@ import 'package:task_manager/screens/welcome_screen.dart';
         ),
 
         AutoRoute(page: SecurityScreen),
+        AutoRoute(page: ChangePasswordScreen),
+
         AutoRoute(page: NotificationsScreen),
         AutoRoute(page: ProfileScreen),
       ]

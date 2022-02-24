@@ -198,6 +198,30 @@ class AuthRepository{
     }
   }
 
+  Future<Either<ResponseMessage, void>?> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    List<String>? ignoreKeys
+  }) async {
+
+    try{
+      final dio = await base.dioAccessToken();
+      await dio.post(
+        "/auth/change-password",
+        data: {
+          "password": currentPassword,
+          "newPassword": newPassword
+        }
+      );
+      return Right(null);
+    }
+    catch (error){
+      final responseMessage = await ResponseError.validate(error, ignoreKeys);
+      if(responseMessage != null) return Left(responseMessage);
+      return null;
+    }
+  }
+
   Future<void> setFirebaseMessagingToken({
     required String token
   }) async {

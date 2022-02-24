@@ -44,6 +44,10 @@
       "count": {}
     }
   },
+  "changeMyPassword": "Cambiar mi contraseña",
+  "@changeMyPassword": {},
+  "changeMyPassword_description": "Es muy sencillo! Ingresa tu contraseña actual y la nueva contraseña que utilizarás para iniciar sesión.",
+  "@changeMyPassword_description": {},
   "chooseDateTime": "Elige fecha y hora",
   "@chooseDateTime": {},
   "confirm": "Confirmar",
@@ -295,6 +299,8 @@
   "@tasks": {},
   "taskStatus": "Estado de las tareas",
   "@taskStatus": {},
+  "textField_currentPassword": "Contraseña actual",
+  "@textField_currentPassword": {},
   "textField_email": "Correo",
   "@textField_email": {},
   "textField_name": "Nombre",

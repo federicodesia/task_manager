@@ -44,6 +44,10 @@
       "count": {}
     }
   },
+  "changeMyPassword": "Change my password",
+  "@changeMyPassword": {},
+  "changeMyPassword_description": "It is very simple! Enter your current password and the new password that you will use to log in.",
+  "@changeMyPassword_description": {},
   "chooseDateTime": "Choose date & time",
   "@chooseDateTime": {},
   "confirm": "Confirm",
@@ -295,6 +299,8 @@
   "@tasks": {},
   "taskStatus": "Task status",
   "@taskStatus": {},
+  "textField_currentPassword": "Current password",
+  "@textField_currentPassword": {},
   "textField_email": "Email",
   "@textField_email": {},
   "textField_name": "Name",

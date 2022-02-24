@@ -11,27 +11,28 @@
 // ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i18;
+import 'package:flutter/material.dart' as _i19;
 
-import '../screens/calendar_screen.dart' as _i16;
+import '../screens/calendar_screen.dart' as _i17;
 import '../screens/email_verification_screen.dart' as _i3;
 import '../screens/forgot_password_email_verification_screen.dart' as _i9;
 import '../screens/forgot_password_new_password_screen.dart' as _i10;
 import '../screens/forgot_password_screen.dart' as _i8;
-import '../screens/home/home_screen.dart' as _i15;
+import '../screens/home/home_screen.dart' as _i16;
 import '../screens/login_screen.dart' as _i6;
 import '../screens/main_screen.dart' as _i11;
-import '../screens/profile_screen.dart' as _i14;
+import '../screens/profile_screen.dart' as _i15;
 import '../screens/register_screen.dart' as _i7;
-import '../screens/settings/notifications_screen.dart' as _i13;
-import '../screens/settings/security_screen.dart' as _i12;
-import '../screens/settings/settings_screen.dart' as _i17;
+import '../screens/settings/notifications_screen.dart' as _i14;
+import '../screens/settings/security/change_password_screen.dart' as _i13;
+import '../screens/settings/security/security_screen.dart' as _i12;
+import '../screens/settings/settings_screen.dart' as _i18;
 import '../screens/splash_screen.dart' as _i1;
 import '../screens/welcome_screen.dart' as _i5;
 import 'wrappers/main_router_wrapper.dart' as _i4;
 
 class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i18.GlobalKey<_i18.NavigatorState>? navigatorKey])
+  AppRouter([_i19.GlobalKey<_i19.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -86,25 +87,29 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: _i12.SecurityScreen());
     },
+    ChangePasswordRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: _i13.ChangePasswordScreen());
+    },
     NotificationsRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i13.NotificationsScreen());
+          routeData: routeData, child: _i14.NotificationsScreen());
     },
     ProfileRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i14.ProfileScreen());
+          routeData: routeData, child: _i15.ProfileScreen());
     },
     HomeRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i15.HomeScreen());
+          routeData: routeData, child: _i16.HomeScreen());
     },
     CalendarRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i16.CalendarScreen());
+          routeData: routeData, child: _i17.CalendarScreen());
     },
     SettingsRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i17.SettingsScreen());
+          routeData: routeData, child: _i18.SettingsScreen());
     }
   };
 
@@ -147,6 +152,8 @@ class AppRouter extends _i2.RootStackRouter {
                   ]),
               _i2.RouteConfig(SecurityRoute.name,
                   path: 'security-screen', parent: MainRouter.name),
+              _i2.RouteConfig(ChangePasswordRoute.name,
+                  path: 'change-password-screen', parent: MainRouter.name),
               _i2.RouteConfig(NotificationsRoute.name,
                   path: 'notifications-screen', parent: MainRouter.name),
               _i2.RouteConfig(ProfileRoute.name,
@@ -276,7 +283,16 @@ class SecurityRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i13.NotificationsScreen]
+/// [_i13.ChangePasswordScreen]
+class ChangePasswordRoute extends _i2.PageRouteInfo<void> {
+  const ChangePasswordRoute()
+      : super(ChangePasswordRoute.name, path: 'change-password-screen');
+
+  static const String name = 'ChangePasswordRoute';
+}
+
+/// generated route for
+/// [_i14.NotificationsScreen]
 class NotificationsRoute extends _i2.PageRouteInfo<void> {
   const NotificationsRoute()
       : super(NotificationsRoute.name, path: 'notifications-screen');
@@ -285,7 +301,7 @@ class NotificationsRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i14.ProfileScreen]
+/// [_i15.ProfileScreen]
 class ProfileRoute extends _i2.PageRouteInfo<void> {
   const ProfileRoute() : super(ProfileRoute.name, path: 'profile-screen');
 
@@ -293,7 +309,7 @@ class ProfileRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i15.HomeScreen]
+/// [_i16.HomeScreen]
 class HomeRoute extends _i2.PageRouteInfo<void> {
   const HomeRoute() : super(HomeRoute.name, path: 'home-screen');
 
@@ -301,7 +317,7 @@ class HomeRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i16.CalendarScreen]
+/// [_i17.CalendarScreen]
 class CalendarRoute extends _i2.PageRouteInfo<void> {
   const CalendarRoute() : super(CalendarRoute.name, path: 'calendar-screen');
 
@@ -309,7 +325,7 @@ class CalendarRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i17.SettingsScreen]
+/// [_i18.SettingsScreen]
 class SettingsRoute extends _i2.PageRouteInfo<void> {
   const SettingsRoute() : super(SettingsRoute.name, path: 'settings-screen');
 
