@@ -99,6 +99,11 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       authRepository.logout();
       add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
     });
+
+    on<AuthLogoutAllRequested>((event, emit) async{
+      final response = await authRepository.logoutAll();
+      if(response) add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+    });
   }
 
   @override

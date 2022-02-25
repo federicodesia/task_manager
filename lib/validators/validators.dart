@@ -40,6 +40,17 @@ abstract class Validators{
     return null;
   }
 
+  static String? validateCurrentPassword(BuildContext context, String currentPassword){
+    if(currentPassword.isEmpty) return context.l10n.error_enterYourCurrentPassword;
+    return validatePassword(context, currentPassword);
+  }
+
+  static String? validateNewPassword(BuildContext context, String currentPassword, String newPassword){
+    if(newPassword.isEmpty) return context.l10n.error_enterYourNewPassword;
+    if(newPassword == currentPassword) return context.l10n.error_samePasswords;
+    return validatePassword(context, newPassword);
+  }
+
   static String? validateEmailVerificationCode(BuildContext context, String value) {
     if(value.isEmpty) return context.l10n.error_enterCode;
     if(value.length < 4) return context.l10n.error_enterCompleteCode;

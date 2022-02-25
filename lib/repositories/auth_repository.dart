@@ -84,6 +84,18 @@ class AuthRepository{
     }
   }
 
+  Future<bool> logoutAll() async {
+    try{
+      final dio = await base.dioRefreshToken();
+      await dio.post("/auth/logout/all");
+      return true;
+    }
+    catch (error){
+      await ResponseError.validate(error, null);
+      return false;
+    }
+  }
+
   Future<void> sendAccountVerificationCode() async {
     try{
       final dio = await base.dioAccessToken();

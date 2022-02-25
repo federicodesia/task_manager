@@ -28,8 +28,8 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
     required String newPassword
   }) async{
 
-    final currentPasswordError = Validators.validatePassword(context, currentPassword);
-    final newPasswordError = Validators.validatePassword(context, newPassword);
+    final currentPasswordError = Validators.validateCurrentPassword(context, currentPassword);
+    final newPasswordError = Validators.validateNewPassword(context, currentPassword, newPassword);
 
     if(currentPasswordError == null && newPasswordError == null){
       emit(ChangePasswordState(isLoading: true));

@@ -1,11 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/components/cards/login_activity_card.dart';
 import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/lists/rounded_list_tile.dart';
 import 'package:task_manager/components/main/center_app_bar.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
+import 'package:task_manager/components/rounded_alert_dialog.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/router/router.gr.dart';
@@ -91,7 +93,7 @@ class _SecurityScreenState extends State<_SecurityScreen>{
                           title: context.l10n.securitySettings_signOutOnAllDevices,
                           icon: Icons.logout_outlined,
                           color: Color(0xFFF57170),
-                          onTap: () {},
+                          onTap: () => showLogoutAllDialog(context),
                         ),
 
                         SizedBox(height: 8.0),
@@ -127,4 +129,32 @@ class _SecurityScreenState extends State<_SecurityScreen>{
       )
     );
   }
+}
+
+void showLogoutAllDialog(BuildContext context){
+  RoundedAlertDialog(
+    buildContext: context,
+    svgImage: "assets/svg/notify.svg",
+    svgScale: 0.35,
+    svgBottomSpace: 48.0,
+    title: context.l10n.alertDialog_logoutAll,
+    description: context.l10n.alertDialog_logoutAll_description,
+    actions: [
+      RoundedAlertDialogButton(
+        text: context.l10n.cancel,
+        onPressed: () => Navigator.of(context, rootNavigator: true).pop()
+      ),
+
+      RoundedAlertDialogButton(
+        text: context.l10n.logoutAll_button,
+        backgroundColor: cPrimaryColor,
+        onPressed: (){
+          // Close AlertDialog
+          Navigator.of(context, rootNavigator: true).pop();
+
+          context.read<AuthBloc>().add(AuthLogoutAllRequested());
+        },
+      ),
+    ],
+  ).show();
 }

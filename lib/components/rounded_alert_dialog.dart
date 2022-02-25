@@ -7,6 +7,8 @@ class RoundedAlertDialog{
 
   final BuildContext buildContext;
   final String? svgImage;
+  final double svgScale;
+  final double svgBottomSpace;
   final String title;
   final String description;
   final List<Widget>? actions;
@@ -15,6 +17,8 @@ class RoundedAlertDialog{
   RoundedAlertDialog({
     required this.buildContext,
     this.svgImage,
+    this.svgScale = 0.4,
+    this.svgBottomSpace = 32.0,
     required this.title,
     required this.description,
     this.actions,
@@ -40,35 +44,45 @@ class RoundedAlertDialog{
                     borderRadius: BorderRadius.circular(cBorderRadius),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(32.0),
+                    padding: EdgeInsets.symmetric(vertical: 32.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
 
-                        if(svgImage != null) Container(
-                          height: MediaQuery.of(buildContext).orientation == Orientation.portrait
-                            ? MediaQuery.of(buildContext).size.width * 0.4
-                            : MediaQuery.of(buildContext).size.height * 0.4,
-                          margin: EdgeInsets.only(bottom: 32.0),
-                          child: SvgPicture.asset(svgImage!)
-                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 32.0),
+                          child: Column(
+                            children: [
+                              if(svgImage != null) Container(
+                                height: MediaQuery.of(buildContext).orientation == Orientation.portrait
+                                  ? MediaQuery.of(buildContext).size.width * svgScale
+                                  : MediaQuery.of(buildContext).size.height * svgScale,
+                                margin: EdgeInsets.only(bottom: svgBottomSpace),
+                                child: SvgPicture.asset(svgImage!)
+                              ),
 
-                        Text(
-                          title,
-                          style: customTheme.subtitleTextStyle,
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 24.0),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(
+                                  title,
+                                  style: customTheme.subtitleTextStyle,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              SizedBox(height: 24.0),
 
-                        Text(
-                          description,
-                          style: customTheme.lightTextStyle,
-                          textAlign: TextAlign.center,
-                          maxLines: 4,
-                          overflow: TextOverflow.ellipsis,
+                              Text(
+                                description,
+                                style: customTheme.lightTextStyle,
+                                textAlign: TextAlign.center,
+                                maxLines: 4,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
                         ),
 
                         if(actions != null) Padding(
@@ -127,7 +141,7 @@ class RoundedAlertDialogButton extends StatelessWidget{
         shadowColor: backgroundColor != null ? customTheme.shadowColor : null,
         padding: EdgeInsets.symmetric(
           vertical: 12.0,
-          horizontal: 28.0
+          horizontal: 24.0
         )
       ),
     );
