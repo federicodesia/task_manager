@@ -11,28 +11,31 @@
 // ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i19;
+import 'package:flutter/material.dart' as _i21;
 
-import '../screens/calendar_screen.dart' as _i17;
+import '../screens/calendar_screen.dart' as _i19;
 import '../screens/email_verification_screen.dart' as _i3;
 import '../screens/forgot_password_email_verification_screen.dart' as _i9;
 import '../screens/forgot_password_new_password_screen.dart' as _i10;
 import '../screens/forgot_password_screen.dart' as _i8;
-import '../screens/home/home_screen.dart' as _i16;
+import '../screens/home/home_screen.dart' as _i18;
 import '../screens/login_screen.dart' as _i6;
 import '../screens/main_screen.dart' as _i11;
-import '../screens/profile_screen.dart' as _i15;
+import '../screens/profile_screen.dart' as _i17;
 import '../screens/register_screen.dart' as _i7;
-import '../screens/settings/notifications_screen.dart' as _i14;
+import '../screens/settings/notifications_screen.dart' as _i16;
+import '../screens/settings/security/change_email_screen.dart' as _i14;
+import '../screens/settings/security/change_email_verification_screen.dart'
+    as _i15;
 import '../screens/settings/security/change_password_screen.dart' as _i13;
 import '../screens/settings/security/security_screen.dart' as _i12;
-import '../screens/settings/settings_screen.dart' as _i18;
+import '../screens/settings/settings_screen.dart' as _i20;
 import '../screens/splash_screen.dart' as _i1;
 import '../screens/welcome_screen.dart' as _i5;
 import 'wrappers/main_router_wrapper.dart' as _i4;
 
 class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i19.GlobalKey<_i19.NavigatorState>? navigatorKey])
+  AppRouter([_i21.GlobalKey<_i21.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -91,25 +94,33 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: _i13.ChangePasswordScreen());
     },
+    ChangeEmailRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: _i14.ChangeEmailScreen());
+    },
+    ChangeEmailVerificationRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: _i15.ChangeEmailVerificationScreen());
+    },
     NotificationsRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i14.NotificationsScreen());
+          routeData: routeData, child: _i16.NotificationsScreen());
     },
     ProfileRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i15.ProfileScreen());
+          routeData: routeData, child: _i17.ProfileScreen());
     },
     HomeRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i16.HomeScreen());
+          routeData: routeData, child: _i18.HomeScreen());
     },
     CalendarRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i17.CalendarScreen());
+          routeData: routeData, child: _i19.CalendarScreen());
     },
     SettingsRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i18.SettingsScreen());
+          routeData: routeData, child: _i20.SettingsScreen());
     }
   };
 
@@ -154,6 +165,11 @@ class AppRouter extends _i2.RootStackRouter {
                   path: 'security-screen', parent: MainRouter.name),
               _i2.RouteConfig(ChangePasswordRoute.name,
                   path: 'change-password-screen', parent: MainRouter.name),
+              _i2.RouteConfig(ChangeEmailRoute.name,
+                  path: 'change-email-screen', parent: MainRouter.name),
+              _i2.RouteConfig(ChangeEmailVerificationRoute.name,
+                  path: 'change-email-verification-screen',
+                  parent: MainRouter.name),
               _i2.RouteConfig(NotificationsRoute.name,
                   path: 'notifications-screen', parent: MainRouter.name),
               _i2.RouteConfig(ProfileRoute.name,
@@ -292,7 +308,26 @@ class ChangePasswordRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i14.NotificationsScreen]
+/// [_i14.ChangeEmailScreen]
+class ChangeEmailRoute extends _i2.PageRouteInfo<void> {
+  const ChangeEmailRoute()
+      : super(ChangeEmailRoute.name, path: 'change-email-screen');
+
+  static const String name = 'ChangeEmailRoute';
+}
+
+/// generated route for
+/// [_i15.ChangeEmailVerificationScreen]
+class ChangeEmailVerificationRoute extends _i2.PageRouteInfo<void> {
+  const ChangeEmailVerificationRoute()
+      : super(ChangeEmailVerificationRoute.name,
+            path: 'change-email-verification-screen');
+
+  static const String name = 'ChangeEmailVerificationRoute';
+}
+
+/// generated route for
+/// [_i16.NotificationsScreen]
 class NotificationsRoute extends _i2.PageRouteInfo<void> {
   const NotificationsRoute()
       : super(NotificationsRoute.name, path: 'notifications-screen');
@@ -301,7 +336,7 @@ class NotificationsRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i15.ProfileScreen]
+/// [_i17.ProfileScreen]
 class ProfileRoute extends _i2.PageRouteInfo<void> {
   const ProfileRoute() : super(ProfileRoute.name, path: 'profile-screen');
 
@@ -309,7 +344,7 @@ class ProfileRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i16.HomeScreen]
+/// [_i18.HomeScreen]
 class HomeRoute extends _i2.PageRouteInfo<void> {
   const HomeRoute() : super(HomeRoute.name, path: 'home-screen');
 
@@ -317,7 +352,7 @@ class HomeRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i17.CalendarScreen]
+/// [_i19.CalendarScreen]
 class CalendarRoute extends _i2.PageRouteInfo<void> {
   const CalendarRoute() : super(CalendarRoute.name, path: 'calendar-screen');
 
@@ -325,7 +360,7 @@ class CalendarRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i18.SettingsScreen]
+/// [_i20.SettingsScreen]
 class SettingsRoute extends _i2.PageRouteInfo<void> {
   const SettingsRoute() : super(SettingsRoute.name, path: 'settings-screen');
 

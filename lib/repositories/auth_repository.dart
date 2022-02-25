@@ -4,6 +4,7 @@ import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/helpers/response_messages.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/either.dart';
+import 'package:task_manager/models/user.dart';
 import 'package:task_manager/repositories/base_repository.dart';
 
 class AuthRepository{
@@ -214,6 +215,51 @@ class AuthRepository{
         }
       );
       return Right(null);
+    }
+    catch (error){
+      final responseMessage = await ResponseError.validate(error, ignoreKeys);
+      if(responseMessage != null) return Left(responseMessage);
+      return null;
+    }
+  }
+
+  Future<Either<ResponseMessage, void>?> sendChangeEmailCode({
+    required String email,
+    List<String>? ignoreKeys,
+    bool Function(String)? ignoreFunction
+  }) async {
+
+    try{
+      final dio = await base.dioAccessToken();
+      await dio.post(
+        "/auth/send-change-email-code",
+        data: {
+          "email": email
+        }
+      );
+      return Right(null);
+    }
+    catch (error){
+      final responseMessage = await ResponseError.validate(error, ignoreKeys, ignoreFunction: ignoreFunction);
+      if(responseMessage != null) return Left(responseMessage);
+      return null;
+    }
+  }
+
+  Future<Either<ResponseMessage, User>?> verifyChangeEmailCode({
+    required String code,
+    List<String>? ignoreKeys
+  }) async {
+
+    try{
+      final dio = await base.dioAccessToken();
+      final response = await dio.post(
+        "/auth/verify-change-email-code",
+        data: {
+          "code": code
+        }
+      );
+      return Right(User.fromJson(response.data));
     }
     catch (error){
       final responseMessage = await ResponseError.validate(error, ignoreKeys);

@@ -18,6 +18,17 @@ abstract class Validators{
     return null;
   }
 
+  static String? validateNewEmail(BuildContext context, String newEmail, String currentEmail) {
+    if(newEmail.isEmpty) return context.l10n.error_enterYourNewEmail;
+    if(newEmail == currentEmail) return context.l10n.error_thisIsYourCurrentEmail;
+    return validateEmail(context, newEmail);
+  }
+
+  static String? validateEqualEmails(BuildContext context, String email, String emailConfirmation){
+    if(email != emailConfirmation) return context.l10n.error_emailsDontMatch;
+    return null;
+  }
+
   static String? validatePassword(BuildContext context, String value) {
     if(value.isEmpty) return context.l10n.error_enterYourPassword;
     if(value.length < 8) return context.l10n.error_minLength(8);

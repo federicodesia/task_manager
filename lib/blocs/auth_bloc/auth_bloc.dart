@@ -91,6 +91,10 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       }
     });
 
+    on<AuthUserChanged>((event, emit) async{
+      emit(state.copyWith(user: event.user));
+    });
+
     on<AuthLogoutRequested>((event, emit){
       authRepository.logout();
       add(AuthCredentialsChanged(credentials: AuthCredentials.empty));

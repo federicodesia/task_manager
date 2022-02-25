@@ -1,14 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/change_password_cubit.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
-import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/theme/theme.dart';
 import '../../../constants.dart';
 
@@ -17,8 +15,7 @@ class ChangePasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ChangePasswordCubit(
-        authRepository: context.read<AuthRepository>(),
-        authBloc: context.read<AuthBloc>()
+        authRepository: context.read<AuthRepository>()
       ),
       child: _ChangePasswordScreen(),
     );

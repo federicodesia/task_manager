@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/validators/validators.dart';
 
@@ -21,12 +20,7 @@ class ChangePasswordState {
 class ChangePasswordCubit extends Cubit<ChangePasswordState> {
   
   final AuthRepository authRepository;
-  final AuthBloc authBloc;
-
-  ChangePasswordCubit({
-    required this.authRepository,
-    required this.authBloc
-  }) : super(const ChangePasswordState());
+  ChangePasswordCubit({required this.authRepository}) : super(const ChangePasswordState());
 
   void submitted({
     required BuildContext context,

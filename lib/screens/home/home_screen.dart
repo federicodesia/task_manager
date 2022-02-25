@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
-import 'package:task_manager/blocs/sync_bloc/sync_bloc.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';

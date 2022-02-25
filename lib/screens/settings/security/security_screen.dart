@@ -79,7 +79,7 @@ class _SecurityScreenState extends State<_SecurityScreen>{
                           title: context.l10n.securitySettings_changeEmail,
                           icon: Icons.email_outlined,
                           color: Color(0xFF6A69E0),
-                          onTap: () {},
+                          onTap: () => AutoRouter.of(context).navigate(ChangeEmailRoute()),
                         ),
                         RoundedListTile(
                           title: context.l10n.securitySettings_changePassword,

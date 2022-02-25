@@ -9,4 +9,9 @@ class AuthCredentialsChanged extends AuthEvent {
   AuthCredentialsChanged({required this.credentials});
 }
 
+class AuthUserChanged extends AuthEvent {
+  final User user;
+  AuthUserChanged({required this.user});
+}
+
 class AuthLogoutRequested extends AuthEvent {}
