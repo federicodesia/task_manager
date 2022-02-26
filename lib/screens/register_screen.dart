@@ -104,29 +104,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   RoundedTextFormField(
                                     controller: passwordController,
                                     hintText: context.l10n.textField_password,
-                                    obscureText: obscurePassword,
-                                    enableSuggestions: false,
-                                    autocorrect: false,
-                                    suffixIcon: Padding(
-                                      padding: EdgeInsets.only(right: 8.0),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: IconButton(
-                                          icon: AnimatedSwitcher(
-                                            duration: cFastAnimationDuration,
-                                            child: Icon(
-                                              obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                              key: Key("IconButtonObscurePasswordKeyValue=$obscurePassword"),
-                                            ),
-                                          ),
-                                          splashRadius: 24.0,
-                                          color: customTheme.lightColor,
-                                          onPressed: () {
-                                            setState(() => obscurePassword = !obscurePassword);
-                                          },
-                                        ),
-                                      ),
-                                    ),
+                                    enableObscureTextToggle: true,
                                     errorText: formState.passwordError,
                                   ),                   
                                 ],

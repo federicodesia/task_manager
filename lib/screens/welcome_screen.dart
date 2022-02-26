@@ -82,10 +82,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                       return EmptySpace(
                         padding: EdgeInsets.all(cPadding),
                         svgImage: slidingPage.svg,
-                        svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
-                          ? MediaQuery.of(context).size.width * 0.35
-                          : MediaQuery.of(context).size.height * 0.35,
-                        svgBottomMargin: 48.0,
+                        svgBottomSpace: 48.0,
                         header: slidingPage.header,
                         headerMaxLines: 1,
                         headerFillLines: true,

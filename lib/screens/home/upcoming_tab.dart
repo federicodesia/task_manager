@@ -60,9 +60,6 @@ class _UpcomingTabState extends State<_UpcomingTab>{
               availableSpaceCubit: widget.availableSpaceCubit,
               child: EmptySpace(
                 svgImage: "assets/svg/completed_tasks.svg",
-                svgHeight: MediaQuery.of(context).orientation == Orientation.portrait ? 
-                          MediaQuery.of(context).size.width * 0.4 :
-                          MediaQuery.of(context).size.height * 0.4,
                 header: context.l10n.emptySpace_youHaventTasksForLater,
                 description: context.l10n.emptySpace_youHaventTasksForLater_description,
               ),

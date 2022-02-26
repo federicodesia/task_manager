@@ -7,8 +7,8 @@ class EmptySpace extends StatelessWidget{
 
   final EdgeInsets padding;
   final String? svgImage;
-  final double? svgHeight;
-  final double svgBottomMargin;
+  final double svgScale;
+  final double svgBottomSpace;
   final String header;
   final int headerMaxLines;
   final bool headerFillLines;
@@ -20,8 +20,8 @@ class EmptySpace extends StatelessWidget{
   const EmptySpace({
     this.padding = const EdgeInsets.symmetric(vertical: cPadding),
     this.svgImage,
-    this.svgHeight,
-    this.svgBottomMargin = 32.0,
+    this.svgScale = 0.35,
+    this.svgBottomSpace = 32.0,
     required this.header,
     this.headerMaxLines = 2,
     this.headerFillLines = false,
@@ -40,8 +40,10 @@ class EmptySpace extends StatelessWidget{
       child: Column(
         children: [
           if(svgImage != null) Container(
-            height: svgHeight,
-            margin: EdgeInsets.only(bottom: svgBottomMargin),
+            height: MediaQuery.of(context).orientation == Orientation.portrait
+              ? MediaQuery.of(context).size.width * svgScale
+              : MediaQuery.of(context).size.height * svgScale,
+            margin: EdgeInsets.only(bottom: svgBottomSpace),
             child: SvgPicture.asset(svgImage!)
           ),
 

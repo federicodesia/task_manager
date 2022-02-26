@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/theme/theme.dart';
 
-class RoundedTextFormField extends StatelessWidget{
+class RoundedTextFormField extends StatefulWidget{
 
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -19,13 +19,10 @@ class RoundedTextFormField extends StatelessWidget{
   final void Function(String)? onFieldSubmitted;
   final String? errorText;
   final TextStyle? errorStyle;
-  final Widget? suffixIcon;
-  final bool obscureText;
-  final bool enableSuggestions;
-  final bool autocorrect;
   final int? maxLength;
   final String? counterText;
   final TextAlign textAlign;
+  final bool enableObscureTextToggle;
   
   RoundedTextFormField({
     this.controller,
@@ -43,14 +40,18 @@ class RoundedTextFormField extends StatelessWidget{
     this.onFieldSubmitted,
     this.errorText,
     this.errorStyle,
-    this.suffixIcon,
-    this.obscureText = false,
-    this.enableSuggestions = true,
-    this.autocorrect = false,
     this.maxLength,
     this.counterText,
-    this.textAlign = TextAlign.start
+    this.textAlign = TextAlign.start,
+    this.enableObscureTextToggle = false,
   });
+
+  @override
+  State<RoundedTextFormField> createState() => _RoundedTextFormFieldState();
+}
+
+class _RoundedTextFormFieldState extends State<RoundedTextFormField> {
+  late bool obscuringText = widget.enableObscureTextToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -62,32 +63,32 @@ class RoundedTextFormField extends StatelessWidget{
       elevation: customTheme.elevation,
       shadowColor: customTheme.shadowColor,
       child: TextFormField(
-        controller: controller,
-        focusNode: focusNode,
+        controller: widget.controller,
+        focusNode: widget.focusNode,
 
-        initialValue: initialValue,
-        validator: validator,
-        onSaved: onSaved,
-        onChanged: onChanged,
-        onFieldSubmitted: onFieldSubmitted,
+        initialValue: widget.initialValue,
+        validator: widget.validator,
+        onSaved: widget.onSaved,
+        onChanged: widget.onChanged,
+        onFieldSubmitted: widget.onFieldSubmitted,
 
-        keyboardType: textInputType,
-        minLines: minLines,
-        maxLines: maxLines,
+        keyboardType: widget.textInputType,
+        minLines: widget.minLines,
+        maxLines: widget.maxLines,
         style: customTheme.textStyle,
-        textInputAction: textInputAction,
+        textInputAction: widget.textInputAction,
 
-        obscureText: obscureText,
-        enableSuggestions: enableSuggestions,
-        autocorrect: autocorrect,
+        obscureText: obscuringText,
+        enableSuggestions: widget.enableObscureTextToggle ? false : true,
+        autocorrect: widget.enableObscureTextToggle ? false : true,
 
-        maxLength: maxLength,
-        textAlign: textAlign,
+        maxLength: widget.maxLength,
+        textAlign: widget.textAlign,
 
         decoration: InputDecoration(
-          hintText: hintText,
+          hintText: widget.hintText,
           hintStyle: customTheme.smallTextStyle,
-          labelText: labelText,
+          labelText: widget.labelText,
           labelStyle: customTheme.smallTextStyle,
           floatingLabelBehavior: FloatingLabelBehavior.never,
 
@@ -106,11 +107,28 @@ class RoundedTextFormField extends StatelessWidget{
           filled: true,
           fillColor: customTheme.contentBackgroundColor,
 
-          suffixIcon: suffixIcon,
-          counterText: counterText,
+          counterText: widget.counterText,
+          errorText: widget.errorText,
+          errorStyle: widget.errorStyle,
 
-          errorText: errorText,
-          errorStyle: errorStyle
+          suffixIcon: widget.enableObscureTextToggle ? Padding(
+            padding: EdgeInsets.only(right: 8.0),
+            child: Material(
+              color: Colors.transparent,
+              child: IconButton(
+                icon: AnimatedSwitcher(
+                  duration: cFastAnimationDuration,
+                  child: Icon(
+                    obscuringText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    key: Key("ObscureTextIconButtonKeyValue=$obscuringText"),
+                  ),
+                ),
+                splashRadius: 24.0,
+                color: customTheme.lightColor,
+                onPressed: () => setState(() => obscuringText = !obscuringText)
+              ),
+            ),
+          ) : null
         ),
       ),
     );

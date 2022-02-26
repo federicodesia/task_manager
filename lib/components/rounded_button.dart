@@ -11,7 +11,7 @@ class RoundedButton extends StatelessWidget{
   final bool autoWidth;
   final double borderRadius;
   final EdgeInsets padding;
-  final Function() onPressed;
+  final void Function()? onPressed;
 
   const RoundedButton({
     required this.child,

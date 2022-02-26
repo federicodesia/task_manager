@@ -96,30 +96,8 @@ class _LoginScreenState extends State<_LoginScreen>{
                                   RoundedTextFormField(
                                     controller: passwordController,
                                     hintText: context.l10n.textField_password,
+                                    enableObscureTextToggle: true,
                                     errorText: formState.passwordError,
-                                    enableSuggestions: false,
-                                    autocorrect: false,
-                                    obscureText: obscurePassword,
-                                    suffixIcon: Padding(
-                                      padding: EdgeInsets.only(right: 8.0),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: IconButton(
-                                          icon: AnimatedSwitcher(
-                                            duration: cFastAnimationDuration,
-                                            child: Icon(
-                                              obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                              key: Key("IconButtonObscurePasswordKeyValue=$obscurePassword"),
-                                            ),
-                                          ),
-                                          splashRadius: 24.0,
-                                          color: customTheme.lightColor,
-                                          onPressed: () {
-                                            setState(() => obscurePassword = !obscurePassword);
-                                          },
-                                        ),
-                                      ),
-                                    ),
                                   ),
                                   SizedBox(height: 16.0),
 

@@ -234,9 +234,6 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                   availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
                                   child: EmptySpace(
                                     svgImage: "assets/svg/completed_tasks.svg",
-                                    svgHeight: MediaQuery.of(context).orientation == Orientation.portrait
-                                      ? MediaQuery.of(context).size.width * 0.4
-                                      : MediaQuery.of(context).size.height * 0.4,
                                     header: state.activeFilter == TaskFilter.All
                                       ? context.l10n.emptySpace_youHaventTasksInCategory
                                       : context.l10n.emptySpace_youHaventTasksWithActiveFilter(state.activeFilter.nameLocalization(context).toLowerCase()),

@@ -61,7 +61,8 @@ class AuthRepository{
   }
 
   Future<AuthCredentials?> accessToken({
-    required AuthCredentials authCredentials
+    required AuthCredentials authCredentials,
+    List<String>? ignoreKeys
   }) async {
 
     try{
@@ -70,7 +71,7 @@ class AuthRepository{
       return authCredentials.copyWith(accessToken: response.data["accessToken"]);
     }
     catch (error){
-      await ResponseError.validate(error, null);
+      await ResponseError.validate(error, ignoreKeys);
     }
   }
 

@@ -48,17 +48,22 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       final credentials = state.credentials;
       if(credentials.isNotEmpty){
         
-        final response = await authRepository.accessToken(authCredentials: credentials);
-        if(response != null) add(AuthCredentialsChanged(credentials: response));
+        final response = await authRepository.accessToken(
+          authCredentials: credentials,
+          ignoreKeys: ["Unauthorized"]
+        );
+        if(response != null){
+          add(AuthCredentialsChanged(credentials: response));
+
+          await firebaseMessaging.getToken().then((token) async{
+            print("FirebaseMessagingToken: $token");
+            if(token != null) await authRepository.setFirebaseMessagingToken(token: token);
+          });
+        }
         else add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
       }
       else Future.delayed(Duration(seconds: 1), () {
         add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
-      });
-      
-      await firebaseMessaging.getToken().then((token) async{
-        print("FirebaseMessagingToken: $token");
-        if(token != null) await authRepository.setFirebaseMessagingToken(token: token);
       });
     });
     
