@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/helpers/response_messages.dart';
+import 'package:task_manager/models/active_session.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/either.dart';
 import 'package:task_manager/models/user.dart';
@@ -287,6 +288,19 @@ class AuthRepository{
     try{
       final dio = await base.dioRefreshToken();
       await dio.post("/auth/set-fcm-token/$token");
+    }
+    catch (error){
+      await ResponseError.validate(error, null);
+    }
+  }
+
+  Future<List<ActiveSession>?> getActiveSessions() async {
+    try{
+      final dio = await base.dioAccessToken();
+      final response = await dio.get("/auth/get-active-sessions");
+      return List<ActiveSession>.from(response.data
+        .map((activeSession) => ActiveSession.fromJson(activeSession))
+      );
     }
     catch (error){
       await ResponseError.validate(error, null);

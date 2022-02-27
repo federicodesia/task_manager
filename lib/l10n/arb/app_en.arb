@@ -210,6 +210,8 @@
   "@homeScreen_todayTab": {},
   "homeScreen_upcomingTab": "Upcoming",
   "@homeScreen_upcomingTab": {},
+  "locationNotAvailable": "Location not available",
+  "@locationNotAvailable": {},
   "loginScreen_description": "Please sign in to your account",
   "@loginScreen_description": {},
   "loginScreen_dontHaveAnAccount": "Don't have an Account?",

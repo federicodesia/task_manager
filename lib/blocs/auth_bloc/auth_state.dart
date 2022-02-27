@@ -10,22 +10,26 @@ class AuthState {
   @JsonKey(ignore: true)
   final AuthCredentials credentials;
   final User user;
+  final List<ActiveSession> activeSessions;
 
   AuthState({
     this.status = AuthStatus.loading,
     this.credentials = AuthCredentials.empty,
-    this.user = User.empty
+    this.user = User.empty,
+    this.activeSessions = const []
   });
 
   AuthState copyWith({
     AuthStatus? status,
     AuthCredentials? credentials,
-    User? user
+    User? user,
+    List<ActiveSession>? activeSessions
   }){
     return AuthState(
       status: status ?? this.status,
       credentials: credentials ?? this.credentials,
-      user: user ?? this.user
+      user: user ?? this.user,
+      activeSessions: activeSessions ?? this.activeSessions
     );
   }
 

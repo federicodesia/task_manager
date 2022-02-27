@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:task_manager/models/active_session.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/user.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
@@ -29,8 +30,10 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   }) : super(AuthState()){
 
     firebaseMessagingTokenSubscription = firebaseMessaging.onTokenRefresh.listen((token) async {
-      print("FirebaseMessagingTokenSubscription: $token");
-      await authRepository.setFirebaseMessagingToken(token: token);
+      if(state.credentials.isNotEmpty){
+        print("FirebaseMessagingTokenSubscription: $token");
+        await authRepository.setFirebaseMessagingToken(token: token);
+      }
     });
 
     on<AuthLoaded>((event, emit) async{
@@ -109,6 +112,17 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       final response = await authRepository.logoutAll();
       if(response) add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
     });
+
+    on<UpdateActiveSessionsRequested>((event, emit) async{
+      final currentToken = state.credentials.refreshToken;
+      final response = await authRepository.getActiveSessions();
+      
+      if(response != null) emit(state.copyWith(
+        activeSessions: response.map((activeSession) => activeSession.token == currentToken
+          ? activeSession.copyWith(isThisDevice: true) : activeSession
+        ).toList()..sort((a, b) => b.isThisDevice ? 1 : -1))
+      );
+    });
   }
 
   @override
@@ -116,7 +130,6 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     firebaseMessagingTokenSubscription.cancel();
     return super.close();
   }
-
 
   @override
   AuthState? fromJson(Map<String, dynamic> json) {

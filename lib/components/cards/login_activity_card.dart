@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/l10n/l10n.dart';
+import 'package:task_manager/models/active_session.dart';
+import 'package:task_manager/models/geo_location.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class LoginActivityCard extends StatelessWidget {
 
+  final ActiveSession activeSession;
+  final void Function()? onTap;
+
   LoginActivityCard({
-    required this.deviceName,
-    required this.location,
-    this.isThisDevice = false,
+    required this.activeSession,
     this.onTap
   });
-
-  final String deviceName;
-  final String location;
-  final bool isThisDevice;
-  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +54,12 @@ class LoginActivityCard extends StatelessWidget {
                     text: TextSpan(
                       style: customTheme.textStyle,
                       children: <TextSpan>[
-                        if(isThisDevice) TextSpan(
+                        if(activeSession.isThisDevice) TextSpan(
                           text: context.l10n.securitySettings_thisDevice + "  ",
                           style: customTheme.boldTextStyle.copyWith(color: Colors.green)
                         ),
-                        TextSpan(text: deviceName),
+                        // TODO: Device name
+                        TextSpan(text: "Device name"),
                       ],
                     ),
                     maxLines: 1,
@@ -68,7 +67,10 @@ class LoginActivityCard extends StatelessWidget {
                   ),
                   SizedBox(height: 2.0),
                   Text(
-                    location,
+                    getLocationString(
+                      context: context,
+                      location: activeSession.geoLocation
+                    ),
                     style: customTheme.smallLightTextStyle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -81,4 +83,14 @@ class LoginActivityCard extends StatelessWidget {
       ),
     );
   }
+}
+
+String getLocationString({required BuildContext context, GeoLocation? location}){
+  if(location != null){
+    List<String?> locationStrings;
+    locationStrings = [location.city, location.region, location.country];
+    locationStrings.removeWhere((s) => s == null || s.isEmpty);
+    if(locationStrings.isNotEmpty) return locationStrings.map((s) => s.toString()).join(", ");
+  }
+  return context.l10n.locationNotAvailable;
 }
