@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/bottom_sheets/active_session_bottom_sheet.dart';
+import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/active_session.dart';
@@ -8,19 +10,22 @@ import 'package:task_manager/theme/theme.dart';
 class LoginActivityCard extends StatelessWidget {
 
   final ActiveSession activeSession;
-  final void Function()? onTap;
-
-  LoginActivityCard({
-    required this.activeSession,
-    this.onTap
-  });
+  LoginActivityCard({required this.activeSession});
 
   @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
     
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        ModalBottomSheet(
+          title: context.l10n.bottomSheet_sessionInformation, 
+          context: context,
+          content: ActiveSessionBottomSheet(
+            activeSession: activeSession
+          )
+        ).show();
+      },
       borderRadius: BorderRadius.circular(cBorderRadius),
       
       child: Padding(
