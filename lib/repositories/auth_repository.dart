@@ -98,6 +98,20 @@ class AuthRepository{
     }
   }
 
+  Future<bool> logoutBySessionId({
+    required int sessionId
+  }) async {
+    try{
+      final dio = await base.dioAccessToken();
+      await dio.post("/auth/logout-by-session-id/$sessionId");
+      return true;
+    }
+    catch (error){
+      await ResponseError.validate(error, null);
+      return false;
+    }
+  }
+
   Future<void> sendAccountVerificationCode() async {
     try{
       final dio = await base.dioAccessToken();

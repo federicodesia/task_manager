@@ -106,7 +106,7 @@ class _SecurityScreenState extends State<SecurityScreen>{
                             final activeSessions = authState.activeSessions;
 
                             return DeclarativeAnimatedList(
-                              items: activeSessions,
+                              items: activeSessions.toList(),
                               itemBuilder: (context, ActiveSession activeSession, index, animation){
                                 
                                 return ListItemAnimation(
@@ -114,8 +114,7 @@ class _SecurityScreenState extends State<SecurityScreen>{
                                   child: Padding(
                                     padding: EdgeInsets.only(bottom: 4.0),
                                     child: LoginActivityCard(
-                                      activeSession: activeSession,
-                                      onTap: () {},
+                                      activeSession: activeSession
                                     ),
                                   ),
                                 );

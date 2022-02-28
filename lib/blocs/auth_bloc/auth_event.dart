@@ -16,5 +16,9 @@ class AuthUserChanged extends AuthEvent {
 
 class AuthLogoutRequested extends AuthEvent {}
 class AuthLogoutAllRequested extends AuthEvent {}
+class AuthLogoutSessionRequested extends AuthEvent {
+  final int sessionId;
+  AuthLogoutSessionRequested({required this.sessionId});
+}
 
 class UpdateActiveSessionsRequested extends AuthEvent {}

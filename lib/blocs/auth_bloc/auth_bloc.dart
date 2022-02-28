@@ -123,6 +123,15 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
         ).toList()..sort((a, b) => b.isThisDevice ? 1 : -1))
       );
     });
+
+    on<AuthLogoutSessionRequested>((event, emit) async{
+      final response = await authRepository.logoutBySessionId(sessionId: event.sessionId);
+      
+      if(response) emit(state.copyWith(
+        activeSessions: state.activeSessions
+          ..removeWhere((activeSession) => activeSession.id == event.sessionId))
+      );
+    });
   }
 
   @override
