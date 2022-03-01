@@ -74,6 +74,7 @@ class AuthRepository{
     catch (error){
       await ResponseError.validate(error, ignoreKeys);
     }
+    return null;
   }
 
   Future<void> logout() async {
@@ -319,5 +320,6 @@ class AuthRepository{
     catch (error){
       await ResponseError.validate(error, null);
     }
+    return null;
   }
 }

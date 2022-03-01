@@ -102,5 +102,6 @@ class AccessTokenInterceptor extends Interceptor {
       catch(_) {}
     }
     catch (_){}
+    return null;
   }
 }

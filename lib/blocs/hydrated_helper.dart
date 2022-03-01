@@ -22,6 +22,7 @@ class HydratedHelper{
       }
     }
     catch(error) {}
+    return null;
   }
 
   static Map<String, dynamic>? _castJson(dynamic json) {

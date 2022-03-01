@@ -61,14 +61,17 @@ abstract class Validators{
   static String? validateEmailResponse(BuildContext context, ResponseMessage responseMessage){
     if(responseMessage.contains("user not found")) return context.l10n.error_userNotFound;
     if(responseMessage.contains("email is already taken")) return context.l10n.error_emailAlreadyTaken;
+    return null;
   }
 
   static String? validatePasswordResponse(BuildContext context, ResponseMessage responseMessage){
     if(responseMessage.contains("wrong password")) return context.l10n.error_wrongPassword;
+    return null;
   }
 
   static String? validateEmailVerificationCodeResponse(BuildContext context, ResponseMessage responseMessage){
     if(responseMessage.contains("invalid code")) return context.l10n.error_invalidCode;
     if(responseMessage.contains("expired code")) return context.l10n.error_expiredCode;
+    return null;
   }
 }

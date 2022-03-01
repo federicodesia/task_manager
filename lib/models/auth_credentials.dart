@@ -44,6 +44,7 @@ class AuthCredentials{
       }
       catch(_){}
     }
+    return null;
   }
 
   factory AuthCredentials.fromJson(Map<String, dynamic> json) => _$AuthCredentialsFromJson(json);

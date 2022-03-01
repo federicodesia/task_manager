@@ -158,6 +158,8 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       return AuthState.fromJson(json);
     }
     catch(error) {}
+    return null;
+    
   }
 
   @override
@@ -166,5 +168,6 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       return state.toJson();
     }
     catch(error) {}
+    return null;
   }
 }

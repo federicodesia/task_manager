@@ -28,6 +28,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
       return SettingsState.fromJson(json);
     }
     catch(error) {}
+    return null;
   }
 
   @override
@@ -37,5 +38,6 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
       return state.toJson();
     }
     catch(error) {}
+    return null;
   }
 }

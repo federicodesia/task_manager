@@ -52,6 +52,7 @@ Tuple2<List<T>, Map<String, SyncErrorType>>? mergeDuplicatedId<T>({
     );
   }
   catch(_){}
+  return null;
 }
 
 Tuple3<
@@ -100,4 +101,5 @@ Tuple3<
     );
   }
   catch(_){}
+  return null;
 }

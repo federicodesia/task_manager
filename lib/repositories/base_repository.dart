@@ -21,21 +21,27 @@ class BaseRepository{
     try{
       final context = locator<ContextService>().context;
       if(context != null) return BlocProvider.of<AuthBloc>(context);
-    } catch(_){}
+    }
+    catch(_){ }
+    return null;
   }
 
   Future<String?> getRefreshToken() async{
     try{
       if(authBloc != null) return authBloc!.state.credentials.refreshToken;
       return await secureStorage.read(key: "refreshToken");
-    } catch(_){}
+    }
+    catch(_){ }
+    return null;
   }
 
   Future<String?> getAccessToken() async{
     try{
       if(authBloc != null) return authBloc!.state.credentials.accessToken;
       return await secureStorage.read(key: "accessToken");
-    } catch(_){}
+    }
+    catch(_){}
+    return null;
   }
   
   late Dio dio = Dio(baseOptions);

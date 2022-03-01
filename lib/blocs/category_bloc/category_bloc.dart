@@ -81,6 +81,7 @@ class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
       return CategoryLoadSuccess.fromJson(json);
     }
     catch(error) {}
+    return null;
   }
 
   @override
@@ -91,5 +92,6 @@ class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
       if(categoryState is CategoryLoadSuccess) return categoryState.toJson();
     }
     catch(error) {}
+    return null;
   }
 }

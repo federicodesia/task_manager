@@ -189,6 +189,7 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
       return SyncState.fromJson(json);
     }
     catch(error) {}
+    return null;
   }
 
   @override
@@ -198,5 +199,6 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
       return state.toJson();
     }
     catch(error) {}
+    return null;
   }
 }

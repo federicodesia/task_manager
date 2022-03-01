@@ -50,5 +50,6 @@ class SyncRepository{
       if(duplicatedMessage.contains("task")) return Left(Tuple2(duplicatedId, Task));
       if(duplicatedMessage.contains("category")) return Left(Tuple2(duplicatedId, Category));
     }
+    return null;
   }
 }

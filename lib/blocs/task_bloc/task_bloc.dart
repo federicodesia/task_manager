@@ -87,6 +87,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
       return TaskLoadSuccess.fromJson(json);
     }
     catch(error) {}
+    return null;
   }
 
   @override
@@ -97,5 +98,6 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
       if(taskState is TaskLoadSuccess) return taskState.toJson();
     }
     catch(error) {}
+    return null;
   }
 }
