@@ -10,11 +10,12 @@ class MyAppBar extends StatelessWidget {
   final String description;
   final Function() onButtonPressed;
   
-  MyAppBar({
+  const MyAppBar({
+    Key? key, 
     required this.header,
     required this.description,
     required this.onButtonPressed
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class MyAppBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: EdgeInsets.all(cPadding),
+          padding: const EdgeInsets.all(cPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

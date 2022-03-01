@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 
 class SnapBounceScrollPhysics extends BouncingScrollPhysics {
   final double itemWidth;
-  final ScrollPhysics? parent;
 
   const SnapBounceScrollPhysics({
     required this.itemWidth,
-    this.parent,
+    ScrollPhysics? parent,
   }) : super(parent: parent);
 
   @override

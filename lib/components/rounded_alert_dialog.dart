@@ -33,25 +33,25 @@ class RoundedAlertDialog{
       barrierColor: cBarrierColor,
       builder: (_) => Center(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.all(32.0),
+                padding: const EdgeInsets.all(32.0),
                 child: Card(
                   color: customTheme.backgroundColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(cBorderRadius),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 32.0),
+                    padding: const EdgeInsets.symmetric(vertical: 32.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
 
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 32.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 32.0),
                           child: Column(
                             children: [
                               if(svgImage != null) Container(
@@ -63,7 +63,7 @@ class RoundedAlertDialog{
                               ),
 
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
                                   title,
                                   style: customTheme.subtitleTextStyle,
@@ -72,7 +72,7 @@ class RoundedAlertDialog{
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              SizedBox(height: 24.0),
+                              const SizedBox(height: 24.0),
 
                               Text(
                                 description,
@@ -86,10 +86,10 @@ class RoundedAlertDialog{
                         ),
 
                         if(actions != null) Padding(
-                          padding: EdgeInsets.only(top: 32.0),
+                          padding: const EdgeInsets.only(top: 32.0),
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             child: Row(
                               mainAxisAlignment: actionsAlignment,
                               children: actions!,
@@ -114,11 +114,12 @@ class RoundedAlertDialogButton extends StatelessWidget{
   final Color? backgroundColor;
   final void Function()? onPressed;
 
-  RoundedAlertDialogButton({
+  const RoundedAlertDialogButton({
+    Key? key, 
     required this.text,
     this.backgroundColor,
     this.onPressed
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -134,12 +135,12 @@ class RoundedAlertDialogButton extends StatelessWidget{
       onPressed: onPressed,
       style: TextButton.styleFrom(
         backgroundColor: backgroundColor,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
         ),
         elevation: backgroundColor != null ? customTheme.elevation : null,
         shadowColor: backgroundColor != null ? customTheme.shadowColor : null,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 12.0,
           horizontal: 24.0
         )

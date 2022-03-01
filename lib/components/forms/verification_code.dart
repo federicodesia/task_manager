@@ -12,14 +12,15 @@ class VerificationCode extends StatefulWidget{
   final String? Function(String?)? validator;
   final String? errorText;
 
-  VerificationCode({
+  const VerificationCode({
+    Key? key, 
     this.controller,
     required this.length,
     this.textInputType = TextInputType.number,
     this.closeKeyboardOnFinish = true,
     this.validator,
     this.errorText
-  });
+  }) : super(key: key);
 
   @override
   _VerificationCodeState createState() => _VerificationCodeState();
@@ -60,7 +61,9 @@ class _VerificationCodeState extends State<VerificationCode>{
 
   String getCode(){
     String code = "";
-    textEditingControllers.forEach((t) => code += t.text);
+    for (TextEditingController t in textEditingControllers) {
+      code += t.text;
+    }
     if(widget.controller != null) widget.controller?.text = code;
     return code;
   }
@@ -68,17 +71,17 @@ class _VerificationCodeState extends State<VerificationCode>{
   @override
   Widget build(BuildContext context) {
     return FormValidator(
-      errorTextPadding: EdgeInsets.symmetric(vertical: 16.0),
+      errorTextPadding: const EdgeInsets.symmetric(vertical: 16.0),
       widget: (state) => Center(
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           child: IntrinsicHeight(
             child: Row(
               children: [
-                Opacity(
+                const Opacity(
                   opacity: 0,
-                  child: Container(
+                  child: SizedBox(
                     width: double.minPositive,
                     child: RoundedTextFormField()
                   ),
@@ -87,7 +90,7 @@ class _VerificationCodeState extends State<VerificationCode>{
                 Row(
                   children: List.generate(length, (index){
                     return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: AspectRatio(
                         aspectRatio: 1.0,
                         child: RawKeyboardListener(
@@ -108,8 +111,8 @@ class _VerificationCodeState extends State<VerificationCode>{
                             textInputAction: index == length - 1 ? TextInputAction.done : TextInputAction.next,
                             maxLength: 1,
                             counterText: "",
-                            errorText: widget.errorText != null ? widget.errorText : state.errorText,
-                            errorStyle: TextStyle(height: 0.0),
+                            errorText: widget.errorText ?? state.errorText,
+                            errorStyle: const TextStyle(height: 0.0),
                             onChanged: (String value){
                               if(value.isNotEmpty) next(index);
 
@@ -130,7 +133,7 @@ class _VerificationCodeState extends State<VerificationCode>{
       errorText: widget.errorText,
       validator: (value){
         if(widget.validator != null) return widget.validator!(getCode());
-        else return null;
+        return null;
       }
     );
   }

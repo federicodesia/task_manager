@@ -91,7 +91,7 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
     tasks = tasks.where((task) => dateDifference(task.date, now) >= 1).toList();
     tasks.sort((a, b) => a.date.compareTo(b.date));
 
-    if(tasks.length > 0){
+    if(tasks.isNotEmpty){
 
       int dateTimeCount = 1;
       DateTime lastDateTime = getDate(tasks.first.date);
@@ -99,9 +99,12 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
 
       for(int i = 0; i < tasks.length; i++){
         Task task = tasks[i];
-        if(dateDifference(task.date, lastDateTime) == 0) items.add(DynamicObject(object: task));
-        else if(dateTimeCount == 3) break;
-        else{
+        if(dateDifference(task.date, lastDateTime) == 0) {
+          items.add(DynamicObject(object: task));
+        }
+        else if(dateTimeCount == 3) {
+          break;
+        } else{
           lastDateTime = getDate(task.date);
           items.add(DynamicObject(object: lastDateTime));
           items.add(DynamicObject(object: task));

@@ -9,6 +9,7 @@ import 'package:task_manager/repositories/base_repository.dart';
 import 'package:task_manager/repositories/sync_repository.dart';
 
 class MainRouteWrapper extends StatelessWidget {
+  const MainRouteWrapper({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class MainRouteWrapper extends StatelessWidget {
           ), lazy: false),
         ],
         child: LifecycleEventHandler(
-          child: AutoRouter(),
+          child: const AutoRouter(),
 
           appLifecycleStateChanged: (state, context) async{
             if(state == AppLifecycleState.resumed){
@@ -47,10 +48,11 @@ class LifecycleEventHandler extends StatefulWidget{
   final Widget child;
   final Function(AppLifecycleState, BuildContext) appLifecycleStateChanged;
 
-  LifecycleEventHandler({
+  const LifecycleEventHandler({
+    Key? key, 
     required this.child,
     required this.appLifecycleStateChanged
-  });
+  }) : super(key: key);
 
   @override
   State<LifecycleEventHandler> createState() => _LifecycleEventHandlerState();

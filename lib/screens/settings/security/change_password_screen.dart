@@ -8,6 +8,8 @@ import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/components/forms/small_form_svg.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
+  const ChangePasswordScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -42,7 +44,7 @@ class _ChangePasswordScreen extends StatelessWidget{
               errorText: formState.currentPasswordError,
             ),
 
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
 
             RoundedTextFormField(
               controller: newPasswordController,

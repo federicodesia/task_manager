@@ -171,7 +171,7 @@ class AuthRepository{
           "email": email
         }
       );
-      return Right(null);
+      return const Right(null);
     }
     catch (error){
       final responseMessage = await ResponseError.validate(error, ignoreKeys, ignoreFunction: ignoreFunction);
@@ -219,7 +219,7 @@ class AuthRepository{
           "password": password
         }
       );
-      return Right(null);
+      return const Right(null);
     }
     catch (error){
       final responseMessage = await ResponseError.validate(error, ignoreKeys);
@@ -243,7 +243,7 @@ class AuthRepository{
           "newPassword": newPassword
         }
       );
-      return Right(null);
+      return const Right(null);
     }
     catch (error){
       final responseMessage = await ResponseError.validate(error, ignoreKeys);
@@ -266,7 +266,7 @@ class AuthRepository{
           "email": email
         }
       );
-      return Right(null);
+      return const Right(null);
     }
     catch (error){
       final responseMessage = await ResponseError.validate(error, ignoreKeys, ignoreFunction: ignoreFunction);

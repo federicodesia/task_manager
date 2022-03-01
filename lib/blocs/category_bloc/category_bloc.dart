@@ -53,13 +53,13 @@ class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
     });
 
     on<CategoryStateUpdated>((event, emit){
-      print("Actualizando CategoryState...");
+      debugPrint("Actualizando CategoryState...");
       final categoryState = event.state;
       if(categoryState is CategoryLoadSuccess){
-        print("SyncPushStatus: " + categoryState.syncPushStatus.name);
-        print("Categories: ${categoryState.categories}");
-        print("DeletedCategories: ${categoryState.deletedCategories}");
-        print("FailedCategories: ${categoryState.failedCategories}");
+        debugPrint("SyncPushStatus: " + categoryState.syncPushStatus.name);
+        debugPrint("Categories: ${categoryState.categories}");
+        debugPrint("DeletedCategories: ${categoryState.deletedCategories}");
+        debugPrint("FailedCategories: ${categoryState.failedCategories}");
       }
       emit(event.state);
     },
@@ -77,21 +77,24 @@ class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
   @override
   CategoryState? fromJson(Map<String, dynamic> json) {
     try{
-      print("categoryBloc fromJson");
+      debugPrint("categoryBloc fromJson");
       return CategoryLoadSuccess.fromJson(json);
     }
-    catch(error) {}
-    return null;
+    catch(error) {
+      return null;
+    }
   }
 
   @override
   Map<String, dynamic>? toJson(CategoryState state) {
     try{
-      print("categoryBloc toJson");
+      debugPrint("categoryBloc toJson");
       final categoryState = state;
       if(categoryState is CategoryLoadSuccess) return categoryState.toJson();
     }
-    catch(error) {}
+    catch(error) {
+      return null;
+    }
     return null;
   }
 }

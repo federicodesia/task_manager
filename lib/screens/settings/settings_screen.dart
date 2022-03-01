@@ -16,6 +16,7 @@ import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
 
 class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
           builder: (context, constraints){
 
             return CustomScrollView(
-              physics: BouncingScrollPhysics(
+              physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()
               ),
               slivers: [
@@ -66,12 +67,12 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                     child: BlocBuilder<AuthBloc, AuthState>(
                       builder: (_, authState) {
                         return Padding(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             vertical: 32.0,
                             horizontal: cPadding
                           ),
                           child: GestureDetector(
-                            onTap: () => AutoRouter.of(context).navigate(ProfileRoute()),
+                            onTap: () => AutoRouter.of(context).navigate(const ProfileRoute()),
                             child: Row(
                               children: [
                                 RoundedButton(
@@ -80,9 +81,9 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                                   child: Image.asset(
                                     "assets/icons/profile.png"
                                   ),
-                                  onPressed: () => AutoRouter.of(context).navigate(ProfileRoute()),
+                                  onPressed: () => AutoRouter.of(context).navigate(const ProfileRoute()),
                                 ),
-                                SizedBox(width: 16.0),
+                                const SizedBox(width: 16.0),
 
                                 Expanded(
                                   child: Column(
@@ -95,7 +96,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                      SizedBox(height: 2.0),
+                                      const SizedBox(height: 2.0),
 
                                       Text(
                                         authState.user.email,
@@ -117,10 +118,10 @@ class _SettingsScreenState extends State<_SettingsScreen>{
 
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
+                    padding: const EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
                     child: Column(
                       children: [
-                        Divider(),
+                        const Divider(),
 
                         RoundedListTileSwitch(
                           title: context.l10n.settings_darkMode,
@@ -132,13 +133,13 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                         RoundedListTile(
                           title: context.l10n.settings_language,
                           icon: Icons.language_rounded,
-                          color: Color(0xFF6A69E0),
+                          color: const Color(0xFF6A69E0),
                           value: Localizations.localeOf(context).name,
                           onTap: () {
                             ModalBottomSheet(
                               title: context.l10n.settings_selectLanguage,
                               context: context,
-                              content: LanguageBottomSheet()
+                              content: const LanguageBottomSheet()
                             ).show();
                           },
                         ),
@@ -147,17 +148,17 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                         RoundedListTile(
                           title: context.l10n.settings_security,
                           icon: Icons.lock_rounded,
-                          color: Color(0xFF31A7E1),
-                          onTap: () => AutoRouter.of(context).navigate(SecurityRoute()),
+                          color: const Color(0xFF31A7E1),
+                          onTap: () => AutoRouter.of(context).navigate(const SecurityRoute()),
                         ),
                         RoundedListTile(
                           title: context.l10n.settings_notifications,
                           icon: Icons.notifications_rounded,
-                          color: Color(0xFFB548C5),
-                          onTap: () => AutoRouter.of(context).navigate(NotificationsRoute()),
+                          color: const Color(0xFFB548C5),
+                          onTap: () => AutoRouter.of(context).navigate(const NotificationsRoute()),
                         ),
 
-                        Divider(),
+                        const Divider(),
 
                         RoundedListTile(
                           title: context.l10n.settings_help,

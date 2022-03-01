@@ -35,26 +35,29 @@ class ForgotPasswordNewPasswordCubit extends Cubit<ForgotPasswordNewPasswordStat
     final passwordError = Validators.validatePassword(context, password);
 
     if(passwordError == null){
-      emit(ForgotPasswordNewPasswordState(isLoading: true));
+      emit(const ForgotPasswordNewPasswordState(isLoading: true));
 
       final response = await authRepository.changeForgotPassword(
         password: password,
         ignoreKeys: ["password"]
       );
 
-      if(response != null) response.when(
-        left: (responseMessage) => emit(ForgotPasswordNewPasswordState(
-          isLoading: false,
-          passwordError: Validators.validatePasswordResponse(context, responseMessage)
-            ?? responseMessage.get("password")
-        )),
+      if(response != null) {
+        response.when(
+          left: (responseMessage) => emit(ForgotPasswordNewPasswordState(
+            isLoading: false,
+            passwordError: Validators.validatePasswordResponse(context, responseMessage)
+              ?? responseMessage.get("password")
+          )),
 
-        right: (changed){
-          emit(ForgotPasswordNewPasswordState(changed: true));
-          authBloc.add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
-        }, 
-      );
-      else emit(ForgotPasswordNewPasswordState(isLoading: false));
+          right: (changed){
+            emit(const ForgotPasswordNewPasswordState(changed: true));
+            authBloc.add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+          }, 
+        );
+      } else {
+        emit(const ForgotPasswordNewPasswordState(isLoading: false));
+      }
     }
     else{
       emit(ForgotPasswordNewPasswordState(

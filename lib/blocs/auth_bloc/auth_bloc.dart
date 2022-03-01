@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -20,7 +21,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
   final UserRepository userRepository;
 
-  FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   late StreamSubscription firebaseMessagingTokenSubscription;
@@ -33,17 +34,17 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
     firebaseMessagingTokenSubscription = firebaseMessaging.onTokenRefresh.listen((token) async {
       if(state.credentials.isNotEmpty){
-        print("FirebaseMessagingTokenSubscription: $token");
+        debugPrint("FirebaseMessagingTokenSubscription: $token");
         await authRepository.setFirebaseMessagingToken(token: token);
       }
     });
     
     firebaseForegroundMessagesSubscription = FirebaseMessaging.onMessage.listen((message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
+      debugPrint('Got a message whilst in the foreground!');
+      debugPrint('Message data: ${message.data}');
 
       if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+        debugPrint('Message also contained a notification: ${message.notification}');
       }
     });
 
@@ -70,22 +71,27 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
           add(AuthCredentialsChanged(credentials: response));
 
           await firebaseMessaging.getToken().then((token) async{
-            print("FirebaseMessagingToken: $token");
+            debugPrint("FirebaseMessagingToken: $token");
             if(token != null) await authRepository.setFirebaseMessagingToken(token: token);
           });
         }
-        else add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+        else {
+          add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+        }
       }
-      else Future.delayed(Duration(seconds: 1), () {
+      else {
+        Future.delayed(const Duration(seconds: 1), () {
         add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
       });
+      }
     });
     
     on<AuthCredentialsChanged>((event, emit) async{
       final credentials = event.credentials;
 
-      if(credentials.isEmpty) secureStorage.deleteAll();
-      else{
+      if(credentials.isEmpty) {
+        secureStorage.deleteAll();
+      } else{
         secureStorage.write(key: "refreshToken", value: credentials.refreshToken);
         secureStorage.write(key: "accessToken", value: credentials.accessToken);
       }
@@ -103,10 +109,12 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
       if(credentials.accessTokenType == TokenType.access && credentials.isVerified){
         final response = await userRepository.getUser();
-        if(response != null) response.when(
-          left: (error) {},
-          right: (user) => emit(state.copyWith(user: user))
-        );
+        if(response != null) {
+          response.when(
+            left: (error) {},
+            right: (user) => emit(state.copyWith(user: user))
+          );
+        }
       }
     });
 
@@ -128,20 +136,24 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       final currentToken = state.credentials.refreshToken;
       final response = await authRepository.getActiveSessions();
       
-      if(response != null) emit(state.copyWith(
-        activeSessions: response.map((activeSession) => activeSession.token == currentToken
-          ? activeSession.copyWith(isThisDevice: true) : activeSession
-        ).toList()..sort((a, b) => b.isThisDevice ? 1 : -1))
-      );
+      if(response != null) {
+        emit(state.copyWith(
+          activeSessions: response.map((activeSession) => activeSession.token == currentToken
+            ? activeSession.copyWith(isThisDevice: true) : activeSession
+          ).toList()..sort((a, b) => b.isThisDevice ? 1 : -1))
+        );
+      }
     });
 
     on<AuthLogoutSessionRequested>((event, emit) async{
       final response = await authRepository.logoutBySessionId(sessionId: event.sessionId);
       
-      if(response) emit(state.copyWith(
-        activeSessions: state.activeSessions
-          ..removeWhere((activeSession) => activeSession.id == event.sessionId))
-      );
+      if(response) {
+        emit(state.copyWith(
+          activeSessions: state.activeSessions
+            ..removeWhere((activeSession) => activeSession.id == event.sessionId))
+        );
+      }
     });
   }
 
@@ -157,9 +169,9 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     try{
       return AuthState.fromJson(json);
     }
-    catch(error) {}
-    return null;
-    
+    catch(error) {
+      return null;
+    }
   }
 
   @override
@@ -167,7 +179,9 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     try{
       return state.toJson();
     }
-    catch(error) {}
-    return null;
+    catch(error) {
+      return null;
+    }
+    
   }
 }

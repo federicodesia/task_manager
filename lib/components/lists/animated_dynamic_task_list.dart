@@ -11,19 +11,20 @@ class AnimatedDynamicTaskList extends StatelessWidget{
   final List<DynamicObject> items;
   final TaskListItemType taskListItemType;
   final Widget Function(Object) objectBuilder;
-  final BuildContext context;
+  final BuildContext buildContext;
   final Function(Task) onUndoDismissed;
 
-  AnimatedDynamicTaskList({
+  const AnimatedDynamicTaskList({
+    Key? key, 
     required this.items,
     required this.taskListItemType,
     required this.objectBuilder,
-    required this.context,
+    required this.buildContext,
     required this.onUndoDismissed
-  });
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext _){
+  Widget build(BuildContext context){
 
     return DeclarativeAnimatedList(
       items: items,
@@ -34,7 +35,7 @@ class AnimatedDynamicTaskList extends StatelessWidget{
         //if(objectA is Task && objectB is Task) return objectA.id == objectB.id;
         return objectA == objectB;
       },
-      itemBuilder: (BuildContext context, DynamicObject dynamicObject, int index, Animation<double> animation){
+      itemBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
         final dynamic item = dynamicObject.object;
 
         return ListItemAnimation(
@@ -42,12 +43,12 @@ class AnimatedDynamicTaskList extends StatelessWidget{
           child: item is Task ? TaskListItem(
             task: item,
             type: taskListItemType,
-            context: context,
+            buildContext: buildContext,
             onUndoDismissed: onUndoDismissed
           ) : objectBuilder(item)
         );
       },
-      removeBuilder: (BuildContext context, DynamicObject dynamicObject, int index, Animation<double> animation){
+      removeBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
         final dynamic item = dynamicObject.object;
         
         return ListItemAnimation(
@@ -59,7 +60,7 @@ class AnimatedDynamicTaskList extends StatelessWidget{
                   TaskListItem(
                     task: item,
                     type: taskListItemType,
-                    context: context,
+                    buildContext: buildContext,
                     onUndoDismissed: onUndoDismissed
                   )
                 : Container();

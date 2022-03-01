@@ -12,6 +12,8 @@ import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class LoginScreen extends StatelessWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -48,7 +50,7 @@ class _LoginScreenState extends State<_LoginScreen>{
           builder: (context, constraints){
 
             return SingleChildScrollView(
-              physics: BouncingScrollPhysics(
+              physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()
               ),
               child: ConstrainedBox(
@@ -63,19 +65,19 @@ class _LoginScreenState extends State<_LoginScreen>{
                           children: [
 
                             Padding(
-                              padding: EdgeInsets.all(cPadding),
+                              padding: const EdgeInsets.all(cPadding),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
 
-                                  SizedBox(height: cPadding),
+                                  const SizedBox(height: cPadding),
                                   Text(
                                     context.l10n.loginScreen_title,
                                     style: customTheme.titleTextStyle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(height: 8.0),
+                                  const SizedBox(height: 8.0),
 
                                   Text(
                                     context.l10n.loginScreen_description,
@@ -83,7 +85,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(height: cPadding * 2),
+                                  const SizedBox(height: cPadding * 2),
 
                                   RoundedTextFormField(
                                     controller: emailController,
@@ -91,7 +93,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                     textInputType: TextInputType.emailAddress,
                                     errorText: formState.emailError
                                   ),
-                                  SizedBox(height: 16.0),
+                                  const SizedBox(height: 16.0),
 
                                   RoundedTextFormField(
                                     controller: passwordController,
@@ -99,7 +101,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                     enableObscureTextToggle: true,
                                     errorText: formState.passwordError,
                                   ),
-                                  SizedBox(height: 16.0),
+                                  const SizedBox(height: 16.0),
 
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -112,7 +114,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         onTap: () {
-                                          AutoRouter.of(context).navigate(ForgotPasswordRoute());
+                                          AutoRouter.of(context).navigate(const ForgotPasswordRoute());
                                         },
                                       ),
                                     ],
@@ -121,13 +123,13 @@ class _LoginScreenState extends State<_LoginScreen>{
                               ),
                             ),
                             
-                            Spacer(),
+                            const Spacer(),
 
                             Padding(
-                              padding: EdgeInsets.all(cPadding),
+                              padding: const EdgeInsets.all(cPadding),
                               child: Column(
                                 children: [
-                                  if(formState.isLoading) Padding(
+                                  if(formState.isLoading) const Padding(
                                     padding: EdgeInsets.only(bottom: 32.0),
                                     child: CircularProgressIndicator(),
                                   ),
@@ -146,7 +148,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                       );
                                     },
                                   ),
-                                  SizedBox(height: cPadding),
+                                  const SizedBox(height: cPadding),
 
                                   GestureDetector(
                                     child: RichText(
@@ -154,9 +156,9 @@ class _LoginScreenState extends State<_LoginScreen>{
                                         style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
                                           TextSpan(text: context.l10n.loginScreen_dontHaveAnAccount),
-                                          TextSpan(text: " "),
+                                          const TextSpan(text: " "),
                                           TextSpan(text: context.l10n.signUp_button, style: customTheme.smallTextButtonStyle),
-                                          TextSpan(text: "\n")
+                                          const TextSpan(text: "\n")
                                         ],
                                       ),
                                       maxLines: 2,
@@ -164,7 +166,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                       textAlign: TextAlign.center,
                                     ),
                                     onTap: () {
-                                      AutoRouter.of(context).navigate(RegisterRoute());
+                                      AutoRouter.of(context).navigate(const RegisterRoute());
                                     },
                                   ),
                                 ],

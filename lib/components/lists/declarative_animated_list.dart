@@ -19,7 +19,8 @@ class DeclarativeAnimatedList<T extends Object> extends StatelessWidget{
   final Axis scrollDirection;
   final bool reverse;
   
-  DeclarativeAnimatedList({
+  const DeclarativeAnimatedList({
+    Key? key, 
     this.shrinkWrap = true,
     this.physics = const NeverScrollableScrollPhysics(),
     this.insertDuration = cAnimatedListDuration,
@@ -30,7 +31,7 @@ class DeclarativeAnimatedList<T extends Object> extends StatelessWidget{
     this.equalityCheck,
     this.scrollDirection = Axis.vertical,
     this.reverse = false
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -6,15 +6,16 @@ import 'package:task_manager/theme/theme.dart';
 class CalendarGroupHour extends StatelessWidget{
 
   final DateTime dateTime;
-  CalendarGroupHour({
+  const CalendarGroupHour({
+    Key? key, 
     required this.dateTime,
-  });
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext _) {
+  Widget build(BuildContext context) {
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: cListItemSpace),
+      padding: const EdgeInsets.symmetric(vertical: cListItemSpace),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -22,11 +23,11 @@ class CalendarGroupHour extends StatelessWidget{
             Stack(
               children: [
                 CalendarGroupHourText(text: DateFormat("HH:mm").format(dateTime).toLowerCase()),
-                CalendarGroupHourText(text: "12:00 ", visible: false)
+                const CalendarGroupHourText(text: "12:00 ", visible: false)
               ],
             ),
 
-            Expanded(
+            const Expanded(
               child: Divider()
             )
           ],
@@ -40,10 +41,11 @@ class CalendarGroupHourText extends StatelessWidget{
   final String text;
   final bool visible;
 
-  CalendarGroupHourText({
+  const CalendarGroupHourText({
+    Key? key, 
     required this.text,
     this.visible = true
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class CalendarGroupHourText extends StatelessWidget{
     return Opacity(
       opacity: visible ? 1 : 0,
       child: Padding(
-        padding: EdgeInsets.only(right: 12.0),
+        padding: const EdgeInsets.only(right: 12.0),
         child: Text(
           text,
           style: customTheme.lightTextStyle,

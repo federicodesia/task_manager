@@ -12,6 +12,7 @@ import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
           builder: (context, constraints){
 
             return CustomScrollView(
-              physics: BouncingScrollPhysics(
+              physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()
               ),
               slivers: [
@@ -80,7 +81,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                         children: [
 
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: cPadding),
+                            padding: const EdgeInsets.symmetric(horizontal: cPadding),
                             child: BlocBuilder<AuthBloc, AuthState>(
                               builder: (_, authState) {
                                 return Column(
@@ -95,7 +96,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                         )
                                       ),
                                       child: Container(
-                                        margin: EdgeInsets.all(4.0),
+                                        margin: const EdgeInsets.all(4.0),
                                         height: 128.0,
                                         decoration: BoxDecoration(
                                           color: customTheme.contentBackgroundColor,
@@ -104,7 +105,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                       ),
                                     ),
 
-                                    SizedBox(height: 32.0),
+                                   const  SizedBox(height: 32.0),
 
                                     Text(
                                       authState.user.name,
@@ -112,7 +113,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    SizedBox(height: 4.0),
+                                    const SizedBox(height: 4.0),
 
                                     Text(
                                       authState.user.email,
@@ -121,7 +122,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                       overflow: TextOverflow.ellipsis,
                                     ),
 
-                                    SizedBox(height: 32.0),
+                                    const SizedBox(height: 32.0),
 
                                     BlocBuilder<TaskBloc, TaskState>(
                                       builder: (_, taskState) {
@@ -159,29 +160,29 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                             ),
                           ),
 
-                          SizedBox(height: 16.0),
-                          Spacer(),
+                          const SizedBox(height: 16.0),
+                          const Spacer(),
 
                           Padding(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               vertical: 32.0,
                               horizontal: 16.0
                             ),
                             child: Material(
                               color: Colors.transparent,
-                              borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
+                              borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius)),
                               elevation: customTheme.elevation,
                               shadowColor: customTheme.shadowColor,
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: customTheme.contentBackgroundColor,
-                                  borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
+                                  borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius))
                                 ),
                                 child: Column(
                                   children: [
 
                                     Padding(
-                                      padding: EdgeInsets.all(cPadding),
+                                      padding: const EdgeInsets.all(cPadding),
                                       child: Row(
                                         children: [
 
@@ -202,7 +203,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                             progressColor: cGoldenColor,
                                           ),
 
-                                          SizedBox(width: 16.0),
+                                          const SizedBox(width: 16.0),
 
                                           Expanded(
                                             child: Column(
@@ -214,7 +215,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                                   maxLines: 3,
                                                   overflow: TextOverflow.ellipsis,
                                                 ),
-                                                SizedBox(height: 8.0),
+                                                const SizedBox(height: 8.0),
 
                                                 Text(
                                                   context.l10n.upgradeToPro_description,
@@ -230,10 +231,10 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                     ),
 
                                     Container(
-                                      padding: EdgeInsets.all(cPadding),
+                                      padding: const EdgeInsets.all(cPadding),
                                       decoration: BoxDecoration(
                                         color: cPrimaryColor.withOpacity(customTheme.isDark ? 0.85 : 1.0),
-                                        borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
+                                        borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius))
                                       ),
                                       child: Row(
                                         children: [
@@ -247,13 +248,13 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                             ),
                                           ),
 
-                                          SizedBox(width: 12.0),
+                                          const SizedBox(width: 12.0),
 
                                           RoundedButton(
                                             autoWidth: true,
                                             color: cGoldenColor,
                                             child: Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                               child: Text(
                                                 context.l10n.upgradeToPro_button,
                                                 style: customTheme.boldTextStyle.copyWith(color: CustomThemeData.light.textColor),
@@ -290,10 +291,11 @@ class ProfileItem extends StatelessWidget{
   final int? count;
   final String name;
 
-  ProfileItem({
+  const ProfileItem({
+    Key? key, 
     required this.count,
     required this.name
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -301,7 +303,7 @@ class ProfileItem extends StatelessWidget{
 
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
           children: [
             Text(
@@ -310,7 +312,7 @@ class ProfileItem extends StatelessWidget{
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            SizedBox(height: 4.0),
+            const SizedBox(height: 4.0),
             Text(
               name,
               style: customTheme.lightTextStyle,

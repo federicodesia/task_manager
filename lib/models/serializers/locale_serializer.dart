@@ -8,5 +8,5 @@ class LocaleSerializer implements JsonConverter<Locale?, String?> {
   Locale? fromJson(String? languageCode) => languageCode != null ? Locale(languageCode) : null;
 
   @override
-  String? toJson(Locale? locale) => locale != null ? locale.languageCode : null;
+  String? toJson(Locale? locale) => locale?.languageCode;
 }

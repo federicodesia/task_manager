@@ -20,7 +20,11 @@ import 'package:task_manager/models/task.dart';
 class TodayTab extends StatefulWidget{
 
   final AvailableSpaceCubit availableSpaceCubit;
-  TodayTab({required this.availableSpaceCubit});
+
+  const TodayTab({
+    Key? key,
+    required this.availableSpaceCubit
+  }) : super(key: key);
 
   @override
   _TodayTabState createState() => _TodayTabState();
@@ -80,7 +84,7 @@ class _TodayTabState extends State<TodayTab>{
                     setState(() => progressSummaryHeight = size.height);
                   },
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 12.0),
+                    padding: const EdgeInsets.only(bottom: 12.0),
                     child: ProgressSummary(
                       header: context.l10n.progressSummary_title,
                       completed: completedTasks.length,
@@ -91,8 +95,8 @@ class _TodayTabState extends State<TodayTab>{
 
                 if(todayTasks.isNotEmpty) AnimatedDynamicTaskList(
                   items: items,
-                  taskListItemType: TaskListItemType.Checkbox,
-                  context: context,
+                  taskListItemType: TaskListItemType.checkbox,
+                  buildContext: context,
                   onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
                   objectBuilder: (object){
                     return (object is String) ? ListHeader(object) : Container();
@@ -111,7 +115,7 @@ class _TodayTabState extends State<TodayTab>{
           }
         }
         else{
-          child = ShimmerList(
+          child = const ShimmerList(
             minItems: 2,
             maxItems: 4,
             child: CheckboxTaskListItem(isShimmer: true)

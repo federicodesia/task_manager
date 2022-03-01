@@ -9,12 +9,13 @@ class CenterAppBar extends StatelessWidget {
   final bool automaticallyImplyLeading;
   final List<Widget>? actions;
   
-  CenterAppBar({
+  const CenterAppBar({
+    Key? key, 
     required this.center,
     this.leading,
     this.automaticallyImplyLeading = true,
     this.actions
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class CenterAppBar extends StatelessWidget {
     final bool canPop = parentRoute?.canPop ?? false;
 
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -34,7 +35,7 @@ class CenterAppBar extends StatelessWidget {
                 if(leading != null) leading!
                 else if(automaticallyImplyLeading && canPop) IconButton(
                   color: customTheme.lightColor,
-                  icon: Icon(Icons.navigate_before_rounded,),
+                  icon: const Icon(Icons.navigate_before_rounded,),
                   splashRadius: cSplashRadius,
                   onPressed: () => Navigator.of(context).maybePop()
                 ),

@@ -17,7 +17,7 @@ class GeoLocation extends Equatable{
   @DateTimeSerializer()
   final DateTime createdAt;
 
-  GeoLocation({
+  const GeoLocation({
     required this.id,
     this.country,
     this.countryCode,

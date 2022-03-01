@@ -10,13 +10,14 @@ class OutlinedFormIconButton extends StatelessWidget{
   final bool expand;
   final Function() onPressed;
 
-  OutlinedFormIconButton({
+  const OutlinedFormIconButton({
+    Key? key, 
     required this.icon,
     required this.text,
     this.outlineColor,
     this.expand = false,
     required this.onPressed
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class OutlinedFormIconButton extends StatelessWidget{
             size: 22.0,
             color: customTheme.lightColor
           ),
-          SizedBox(width: 4.0),
+          const SizedBox(width: 4.0),
 
           Expanded(
             flex: expand ? 1 : 0,
@@ -46,7 +47,7 @@ class OutlinedFormIconButton extends StatelessWidget{
         ],
       ),
       style: OutlinedButton.styleFrom(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 16.0,
           vertical: 12.0
         ),

@@ -17,6 +17,7 @@ import 'package:task_manager/theme/theme.dart';
 import '../../../constants.dart';
 
 class SecurityScreen extends StatefulWidget{
+  const SecurityScreen({Key? key}) : super(key: key);
 
   @override
   _SecurityScreenState createState() => _SecurityScreenState();
@@ -43,7 +44,7 @@ class _SecurityScreenState extends State<SecurityScreen>{
           builder: (context, constraints){
 
             return CustomScrollView(
-              physics: BouncingScrollPhysics(
+              physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()
               ),
               slivers: [
@@ -66,7 +67,7 @@ class _SecurityScreenState extends State<SecurityScreen>{
 
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
+                    padding: const EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
 
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,30 +76,30 @@ class _SecurityScreenState extends State<SecurityScreen>{
                         RoundedListTile(
                           title: context.l10n.securitySettings_changeEmail,
                           icon: Icons.email_outlined,
-                          color: Color(0xFF6A69E0),
-                          onTap: () => AutoRouter.of(context).navigate(ChangeEmailRoute()),
+                          color: const Color(0xFF6A69E0),
+                          onTap: () => AutoRouter.of(context).navigate(const ChangeEmailRoute()),
                         ),
                         RoundedListTile(
                           title: context.l10n.securitySettings_changePassword,
                           icon: Icons.lock_outlined,
-                          color: Color(0xFF31A7E1),
-                          onTap: () => AutoRouter.of(context).navigate(ChangePasswordRoute()),
+                          color: const Color(0xFF31A7E1),
+                          onTap: () => AutoRouter.of(context).navigate(const ChangePasswordRoute()),
                         ),
                         RoundedListTile(
                           title: context.l10n.securitySettings_signOutOnAllDevices,
                           icon: Icons.logout_outlined,
-                          color: Color(0xFFF57170),
+                          color: const Color(0xFFF57170),
                           onTap: () => showLogoutAllDialog(context),
                         ),
 
-                        SizedBox(height: 8.0),
+                        const SizedBox(height: 8.0),
                         ListHeader(context.l10n.securitySettings_relatedNotifications),
                         RoundedListTileSwitch(
                           title: context.l10n.securitySettings_loginOnNewDevice,
                           icon: Icons.smartphone_outlined
                         ),
 
-                        SizedBox(height: 8.0),
+                        const SizedBox(height: 8.0),
                         ListHeader(context.l10n.securitySettings_loginActivity),
 
                         BlocBuilder<AuthBloc, AuthState>(
@@ -112,7 +113,7 @@ class _SecurityScreenState extends State<SecurityScreen>{
                                 return ListItemAnimation(
                                   animation: animation,
                                   child: Padding(
-                                    padding: EdgeInsets.only(bottom: 4.0),
+                                    padding: const EdgeInsets.only(bottom: 4.0),
                                     child: LoginActivityCard(
                                       activeSession: activeSession
                                     ),

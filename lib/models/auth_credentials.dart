@@ -21,7 +21,7 @@ class AuthCredentials{
     accessToken: ""
   );
 
-  bool get isEmpty => this.refreshToken == "" && this.accessToken == "";
+  bool get isEmpty => refreshToken == "" && accessToken == "";
   bool get isNotEmpty => !isEmpty;
 
   bool get isVerified{

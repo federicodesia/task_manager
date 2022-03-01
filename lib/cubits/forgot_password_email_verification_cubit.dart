@@ -36,7 +36,7 @@ class ForgotPasswordEmailVerificationCubit extends Cubit<ForgotPasswordEmailVeri
     final codeError = Validators.validateEmailVerificationCode(context, code);
 
     if(codeError == null){
-      emit(ForgotPasswordEmailVerificationState(isLoading: true));
+      emit(const ForgotPasswordEmailVerificationState(isLoading: true));
 
       final response = await authRepository.verifyPasswordCode(
         email: email,
@@ -44,19 +44,22 @@ class ForgotPasswordEmailVerificationCubit extends Cubit<ForgotPasswordEmailVeri
         ignoreKeys: ["code"]
       );
 
-      if(response != null) response.when(
-        left: (responseMessage) => emit(ForgotPasswordEmailVerificationState(
-          isLoading: false,
-          codeError: Validators.validateEmailVerificationCodeResponse(context, responseMessage)
-            ?? responseMessage.get("code"),
-        )),
+      if(response != null) {
+        response.when(
+          left: (responseMessage) => emit(ForgotPasswordEmailVerificationState(
+            isLoading: false,
+            codeError: Validators.validateEmailVerificationCodeResponse(context, responseMessage)
+              ?? responseMessage.get("code"),
+          )),
 
-        right: (credentials){
-          emit(ForgotPasswordEmailVerificationState(verified: true));
-          authBloc.add(AuthCredentialsChanged(credentials: credentials));
-        }, 
-      );
-      else emit(ForgotPasswordEmailVerificationState(isLoading: false));
+          right: (credentials){
+            emit(const ForgotPasswordEmailVerificationState(verified: true));
+            authBloc.add(AuthCredentialsChanged(credentials: credentials));
+          }, 
+        );
+      } else {
+        emit(const ForgotPasswordEmailVerificationState(isLoading: false));
+      }
     }
     else{
       emit(ForgotPasswordEmailVerificationState(

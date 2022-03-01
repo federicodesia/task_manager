@@ -5,7 +5,7 @@ import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class DialogService {
-  final GlobalKey<NavigatorState> navigatoryKey = new GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navigatoryKey = GlobalKey<NavigatorState>();
 
   void showNoInternetConnectionDialog() {
     final context = navigatoryKey.currentContext;
@@ -22,7 +22,7 @@ class DialogService {
           RoundedButton(
             autoWidth: true,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 32.0),
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: Text(
                 context.l10n.gotIt_button,
                 style: customTheme.primaryColorButtonTextStyle
@@ -50,7 +50,7 @@ class DialogService {
           RoundedButton(
             autoWidth: true,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 32.0),
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: Text(
                 context.l10n.gotIt_button,
                 style: customTheme.primaryColorButtonTextStyle

@@ -16,14 +16,15 @@ class WeekBarChart extends StatelessWidget{
   final Map<DateTime, int> weekTasks;
   final Map<DateTime, int> weekCompletedTasks;
 
-  WeekBarChart({
+  const WeekBarChart({
+    Key? key, 
     this.chartHeight = 100,
     required this.header,
     required this.weekCompletedTasksCount,
     required this.weekRemainingTasksCount,
     required this.weekTasks,
     required this.weekCompletedTasks
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +33,9 @@ class WeekBarChart extends StatelessWidget{
     return Container(
       decoration: BoxDecoration(
         color: customTheme.contentBackgroundColor,
-        borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
+        borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius))
       ),
-      padding: EdgeInsets.all(cPadding),
+      padding: const EdgeInsets.all(cPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -44,7 +45,7 @@ class WeekBarChart extends StatelessWidget{
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: 12.0),
+          const SizedBox(height: 12.0),
 
           SizedBox(
             height: chartHeight,
@@ -81,7 +82,7 @@ class WeekBarChart extends StatelessWidget{
             ),
           ),
           
-          SizedBox(height: 12.0),
+          const SizedBox(height: 12.0),
 
           Stack(
             children: [
@@ -113,7 +114,7 @@ class WeekBarChart extends StatelessWidget{
                     ),
                   ),
 
-                  SizedBox(width: 8.0),
+                  const SizedBox(width: 8.0),
                   Expanded(
                     child: AlignedAnimatedSwitcher(
                       duration: cAnimationDuration,

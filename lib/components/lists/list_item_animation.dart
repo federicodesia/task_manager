@@ -6,11 +6,12 @@ class ListItemAnimation extends StatelessWidget{
   final Axis axis;
   final Widget child;
 
-  ListItemAnimation({
+  const ListItemAnimation({
+    Key? key, 
     required this.animation,
     this.axis = Axis.vertical,
     required this.child,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class ListItemAnimation extends StatelessWidget{
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
           parent: animation,
-          curve: Interval(0.75, 1.0, curve: Curves.easeInOut),
+          curve: const Interval(0.75, 1.0, curve: Curves.easeInOut),
         ),
       ),
       child: SizeTransition(

@@ -9,11 +9,12 @@ class AnimatedFloatingActionButtonScrollNotification extends StatefulWidget{
   final Function(bool) onChange;
   final Widget child;
 
-  AnimatedFloatingActionButtonScrollNotification({
+  const AnimatedFloatingActionButtonScrollNotification({
+    Key? key, 
     required this.currentState,
     required this.onChange,
     required this.child,
-  });
+  }) : super(key: key);
 
   @override
   State<AnimatedFloatingActionButtonScrollNotification> createState() => _AnimatedFloatingActionButtonScrollNotificationState();
@@ -28,9 +29,13 @@ class _AnimatedFloatingActionButtonScrollNotificationState extends State<Animate
         if(metrics.pixels >= metrics.maxScrollExtent){
           if(widget.currentState) widget.onChange(false);
         }
-        else if(!widget.currentState) widget.onChange(true);
+        else if(!widget.currentState) {
+          widget.onChange(true);
+        }
       }
-      else if(!widget.currentState) widget.onChange(true);
+      else if(!widget.currentState) {
+        widget.onChange(true);
+      }
     }
   }
 
@@ -40,7 +45,7 @@ class _AnimatedFloatingActionButtonScrollNotificationState extends State<Animate
       onNotification: (ScrollMetricsNotification notification){
         lastNotification = notification;
 
-        Future.delayed(Duration(), (){
+        Future.delayed(const Duration(), (){
           if(lastNotification == notification) updateState(notification.metrics);
         });
         
@@ -57,11 +62,12 @@ class AnimatedFloatingActionButton extends StatelessWidget {
   final IconData icon;
   final void Function()? onPressed;
 
-  AnimatedFloatingActionButton({
+  const AnimatedFloatingActionButton({
+    Key? key, 
     this.visible = true,
     this.icon = Icons.add_rounded,
     this.onPressed
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +84,7 @@ class AnimatedFloatingActionButton extends StatelessWidget {
           splashColor: customTheme.shadowColor,
           
           backgroundColor: cPrimaryColor,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
           ),
           child: Icon(icon, color: Colors.white),

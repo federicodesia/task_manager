@@ -14,7 +14,7 @@ class BaseRepository{
     receiveTimeout: 3000,
   );
 
-  late FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  late FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   late AuthBloc? authBloc = getAuthBloc;
   AuthBloc? get getAuthBloc{
@@ -46,7 +46,7 @@ class BaseRepository{
   
   late Dio dio = Dio(baseOptions);
 
-  late Dio _dioRefreshToken = Dio(baseOptions);
+  late final Dio _dioRefreshToken = Dio(baseOptions);
   Future<Dio> dioRefreshToken() async{
     final _refreshToken = await getRefreshToken() ?? "";
     return _dioRefreshToken..options.headers = {
@@ -54,12 +54,13 @@ class BaseRepository{
     };
   }
 
-  late Dio _dioAccessToken = Dio(baseOptions)..interceptors.add(AccessTokenInterceptor(
+  late final Dio _dioAccessToken = Dio(baseOptions)..interceptors.add(AccessTokenInterceptor(
     getRefreshToken: () => getRefreshToken(),
     onAuthCredentialsChanged: (credentials) {
       try{
-        if(authBloc != null) authBloc!.add(AuthCredentialsChanged(credentials: credentials));
-        else{
+        if(authBloc != null) {
+          authBloc!.add(AuthCredentialsChanged(credentials: credentials));
+        } else{
           secureStorage.write(key: "refreshToken", value: credentials.refreshToken);
           secureStorage.write(key: "accessToken", value: credentials.accessToken);
         }

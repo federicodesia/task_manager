@@ -8,10 +8,11 @@ class MyBottomNavigationBar extends StatelessWidget{
   final TabsRouter tabsRouter;
   final List<IconData> icons;
 
-  MyBottomNavigationBar({
+  const MyBottomNavigationBar({
+    Key? key, 
     required this.tabsRouter,
     required this.icons
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class MyBottomNavigationBar extends StatelessWidget{
         Container(
           decoration: BoxDecoration(
             color: customTheme.contentBackgroundColor,
-            borderRadius: BorderRadius.all(Radius.circular(24.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
             boxShadow: [
               BoxShadow(
                 color: customTheme.shadowColor,
@@ -51,8 +52,8 @@ class MyBottomNavigationBar extends StatelessWidget{
               )
             ]
           ),
-          margin: EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-          padding: EdgeInsets.all(8.0),
+          margin: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+          padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(icons.length, (index){
@@ -75,11 +76,12 @@ class MyBottomNavigationBarIcon extends StatelessWidget{
   final bool isSelected;
   final Function() onPressed;
 
-  MyBottomNavigationBarIcon({
+  const MyBottomNavigationBarIcon({
+    Key? key, 
     required this.icon,
     required this.isSelected,
     required this.onPressed,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +113,7 @@ class MyBottomNavigationBarIcon extends StatelessWidget{
           width: 8.0,
           decoration: BoxDecoration(
             color: isSelected ? cPrimaryColor : Colors.transparent,
-            borderRadius: BorderRadius.all(Radius.circular(5.0))
+            borderRadius: const BorderRadius.all(Radius.circular(5.0))
           ),
         )
       ],

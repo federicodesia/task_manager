@@ -10,11 +10,12 @@ class CenterTextIconButton extends StatelessWidget{
   final Function() onPressed;
 
   const CenterTextIconButton({
+    Key? key, 
     this.padding = const EdgeInsets.symmetric(horizontal: 12.0),
     required this.text,
     required this.iconAsset,
     required this.onPressed
-  });
+  }) : super(key: key);
   
   @override
   Widget build(BuildContext context) {

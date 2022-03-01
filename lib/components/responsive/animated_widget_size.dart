@@ -7,12 +7,13 @@ class AnimatedWidgetSize extends StatelessWidget {
   final Alignment alignment;
   final Widget child;
 
-  AnimatedWidgetSize({
+  const AnimatedWidgetSize({
+    Key? key, 
     this.duration = cTransitionDuration,
     this.curve = Curves.linear,
     this.alignment = Alignment.topLeft,
     required this.child,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

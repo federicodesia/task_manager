@@ -21,7 +21,7 @@ class Category extends Equatable{
   @NullableDateTimeSerializer()
   final DateTime? deletedAt;
 
-  Category({
+  const Category({
     required this.id,
     required this.name,
     required this.color,
@@ -38,7 +38,7 @@ class Category extends Equatable{
     required Color color
   }){
     return Category(
-      id: isGeneral ? null : Uuid().v4(),
+      id: isGeneral ? null : const Uuid().v4(),
       name: name,
       color: color,
       createdAt: copyDateTimeWith(DateTime.now(), microsecond: 0),
@@ -56,7 +56,7 @@ class Category extends Equatable{
       id: id ?? this.id,
       name: name ?? this.name,
       color: color ?? this.color,
-      createdAt: this.createdAt,
+      createdAt: createdAt,
       updatedAt: copyDateTimeWith(DateTime.now(), microsecond: 0),
       deletedAt: deletedAt ?? this.deletedAt
     );

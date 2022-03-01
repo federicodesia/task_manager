@@ -34,28 +34,31 @@ class ChangeEmailVerificationCubit extends Cubit<ChangeEmailVerificationState> {
     final codeError = Validators.validateEmailVerificationCode(context, code);
 
     if(codeError == null){
-      emit(ChangeEmailVerificationState(isLoading: true));
+      emit(const ChangeEmailVerificationState(isLoading: true));
 
       final response = await authRepository.verifyChangeEmailCode(
         code: code,
         ignoreKeys: ["code"]
       );
 
-      if(response != null) response.when(
-        left: (responseMessage){
-          emit(ChangeEmailVerificationState(
-            isLoading: false,
-            codeError: Validators.validateEmailVerificationCodeResponse(context, responseMessage)
-              ?? responseMessage.get("code"),
-          ));
-        },
+      if(response != null) {
+        response.when(
+          left: (responseMessage){
+            emit(ChangeEmailVerificationState(
+              isLoading: false,
+              codeError: Validators.validateEmailVerificationCodeResponse(context, responseMessage)
+                ?? responseMessage.get("code"),
+            ));
+          },
 
-        right: (user){
-          authBloc.add(AuthUserChanged(user: user));
-          emit(ChangeEmailVerificationState(changed: true));
-        }, 
-      );
-      else emit(ChangeEmailVerificationState(isLoading: false));
+          right: (user){
+            authBloc.add(AuthUserChanged(user: user));
+            emit(const ChangeEmailVerificationState(changed: true));
+          }, 
+        );
+      } else {
+        emit(const ChangeEmailVerificationState(isLoading: false));
+      }
     }
     else{
       emit(ChangeEmailVerificationState(

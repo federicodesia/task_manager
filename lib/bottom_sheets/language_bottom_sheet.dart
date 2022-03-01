@@ -9,6 +9,7 @@ import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class LanguageBottomSheet extends StatefulWidget{
+  const LanguageBottomSheet({Key? key}) : super(key: key);
 
   @override
   _LanguageBottomSheetState createState() => _LanguageBottomSheetState();
@@ -26,9 +27,9 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet>{
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
 
-        SizedBox(height: cPadding),
+        const SizedBox(height: cPadding),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: cPadding),
+          padding: const EdgeInsets.symmetric(horizontal: cPadding),
           child: Column(
             children: supportedLocales != null ? supportedLocales.map((locale){
               return RoundedListTile(
@@ -42,10 +43,10 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet>{
         ),
         
 
-        SizedBox(height: 32.0),
+        const SizedBox(height: 32.0),
 
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: cPadding),
+          padding: const EdgeInsets.symmetric(horizontal: cPadding),
           child: RoundedButton(
             width: double.infinity,
             child: Text(

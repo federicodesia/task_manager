@@ -6,6 +6,7 @@ import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class MainScreen extends StatelessWidget{
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class MainScreen extends StatelessWidget{
       },
 
       homeIndex: 0,
-      routes: [
+      routes: const [
         HomeRoute(),
         CalendarRoute(),
         SettingsRoute(),
@@ -35,7 +36,7 @@ class MainScreen extends StatelessWidget{
 
         return MyBottomNavigationBar(
           tabsRouter: tabsRouter,
-          icons: [
+          icons: const [
             Icons.home_rounded,
             Icons.event_note_rounded,
             Icons.notifications_rounded,

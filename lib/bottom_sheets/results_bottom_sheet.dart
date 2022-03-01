@@ -12,7 +12,10 @@ import 'package:task_manager/theme/theme.dart';
 class ResultsBottomSheet extends StatefulWidget{
 
   final CategoryScreenBloc categoryScreenBloc;
-  ResultsBottomSheet({required this.categoryScreenBloc});
+  const ResultsBottomSheet({
+    Key? key,
+    required this.categoryScreenBloc
+  }) : super(key: key);
 
   @override
   _ResultsBottomSheetState createState() => _ResultsBottomSheetState();
@@ -44,15 +47,15 @@ class _ResultsBottomSheetState extends State<ResultsBottomSheet>{
           children: [
 
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: cPadding),
+              padding: const EdgeInsets.symmetric(horizontal: cPadding),
               child: FormInputHeader(context.l10n.taskStatus),
             ),
-            SizedBox(height: 4.0),
+            const SizedBox(height: 4.0),
 
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: cPadding),
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: cPadding),
               child: Row(
                 children: List.generate(TaskFilter.values.length, (index){
                   TaskFilter filter = TaskFilter.values[index];
@@ -71,10 +74,10 @@ class _ResultsBottomSheetState extends State<ResultsBottomSheet>{
               )
             ),
 
-            SizedBox(height: 32.0),
+            const SizedBox(height: 32.0),
 
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: cPadding),
+              padding: const EdgeInsets.symmetric(horizontal: cPadding),
               child: RoundedButton(
                 width: double.infinity,
                 child: Text(

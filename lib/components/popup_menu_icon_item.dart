@@ -6,10 +6,11 @@ class PopupMenuIconItem extends StatelessWidget{
   final IconData icon;
   final String text;
 
-  PopupMenuIconItem({
+  const PopupMenuIconItem({
+    Key? key, 
     required this.icon,
     required this.text
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class PopupMenuIconItem extends StatelessWidget{
           icon,
           color: customTheme.lightColor,
         ),
-        SizedBox(width: 12.0),
+        const SizedBox(width: 12.0),
         Text(
           text,
           style: customTheme.lightTextStyle,

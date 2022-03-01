@@ -4,14 +4,17 @@ import 'package:task_manager/theme/theme.dart';
 class FormInputHeader extends StatelessWidget{
 
   final String text;
-  FormInputHeader(this.text);
+  const FormInputHeader(
+    this.text,
+    {Key? key}
+  ) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
 
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 24.0,
         bottom: 8.0
       ),

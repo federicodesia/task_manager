@@ -10,7 +10,11 @@ import 'package:task_manager/theme/theme.dart';
 class LoginActivityCard extends StatelessWidget {
 
   final ActiveSession activeSession;
-  LoginActivityCard({required this.activeSession});
+
+  const LoginActivityCard({
+    Key? key,
+    required this.activeSession
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,20 +33,20 @@ class LoginActivityCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(cBorderRadius),
       
       child: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
             Material(
-              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(16.0)),
               elevation: customTheme.elevation,
               shadowColor: customTheme.shadowColor,
               child: Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                   color: customTheme.contentBackgroundColor
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.place_outlined,
                   color: Colors.grey,
                   size: 18.0,
@@ -50,7 +54,7 @@ class LoginActivityCard extends StatelessWidget {
               ),
             ),
 
-            SizedBox(width: 16.0),
+            const SizedBox(width: 16.0),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,13 +68,13 @@ class LoginActivityCard extends StatelessWidget {
                           style: customTheme.boldTextStyle.copyWith(color: Colors.green)
                         ),
                         // TODO: Device name
-                        TextSpan(text: "Device name"),
+                        const TextSpan(text: "Device name"),
                       ],
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis
                   ),
-                  SizedBox(height: 2.0),
+                  const SizedBox(height: 2.0),
                   Text(
                     getLocationString(
                       context: context,

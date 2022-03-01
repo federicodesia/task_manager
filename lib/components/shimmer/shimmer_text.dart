@@ -16,7 +16,8 @@ class ShimmerText extends StatelessWidget{
   final TextOverflow? overflow;
   final Alignment alignment;
 
-  ShimmerText({
+  const ShimmerText({
+    Key? key, 
     required this.isShimmer,
     this.shimmerTextHeight = 0.9,
     required this.shimmerMinTextLenght,
@@ -27,18 +28,20 @@ class ShimmerText extends StatelessWidget{
     this.maxLines,
     this.overflow,
     this.alignment = Alignment.centerLeft
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
 
-    if(!isShimmer) return Text(
-      text ?? "",
-      style: style,
-      maxLines: maxLines,
-      overflow: overflow,
-    );
+    if(!isShimmer) {
+      return Text(
+        text ?? "",
+        style: style,
+        maxLines: maxLines,
+        overflow: overflow,
+      );
+    }
 
     bool shimmerText = Random().nextDouble() <= shimmerProbability;
 
@@ -54,7 +57,7 @@ class ShimmerText extends StatelessWidget{
 
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(6.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(6.0)),
             color: customTheme.shimmerColor
           ),
           child: Opacity(

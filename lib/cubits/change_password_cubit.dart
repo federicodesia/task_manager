@@ -32,7 +32,7 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
     final newPasswordError = Validators.validateNewPassword(context, currentPassword, newPassword);
 
     if(currentPasswordError == null && newPasswordError == null){
-      emit(ChangePasswordState(isLoading: true));
+      emit(const ChangePasswordState(isLoading: true));
 
       final response = await authRepository.changePassword(
         currentPassword: currentPassword,
@@ -40,19 +40,22 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
         ignoreKeys: ["password"]
       );
 
-      if(response != null) response.when(
-        left: (responseMessage) => emit(ChangePasswordState(
-          isLoading: false,
-          currentPasswordError: Validators.validatePasswordResponse(context, responseMessage)
-            ?? responseMessage.getIgnoring("password", ignore: "new password"),
-          newPasswordError: responseMessage.get("new password")
-        )),
+      if(response != null) {
+        response.when(
+          left: (responseMessage) => emit(ChangePasswordState(
+            isLoading: false,
+            currentPasswordError: Validators.validatePasswordResponse(context, responseMessage)
+              ?? responseMessage.getIgnoring("password", ignore: "new password"),
+            newPasswordError: responseMessage.get("new password")
+          )),
 
-        right: (changed){
-          emit(ChangePasswordState(changed: true));
-        }, 
-      );
-      else emit(ChangePasswordState(isLoading: false));
+          right: (changed){
+            emit(const ChangePasswordState(changed: true));
+          }, 
+        );
+      } else {
+        emit(const ChangePasswordState(isLoading: false));
+      }
     }
     else{
       emit(ChangePasswordState(

@@ -21,7 +21,9 @@ class HydratedHelper{
         if(blocStateJson != null) return _castJson(blocStateJson);
       }
     }
-    catch(error) {}
+    catch(error) {
+      return null;
+    }
     return null;
   }
 

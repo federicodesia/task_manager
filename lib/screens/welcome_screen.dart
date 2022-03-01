@@ -14,6 +14,8 @@ import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -64,7 +66,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
           builder: (_, constraints) {
 
             return SingleChildScrollView(
-              physics: BouncingScrollPhysics(
+              physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()
               ),
               child: Column(
@@ -75,12 +77,12 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                     onPageChanged: (index){
                       setState(() => currentSlidingPage = index);
                     },
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     children: List.generate(slidingPages.length, (index){
                       SlidingPage slidingPage = slidingPages[index];
 
                       return EmptySpace(
-                        padding: EdgeInsets.all(cPadding),
+                        padding: const EdgeInsets.all(cPadding),
                         svgImage: slidingPage.svg,
                         svgBottomSpace: 48.0,
                         header: slidingPage.header,
@@ -99,7 +101,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                       context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height);
                     },
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
+                      padding: const EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -108,30 +110,30 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                             count: slidingPages.length,
                             selectedIndex: currentSlidingPage,
                           ),
-                          SizedBox(height: cPadding),
+                          const SizedBox(height: cPadding),
 
                           CenterTextIconButton(
                             text: context.l10n.welcomeScreen_continueWithMethod("Facebook"),
                             iconAsset: "assets/icons/facebook.png",
                             onPressed: () {},
                           ),
-                          SizedBox(height: 12.0),
+                          const SizedBox(height: 12.0),
 
                           CenterTextIconButton(
                             text: context.l10n.welcomeScreen_continueWithMethod("Google"),
                             iconAsset: "assets/icons/google.png",
                             onPressed: () {},
                           ),
-                          SizedBox(height: 12.0),
+                          const SizedBox(height: 12.0),
 
                           CenterTextIconButton(
                             text: context.l10n.welcomeScreen_continueWithMethod("email"),
                             iconAsset: "assets/icons/email.png",
                             onPressed: () {
-                              AutoRouter.of(context).navigate(LoginRoute());
+                              AutoRouter.of(context).navigate(const LoginRoute());
                             },
                           ),
-                          SizedBox(height: cPadding),
+                          const SizedBox(height: cPadding),
 
                           FractionallySizedBox(
                             widthFactor: 0.75,

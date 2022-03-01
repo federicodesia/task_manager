@@ -12,6 +12,7 @@ import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/components/forms/small_form_svg.dart';
 
 class ChangeEmailVerificationScreen extends StatelessWidget {
+  const ChangeEmailVerificationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,7 @@ class _ChangeEmailVerificationScreen extends StatelessWidget{
           description: context.l10n.emptySpace_verifyYourEmail_description,
           formChildren: [
 
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             VerificationCode(
               controller: codeController,
               textInputType: TextInputType.text,
@@ -68,7 +69,7 @@ class _ChangeEmailVerificationScreen extends StatelessWidget{
           },
           bottomWidget: ResendCodeTimer(
             controller: customTimerController,
-            onResend: () => AutoRouter.of(context).replace(ChangeEmailRoute()),
+            onResend: () => AutoRouter.of(context).replace(const ChangeEmailRoute()),
           ),
         );
       }

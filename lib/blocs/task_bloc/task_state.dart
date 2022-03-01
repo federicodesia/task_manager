@@ -23,9 +23,9 @@ class TaskLoadSuccess extends TaskState {
   static TaskLoadSuccess initial(){
     return TaskLoadSuccess(
       syncPushStatus: SyncStatus.idle,
-      tasks: [],
-      deletedTasks: [],
-      failedTasks: {}
+      tasks: const [],
+      deletedTasks: const [],
+      failedTasks: const {}
     );
   }
 

@@ -53,7 +53,7 @@ extension DateTimeExtension on DateTime {
     if(difference == -1) return context.l10n.dateTime_yasterday;
     if(difference == 0) return context.l10n.dateTime_today;
     if(difference == 1) return context.l10n.dateTime_tomorrow;
-    if(this.year != now.year) return this.formatLocalization(context, format: "E, dd MMM y");
-    return this.formatLocalization(context, format: "E, dd MMM");
+    if(year != now.year) return formatLocalization(context, format: "E, dd MMM y");
+    return formatLocalization(context, format: "E, dd MMM");
   }
 }

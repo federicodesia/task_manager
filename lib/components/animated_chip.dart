@@ -10,13 +10,14 @@ class AnimatedChip extends StatelessWidget{
   final bool isLastItem;
   final Function()? onTap;
   
-  AnimatedChip({
+  const AnimatedChip({
+    Key? key, 
     required this.text,
     this.backgroundColor,
     this.textColor,
     required this.isLastItem,
     this.onTap
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +26,12 @@ class AnimatedChip extends StatelessWidget{
     return GestureDetector(
       child: AnimatedContainer(
         duration: cFastAnimationDuration,
-        padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
         margin: EdgeInsets.only(right: isLastItem ? 0.0 : 8.0),
 
         decoration: BoxDecoration(
           color: backgroundColor ?? customTheme.contentBackgroundColor,
-          borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
+          borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius)),
         ),
 
         child: Text(

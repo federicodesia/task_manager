@@ -36,7 +36,7 @@ class LoginCubit extends Cubit<LoginState> {
     final passwordError = Validators.validatePassword(context, password);
 
     if(emailError == null && passwordError == null){
-      emit(LoginState(isLoading: true));
+      emit(const LoginState(isLoading: true));
 
       final response = await authRepository.login(
         email: email,
@@ -57,11 +57,13 @@ class LoginCubit extends Cubit<LoginState> {
           )),
 
           right: (authCredentials){
-            emit(LoginState(isLoading: false));
+            emit(const LoginState(isLoading: false));
             authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
           }, 
         );
-      } else emit(LoginState(isLoading: false));
+      } else {
+        emit(const LoginState(isLoading: false));
+      }
     }
     else{
       emit(LoginState(

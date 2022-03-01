@@ -8,12 +8,13 @@ class FormValidator extends StatefulWidget{
   final String? errorText;
   final EdgeInsets errorTextPadding;
   
-  FormValidator({
+  const FormValidator({
+    Key? key, 
     required this.widget,
     this.validator,
     this.errorText,
     this.errorTextPadding = const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0)
-  });
+  }) : super(key: key);
 
   @override
   State<FormValidator> createState() => _FormValidatorState();
@@ -33,11 +34,18 @@ class _FormValidatorState extends State<FormValidator> {
       builder: (FormFieldState state){
 
         bool hasError;
-        if(widget.errorText != null) hasError = widget.errorText != null;
-        else hasError = state.hasError;
+        if(widget.errorText != null) {
+          hasError = widget.errorText != null;
+        } else {
+          hasError = state.hasError;
+        }
 
-        if(errorCurrentState && !hasError) animate = false;
-        else animate = true;
+        if(errorCurrentState && !hasError) {
+          animate = false;
+        }
+        else {
+          animate = true;
+        }
 
         errorCurrentState = hasError;
 
@@ -55,7 +63,7 @@ class _FormValidatorState extends State<FormValidator> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      (widget.errorText != null ? widget.errorText : state.errorText) ?? "",
+                      (widget.errorText ?? state.errorText) ?? "",
                       style: themeData.textTheme.caption!.copyWith(color: themeData.errorColor),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,

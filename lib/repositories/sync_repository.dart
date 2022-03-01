@@ -26,7 +26,7 @@ class SyncRepository{
       final response = await dio.post(
         "/sync",
         data: {
-          "lastSync": NullableDateTimeSerializer().toJson(lastSync),
+          "lastSync": const NullableDateTimeSerializer().toJson(lastSync),
           "tasks": tasks,
           "categories": categories
         }

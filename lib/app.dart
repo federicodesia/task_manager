@@ -16,13 +16,15 @@ import 'package:task_manager/theme/theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   final navigatoryKey = locator<DialogService>().navigatoryKey;
-  late AppRouter _appRouter = AppRouter(navigatoryKey);
+  late final AppRouter _appRouter = AppRouter(navigatoryKey);
 
   @override
   void initState() {
@@ -69,15 +71,15 @@ class _MyAppState extends State<MyApp> {
                   routerDelegate: AutoRouterDelegate.declarative(
                     _appRouter,
                     routes: (_) => [
-                      if(authStatus == AuthStatus.loading) SplashRoute()
-                      else if(authStatus == AuthStatus.waitingVerification) EmailVerificationRoute()
-                      else if(authStatus == AuthStatus.authenticated) MainRouter()
-                      else WelcomeRouter()
+                      if(authStatus == AuthStatus.loading) const SplashRoute()
+                      else if(authStatus == AuthStatus.waitingVerification) const EmailVerificationRoute()
+                      else if(authStatus == AuthStatus.authenticated) const MainRouter()
+                      else const WelcomeRouter()
                     ],
                   ),
                   routeInformationParser: _appRouter.defaultRouteParser(includePrefixMatches: true),
                   debugShowCheckedModeBanner: false,
-                  localizationsDelegates: [
+                  localizationsDelegates: const [
                     AppLocalizations.delegate,
                     LocaleNamesLocalizationsDelegate(),
                     GlobalMaterialLocalizations.delegate,

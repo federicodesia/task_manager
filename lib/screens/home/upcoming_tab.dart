@@ -19,7 +19,11 @@ import 'package:task_manager/l10n/l10n.dart';
 class UpcomingTab extends StatelessWidget{
   
   final AvailableSpaceCubit availableSpaceCubit;
-  UpcomingTab({required this.availableSpaceCubit});
+
+  const UpcomingTab({
+    Key? key,
+    required this.availableSpaceCubit
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,7 @@ class UpcomingTab extends StatelessWidget{
 class _UpcomingTab extends StatefulWidget{
   
   final AvailableSpaceCubit availableSpaceCubit;
-  _UpcomingTab({required this.availableSpaceCubit});
+  const _UpcomingTab({required this.availableSpaceCubit});
 
   @override
   _UpcomingTabState createState() => _UpcomingTabState();
@@ -74,7 +78,7 @@ class _UpcomingTabState extends State<_UpcomingTab>{
                     setState(() => weekBarChartHeight = size.height);
                   },
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 12.0),
+                    padding: const EdgeInsets.only(bottom: 12.0),
                     child: WeekBarChart(
                       header: context.l10n.upcomingTab_tasksInThisWeek,
                       weekCompletedTasksCount: state.weekCompletedTasksCount,
@@ -87,8 +91,8 @@ class _UpcomingTabState extends State<_UpcomingTab>{
 
                 if(items.isNotEmpty) AnimatedDynamicTaskList(
                   items: items,
-                  taskListItemType: TaskListItemType.Checkbox,
-                  context: context,
+                  taskListItemType: TaskListItemType.checkbox,
+                  buildContext: context,
                   onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
                   objectBuilder: (object){
                     if(object is DateTime){
@@ -111,7 +115,7 @@ class _UpcomingTabState extends State<_UpcomingTab>{
           }
         }
         else{
-          child = ShimmerList(
+          child = const ShimmerList(
             minItems: 2,
             maxItems: 4,
             child: CheckboxTaskListItem(isShimmer: true)

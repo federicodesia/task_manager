@@ -10,11 +10,12 @@ class CalendarMonthPicker extends StatefulWidget{
   final DateTime initialMonth;
   final Function(DateTime)? onChanged;
 
-  CalendarMonthPicker({
+  const CalendarMonthPicker({
+    Key? key, 
     required this.months,
     required this.initialMonth,
     this.onChanged
-  });
+  }) : super(key: key);
 
   @override
   _CalendarMonthPickerState createState() => _CalendarMonthPickerState();
@@ -58,15 +59,17 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
       children: [
 
         IconButton(
-          icon: Icon(Icons.chevron_left_rounded),
+          icon: const Icon(Icons.chevron_left_rounded),
           color: customTheme.lightColor,
           splashRadius: cSmallSplashRadius,
           onPressed: (){
-            if(currentPage % 1 == 0) pageController.animateToPage(
-              (currentPage).toInt() - 1,
-              duration: cAnimationDuration,
-              curve: Curves.easeInOut
-            );
+            if(currentPage % 1 == 0) {
+              pageController.animateToPage(
+                (currentPage).toInt() - 1,
+                duration: cAnimationDuration,
+                curve: Curves.easeInOut
+              );
+            }
           },
         ),
 
@@ -78,7 +81,7 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
             },
             child: ExpandablePageView.builder(
               controller: pageController,
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               itemCount: monthList.length,
               itemBuilder: (context, index){
                 final double opacity = 1 - (currentPage - index).clamp(-1.0, 1.0).abs();
@@ -86,7 +89,7 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
                 return Opacity(
                   opacity: (4 * opacity - 3).clamp(0.0, 1.0),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       monthList[index].formatLocalization(context, format: "MMMM y"),
                       style: customTheme.boldTextStyle,
@@ -105,15 +108,17 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
         ),
 
         IconButton(
-          icon: Icon(Icons.chevron_right_rounded),
+          icon: const Icon(Icons.chevron_right_rounded),
           color: customTheme.lightColor,
           splashRadius: cSmallSplashRadius,
           onPressed: (){
-            if(currentPage % 1 == 0) pageController.animateToPage(
-              (currentPage).toInt() + 1,
-              duration: cAnimationDuration,
-              curve: Curves.easeInOut
-            );
+            if(currentPage % 1 == 0) {
+              pageController.animateToPage(
+                (currentPage).toInt() + 1,
+                duration: cAnimationDuration,
+                curve: Curves.easeInOut
+              );
+            }
           },
         ),
       ],

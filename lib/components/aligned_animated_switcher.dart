@@ -7,11 +7,12 @@ class AlignedAnimatedSwitcher extends StatefulWidget{
   final Alignment alignment;
   final Duration duration;
 
-  AlignedAnimatedSwitcher({
+  const AlignedAnimatedSwitcher({
+    Key? key, 
     required this.child,
     this.alignment = Alignment.topLeft,
     this.duration = cTransitionDuration
-  });
+  }) : super(key: key);
 
   @override
   _AlignedAnimatedSwitcherState createState() => _AlignedAnimatedSwitcherState();

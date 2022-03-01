@@ -22,7 +22,7 @@ class Task extends Equatable{
   @NullableDateTimeSerializer()
   final DateTime? deletedAt;
 
-  Task({ 
+  const Task({ 
     required this.id,
     this.categoryId,
     required this.title,
@@ -42,7 +42,7 @@ class Task extends Equatable{
     bool isCompleted = false
   }){
     return Task(
-      id: Uuid().v4(),
+      id: const Uuid().v4(),
       categoryId: categoryId,
       title: title,
       description: description,
@@ -69,7 +69,7 @@ class Task extends Equatable{
       description: description ?? this.description,
       date: date ?? this.date,
       isCompleted: isCompleted ?? this.isCompleted,
-      createdAt: this.createdAt,
+      createdAt: createdAt,
       updatedAt: copyDateTimeWith(DateTime.now(), microsecond: 0),
       deletedAt: deletedAt ?? this.deletedAt
     );

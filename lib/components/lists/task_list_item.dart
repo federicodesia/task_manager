@@ -13,46 +13,47 @@ import '../../constants.dart';
 import '../rounded_snack_bar.dart';
 
 enum TaskListItemType{
-  Checkbox,
-  Calendar
+  checkbox,
+  calendar
 }
 
 class TaskListItem extends StatelessWidget{
   final Task task;
   final TaskListItemType type;
-  final BuildContext context;
+  final BuildContext buildContext;
   final Function(Task) onUndoDismissed;
 
-  TaskListItem({
+  const TaskListItem({
+    Key? key, 
     required this.task,
     required this.type,
-    required this.context,
+    required this.buildContext,
     required this.onUndoDismissed,
-  });
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext _) {
+  Widget build(BuildContext context) {
 
     final Function() onPressed = ModalBottomSheet(
-      title: context.l10n.bottomSheet_editTask,
-      context: context,
+      title: buildContext.l10n.bottomSheet_editTask,
+      context: buildContext,
       content: TaskBottomSheet(editTask: task)
     ).show;
 
     final Widget item;
     switch(type){
-      case TaskListItemType.Calendar:
+      case TaskListItemType.calendar:
         item = CalendarTaskListItem(
           task: task,
           onPressed: onPressed,
         );
         break;
       
-      case TaskListItemType.Checkbox:
+      case TaskListItemType.checkbox:
         item = CheckboxTaskListItem(
           task: task,
           onPressed: onPressed,
-          onChanged: (value) => BlocProvider.of<TaskBloc>(context).add(
+          onChanged: (value) => BlocProvider.of<TaskBloc>(buildContext).add(
             TaskUpdated(task.copyWith(isCompleted: value))
           ),
         );
@@ -60,22 +61,21 @@ class TaskListItem extends StatelessWidget{
     }
 
     return Padding(
-      padding: EdgeInsets.only(bottom: cListItemSpace),
+      padding: const EdgeInsets.only(bottom: cListItemSpace),
       child: RoundedDismissible(
-        key: UniqueKey(),
-        text: context.l10n.dismissible_deleteTask,
+        text: buildContext.l10n.dismissible_deleteTask,
         icon: Icons.delete_rounded,
         color: cRedColor,
         child: item,
         onDismissed: (_) {
           Task tempTask = task;
-          BlocProvider.of<TaskBloc>(context).add(TaskDeleted(task));
+          BlocProvider.of<TaskBloc>(buildContext).add(TaskDeleted(task));
 
           RoundedSnackBar(
-            context: context,
-            text: context.l10n.snackBar_taskDeleted,
+            context: buildContext,
+            text: buildContext.l10n.snackBar_taskDeleted,
             action: SnackBarAction(
-              label: context.l10n.snackBar_undo,
+              label: buildContext.l10n.snackBar_undo,
               textColor: cPrimaryColor,
               onPressed: () => onUndoDismissed(tempTask)
             )

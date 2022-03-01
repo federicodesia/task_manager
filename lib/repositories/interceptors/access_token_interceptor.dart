@@ -13,7 +13,7 @@ class AccessTokenInterceptor extends Interceptor {
     required this.onAuthCredentialsChanged
   });
 
-  late Dio _dio = Dio(
+  late final Dio _dio = Dio(
     BaseOptions(
       baseUrl: "https://yusuf007r.dev/task-manager/auth",
       connectTimeout: 5000,

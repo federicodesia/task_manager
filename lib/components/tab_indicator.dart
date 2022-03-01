@@ -15,7 +15,7 @@ class TabIndicatorPainter extends BoxPainter{
     final tabWidth = configuration.size!.width;
     final tabHeight = configuration.size!.height;
 
-    Rect rect = new Rect.fromCenter(
+    Rect rect = Rect.fromCenter(
       center: Offset(
         offset.dx + tabWidth / 2,
         offset.dy + tabHeight / 2
@@ -29,7 +29,7 @@ class TabIndicatorPainter extends BoxPainter{
     paint.style = PaintingStyle.fill;
 
     canvas.drawRRect(
-      RRect.fromRectAndRadius(rect, Radius.circular(cBorderRadius)),
+      RRect.fromRectAndRadius(rect, const Radius.circular(cBorderRadius)),
       paint
     );
   }

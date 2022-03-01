@@ -4,33 +4,32 @@ import 'package:task_manager/theme/theme.dart';
 
 class RoundedDismissible extends StatelessWidget{
 
-  final Key key;
   final String text;
   final IconData icon;
   final Color color;
   final Widget child;
   final DismissDirectionCallback onDismissed;
 
-  RoundedDismissible({
-    required this.key,
+  const RoundedDismissible({
+    Key? key,
     required this.text,
     required this.icon,
     required this.color,
     required this.child,
     required this.onDismissed
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
     
     return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
+      borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius)),
       child: Dismissible(
-        key: key,
+        key: UniqueKey(),
         direction: DismissDirection.endToStart,
         background: Container(
-          padding: EdgeInsets.symmetric(horizontal: cPadding),
+          padding: const EdgeInsets.symmetric(horizontal: cPadding),
           color: color,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -39,7 +38,7 @@ class RoundedDismissible extends StatelessWidget{
                 text,
                 style: customTheme.textStyle.copyWith(color: Colors.white),
               ),
-              SizedBox(width: 12.0),
+              const SizedBox(width: 12.0),
               Icon(
                 icon,
                 color: Colors.white,

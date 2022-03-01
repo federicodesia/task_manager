@@ -34,7 +34,7 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
     final codeError = Validators.validateEmailVerificationCode(context, code);
 
     if(codeError == null){
-      emit(EmailVerificationState(isLoading: true));
+      emit(const EmailVerificationState(isLoading: true));
 
       final response = await authRepository.verifyAccountCode(
         authCredentials: authBloc.state.credentials,
@@ -42,19 +42,22 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
         ignoreKeys: ["code"]
       );
 
-      if(response != null) response.when(
-        left: (responseMessage) => emit(EmailVerificationState(
-          isLoading: false,
-          codeError: Validators.validateEmailVerificationCodeResponse(context, responseMessage)
-            ?? responseMessage.get("code"),
-        )),
+      if(response != null) {
+        response.when(
+          left: (responseMessage) => emit(EmailVerificationState(
+            isLoading: false,
+            codeError: Validators.validateEmailVerificationCodeResponse(context, responseMessage)
+              ?? responseMessage.get("code"),
+          )),
 
-        right: (credentials){
-          emit(EmailVerificationState(isLoading: false));
-          authBloc.add(AuthCredentialsChanged(credentials: credentials));
-        }, 
-      );
-      else emit(EmailVerificationState(isLoading: false));
+          right: (credentials){
+            emit(const EmailVerificationState(isLoading: false));
+            authBloc.add(AuthCredentialsChanged(credentials: credentials));
+          }, 
+        );
+      } else {
+        emit(const EmailVerificationState(isLoading: false));
+      }
     }
     else{
       emit(EmailVerificationState(

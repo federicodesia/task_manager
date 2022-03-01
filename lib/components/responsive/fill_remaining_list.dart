@@ -13,13 +13,14 @@ class FillRemainingList extends StatefulWidget{
   final double subtractHeight;
   final bool subtractPadding;
 
-  FillRemainingList({
+  const FillRemainingList({
+    Key? key, 
     required this.availableSpaceCubit,
     this.alignment = Alignment.center,
     required this.child,
     this.subtractHeight = 0.0,
     this.subtractPadding = true
-  });
+  }) : super(key: key);
 
   @override
   _FillRemainingListState createState() => _FillRemainingListState();
@@ -42,7 +43,7 @@ class _FillRemainingListState extends State<FillRemainingList>{
           child: Align(
             alignment: widget.alignment,
             child: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

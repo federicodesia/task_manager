@@ -7,17 +7,18 @@ class Header extends StatelessWidget{
   final String text;
   final String? rightText;
 
-  Header({
+  const Header({
+    Key? key, 
     required this.text,
     this.rightText
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
     
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: cPadding),
+      padding: const EdgeInsets.symmetric(horizontal: cPadding),
       child: Row(
         children: [
           Expanded(

@@ -18,6 +18,7 @@ class EmptySpace extends StatelessWidget{
   final double descriptionWidthFactor;
 
   const EmptySpace({
+    Key? key, 
     this.padding = const EdgeInsets.symmetric(vertical: cPadding),
     this.svgImage,
     this.svgScale = 0.35,
@@ -29,7 +30,7 @@ class EmptySpace extends StatelessWidget{
     this.descriptionMaxLines = 4,
     this.descriptionFillLines = false,
     this.descriptionWidthFactor = 0.9
-  });
+  }) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class EmptySpace extends StatelessWidget{
             maxLines: headerMaxLines,
             overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
 
           FractionallySizedBox(
             widthFactor: descriptionWidthFactor,

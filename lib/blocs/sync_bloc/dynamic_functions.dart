@@ -9,15 +9,18 @@ List<T> itemsUpdatedAfterDate<T>({
   required Map<String, SyncErrorType> failedItems
 }){
   try{
-    if(date != null) items = items..removeWhere((i) => 
-      i.id == null
-      || failedItems[i.id] == SyncErrorType.blacklist
-      || !i.updatedAt.isAfter(date)
+    if(date != null) {
+      items = items..removeWhere((i) => 
+        i.id == null
+        || failedItems[i.id] == SyncErrorType.blacklist
+        || !i.updatedAt.isAfter(date)
     );
-    else items = items..removeWhere((i) => 
-      i.id == null
-      || failedItems[i.id] == SyncErrorType.blacklist
-    );
+    } else {
+      items = items..removeWhere((i) => 
+        i.id == null
+        || failedItems[i.id] == SyncErrorType.blacklist
+      );
+    }
     return List<T>.from(items);
   }
   catch(_){
@@ -34,13 +37,14 @@ Tuple2<List<T>, Map<String, SyncErrorType>>? mergeDuplicatedId<T>({
 
     final failedItem = failedItems[duplicatedId];
     if(failedItem != null){
-      if(failedItem == SyncErrorType.duplicatedId)
+      if(failedItem == SyncErrorType.duplicatedId) {
         failedItems[duplicatedId] = SyncErrorType.blacklist;
+      }
     }
     else{
       final index = items.lastIndexWhere((i) => i.id == duplicatedId);
       if(index != -1){
-        final newId = Uuid().v4();
+        final newId = const Uuid().v4();
         failedItems[newId] = SyncErrorType.duplicatedId;
         items[index] = items.elementAt(index).copyWith(id: newId);
       }
@@ -69,10 +73,10 @@ Tuple3<
     final updatedItems = [];
     final deletedItems = [];
 
-    replaceItems.forEach((r){
+    for(dynamic r in replaceItems) {
       r.deletedAt != null ? deletedItems.add(r) : updatedItems.add(r);
       currentFailedItems.remove(r.id);
-    });
+    }
 
     currentDeletedItems.removeWhere((c){
       final deleted = deletedItems.firstWhereOrNull((d) => d.id == c.id);

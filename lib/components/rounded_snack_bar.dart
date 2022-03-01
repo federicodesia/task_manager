@@ -20,11 +20,11 @@ class RoundedSnackBar{
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.all(cPadding),
-        padding: EdgeInsets.fromLTRB(cPadding, 4.0, 6.0, 4.0),
+        margin: const EdgeInsets.all(cPadding),
+        padding: const EdgeInsets.fromLTRB(cPadding, 4.0, 6.0, 4.0),
         backgroundColor: customTheme.contentBackgroundColor,
         elevation: 2.0,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16.0))
         ),
         content: Text(

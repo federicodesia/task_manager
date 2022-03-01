@@ -12,31 +12,36 @@ class CheckboxTaskListItem extends StatelessWidget{
   final Function(bool?)? onChanged;
   final bool isShimmer;
   
-  CheckboxTaskListItem({
+  const CheckboxTaskListItem({
+    Key? key, 
     this.task,
     this.onPressed,
     this.onChanged,
     this.isShimmer = false
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if(isShimmer) return IgnorePointer(
-      ignoring: true,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: cListItemSpace),
-        child: CheckboxTaskListItemContent(isShimmer: true),
-      ),
-    );
+    if(isShimmer) {
+      return const IgnorePointer(
+        ignoring: true,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: cListItemSpace),
+          child: CheckboxTaskListItemContent(isShimmer: true),
+        ),
+      );
+    }
 
-    if(task != null) return CheckboxTaskListItemContent(
-      onCheckboxChanged: onChanged,
-      onPressed: onPressed,
-      completed: task!.isCompleted,
-      title: task!.title,
-      description: task!.description,
-      dateTime: task!.date,
-    );
+    if(task != null) {
+      return CheckboxTaskListItemContent(
+        onCheckboxChanged: onChanged,
+        onPressed: onPressed,
+        completed: task!.isCompleted,
+        title: task!.title,
+        description: task!.description,
+        dateTime: task!.date,
+      );
+    }
 
     return Container();
   }
@@ -52,7 +57,8 @@ class CheckboxTaskListItemContent extends StatelessWidget{
   final DateTime? dateTime;
   final bool isShimmer;
 
-  CheckboxTaskListItemContent({
+  const CheckboxTaskListItemContent({
+    Key? key, 
     this.onCheckboxChanged,
     this.onPressed,
     this.completed,
@@ -60,7 +66,7 @@ class CheckboxTaskListItemContent extends StatelessWidget{
     this.description,
     this.dateTime,
     this.isShimmer = false
-  });
+  }) : super(key: key);
 
 
   @override
@@ -86,14 +92,14 @@ class CheckboxTaskListItemContent extends StatelessWidget{
           ),
         ),
 
-        SizedBox(width: 4.0),
+        const SizedBox(width: 4.0),
 
         Expanded(
           child: ElevatedButton(
             onPressed: onPressed ?? () {},
             style: ElevatedButton.styleFrom(
               primary: customTheme.contentBackgroundColor,
-              padding: EdgeInsets.all(cListItemPadding),
+              padding: const EdgeInsets.all(cListItemPadding),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(cBorderRadius),
               ),
@@ -120,7 +126,7 @@ class CheckboxTaskListItemContent extends StatelessWidget{
                       ),
                     ),
 
-                    SizedBox(width: 12.0),
+                    const SizedBox(width: 12.0),
 
                     if(dateTime != null) Text(
                       DateFormat("HH:mm a").format(dateTime!).toLowerCase(),
@@ -131,7 +137,7 @@ class CheckboxTaskListItemContent extends StatelessWidget{
 
                 // Description
                 if(isShimmer || description != "") Padding(
-                  padding: EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsets.only(top: 8.0),
                   child: ShimmerText(
                     isShimmer: isShimmer,
                     shimmerTextHeight: 0.9,

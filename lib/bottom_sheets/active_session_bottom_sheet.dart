@@ -15,7 +15,7 @@ import 'package:latlong2/latlong.dart';
 class ActiveSessionBottomSheet extends StatelessWidget{
 
   final ActiveSession activeSession;
-  ActiveSessionBottomSheet({required this.activeSession});
+  const ActiveSessionBottomSheet({Key? key, required this.activeSession}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,8 @@ class ActiveSessionBottomSheet extends StatelessWidget{
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
 
-          FormInputHeader("Samsung Galaxy J2 Prime"),
-          SizedBox(height: 4.0),
+          const FormInputHeader("Samsung Galaxy J2 Prime"),
+          const SizedBox(height: 4.0),
 
           Text(
             "${context.l10n.ipAdress}: ${activeSession.ipAddress}",
@@ -57,10 +57,10 @@ class ActiveSessionBottomSheet extends StatelessWidget{
           ),
 
           if(locationPoint != null) Container(
-            margin: EdgeInsets.only(top: cPadding),
+            margin: const EdgeInsets.only(top: cPadding),
             height: 250,
             child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
+              borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius)),
               child: FlutterMap(
                 options: MapOptions(
                   center: locationPoint,
@@ -69,7 +69,7 @@ class ActiveSessionBottomSheet extends StatelessWidget{
                 ),
                 layers: [
                   TileLayerOptions(
-                    tileProvider: CachedTileProvider(),
+                    tileProvider: const CachedTileProvider(),
                     urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                     subdomains: ['a', 'b', 'c'],
 
@@ -79,7 +79,7 @@ class ActiveSessionBottomSheet extends StatelessWidget{
                       return InvertColors(
                         invert: customTheme.isDark,
                         child: ColorFiltered(
-                          colorFilter: ColorFilter.mode(
+                          colorFilter: const ColorFilter.mode(
                             Colors.grey,
                             BlendMode.saturation
                           ),
@@ -89,7 +89,7 @@ class ActiveSessionBottomSheet extends StatelessWidget{
                     },
                     attributionBuilder: (context) {
                       return Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "© OpenStreetMap contributors ",
                           style: customTheme.smallLightTextStyle
@@ -123,7 +123,7 @@ class ActiveSessionBottomSheet extends StatelessWidget{
             ),
           ),
 
-          SizedBox(height: 32.0),
+          const SizedBox(height: 32.0),
 
           RoundedButton(
             width: double.infinity,
@@ -147,15 +147,16 @@ class InvertColors extends StatelessWidget {
   final Widget child;
   final bool invert;
 
-  InvertColors({
+  const InvertColors({
+    Key? key, 
     required this.child,
     this.invert = true
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return invert ? ColorFiltered(
-      colorFilter: ColorFilter.matrix([
+      colorFilter: const ColorFilter.matrix([
         -1, 0, 0, 0,
         255, 0, -1, 0, 0,
         255, 0, 0, -1, 0,

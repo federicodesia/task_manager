@@ -5,10 +5,11 @@ class WidgetSize extends StatefulWidget {
   final Widget child;
   final Function onChange;
 
-  WidgetSize({
+  const WidgetSize({
+    Key? key, 
     required this.child,
     required this.onChange,
-  });
+  }) : super(key: key);
 
   @override
   _WidgetSizeState createState() => _WidgetSizeState();
@@ -24,14 +25,14 @@ class _WidgetSizeState extends State<WidgetSize> {
     );
   }
 
-  var widgetKey = GlobalKey();
-  var oldSize;
+  GlobalKey widgetKey = GlobalKey();
+  Size? oldSize;
 
   void postFrameCallback(_) {
     var context = widgetKey.currentContext;
     if (context == null) return;
 
-    var newSize = context.size;
+    Size? newSize = context.size;
     if (oldSize == newSize) return;
 
     oldSize = newSize;

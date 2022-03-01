@@ -1,7 +1,7 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
 import 'package:task_manager/models/sync_item_error.dart';
 import 'package:task_manager/models/sync_status.dart';
 import 'package:task_manager/models/task.dart';
@@ -59,13 +59,13 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     });
 
     on<TaskStateUpdated>((event, emit){
-      print("Actualizando TaskState...");
+      debugPrint("Actualizando TaskState...");
       final taskState = event.state;
       if(taskState is TaskLoadSuccess){
-        print("SyncPushStatus: " + taskState.syncPushStatus.name);
-        print("Tasks: ${taskState.tasks}");
-        print("DeletedTasks: ${taskState.deletedTasks}");
-        print("FailedTasks: ${taskState.failedTasks}");
+        debugPrint("SyncPushStatus: " + taskState.syncPushStatus.name);
+        debugPrint("Tasks: ${taskState.tasks}");
+        debugPrint("DeletedTasks: ${taskState.deletedTasks}");
+        debugPrint("FailedTasks: ${taskState.failedTasks}");
       }
       emit(event.state);
     },
@@ -83,21 +83,24 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   @override
   TaskState? fromJson(Map<String, dynamic> json) {
     try{
-      print("taskBloc fromJson");
+      debugPrint("taskBloc fromJson");
       return TaskLoadSuccess.fromJson(json);
     }
-    catch(error) {}
-    return null;
+    catch(error) {
+      return null;
+    }
   }
 
   @override
   Map<String, dynamic>? toJson(TaskState state) {
     try{
-      print("taskBloc toJson");
+      debugPrint("taskBloc toJson");
       final taskState = state;
       if(taskState is TaskLoadSuccess) return taskState.toJson();
     }
-    catch(error) {}
+    catch(error) {
+      return null;
+    }
     return null;
   }
 }

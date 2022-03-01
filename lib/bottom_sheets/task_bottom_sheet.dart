@@ -27,11 +27,12 @@ class TaskBottomSheet extends StatefulWidget{
   final DateTime? initialDate;
   final String? initialcategoryId;
 
-  TaskBottomSheet({
+  const TaskBottomSheet({
+    Key? key, 
     this.editTask,
     this.initialDate,
     this.initialcategoryId
-  });
+  }) : super(key: key);
 
   @override
   _TaskBottomSheetState createState() => _TaskBottomSheetState();
@@ -61,7 +62,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
         children: [
           
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: cPadding),
+            padding: const EdgeInsets.symmetric(horizontal: cPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -94,7 +95,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                   ),
 
                   FormInputHeader(context.l10n.chooseDateTime),
-                  SizedBox(height: 4.0),
+                  const SizedBox(height: 4.0),
 
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +108,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                             outlineColor: state.hasError ? themeData.errorColor : null,
                             expand: true,
                             onPressed: () {
-                              FocusScope.of(context).requestFocus(new FocusNode());
+                              FocusScope.of(context).requestFocus(FocusNode());
                               ModalBottomSheet(
                                 context: context,
                                 title: context.l10n.bottomSheet_selectDate,
@@ -124,7 +125,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                           }
                         )
                       ),
-                      SizedBox(width: 12.0),
+                      const SizedBox(width: 12.0),
 
                       Expanded(
                         child: FormValidator(
@@ -134,7 +135,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                             outlineColor: state.hasError ? themeData.errorColor : null,
                             expand: true,
                             onPressed: () {
-                              FocusScope.of(context).requestFocus(new FocusNode());
+                              FocusScope.of(context).requestFocus(FocusNode());
                               ModalBottomSheet(
                                 context: context,
                                 title: context.l10n.bottomSheet_selectTime,
@@ -162,7 +163,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                   ),
 
                   FormInputHeader(context.l10n.category),
-                  SizedBox(height: 4.0),
+                  const SizedBox(height: 4.0),
               ],
             ),
           ),
@@ -171,8 +172,8 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
             alignment: Alignment.centerLeft,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: cPadding),
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: cPadding),
               child: Row(
                 children: [
 
@@ -196,8 +197,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                               isLastItem: false,
                               onTap: () {
                                 setState(() {
-                                  if(category.id == categoryId) categoryId = null;
-                                  else categoryId = category.id;
+                                  categoryId = category.id == categoryId ? null : category.id;
                                 });
                               }
                             );
@@ -215,7 +215,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                       ModalBottomSheet(
                         context: context,
                         title: context.l10n.bottomSheet_createCategory,
-                        content: CategoryBottomSheet()
+                        content: const CategoryBottomSheet()
                       ).show();
                     },
                   ),
@@ -224,10 +224,10 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
             ),
           ),
 
-          SizedBox(height: 48.0),
+          const SizedBox(height: 48.0),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: cPadding),
+            padding: const EdgeInsets.symmetric(horizontal: cPadding),
             child: RoundedButton(
               width: double.infinity,
               child: Text(
@@ -245,19 +245,22 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                     minute: time!.minute,
                   );
 
-                  if(editTask != null) context.read<TaskBloc>().add(TaskUpdated(editTask!.copyWith(
-                    categoryId: categoryId,
-                    title: title,
-                    description: description,
-                    date: dateTime
-                  )));
-
-                  else context.read<TaskBloc>().add(TaskAdded(Task.create(
-                    categoryId: categoryId,
-                    title: title,
-                    description: description,
-                    date: dateTime
-                  )));
+                  if(editTask != null) {
+                    context.read<TaskBloc>().add(TaskUpdated(editTask!.copyWith(
+                      categoryId: categoryId,
+                      title: title,
+                      description: description,
+                      date: dateTime
+                    )));
+                  }
+                  else {
+                    context.read<TaskBloc>().add(TaskAdded(Task.create(
+                      categoryId: categoryId,
+                      title: title,
+                      description: description,
+                      date: dateTime
+                    )));
+                  }
                   
                   Navigator.pop(context);
                 }

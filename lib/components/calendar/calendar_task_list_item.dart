@@ -17,43 +17,50 @@ class CalendarTaskListItem extends StatelessWidget{
   final Function()? onPressed;
   final bool isShimmer;
   
-  CalendarTaskListItem({
+  const CalendarTaskListItem({
+    Key? key, 
     this.task,
     this.onPressed,
     this.isShimmer = false
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    if(isShimmer) return IgnorePointer(
-      ignoring: true,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: cListItemSpace),
-        child: CalendarTaskListItemContent(isShimmer: true),
-      ),
-    );
+    if(isShimmer) {
+      return const IgnorePointer(
+        ignoring: true,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: cListItemSpace),
+          child: CalendarTaskListItemContent(isShimmer: true),
+        ),
+      );
+    }
 
-    if(task != null) return BlocBuilder<CategoryBloc, CategoryState>(
-      builder: (_, categoryState) {
+    if(task != null) {
+      return BlocBuilder<CategoryBloc, CategoryState>(
+        builder: (_, categoryState) {
 
-        if(categoryState is CategoryLoadSuccess){
+          if(categoryState is CategoryLoadSuccess){
 
-          Category? category = categoryState.categories.firstWhereOrNull((c) => c.id == task!.categoryId);
-          if(category != null) return CalendarTaskListItemContent(
-            onPressed: onPressed,
-            categoryColor: category.color,
-            categoryName: category.name,
-            dateTime: task!.date,
-            title: task!.title,
-            description: task!.description,
-          );
+            Category? category = categoryState.categories.firstWhereOrNull((c) => c.id == task!.categoryId);
+            if(category != null) {
+              return CalendarTaskListItemContent(
+                onPressed: onPressed,
+                categoryColor: category.color,
+                categoryName: category.name,
+                dateTime: task!.date,
+                title: task!.title,
+                description: task!.description,
+              );
+            }
 
+            return Container();
+          }
           return Container();
         }
-        return Container();
-      }
-    );
+      );
+    }
     return Container();
   }
 }
@@ -68,7 +75,8 @@ class CalendarTaskListItemContent extends StatelessWidget{
   final String? description;
   final bool isShimmer;
 
-  CalendarTaskListItemContent({
+  const CalendarTaskListItemContent({
+    Key? key, 
     this.onPressed,
     this.categoryColor,
     this.categoryName,
@@ -76,7 +84,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
     this.title,
     this.description,
     this.isShimmer = false
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -84,14 +92,14 @@ class CalendarTaskListItemContent extends StatelessWidget{
     
     return Row(
       children: [
-        CalendarGroupHourText(text: "12:00", visible: false),
+        const CalendarGroupHourText(text: "12:00", visible: false),
 
         Expanded(
           child: ElevatedButton(
             onPressed: onPressed ?? () {},
             style: ElevatedButton.styleFrom(
               primary: customTheme.contentBackgroundColor,
-              padding: EdgeInsets.all(cListItemPadding),
+              padding: const EdgeInsets.all(cListItemPadding),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(cBorderRadius),
               ),
@@ -104,11 +112,11 @@ class CalendarTaskListItemContent extends StatelessWidget{
                   Container(
                     width: cLineSize,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                      borderRadius: const BorderRadius.all(Radius.circular(6.0)),
                       color: isShimmer ? customTheme.shimmerColor : categoryColor
                     )
                   ),
-                  SizedBox(width: 16.0),
+                  const SizedBox(width: 16.0),
 
                   Expanded(
                     child: Column(
@@ -129,7 +137,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                               ),
                             ),
 
-                            SizedBox(width: 12.0),
+                            const SizedBox(width: 12.0),
 
                             if(dateTime != null) Text(
                               DateFormat("HH:mm a").format(dateTime!).toLowerCase(),
@@ -137,7 +145,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                             )
                           ],
                         ),
-                        SizedBox(height: 4.0),
+                        const SizedBox(height: 4.0),
 
                         ShimmerText(
                           isShimmer: isShimmer,
@@ -152,7 +160,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
 
                         // Description
                         if(description != "" && description != null) Padding(
-                          padding: EdgeInsets.only(top: 8.0),
+                          padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
                             description!,
                             style: customTheme.lightTextStyle,

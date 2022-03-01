@@ -3,18 +3,18 @@ import 'package:task_manager/constants.dart';
 
 ThemeData _baseThemeData(ThemeData base) {
   return base.copyWith(
-    appBarTheme: AppBarTheme(backgroundColor: Colors.transparent),
+    appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent),
   );
 }
 
 ThemeData lightThemeData = _baseThemeData(ThemeData.light()).copyWith(
-  colorScheme: ColorScheme.light(primary: cPrimaryColor),
-  scaffoldBackgroundColor: Color(0xFFFFFFFF),
+  colorScheme: const ColorScheme.light(primary: cPrimaryColor),
+  scaffoldBackgroundColor: const Color(0xFFFFFFFF),
 );
 
 ThemeData darkThemeData = _baseThemeData(ThemeData.dark()).copyWith(
-  colorScheme: ColorScheme.dark(primary: cPrimaryColor),
-  scaffoldBackgroundColor: Color(0xFF1F1D2C),
+  colorScheme: const ColorScheme.dark(primary: cPrimaryColor),
+  scaffoldBackgroundColor: const Color(0xFF1F1D2C),
 );
 
 extension CustomThemeDataExtension on ThemeData {
@@ -80,32 +80,32 @@ class CustomThemeData {
   static CustomThemeData get dark {
     return CustomThemeData(
       isDark: true,
-      backgroundColor: Color(0xFF1F1D2C),
-      contentBackgroundColor: Color(0xFF272735),
-      textColor: Color(0xFFFBFAFC),
+      backgroundColor: const Color(0xFF1F1D2C),
+      contentBackgroundColor: const Color(0xFF272735),
+      textColor: const Color(0xFFFBFAFC),
       lightColor: Colors.white.withOpacity(0.5),
       mediumLightColor: Colors.white.withOpacity(0.25),
       extraLightColor: Colors.white.withOpacity(0.05),
       shimmerColor: Colors.white.withOpacity(0.03),
       elevation: 0.0,
       shadowColor: Colors.transparent,
-      unselectedCheckboxColor: Color(0xFF2C2F39)
+      unselectedCheckboxColor: const Color(0xFF2C2F39)
     );
   }
 
   static CustomThemeData get light {
     return CustomThemeData(
       isDark: false,
-      backgroundColor: Color(0xFFF0F2F5),
-      contentBackgroundColor: Color(0xFFFFFFFF),
-      textColor: Color(0xFF333649),
-      lightColor: Color(0xFF798090),
-      mediumLightColor: Color(0xFFE3E3E3),
-      extraLightColor: Color(0xFFE3E3E3),
+      backgroundColor: const Color(0xFFF0F2F5),
+      contentBackgroundColor: const Color(0xFFFFFFFF),
+      textColor: const Color(0xFF333649),
+      lightColor: const Color(0xFF798090),
+      mediumLightColor: const Color(0xFFE3E3E3),
+      extraLightColor: const Color(0xFFE3E3E3),
       shimmerColor: Colors.black.withOpacity(0.04),
       elevation: 4.0,
       shadowColor: Colors.black.withOpacity(0.08),
-      unselectedCheckboxColor: Color(0xFF798090)
+      unselectedCheckboxColor: const Color(0xFF798090)
     );
   }
 }

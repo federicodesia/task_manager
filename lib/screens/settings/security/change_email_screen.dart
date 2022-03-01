@@ -10,6 +10,8 @@ import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/components/forms/small_form_svg.dart';
 
 class ChangeEmailScreen extends StatelessWidget {
+  const ChangeEmailScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -45,7 +47,7 @@ class _ChangeEmailScreen extends StatelessWidget{
               textInputType: TextInputType.emailAddress,
               errorText: formState.emailError,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
 
             RoundedTextFormField(
               controller: emailConfirmationController,
@@ -65,7 +67,7 @@ class _ChangeEmailScreen extends StatelessWidget{
               );
 
               final nextState = await context.read<ChangeEmailCubit>().stream.first;
-              if(nextState.emailSent) AutoRouter.of(context).replace(ChangeEmailVerificationRoute());
+              if(nextState.emailSent) AutoRouter.of(context).replace(const ChangeEmailVerificationRoute());
             }
             catch(_){}
           },

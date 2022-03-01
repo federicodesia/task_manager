@@ -84,7 +84,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     List<DynamicObject> groups = [];
     DateTime now = DateTime.now();
 
-    if(_tasks.length > 0){
+    if(_tasks.isNotEmpty){
       for(int i = _tasks.first.date.hour; i <= _tasks.last.date.hour; i++){
         groups.add(DynamicObject(
           object: DateTime(now.year, now.month, now.day, i)

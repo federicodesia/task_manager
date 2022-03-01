@@ -10,6 +10,7 @@ import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
 
 class NotificationsScreen extends StatelessWidget {
+  const NotificationsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class _NotificationsScreenState extends State<_NotificationsScreen>{
           builder: (context, constraints){
 
             return CustomScrollView(
-              physics: BouncingScrollPhysics(
+              physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()
               ),
               slivers: [
@@ -66,7 +67,7 @@ class _NotificationsScreenState extends State<_NotificationsScreen>{
 
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
+                    padding: const EdgeInsets.fromLTRB(cPadding, 0, cPadding, cPadding),
 
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,14 +78,14 @@ class _NotificationsScreenState extends State<_NotificationsScreen>{
                           title: context.l10n.notificationsSettings_beforeSchedule,
                           description: context.l10n.notificationsSettings_beforeSchedule_description,
                           icon: Icons.schedule_outlined,
-                          color: Color(0xFF6B68E1)
+                          color: const Color(0xFF6B68E1)
                         ),
 
                         RoundedListTileSwitch(
                           title: context.l10n.notificationsSettings_taskSchedule,
                           description: context.l10n.notificationsSettings_taskSchedule_description,
                           icon: Icons.schedule_outlined,
-                          color: Color(0xFF31A8E1)
+                          color: const Color(0xFF31A8E1)
                         ),
                         
 
@@ -92,21 +93,21 @@ class _NotificationsScreenState extends State<_NotificationsScreen>{
                           title: context.l10n.notificationsSettings_uncompletedTask,
                           description: context.l10n.notificationsSettings_uncompletedTask_description,
                           icon: Icons.schedule_outlined,
-                          color: Color(0xFFB548C6)
+                          color: const Color(0xFFB548C6)
                         ),
 
-                        SizedBox(height: 8.0),
+                        const SizedBox(height: 8.0),
                         ListHeader(context.l10n.notificationsSettings_other),
                         RoundedListTileSwitch(
                           title: context.l10n.notificationsSettings_newUpdatesAvailable,
                           icon: Icons.system_update_alt_outlined,
-                          color: Color(0xFF21B17D)
+                          color: const Color(0xFF21B17D)
                         ),
 
                         RoundedListTileSwitch(
                           title: context.l10n.notificationsSettings_announcementsAndOffers,
                           icon: Icons.local_offer_outlined,
-                          color: Color(0xFFFF8801)
+                          color: const Color(0xFFFF8801)
                         ),
                       ],
                     ),

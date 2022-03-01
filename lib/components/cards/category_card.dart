@@ -19,10 +19,11 @@ class CategoryCard extends StatelessWidget{
   final String? categoryId;
   final bool isShimmer;
 
-  CategoryCard({
+  const CategoryCard({
+    Key? key, 
     this.categoryId,
     this.isShimmer = false
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class CategoryCard extends StatelessWidget{
         return BlocBuilder<CategoryBloc, CategoryState>(
           builder: (_, categoryState) {
 
-            if(isShimmer) return CategoryCardContent(isShimmer: true);
+            if(isShimmer) return const CategoryCardContent(isShimmer: true);
 
             if(taskState is TaskLoadSuccess && categoryState is CategoryLoadSuccess){
               final category = categoryState.categories.firstWhereOrNull((c) => c.id == categoryId);
@@ -44,8 +45,9 @@ class CategoryCard extends StatelessWidget{
               String description;
               int tasksCount = categoryTasks.length;
               int completedTasks = categoryTasks.where((task) => task.isCompleted).length;
-              if(tasksCount > 0 && tasksCount == completedTasks) description = context.l10n.categoryCard_allDone_description;
-              else{
+              if(tasksCount > 0 && tasksCount == completedTasks) {
+                description = context.l10n.categoryCard_allDone_description;
+              } else{
                 int remainingTasks = tasksCount - completedTasks;
                 description = context.l10n.categoryCard_taskCount_description(remainingTasks);
               }
@@ -65,11 +67,13 @@ class CategoryCard extends StatelessWidget{
                   );
                 },
                 onLongPress: () {
-                  if(!category.isGeneral) ModalBottomSheet(
-                    title: context.l10n.bottomSheet_editCategory,
-                    context: context,
-                    content: CategoryBottomSheet(editCategory: category)
-                  ).show();
+                  if(!category.isGeneral) {
+                    ModalBottomSheet(
+                      title: context.l10n.bottomSheet_editCategory,
+                      context: context,
+                      content: CategoryBottomSheet(editCategory: category)
+                    ).show();
+                  }
                 },
                 name: category.name,
                 description: description,
@@ -98,7 +102,8 @@ class CategoryCardContent extends StatelessWidget{
   final int completedTasks;
   final bool isShimmer;
 
-  CategoryCardContent({
+  const CategoryCardContent({
+    Key? key, 
     this.onPressed,
     this.onLongPress,
     this.name,
@@ -107,7 +112,7 @@ class CategoryCardContent extends StatelessWidget{
     this.tasksCount = 0,
     this.completedTasks = 0,
     this.isShimmer = false
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +125,7 @@ class CategoryCardContent extends StatelessWidget{
         onLongPress: () => onLongPress != null ? onLongPress!() : null,
         style: ElevatedButton.styleFrom(
           primary: customTheme.contentBackgroundColor,
-          padding: EdgeInsets.all(cPadding),
+          padding: const EdgeInsets.all(cPadding),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(cBorderRadius),
           ),
@@ -142,7 +147,7 @@ class CategoryCardContent extends StatelessWidget{
               overflow: TextOverflow.ellipsis,
             ),
 
-            SizedBox(height: 2.0),
+            const SizedBox(height: 2.0),
 
             ShimmerText(
               isShimmer: isShimmer,
@@ -155,7 +160,7 @@ class CategoryCardContent extends StatelessWidget{
               overflow: TextOverflow.ellipsis,
             ),
             
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             
             LinearPercentIndicator(
               lineHeight: cLineSize,

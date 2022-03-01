@@ -24,20 +24,22 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
   @override
   SettingsState? fromJson(Map<String, dynamic> json) {
     try{
-      print("SettingBloc fromJson");
+      debugPrint("SettingBloc fromJson");
       return SettingsState.fromJson(json);
     }
-    catch(error) {}
-    return null;
+    catch(error) {
+      return null;
+    }
   }
 
   @override
   Map<String, dynamic>? toJson(SettingsState state) {
     try{
-      print("SettingBloc toJson");
+      debugPrint("SettingBloc toJson");
       return state.toJson();
     }
-    catch(error) {}
-    return null;
+    catch(error) {
+      return null;
+    }
   }
 }

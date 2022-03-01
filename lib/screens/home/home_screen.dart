@@ -29,6 +29,7 @@ import 'package:task_manager/theme/theme.dart';
 import '../../constants.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,7 @@ class HomeScreen extends StatelessWidget {
 class _HomeScreen extends StatefulWidget{
 
   final List<MyTab> tabList;
-  _HomeScreen({required this.tabList});
+  const _HomeScreen({required this.tabList});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -94,7 +95,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
           ModalBottomSheet(
             title: context.l10n.bottomSheet_createTask,
             context: context,
-            content: TaskBottomSheet(),
+            content: const TaskBottomSheet(),
           ).show();
         },
       ),
@@ -106,7 +107,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
             currentState: showFloatingActionButton,
             onChange: (value) => setState(() => showFloatingActionButton = value),
             child: CustomScrollView(
-              physics: BouncingScrollPhysics(
+              physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()
               ),
               slivers: [
@@ -121,7 +122,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                     child: MyAppBar(
                       header: context.l10n.homeScreen_header,
                       description: context.l10n.homeScreen_description,
-                      onButtonPressed: () => AutoRouter.of(context).navigate(ProfileRoute()),
+                      onButtonPressed: () => AutoRouter.of(context).navigate(const ProfileRoute()),
                     )
                   )
                 ),
@@ -136,7 +137,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Header(text: context.l10n.categories),
-                        SizedBox(height: cPadding),
+                        const SizedBox(height: cPadding),
 
                         BlocBuilder<CategoryBloc, CategoryState>(
                           builder: (_, categoryState){
@@ -146,14 +147,14 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                 alignment: Alignment.centerLeft,
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
-                                  physics: BouncingScrollPhysics(),
-                                  padding: EdgeInsets.symmetric(horizontal: cPadding),
+                                  physics: const BouncingScrollPhysics(),
+                                  padding: const EdgeInsets.symmetric(horizontal: cPadding),
                                   child: BoxyRow(
                                     children: [
-                                      Dominant(
+                                      const Dominant(
                                         child: Opacity(
                                           opacity: 0,
-                                          child: Container(
+                                          child: SizedBox(
                                             width: double.minPositive,
                                             child: CategoryCard(isShimmer: true)
                                           ),
@@ -174,7 +175,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                                   axis: Axis.horizontal,
                                                   child: Container(
                                                     width: 148.0,
-                                                    margin: EdgeInsets.only(right: 12.0),
+                                                    margin: const EdgeInsets.only(right: 12.0),
                                                     child: CategoryCard(
                                                       categoryId: item.id
                                                     ),
@@ -190,12 +191,12 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                                   ModalBottomSheet(
                                                     title: context.l10n.bottomSheet_createCategory,
                                                     context: context,
-                                                    content: CategoryBottomSheet()
+                                                    content: const CategoryBottomSheet()
                                                   ).show();
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   primary: customTheme.backgroundColor,
-                                                  padding: EdgeInsets.all(8.0),
+                                                  padding: const EdgeInsets.all(8.0),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(cBorderRadius),
                                                     side: BorderSide(color: customTheme.extraLightColor, width: 1.5)
@@ -210,7 +211,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                                       Icons.add_rounded,
                                                       color: customTheme.lightColor,
                                                     ),
-                                                    SizedBox(height: 6.0),
+                                                    const SizedBox(height: 6.0),
 
                                                     Text(
                                                       context.l10n.addNewCategory_button,
@@ -219,7 +220,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
                                                     ),
-                                                    SizedBox(height: 2.0),
+                                                    const SizedBox(height: 2.0),
                                                   ],
                                                 )
                                               ),
@@ -231,8 +232,8 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                           scrollDirection: Axis.horizontal,
                                           child: Container(
                                             width: 148.0,
-                                            margin: EdgeInsets.only(right: 12.0),
-                                            child: CategoryCard(isShimmer: true),
+                                            margin: const EdgeInsets.only(right: 12.0),
+                                            child: const CategoryCard(isShimmer: true),
                                           )
                                         ),
                                       )
@@ -244,11 +245,11 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                           },
                         ),
 
-                        SizedBox(height: cPadding),
+                        const SizedBox(height: cPadding),
 
                         // Tabs
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: cPadding),
+                          padding: const EdgeInsets.symmetric(horizontal: cPadding),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Theme(
@@ -260,7 +261,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                               child: TabBar(
                                 controller: tabController,
                                 isScrollable: true,
-                                physics: BouncingScrollPhysics(),
+                                physics: const BouncingScrollPhysics(),
 
                                 indicatorSize: TabBarIndicatorSize.tab,
                                 indicatorWeight: 0.0,
@@ -269,8 +270,8 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                   color: cPrimaryColor,
                                   distanceFromCenter: 20.0
                                 ),
-                                labelPadding: EdgeInsets.only(right: 32.0),
-                                indicatorPadding: EdgeInsets.only(right: 32.0),
+                                labelPadding: const EdgeInsets.only(right: 32.0),
+                                indicatorPadding: const EdgeInsets.only(right: 32.0),
 
                                 /*indicator: TabIndicatorDecoration(),
                                 labelPadding: EdgeInsets.symmetric(horizontal: cPadding),*/
@@ -303,7 +304,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                 SliverToBoxAdapter(
                   child: ExpandablePageView.builder(
                     controller: pageController,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     itemCount: tabList.length,
                     itemBuilder: (context, index){
                       
@@ -312,8 +313,8 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                           minHeight: (constraints.maxHeight - appBarHeight - contentHeight).clamp(0.0, constraints.maxHeight)
                         ),
                         child: SingleChildScrollView(
-                          physics: BouncingScrollPhysics(),
-                          padding: EdgeInsets.all(cPadding),
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.all(cPadding),
                           child: tabList[index].content
                         ),
                       );

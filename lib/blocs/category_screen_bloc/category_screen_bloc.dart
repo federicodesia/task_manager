@@ -30,8 +30,8 @@ class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> 
       TaskState taskBlocState = taskBloc.state;
       if(taskBlocState is TaskLoadSuccess){
         emit(CategoryScreenLoadSuccess(
-          activeFilter: TaskFilter.All,
-          items: _getGroups(TaskFilter.All, taskBlocState.tasks)
+          activeFilter: TaskFilter.all,
+          items: _getGroups(TaskFilter.all, taskBlocState.tasks)
         ));
       }
     });
@@ -61,8 +61,11 @@ class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> 
     List<DynamicObject> items = [];
 
     tasks = tasks.where((task) => task.categoryId == categoryId).toList();
-    if(filter == TaskFilter.Completed) tasks = tasks.where((task) => task.isCompleted).toList();
-    else if(filter == TaskFilter.Remaining) tasks = tasks.where((task) => !task.isCompleted).toList();
+    if(filter == TaskFilter.completed) {
+      tasks = tasks.where((task) => task.isCompleted).toList();
+    } else if(filter == TaskFilter.remaining) {
+      tasks = tasks.where((task) => !task.isCompleted).toList();
+    }
 
     if(tasks.isNotEmpty){
       tasks.sort((a, b) => a.date.compareTo(b.date));
@@ -72,8 +75,9 @@ class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> 
 
       for(int i = 0; i < tasks.length; i++){
         Task task = tasks[i];
-        if(dateDifference(task.date, lastDateTime) == 0) items.add(DynamicObject(object: task));
-        else{
+        if(dateDifference(task.date, lastDateTime) == 0) {
+          items.add(DynamicObject(object: task));
+        } else{
           lastDateTime = getDate(task.date);
           items.add(DynamicObject(object: lastDateTime));
           items.add(DynamicObject(object: task));

@@ -32,13 +32,13 @@ class User{
   );
 
   bool get isEmpty =>
-    this.id == ""
-    && this.email == ""
-    && this.name == ""
-    && this.imageUrl == null
-    && this.createdAt == ""
-    && this.updatedAt == ""
-    && this.verified == false;
+    id == ""
+    && email == ""
+    && name == ""
+    && imageUrl == null
+    && createdAt == ""
+    && updatedAt == ""
+    && verified == false;
 
   bool get isNotEmpty => !isEmpty;
 

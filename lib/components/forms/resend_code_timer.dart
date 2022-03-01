@@ -9,10 +9,11 @@ class ResendCodeTimer extends StatelessWidget{
   final CustomTimerController controller;
   final void Function() onResend;
 
-  ResendCodeTimer({
+  const ResendCodeTimer({
+    Key? key, 
     required this.controller,
     required this.onResend
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +21,8 @@ class ResendCodeTimer extends StatelessWidget{
     
     return CustomTimer(
       controller: controller,
-      begin: Duration(minutes: 2),
-      end: Duration(),
+      begin: const Duration(minutes: 2),
+      end: const Duration(),
       builder: (time) {
         return Text(
           context.l10n.emailVerification_resendCodeIn("${time.minutes}:${time.seconds}\n"),

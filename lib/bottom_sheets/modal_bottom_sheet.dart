@@ -21,7 +21,7 @@ class ModalBottomSheet{
       isScrollControlled: true,
       barrierColor: cBarrierColor,
       backgroundColor: customTheme.backgroundColor,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(cBottomSheetBorderRadius),
           topRight: Radius.circular(cBottomSheetBorderRadius)
@@ -35,8 +35,8 @@ class ModalBottomSheet{
             maxHeight: MediaQuery.of(context).size.height * 0.95
           ),
           child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.fromLTRB(0, 16.0, 0, cPadding),
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(0, 16.0, 0, cPadding),
             child: Column(
               children: [
                 Container(
@@ -44,11 +44,11 @@ class ModalBottomSheet{
                   width: 48.0,
                   decoration: BoxDecoration(
                     color: customTheme.extraLightColor,
-                    borderRadius: BorderRadius.all(Radius.circular(8.0))
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0))
                   ),
                 ),
 
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
 
                 Text(
                   title,
@@ -56,7 +56,7 @@ class ModalBottomSheet{
                 ),
 
                 content,
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
               ],
             ),
           )

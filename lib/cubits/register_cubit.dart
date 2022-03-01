@@ -40,7 +40,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     final passwordError = Validators.validatePassword(context, password);
 
     if(nameError == null && emailError == null && passwordError == null){
-      emit(RegisterState(isLoading: true));
+      emit(const RegisterState(isLoading: true));
 
       final response = await authRepository.register(
         name: name,
@@ -49,21 +49,24 @@ class RegisterCubit extends Cubit<RegisterState> {
         ignoreKeys: ["name", "user", "email", "password"]
       );
 
-      if(response != null) response.when(
-        left: (responseMessage) => emit(RegisterState(
-          isLoading: false,
-          nameError: responseMessage.get("name"),
-          emailError: Validators.validateEmailResponse(context, responseMessage)
-              ?? (responseMessage.get("user") ?? responseMessage.get("email")),
-          passwordError: responseMessage.get("password"),
-        )),
+      if(response != null) {
+        response.when(
+          left: (responseMessage) => emit(RegisterState(
+            isLoading: false,
+            nameError: responseMessage.get("name"),
+            emailError: Validators.validateEmailResponse(context, responseMessage)
+                ?? (responseMessage.get("user") ?? responseMessage.get("email")),
+            passwordError: responseMessage.get("password"),
+          )),
 
-        right: (authCredentials){
-          emit(RegisterState(isLoading: false));
-          authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
-        }, 
-      );
-      else emit(RegisterState(isLoading: false));
+          right: (authCredentials){
+            emit(const RegisterState(isLoading: false));
+            authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
+          }, 
+        );
+      } else {
+        emit(const RegisterState(isLoading: false));
+      }
     }
     else{
       emit(RegisterState(

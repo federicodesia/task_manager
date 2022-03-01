@@ -39,7 +39,7 @@ class ChangeEmailCubit extends Cubit<ChangeEmailState> {
      ?? Validators.validateEqualEmails(context, email, emailConfirmation);
 
     if(emailError == null && emailConfirmationError == null){
-      emit(ChangeEmailState(isLoading: true));
+      emit(const ChangeEmailState(isLoading: true));
 
       final response = await authRepository.sendChangeEmailCode(
         email: email,
@@ -47,24 +47,28 @@ class ChangeEmailCubit extends Cubit<ChangeEmailState> {
         ignoreFunction: (m) => DateTime.tryParse(m.toUpperCase()) != null
       );
 
-      if(response != null) response.when(
-        left: (responseMessage){
-          final dateTime = DateTime.tryParse(responseMessage.first.toUpperCase());
-          if(dateTime != null) emit(ChangeEmailState(emailSent: true));
-          else{
-            emit(ChangeEmailState(
-              isLoading: false,
-              emailError: Validators.validateEmailResponse(context, responseMessage)
-                ?? responseMessage.get("email"),
-            ));
-          }
-        },
+      if(response != null) {
+        response.when(
+          left: (responseMessage){
+            final dateTime = DateTime.tryParse(responseMessage.first.toUpperCase());
+            if(dateTime != null) {
+              emit(const ChangeEmailState(emailSent: true));
+            } else{
+              emit(ChangeEmailState(
+                isLoading: false,
+                emailError: Validators.validateEmailResponse(context, responseMessage)
+                  ?? responseMessage.get("email"),
+              ));
+            }
+          },
 
-        right: (sent){
-          emit(ChangeEmailState(emailSent: true));
-        }, 
-      );
-      else emit(ChangeEmailState(isLoading: false));
+          right: (sent){
+            emit(const ChangeEmailState(emailSent: true));
+          }, 
+        );
+      } else {
+        emit(const ChangeEmailState(isLoading: false));
+      }
     }
     else{
       emit(ChangeEmailState(

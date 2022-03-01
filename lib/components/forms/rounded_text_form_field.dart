@@ -24,7 +24,8 @@ class RoundedTextFormField extends StatefulWidget{
   final TextAlign textAlign;
   final bool enableObscureTextToggle;
   
-  RoundedTextFormField({
+  const RoundedTextFormField({
+    Key? key, 
     this.controller,
     this.focusNode,
     this.labelText,
@@ -44,7 +45,7 @@ class RoundedTextFormField extends StatefulWidget{
     this.counterText,
     this.textAlign = TextAlign.start,
     this.enableObscureTextToggle = false,
-  });
+  }) : super(key: key);
 
   @override
   State<RoundedTextFormField> createState() => _RoundedTextFormFieldState();
@@ -97,10 +98,10 @@ class _RoundedTextFormFieldState extends State<RoundedTextFormField> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(cBorderRadius),
-            borderSide: BorderSide(style: BorderStyle.none),
+            borderSide: const BorderSide(style: BorderStyle.none),
           ),
           
-          contentPadding: EdgeInsets.symmetric(
+          contentPadding: const EdgeInsets.symmetric(
             horizontal: 24.0,
             vertical: 20.0
           ),
@@ -112,7 +113,7 @@ class _RoundedTextFormFieldState extends State<RoundedTextFormField> {
           errorStyle: widget.errorStyle,
 
           suffixIcon: widget.enableObscureTextToggle ? Padding(
-            padding: EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(right: 8.0),
             child: Material(
               color: Colors.transparent,
               child: IconButton(

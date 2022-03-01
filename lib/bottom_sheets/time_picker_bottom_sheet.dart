@@ -10,10 +10,11 @@ class TimePickerBottomSheet extends StatelessWidget{
   final Duration initialTime;
   final Function(Duration) onTimeChanged;
 
-  TimePickerBottomSheet({
+  const TimePickerBottomSheet({
+    Key? key, 
     required this.onTimeChanged,
     required this.initialTime
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +25,11 @@ class TimePickerBottomSheet extends StatelessWidget{
         brightness: customTheme.isDark ? Brightness.dark : Brightness.light,
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: cPadding),
+        padding: const EdgeInsets.symmetric(horizontal: cPadding),
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: cPadding),
+              padding: const EdgeInsets.symmetric(vertical: cPadding),
               child: CupertinoTimerPicker(
                 mode: CupertinoTimerPickerMode.hm,
                 initialTimerDuration: initialTime,

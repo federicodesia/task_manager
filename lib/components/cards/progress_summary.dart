@@ -12,33 +12,40 @@ class ProgressSummary extends StatelessWidget{
   final int completed;
   final int total;
 
-  ProgressSummary({
+  const ProgressSummary({
+    Key? key, 
     required this.header,
     required this.completed,
     required this.total
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
 
     String _description;
-    if(completed == 0) _description = context.l10n.progressSummary_description;
-    else if(completed == total) _description = context.l10n.progressSummary_finished_description;
-    else _description = context.l10n.progressSummary_inProgress_description(completed, total);
+    if(completed == 0) {
+      _description = context.l10n.progressSummary_description;
+    }
+    else if(completed == total) {
+      _description = context.l10n.progressSummary_finished_description;
+    }
+    else {
+      _description = context.l10n.progressSummary_inProgress_description(completed, total);
+    }
 
     double _percent = total > 0 ? completed / total : 0.0;
 
     return Material(
-      borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
+      borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius)),
       elevation: customTheme.elevation,
       shadowColor: customTheme.shadowColor,
       child: Container(
         decoration: BoxDecoration(
           color: customTheme.contentBackgroundColor,
-          borderRadius: BorderRadius.all(Radius.circular(cBorderRadius))
+          borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius))
         ),
-        padding: EdgeInsets.all(cPadding),
+        padding: const EdgeInsets.all(cPadding),
         child: Row(
           children: [
             Expanded(
@@ -51,7 +58,7 @@ class ProgressSummary extends StatelessWidget{
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
 
                   AnimatedWidgetSize(
                     child: AlignedAnimatedSwitcher(
@@ -68,7 +75,7 @@ class ProgressSummary extends StatelessWidget{
               ),
             ),
 
-            SizedBox(width: 16.0),
+            const SizedBox(width: 16.0),
 
             CircularPercentIndicator(
               radius: 56.0,

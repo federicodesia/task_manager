@@ -11,24 +11,28 @@ import 'package:task_manager/models/category.dart';
 import 'package:task_manager/theme/theme.dart';
 
 List<Color> colors = [
-  Color(0xFF0063AE),
-  Color(0xFF008FFD),
-  Color(0xFF00C0FD),
-  Color(0xFF07B9AE),
-  Color(0xFF00B96D),
-  Color(0xFFFF6B55),
-  Color(0xFFEC0039),
-  Color(0xFFBE118E),
-  Color(0xFFFA6EE3),
-  Color(0xFF7F43FF),
-  Color(0xFF4743FF),
-  Color(0xFF9295A2)
+  const Color(0xFF0063AE),
+  const Color(0xFF008FFD),
+  const Color(0xFF00C0FD),
+  const Color(0xFF07B9AE),
+  const Color(0xFF00B96D),
+  const Color(0xFFFF6B55),
+  const Color(0xFFEC0039),
+  const Color(0xFFBE118E),
+  const Color(0xFFFA6EE3),
+  const Color(0xFF7F43FF),
+  const Color(0xFF4743FF),
+  const Color(0xFF9295A2)
 ];
 
 class CategoryBottomSheet extends StatefulWidget{
   
   final Category? editCategory;
-  CategoryBottomSheet({this.editCategory});
+
+  const CategoryBottomSheet({
+    Key? key,
+    this.editCategory
+  }) : super(key: key);
 
   @override
   _CategoryBottomSheetState createState() => _CategoryBottomSheetState();
@@ -57,7 +61,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
         children: [
           
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: cPadding),
+            padding: const EdgeInsets.symmetric(horizontal: cPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -76,7 +80,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                 ),
 
                 FormInputHeader(context.l10n.selectColor),
-                SizedBox(height: 4.0),
+                const SizedBox(height: 4.0),
 
                 LayoutBuilder(
                   builder: (_, constraints){                    
@@ -99,15 +103,15 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                                   color: isSelected ? customTheme.lightColor : Colors.transparent,
                                   width: 1.5
                                 ),
-                                borderRadius: BorderRadius.all(Radius.circular(12.0))
+                                borderRadius: const BorderRadius.all(Radius.circular(12.0))
                               ),
                               child: Container(
                                 height: 16.0,
                                 width: 16.0,
-                                margin: EdgeInsets.all(10.0),
+                                margin: const EdgeInsets.all(10.0),
                                 decoration: BoxDecoration(
                                   color: color,
-                                  borderRadius: BorderRadius.all(Radius.circular(6.0))
+                                  borderRadius: const BorderRadius.all(Radius.circular(6.0))
                                 ),
                               ),
                             ),
@@ -122,10 +126,10 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
             ),
           ),
 
-          SizedBox(height: 32.0),
+          const SizedBox(height: 32.0),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: cPadding),
+            padding: const EdgeInsets.symmetric(horizontal: cPadding),
             child: RoundedButton(
               width: double.infinity,
               child: Text(
@@ -137,15 +141,17 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
                 if (formKey.currentState!.validate()){
                   formKey.currentState!.save();
 
-                  if(editCategory != null) BlocProvider.of<CategoryBloc>(context).add(CategoryUpdated(editCategory!.copyWith(
-                    name: categoryName,
-                    color: categoryColor
-                  )));
-
-                  else BlocProvider.of<CategoryBloc>(context).add(CategoryAdded(Category.create(
-                    name: categoryName,
-                    color: categoryColor
-                  )));
+                  if(editCategory != null) {
+                    BlocProvider.of<CategoryBloc>(context).add(CategoryUpdated(editCategory!.copyWith(
+                      name: categoryName,
+                      color: categoryColor
+                    )));
+                  } else {
+                    BlocProvider.of<CategoryBloc>(context).add(CategoryAdded(Category.create(
+                      name: categoryName,
+                      color: categoryColor
+                    )));
+                  }
 
                   Navigator.pop(context);
                 }

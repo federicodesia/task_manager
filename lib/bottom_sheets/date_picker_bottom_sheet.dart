@@ -10,25 +10,26 @@ class DatePickerBottomSheet extends StatelessWidget{
   final DateTime initialDate;
   final ValueChanged<DateTime> onDateChanged;
 
-  DatePickerBottomSheet({
+  const DatePickerBottomSheet({
+    Key? key, 
     required this.onDateChanged,
     required this.initialDate
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
     
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: cPadding),
+      padding: const EdgeInsets.symmetric(horizontal: cPadding),
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: cPadding),
+            padding: const EdgeInsets.symmetric(vertical: cPadding),
             child: CalendarDatePicker(
               initialDate: initialDate,
               firstDate: DateTime(1969, 1, 1),
-              lastDate: DateTime.now().add(Duration(days: 365)),
+              lastDate: DateTime.now().add(const Duration(days: 365)),
               onDateChanged: onDateChanged
             ),
           ),

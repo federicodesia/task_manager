@@ -33,7 +33,11 @@ import '../constants.dart';
 class CategoryScreen extends StatelessWidget {
 
   final String? categoryId;
-  CategoryScreen({required this.categoryId});
+
+  const CategoryScreen({
+    Key? key,
+    required this.categoryId
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,7 @@ class CategoryScreen extends StatelessWidget {
 class _CategoryScreen extends StatefulWidget{
 
   final String? categoryId;
-  _CategoryScreen({required this.categoryId});
+  const _CategoryScreen({required this.categoryId});
 
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
@@ -86,7 +90,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
               currentState: showFloatingActionButton,
               onChange: (value) => setState(() => showFloatingActionButton = value),
               child: CustomScrollView(
-                physics: BouncingScrollPhysics(
+                physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()
                 ),
                 slivers: [
@@ -129,10 +133,10 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                       width: 8.0,
                                       decoration: BoxDecoration(
                                         color: category.color,
-                                        borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                        borderRadius: const BorderRadius.all(Radius.circular(8.0))
                                       )
                                     ),
-                                    SizedBox(width: 8.0),
+                                    const SizedBox(width: 8.0),
                                     Text(
                                       category.name,
                                       style: customTheme.subtitleTextStyle.copyWith(height: 1.0),
@@ -145,27 +149,27 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                   _CategoryScreenPopupButton(category: category)
                                 ],
                               ),
-                              SizedBox(height: cPadding - 16.0),
+                             const  SizedBox(height: cPadding - 16.0),
                               
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: cPadding),
+                                padding: const EdgeInsets.symmetric(horizontal: cPadding),
                                 child: Row(
                                   children: [
                                     Expanded(
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
+                                          borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius)),
                                           color: customTheme.contentBackgroundColor
                                         ),
                                         child: Padding(
-                                          padding: EdgeInsets.all(16.0),
+                                          padding: const EdgeInsets.all(16.0),
                                           child: Row(
                                             children: [
                                               Icon(
                                                 Icons.search_rounded,
                                                 color: customTheme.lightColor,
                                               ),
-                                              SizedBox(width: 12.0),
+                                              const SizedBox(width: 12.0),
                                               Text(
                                                 context.l10n.searchTask,
                                                 style: customTheme.lightTextStyle.copyWith(height: 1.0),
@@ -176,7 +180,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                       ),
                                     ),
 
-                                    SizedBox(width: 12.0),
+                                    const SizedBox(width: 12.0),
                                     RoundedButton(
                                       width: 56.0,
                                       height: 56.0,
@@ -207,21 +211,21 @@ class _CategoryScreenState extends State<_CategoryScreen>{
 
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: cPadding),
+                      padding: const EdgeInsets.symmetric(horizontal: cPadding),
                       child: BlocBuilder<CategoryScreenBloc, CategoryScreenState>(
                         builder: (_, state){
 
                           if(state is CategoryScreenLoadSuccess){
 
                             return Padding(
-                              padding: EdgeInsets.only(top: cPadding - cListItemSpace),
+                              padding: const EdgeInsets.only(top: cPadding - cListItemSpace),
                               child: AlignedAnimatedSwitcher(
                                 alignment: Alignment.topCenter,
                                 duration: cTransitionDuration,
                                 child: state.items.isNotEmpty ? AnimatedDynamicTaskList(
                                   items: state.items,
-                                  taskListItemType: TaskListItemType.Checkbox,
-                                  context: context,
+                                  taskListItemType: TaskListItemType.checkbox,
+                                  buildContext: context,
                                   onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
                                   objectBuilder: (object){
                                     if(object is DateTime){
@@ -234,10 +238,10 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                   availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
                                   child: EmptySpace(
                                     svgImage: "assets/svg/completed_tasks.svg",
-                                    header: state.activeFilter == TaskFilter.All
+                                    header: state.activeFilter == TaskFilter.all
                                       ? context.l10n.emptySpace_youHaventTasksInCategory
                                       : context.l10n.emptySpace_youHaventTasksWithActiveFilter(state.activeFilter.nameLocalization(context).toLowerCase()),
-                                    description: state.activeFilter == TaskFilter.All
+                                    description: state.activeFilter == TaskFilter.all
                                       ? context.l10n.emptySpace_youHaventTasksInCategory_description
                                       : context.l10n.emptySpace_youHaventTasksWithActiveFilter_description,
                                   )
@@ -246,7 +250,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                             );
                           }
 
-                          return Padding(
+                          return const Padding(
                             padding: EdgeInsets.only(top: cPadding),
                             child: ShimmerList(
                               minItems: 3,
@@ -271,7 +275,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
 class _CategoryScreenPopupButton extends StatelessWidget{
 
   final Category category;
-  _CategoryScreenPopupButton({required this.category});
+  const _CategoryScreenPopupButton({required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -281,7 +285,7 @@ class _CategoryScreenPopupButton extends StatelessWidget{
     return PopupMenuButton(
       key: popupMenuKey,
       color: customTheme.contentBackgroundColor,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),
       elevation: 4,
@@ -340,7 +344,7 @@ class _CategoryScreenPopupButton extends StatelessWidget{
       },
       child: IconButton(
         color: customTheme.lightColor,
-        icon: Icon(Icons.more_vert_rounded),
+        icon: const Icon(Icons.more_vert_rounded),
         splashRadius: cSplashRadius,
         onPressed: () {
           popupMenuKey.currentState!.showButtonMenu();

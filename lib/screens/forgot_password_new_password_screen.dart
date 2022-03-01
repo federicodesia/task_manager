@@ -11,6 +11,8 @@ import 'package:task_manager/components/forms/small_form_svg.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class ForgotPasswordNewPasswordScreen extends StatelessWidget {
+  const ForgotPasswordNewPasswordScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -56,7 +58,7 @@ class _ForgotPasswordNewPasswordScreen extends StatelessWidget{
               );
 
               final nextState = await context.read<ForgotPasswordNewPasswordCubit>().stream.first;
-              if(nextState.changed) AutoRouter.of(context).navigate(WelcomeRoute());
+              if(nextState.changed) AutoRouter.of(context).navigate(const WelcomeRoute());
             }
             catch(_){}
           },
@@ -76,7 +78,7 @@ class _ForgotPasswordNewPasswordScreen extends StatelessWidget{
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
             ),
-            onTap: () => AutoRouter.of(context).navigate(LoginRoute())
+            onTap: () => AutoRouter.of(context).navigate(const LoginRoute())
           ),
         );
       }

@@ -18,7 +18,7 @@ class ActiveSession extends Equatable{
   final GeoLocation? geoLocation;
   final bool isThisDevice;
 
-  ActiveSession({
+  const ActiveSession({
     required this.id,
     required this.token,
     required this.lastTimeOfUse,
@@ -32,12 +32,12 @@ class ActiveSession extends Equatable{
     bool? isThisDevice
   }){
     return ActiveSession(
-      id: this.id,
-      token: this.token,
-      lastTimeOfUse: this.lastTimeOfUse,
-      ipAddress: this.ipAddress,
-      createdAt: this.createdAt,
-      geoLocation: this.geoLocation,
+      id: id,
+      token: token,
+      lastTimeOfUse: lastTimeOfUse,
+      ipAddress: ipAddress,
+      createdAt: createdAt,
+      geoLocation: geoLocation,
       isThisDevice: isThisDevice ?? this.isThisDevice
     );
   }

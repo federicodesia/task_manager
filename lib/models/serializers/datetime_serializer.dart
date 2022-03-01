@@ -15,8 +15,8 @@ class NullableDateTimeSerializer implements JsonConverter<DateTime?, String?> {
   const NullableDateTimeSerializer();
 
   @override
-  DateTime? fromJson(String? dateUtc) => dateUtc != null ? DateTimeSerializer().fromJson(dateUtc) : null;
+  DateTime? fromJson(String? dateUtc) => dateUtc != null ? const DateTimeSerializer().fromJson(dateUtc) : null;
 
   @override
-  String? toJson(DateTime? localDate) => localDate != null ? DateTimeSerializer().toJson(localDate) : null;
+  String? toJson(DateTime? localDate) => localDate != null ? const DateTimeSerializer().toJson(localDate) : null;
 }

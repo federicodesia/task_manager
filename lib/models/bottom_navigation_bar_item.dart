@@ -18,13 +18,13 @@ List<MyBottomNavigationBarItem> bottomNavigationBarItems = [
   MyBottomNavigationBarItem(
     icon: "home_outlined",
     selectedIcon: "home_filled",
-    child: HomeScreen()
+    child: const HomeScreen()
   ),
 
   MyBottomNavigationBarItem(
     icon: "calendar_outlined",
     selectedIcon: "calendar_filled",
-    child: CalendarScreen()
+    child: const CalendarScreen()
   ),
 
   MyBottomNavigationBarItem(

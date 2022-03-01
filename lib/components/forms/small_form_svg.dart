@@ -15,7 +15,8 @@ class SmallFormSvg extends StatelessWidget {
   final void Function() onButtonPressed;
   final Widget? bottomWidget;
 
-  SmallFormSvg({
+  const SmallFormSvg({
+    Key? key, 
     required this.svgImage,
     required this.header,
     required this.description,
@@ -24,7 +25,7 @@ class SmallFormSvg extends StatelessWidget {
     required this.buttonText,
     required this.onButtonPressed,
     this.bottomWidget
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class SmallFormSvg extends StatelessWidget {
           builder: (context, constraints){
 
             return SingleChildScrollView(
-              physics: BouncingScrollPhysics(
+              physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()
               ),
               child: ConstrainedBox(
@@ -54,7 +55,7 @@ class SmallFormSvg extends StatelessWidget {
 
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.all(cPadding),
+                            padding: const EdgeInsets.all(cPadding),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -66,7 +67,7 @@ class SmallFormSvg extends StatelessWidget {
                                   description: description,
                                 ),
 
-                                SizedBox(height: cPadding),
+                                const SizedBox(height: cPadding),
                                 Column(
                                   children: formChildren,
                                 )
@@ -76,10 +77,10 @@ class SmallFormSvg extends StatelessWidget {
                         ),
 
                         Padding(
-                          padding: EdgeInsets.all(cPadding),
+                          padding: const EdgeInsets.all(cPadding),
                           child: Column(
                             children: [
-                              if(isLoading) Padding(
+                              if(isLoading) const Padding(
                                 padding: EdgeInsets.only(bottom: 32.0),
                                 child: CircularProgressIndicator(),
                               ),
@@ -93,7 +94,7 @@ class SmallFormSvg extends StatelessWidget {
                                 onPressed: onButtonPressed,
                               ),
 
-                              SizedBox(height: cPadding),
+                              const SizedBox(height: cPadding),
                               bottomWidget ?? Container()
                             ],
                           ),

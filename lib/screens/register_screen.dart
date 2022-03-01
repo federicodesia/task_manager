@@ -12,6 +12,8 @@ import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -49,7 +51,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
           builder: (context, constraints){
 
             return SingleChildScrollView(
-              physics: BouncingScrollPhysics(
+              physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()
               ),
               child: ConstrainedBox(
@@ -64,19 +66,19 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                           children: [
 
                             Padding(
-                              padding: EdgeInsets.all(cPadding),
+                              padding: const EdgeInsets.all(cPadding),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
 
-                                  SizedBox(height: cPadding),
+                                  const SizedBox(height: cPadding),
                                   Text(
                                     context.l10n.registerScreen_title,
                                     style: customTheme.titleTextStyle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(height: 8.0),
+                                  const SizedBox(height: 8.0),
 
                                   Text(
                                     context.l10n.registerScreen_description,
@@ -84,14 +86,14 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(height: cPadding * 2),
+                                  const SizedBox(height: cPadding * 2),
 
                                   RoundedTextFormField(
                                     controller: nameController,
                                     hintText: context.l10n.textField_name,
                                     errorText: formState.nameError
                                   ),
-                                  SizedBox(height: 16.0),
+                                  const SizedBox(height: 16.0),
 
                                   RoundedTextFormField(
                                     controller: emailController,
@@ -99,7 +101,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                     textInputType: TextInputType.emailAddress,
                                     errorText: formState.emailError
                                   ),
-                                  SizedBox(height: 16.0),
+                                  const SizedBox(height: 16.0),
 
                                   RoundedTextFormField(
                                     controller: passwordController,
@@ -111,13 +113,13 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                               ),
                             ),
                             
-                            Spacer(),
+                            const Spacer(),
 
                             Padding(
-                              padding: EdgeInsets.all(cPadding),
+                              padding: const EdgeInsets.all(cPadding),
                               child: Column(
                                 children: [
-                                  if(formState.isLoading) Padding(
+                                  if(formState.isLoading) const Padding(
                                     padding: EdgeInsets.only(bottom: 32.0),
                                     child: CircularProgressIndicator(),
                                   ),
@@ -138,7 +140,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                       );
                                     },
                                   ),
-                                  SizedBox(height: cPadding),
+                                  const SizedBox(height: cPadding),
 
                                   GestureDetector(
                                     child: RichText(
@@ -146,9 +148,9 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                         style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
                                           TextSpan(text: context.l10n.registerScreen_alreadyHaveAnAccount),
-                                          TextSpan(text: " "),
+                                          const TextSpan(text: " "),
                                           TextSpan(text: context.l10n.signIn_button, style: customTheme.smallTextButtonStyle),
-                                          TextSpan(text: "\n")
+                                          const TextSpan(text: "\n")
                                         ],
                                       ),
                                       maxLines: 2,
@@ -156,7 +158,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                       textAlign: TextAlign.center,
                                     ),
                                     onTap: () {
-                                      AutoRouter.of(context).navigate(LoginRoute());
+                                      AutoRouter.of(context).navigate(const LoginRoute());
                                     },
                                   ),
                                 ],

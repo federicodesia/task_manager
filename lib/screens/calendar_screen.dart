@@ -27,6 +27,8 @@ import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
 class CalendarScreen extends StatelessWidget {
+  const CalendarScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -93,7 +95,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                 currentState: showFloatingActionButton,
                 onChange: (value) => setState(() => showFloatingActionButton = value),
                 child: CustomScrollView(
-                  physics: BouncingScrollPhysics(
+                  physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()
                   ),
                   slivers: [
@@ -128,7 +130,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: cPadding),
+                                  padding: const EdgeInsets.symmetric(horizontal: cPadding),
                                   child: CalendarMonthPicker(
                                     months: calendarState.months,
                                     initialMonth: DateTime.now(),
@@ -139,8 +141,12 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                       BlocProvider.of<CalendarBloc>(context).add(CalendarMonthUpdated(date));
                                       
                                       int index;
-                                      if(previousIndex > previousLenght - 1) index = nowLenght - 1;
-                                      else index = previousIndex.clamp(0, nowLenght - 1);
+                                      if(previousIndex > previousLenght - 1) {
+                                        index = nowLenght - 1;
+                                      }
+                                      else {
+                                        index = previousIndex.clamp(0, nowLenght - 1);
+                                      }
 
                                       scrollController.animateTo(
                                         index * tabWidth! - 0.001,
@@ -151,7 +157,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                   ),
                                 ),
 
-                                SizedBox(height: 8.0),
+                                const SizedBox(height: 8.0),
 
                                 NotificationListener<ScrollEndNotification>(
                                   child: SingleChildScrollView(
@@ -160,7 +166,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                     padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 2 - (tabWidth ?? 100.0) / 2),
                                     physics: tabWidth != null ? SnapBounceScrollPhysics(
                                       itemWidth: tabWidth!
-                                    ) : BouncingScrollPhysics(),
+                                    ) : const BouncingScrollPhysics(),
                                     child: Row(
                                       children: List.generate(calendarState.days.length, (index){
                                         DateTime day = calendarState.days[index];
@@ -198,20 +204,20 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                   }
                                 ),
 
-                                SizedBox(height: cPadding - cListItemSpace),
+                                const SizedBox(height: cPadding - cListItemSpace),
                               ],
                             ),
                           ),
 
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: cPadding),
+                            padding: const EdgeInsets.symmetric(horizontal: cPadding),
                             child: items != null ? AlignedAnimatedSwitcher(
                               alignment: Alignment.topCenter,
                               duration: cTransitionDuration,
                               child: items.isNotEmpty ? AnimatedDynamicTaskList(
                                 items: items,
-                                taskListItemType: TaskListItemType.Calendar,
-                                context: context,
+                                taskListItemType: TaskListItemType.calendar,
+                                buildContext: context,
                                 onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
                                 objectBuilder: (object){
                                   return (object is DateTime) ? CalendarGroupHour(dateTime: object) : Container();
@@ -224,7 +230,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                   description: context.l10n.emptySpace_youHaventTasksOnThisDay_description,
                                 )
                               ),
-                            ) : Padding(
+                            ) : const Padding(
                               padding: EdgeInsets.only(top: cPadding),
                               child: ShimmerList(
                                 minItems: 3,
@@ -234,7 +240,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                             )
                           ),
 
-                          SizedBox(height: cPadding),
+                          const SizedBox(height: cPadding),
                         ],
                       ) : Container(),
                     ),

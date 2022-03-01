@@ -7,10 +7,11 @@ class DotIndicatorList extends StatelessWidget{
   final int count;
   final int selectedIndex;
 
-  DotIndicatorList({
+  const DotIndicatorList({
+    Key? key, 
     required this.count,
     required this.selectedIndex
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class DotIndicatorList extends StatelessWidget{
           duration: cFastAnimationDuration,
           height: cDotSize,
           width: index == selectedIndex ? cSelectedDotSize : cDotSize,
-          margin: EdgeInsets.symmetric(horizontal: 2.5),
+          margin: const EdgeInsets.symmetric(horizontal: 2.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(cDotSize),
             color: index == selectedIndex ? cPrimaryColor : Color.alphaBlend(customTheme.extraLightColor, customTheme.backgroundColor),

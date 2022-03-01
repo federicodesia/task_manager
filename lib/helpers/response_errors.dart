@@ -24,6 +24,7 @@ abstract class ResponseError{
         if(ignoreKeys != null && ignoreKeys.any((key) => responseMessages.contains(key))) return responseMessages;
         if(ignoreFunction != null && responseMessages.checkFunction(ignoreFunction)) return responseMessages;
       }
+      // ignore: empty_catches
       catch(error){}
     }
     

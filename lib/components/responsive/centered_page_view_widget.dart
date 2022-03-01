@@ -11,13 +11,14 @@ class CenteredPageViewWidget extends StatefulWidget{
   final void Function(int)? onPageChanged;
   final List<Widget> children;
 
-  CenteredPageViewWidget({
+  const CenteredPageViewWidget({
+    Key? key, 
     required this.availableSpaceCubit,
     this.controller,
     this.physics,
     this.onPageChanged,
     required this.children
-  });
+  }) : super(key: key);
 
   @override
   _CenteredPageViewWidgetState createState() => _CenteredPageViewWidgetState();
@@ -44,7 +45,7 @@ class _CenteredPageViewWidgetState extends State<CenteredPageViewWidget>{
 
               return Center(
                 child: SingleChildScrollView(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

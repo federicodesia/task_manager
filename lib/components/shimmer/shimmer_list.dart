@@ -17,6 +17,7 @@ class ShimmerList extends StatefulWidget{
   final Widget child;
 
   const ShimmerList({
+    Key? key, 
     this.scrollDirection = Axis.vertical,
     this.delayDuration = const Duration(milliseconds: 250),
     this.animationDuration = cAnimatedListDuration,
@@ -24,7 +25,7 @@ class ShimmerList extends StatefulWidget{
     this.minItems = 3,
     this.maxItems = 3,
     required this.child
-  });
+  }) : super(key: key);
 
   @override
   _ShimmerListState createState() => _ShimmerListState();
@@ -55,8 +56,11 @@ class _ShimmerListState extends State<ShimmerList>{
     while(!disposed) {
 
       final int itemCount;
-      if(generateRandom) itemCount = minItems + Random().nextInt(maxItems + 1 - minItems);
-      else itemCount = minItems;
+      if(generateRandom) {
+        itemCount = minItems + Random().nextInt(maxItems + 1 - minItems);
+      } else {
+        itemCount = minItems;
+      }
 
       for(int i = 0; i <= itemCount; i++){
         if(!disposed) setState(() => currentItems = i);

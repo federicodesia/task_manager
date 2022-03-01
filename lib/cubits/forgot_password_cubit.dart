@@ -28,30 +28,34 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     final emailError = Validators.validateEmail(context, email);
 
     if(emailError == null){
-      emit(ForgotPasswordState(isLoading: true));
+      emit(const ForgotPasswordState(isLoading: true));
       final response = await authRepository.sendPasswordResetCode(
         email: email,
         ignoreKeys: ["user", "email"],
         ignoreFunction: (m) => DateTime.tryParse(m.toUpperCase()) != null
       );
 
-      if(response != null) response.when(
-        left: (responseMessage){
-          final dateTime = DateTime.tryParse(responseMessage.first.toUpperCase());
+      if(response != null) {
+        response.when(
+          left: (responseMessage){
+            final dateTime = DateTime.tryParse(responseMessage.first.toUpperCase());
 
-          if(dateTime != null) emit(ForgotPasswordState(emailSent: true));
-          else{
-            emit(ForgotPasswordState(
-              isLoading: false,
-              emailError: Validators.validateEmailResponse(context, responseMessage)
-                ?? (responseMessage.get("user") ?? responseMessage.get("email")),
-            ));
-          }
-        },
+            if(dateTime != null) {
+              emit(const ForgotPasswordState(emailSent: true));
+            } else{
+              emit(ForgotPasswordState(
+                isLoading: false,
+                emailError: Validators.validateEmailResponse(context, responseMessage)
+                  ?? (responseMessage.get("user") ?? responseMessage.get("email")),
+              ));
+            }
+          },
 
-        right: (sent) => emit(ForgotPasswordState(emailSent: true))
-      );
-      else emit(ForgotPasswordState(isLoading: false));
+          right: (sent) => emit(const ForgotPasswordState(emailSent: true))
+        );
+      } else {
+        emit(const ForgotPasswordState(isLoading: false));
+      }
     }
     else{
       emit(ForgotPasswordState(

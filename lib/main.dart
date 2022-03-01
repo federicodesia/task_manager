@@ -20,7 +20,7 @@ void main() async{
     storageDirectory: await getTemporaryDirectory(),
   ).then((storage){
     HydratedBlocOverrides.runZoned(
-      () => runApp(MyApp()),
+      () => runApp(const MyApp()),
       storage: storage,
     );
   });

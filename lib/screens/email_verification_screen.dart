@@ -10,6 +10,8 @@ import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/components/forms/small_form_svg.dart';
 
 class EmailVerificationScreen extends StatelessWidget {
+  const EmailVerificationScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -41,7 +43,7 @@ class _EmailVerificationScreen extends StatelessWidget{
           description: context.l10n.emptySpace_verifyYourEmail_description,
           formChildren: [
 
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             VerificationCode(
               controller: codeController,
               textInputType: TextInputType.text,

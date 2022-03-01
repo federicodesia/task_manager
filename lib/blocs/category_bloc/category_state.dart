@@ -29,8 +29,8 @@ class CategoryLoadSuccess extends CategoryState {
           color: Colors.grey.withOpacity(0.65)
         )
       ],
-      deletedCategories: [],
-      failedCategories: {}
+      deletedCategories: const [],
+      failedCategories: const {}
     );
   }
 

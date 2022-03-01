@@ -10,6 +10,8 @@ import 'package:task_manager/components/forms/small_form_svg.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
+  const ForgotPasswordScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -54,9 +56,11 @@ class _ForgotPasswordScreen extends StatelessWidget{
               );
 
               final nextState = await context.read<ForgotPasswordCubit>().stream.first;
-              if(nextState.emailSent) AutoRouter.of(context).navigate(
-                ForgotPasswordEmailVerificationRoute(email: emailController.text)
-              );
+              if(nextState.emailSent) {
+                AutoRouter.of(context).navigate(
+                  ForgotPasswordEmailVerificationRoute(email: emailController.text)
+                );
+              }
             }
             catch(_){}
           },
@@ -76,7 +80,7 @@ class _ForgotPasswordScreen extends StatelessWidget{
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
             ),
-            onTap: () => AutoRouter.of(context).navigate(LoginRoute())
+            onTap: () => AutoRouter.of(context).navigate(const LoginRoute())
           ),
         );
       }

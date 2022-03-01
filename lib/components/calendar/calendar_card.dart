@@ -10,11 +10,12 @@ class CalendarCard extends StatelessWidget{
   final bool isSelected;
   final Function()? onTap;
   
-  CalendarCard({
+  const CalendarCard({
+    Key? key, 
     required this.dateTime,
     required this.isSelected,
     this.onTap
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +25,10 @@ class CalendarCard extends StatelessWidget{
       child: AnimatedContainer(
         duration: cFastAnimationDuration,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(cBorderRadius)),
+          borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius)),
           color: isSelected ? cPrimaryColor : Colors.transparent
         ),
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 16.0,
           horizontal: 12.0
         ),
@@ -40,7 +41,7 @@ class CalendarCard extends StatelessWidget{
                 color: isSelected ? Colors.white : customTheme.lightTextColor
               ),
             ),
-            SizedBox(height: 4.0),
+            const SizedBox(height: 4.0),
 
             Stack(
               alignment: Alignment.center,

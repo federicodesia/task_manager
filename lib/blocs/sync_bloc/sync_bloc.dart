@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
@@ -46,10 +47,10 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
     });
 
     on<BackgroundSyncRequested>((event, emit) => sync(event, emit),
-    transformer: debounceTransformer(Duration(seconds: 1)));
+    transformer: debounceTransformer(const Duration(seconds: 1)));
 
     on<SyncRequested>((event, emit) => sync(event, emit),
-    transformer: debounceTransformer(Duration(seconds: 5)));
+    transformer: debounceTransformer(const Duration(seconds: 5)));
 
     on<SyncReloadStateRequested>((event, emit) async{
       final json = event.json;
@@ -61,7 +62,7 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
   }
 
   Future<void> sync(SyncEvent event, Emitter<SyncState> emit) async{
-    print("Sync requested");
+    debugPrint("Sync requested");
 
     final taskState = taskBloc.state;
     final categoryState = categoryBloc.state;
@@ -81,14 +82,14 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
       failedItems: categoryState.failedCategories
     );
 
-    print("Sync | Enviando peticion a la API...");
-    await Future.delayed(Duration(seconds: 2));
+    debugPrint("Sync | Enviando peticion a la API...");
+    await Future.delayed(const Duration(seconds: 2));
     final responseItems = await syncRepository.sync(
       lastSync: state.lastSync,
       tasks: updatedTasks,
       categories: updatedCategories
     );
-    print("Sync | Respuesta de la API recibida...");
+    debugPrint("Sync | Respuesta de la API recibida...");
 
     if(responseItems != null){
 
@@ -145,12 +146,14 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
               replaceItems: replaceItems.item1
             );
 
-            if(mergedTasks != null) taskBloc.add(TaskStateUpdated(taskState.copyWith(
-              syncPushStatus: SyncStatus.idle,
-              tasks: mergedTasks.item1,
-              deletedTasks: mergedTasks.item2,
-              failedTasks: mergedTasks.item3
-            )));
+            if(mergedTasks != null) {
+              taskBloc.add(TaskStateUpdated(taskState.copyWith(
+                syncPushStatus: SyncStatus.idle,
+                tasks: mergedTasks.item1,
+                deletedTasks: mergedTasks.item2,
+                failedTasks: mergedTasks.item3
+              )));
+            }
           }
 
           if(replaceCategories.isNotEmpty){
@@ -161,12 +164,14 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
               replaceItems: replaceItems.item2
             );
 
-            if(mergedCategories != null) categoryBloc.add(CategoryStateUpdated(newCategoryState.copyWith(
-              syncPushStatus: SyncStatus.idle,
-              categories: mergedCategories.item1,
-              deletedCategories: mergedCategories.item2,
-              failedCategories: mergedCategories.item3
-            )));
+            if(mergedCategories != null) {
+              categoryBloc.add(CategoryStateUpdated(newCategoryState.copyWith(
+                syncPushStatus: SyncStatus.idle,
+                categories: mergedCategories.item1,
+                deletedCategories: mergedCategories.item2,
+                failedCategories: mergedCategories.item3
+              )));
+            }
           }
 
           emit(state.copyWith(lastSync: tempDate));
@@ -185,20 +190,22 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
   @override
   SyncState? fromJson(Map<String, dynamic> json) {
     try{
-      print("syncBloc fromJson");
+      debugPrint("syncBloc fromJson");
       return SyncState.fromJson(json);
     }
-    catch(error) {}
-    return null;
+    catch(error) {
+      return null;
+    }
   }
 
   @override
   Map<String, dynamic>? toJson(SyncState state) {
     try{
-      print("syncBloc toJson");
+      debugPrint("syncBloc toJson");
       return state.toJson();
     }
-    catch(error) {}
-    return null;
+    catch(error) {
+      return null;
+    }
   }
 }

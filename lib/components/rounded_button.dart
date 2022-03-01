@@ -14,6 +14,7 @@ class RoundedButton extends StatelessWidget{
   final void Function()? onPressed;
 
   const RoundedButton({
+    Key? key, 
     required this.child,
     this.color = cPrimaryColor,
     this.width = cButtonSize,
@@ -22,13 +23,13 @@ class RoundedButton extends StatelessWidget{
     this.borderRadius = cBorderRadius,
     this.padding = const EdgeInsets.all(cButtonPadding),
     required this.onPressed
-  });
+  }) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
     
-    return Container(
+    return SizedBox(
       width: !autoWidth ? width : null,
       height: height,
       child: ElevatedButton(

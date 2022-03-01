@@ -14,7 +14,11 @@ import 'package:task_manager/components/forms/small_form_svg.dart';
 class ForgotPasswordEmailVerificationScreen extends StatelessWidget {
 
   final String email;
-  ForgotPasswordEmailVerificationScreen({required this.email});
+
+  const ForgotPasswordEmailVerificationScreen({
+    Key? key,
+    required this.email
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +52,7 @@ class _ForgotPasswordEmailVerificationScreen extends StatelessWidget{
           description: context.l10n.emptySpace_verifyYourEmail_description,
           formChildren: [
 
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             VerificationCode(
               controller: codeController,
               textInputType: TextInputType.text,
@@ -66,7 +70,7 @@ class _ForgotPasswordEmailVerificationScreen extends StatelessWidget{
               );
 
               final nextState = await context.read<ForgotPasswordEmailVerificationCubit>().stream.first;
-              if(nextState.verified) AutoRouter.of(context).navigate(ForgotPasswordNewPasswordRoute());
+              if(nextState.verified) AutoRouter.of(context).navigate(const ForgotPasswordNewPasswordRoute());
             }
             catch(_){}
           },
