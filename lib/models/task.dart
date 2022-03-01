@@ -48,8 +48,8 @@ class Task extends Equatable{
       description: description,
       date: date,
       isCompleted: isCompleted,
-      createdAt: copyDateTimeWith(DateTime.now(), microsecond: 0),
-      updatedAt: copyDateTimeWith(DateTime.now(), microsecond: 0)
+      createdAt: DateTime.now().copyWith(microsecond: 0),
+      updatedAt: DateTime.now().copyWith(microsecond: 0)
     );
   }
 
@@ -70,7 +70,7 @@ class Task extends Equatable{
       date: date ?? this.date,
       isCompleted: isCompleted ?? this.isCompleted,
       createdAt: createdAt,
-      updatedAt: copyDateTimeWith(DateTime.now(), microsecond: 0),
+      updatedAt: DateTime.now().copyWith(microsecond: 0),
       deletedAt: deletedAt ?? this.deletedAt
     );
   }

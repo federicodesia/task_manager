@@ -41,8 +41,8 @@ class Category extends Equatable{
       id: isGeneral ? null : const Uuid().v4(),
       name: name,
       color: color,
-      createdAt: copyDateTimeWith(DateTime.now(), microsecond: 0),
-      updatedAt: copyDateTimeWith(DateTime.now(), microsecond: 0)
+      createdAt: DateTime.now().copyWith(microsecond: 0),
+      updatedAt: DateTime.now().copyWith(microsecond: 0)
     );
   }
 
@@ -57,7 +57,7 @@ class Category extends Equatable{
       name: name ?? this.name,
       color: color ?? this.color,
       createdAt: createdAt,
-      updatedAt: copyDateTimeWith(DateTime.now(), microsecond: 0),
+      updatedAt: DateTime.now().copyWith(microsecond: 0),
       deletedAt: deletedAt ?? this.deletedAt
     );
   }

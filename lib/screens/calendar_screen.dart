@@ -37,7 +37,7 @@ class CalendarScreen extends StatelessWidget {
         BlocProvider(create: (_) => CalendarBloc(taskBloc: context.read<TaskBloc>())..add(CalendarLoaded(
           startMonth: DateTime(DateTime.now().year, DateTime.now().month - 1),
           endMonth: DateTime(DateTime.now().year, DateTime.now().month + 2),
-          selectedDate: getDate(DateTime.now())
+          selectedDate: DateTime.now().ignoreTime
         ))),
       ],
       child: _CalendarScreen()
@@ -137,7 +137,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                     onChanged: (date){
                                       int previousIndex = scrollController.offset ~/ tabWidth!;
                                       int previousLenght = calendarState.days.length;
-                                      int nowLenght = daysInMonth(date);
+                                      int nowLenght = date.daysInMonth;
                                       BlocProvider.of<CalendarBloc>(context).add(CalendarMonthUpdated(date));
                                       
                                       int index;

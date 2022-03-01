@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:task_manager/helpers/enum_helper.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 
 class AccessTokenInterceptor extends Interceptor {
@@ -67,7 +66,7 @@ class AccessTokenInterceptor extends Interceptor {
     try{
       final token = options.headers["Authorization"].toString().split(" ").last;
       final type = JwtDecoder.decode(token)["type"];
-      if(enumFromString(TokenType.values, type) == TokenType.access) return token;
+      if(TokenType.values.byName(type) == TokenType.access) return token;
     }
     catch(_) {}
     return null;

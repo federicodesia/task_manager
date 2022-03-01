@@ -29,7 +29,7 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
   
   @override
   void initState() {
-    int initialPage = monthList.indexOf(copyDateTimeWith(getDate(widget.initialMonth), day: 1));
+    int initialPage = monthList.indexOf(widget.initialMonth.ignoreTime.copyWith(day: 1));
     initialPage = initialPage != -1 ? initialPage : 0;
 
     currentPage = initialPage.toDouble();

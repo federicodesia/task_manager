@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:task_manager/helpers/enum_helper.dart';
 
 part 'auth_credentials.g.dart';
 
@@ -40,7 +39,7 @@ class AuthCredentials{
     if(accessToken != ""){
       try{
         final String type = JwtDecoder.decode(accessToken)["type"];
-        return enumFromString(TokenType.values, type);
+        return TokenType.values.byName(type);
       }
       catch(_){}
     }

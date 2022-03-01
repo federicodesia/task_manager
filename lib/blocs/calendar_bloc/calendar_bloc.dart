@@ -78,7 +78,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   }
 
   List<DynamicObject> _getGroupsByDate(List<Task> tasks, DateTime date){
-    List<Task> _tasks = tasks.where((task) => dateDifference(task.date, date) == 0).toList();
+    List<Task> _tasks = tasks.where((task) => task.date.dateDifference(date) == 0).toList();
     _tasks.sort((a, b) => a.date.compareTo(b.date));
 
     List<DynamicObject> groups = [];
@@ -100,7 +100,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
 
   List<DateTime> _getDaysOfMonth(DateTime date){
     List<DateTime> days = [];
-    for(int i = 0; i < daysInMonth(date); i++){
+    for(int i = 0; i < date.daysInMonth; i++){
       days.add(DateTime(date.year, date.month, i + 1));
     }
     return days;

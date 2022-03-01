@@ -144,11 +144,10 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                                     hours: time != null ? time!.hour : DateTime.now().hour,
                                     minutes: time != null ? time!.minute : DateTime.now().minute,
                                   ),
-                                  onTimeChanged: (duration) => time = copyDateTimeWith(
-                                    time != null ? time! : DateTime.now(),
+                                  onTimeChanged: (duration) => time = DateTime.now().copyWith(
                                     hour: duration.inHours,
                                     minute: duration.inMinutes.remainder(60)
-                                  ),
+                                  )
                                 )
                               ).show();
                             }
@@ -239,27 +238,28 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                 if(formKey.currentState!.validate()){
                   formKey.currentState!.save();
 
-                  final dateTime = copyDateTimeWith(
-                    date!,
-                    hour: time!.hour,
-                    minute: time!.minute,
+                  final dateTime = date?.copyWith(
+                    hour: time?.hour,
+                    minute: time?.minute,
                   );
 
-                  if(editTask != null) {
-                    context.read<TaskBloc>().add(TaskUpdated(editTask!.copyWith(
-                      categoryId: categoryId,
-                      title: title,
-                      description: description,
-                      date: dateTime
-                    )));
-                  }
-                  else {
-                    context.read<TaskBloc>().add(TaskAdded(Task.create(
-                      categoryId: categoryId,
-                      title: title,
-                      description: description,
-                      date: dateTime
-                    )));
+                  if(dateTime != null){
+                    if(editTask != null) {
+                      context.read<TaskBloc>().add(TaskUpdated(editTask!.copyWith(
+                        categoryId: categoryId,
+                        title: title,
+                        description: description,
+                        date: dateTime
+                      )));
+                    }
+                    else {
+                      context.read<TaskBloc>().add(TaskAdded(Task.create(
+                        categoryId: categoryId,
+                        title: title,
+                        description: description,
+                        date: dateTime
+                      )));
+                    }
                   }
                   
                   Navigator.pop(context);

@@ -70,15 +70,15 @@ class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> 
     if(tasks.isNotEmpty){
       tasks.sort((a, b) => a.date.compareTo(b.date));
 
-      DateTime lastDateTime = getDate(tasks.first.date);
+      DateTime lastDateTime = tasks.first.date.ignoreTime;
       items.add(DynamicObject(object: lastDateTime));
 
       for(int i = 0; i < tasks.length; i++){
         Task task = tasks[i];
-        if(dateDifference(task.date, lastDateTime) == 0) {
+        if(task.date.dateDifference(lastDateTime) == 0) {
           items.add(DynamicObject(object: task));
         } else{
-          lastDateTime = getDate(task.date);
+          lastDateTime = task.date.ignoreTime;
           items.add(DynamicObject(object: lastDateTime));
           items.add(DynamicObject(object: task));
         }

@@ -54,7 +54,7 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
   > _getWeekData(List<Task> tasks){
 
     final now = DateTime.now();
-    final startOfWeek = getDate(now.subtract(Duration(days: now.weekday - 1)));
+    final startOfWeek = now.subtract(Duration(days: now.weekday - 1)).ignoreTime;
     
     int weekCompletedTasksCount = 0;
     int weekRemainingTasksCount = 0;
@@ -62,8 +62,8 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
     Map<DateTime, int> completedWeekTasks = {};
 
     for(int i = 0; i < DateTime.daysPerWeek; i++){
-      final weekday = getDate(startOfWeek.add(Duration(days: i)));
-      final weekdayTasks = tasks.where((task) => dateDifference(task.date, weekday) == 0);
+      final weekday = startOfWeek.add(Duration(days: i)).ignoreTime;
+      final weekdayTasks = tasks.where((task) => task.date.dateDifference(weekday) == 0);
       final weekdayTasksCount = weekdayTasks.length;
 
       final weekdayCompletedTasks = weekdayTasks.where((task) => task.isCompleted);
@@ -88,24 +88,24 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
     List<DynamicObject> items = [];
 
     DateTime now = DateTime.now();
-    tasks = tasks.where((task) => dateDifference(task.date, now) >= 1).toList();
+    tasks = tasks.where((task) => task.date.dateDifference(now) >= 1).toList();
     tasks.sort((a, b) => a.date.compareTo(b.date));
 
     if(tasks.isNotEmpty){
 
       int dateTimeCount = 1;
-      DateTime lastDateTime = getDate(tasks.first.date);
+      DateTime lastDateTime = tasks.first.date.ignoreTime;
       items.add(DynamicObject(object: lastDateTime));
 
       for(int i = 0; i < tasks.length; i++){
         Task task = tasks[i];
-        if(dateDifference(task.date, lastDateTime) == 0) {
+        if(task.date.dateDifference(lastDateTime) == 0) {
           items.add(DynamicObject(object: task));
         }
         else if(dateTimeCount == 3) {
           break;
         } else{
-          lastDateTime = getDate(task.date);
+          lastDateTime = task.date.ignoreTime;
           items.add(DynamicObject(object: lastDateTime));
           items.add(DynamicObject(object: task));
           dateTimeCount++;
