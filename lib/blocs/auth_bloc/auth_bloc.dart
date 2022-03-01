@@ -22,7 +22,9 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
   FlutterSecureStorage secureStorage = FlutterSecureStorage();
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+
   late StreamSubscription firebaseMessagingTokenSubscription;
+  late StreamSubscription firebaseForegroundMessagesSubscription;
 
   AuthBloc({
     required this.authRepository,
@@ -33,6 +35,15 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       if(state.credentials.isNotEmpty){
         print("FirebaseMessagingTokenSubscription: $token");
         await authRepository.setFirebaseMessagingToken(token: token);
+      }
+    });
+    
+    firebaseForegroundMessagesSubscription = FirebaseMessaging.onMessage.listen((message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
       }
     });
 
@@ -137,6 +148,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   @override
   Future<void> close() {
     firebaseMessagingTokenSubscription.cancel();
+    firebaseForegroundMessagesSubscription.cancel();
     return super.close();
   }
 

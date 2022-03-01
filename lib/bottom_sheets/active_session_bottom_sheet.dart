@@ -1,11 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/components/forms/form_input_header.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/active_session.dart';
 import 'package:task_manager/theme/theme.dart';
@@ -19,7 +20,6 @@ class ActiveSessionBottomSheet extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
-    final dateFormat = DateFormat("yyyy/MM/dd HH:mm");
 
     final geoLocation = activeSession.geoLocation;
     final lat = geoLocation?.lat;
@@ -43,14 +43,14 @@ class ActiveSessionBottomSheet extends StatelessWidget{
           ),
 
           Text(
-            "${context.l10n.loginDate}: ${dateFormat.format(activeSession.createdAt)}",
+            "${context.l10n.loginDate}: ${activeSession.createdAt.formatLocalization(context, format: "d MMM y HH:mm a")}",
             style: customTheme.lightTextStyle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
 
           Text(
-            "${context.l10n.lastActivity}: ${dateFormat.format(activeSession.lastTimeOfUse)}",
+            "${context.l10n.lastActivity}: ${activeSession.lastTimeOfUse.formatLocalization(context, format: "d MMM y HH:mm a")}",
             style: customTheme.lightTextStyle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -69,6 +69,7 @@ class ActiveSessionBottomSheet extends StatelessWidget{
                 ),
                 layers: [
                   TileLayerOptions(
+                    tileProvider: CachedTileProvider(),
                     urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                     subdomains: ['a', 'b', 'c'],
 
@@ -162,5 +163,16 @@ class InvertColors extends StatelessWidget {
       ]),
       child: child,
     ) : child;
+  }
+}
+
+class CachedTileProvider extends TileProvider {
+  const CachedTileProvider();
+  
+  @override
+  ImageProvider getImage(Coords<num> coords, TileLayerOptions options) {
+    return CachedNetworkImageProvider(
+      getTileUrl(coords, options),
+    );
   }
 }
