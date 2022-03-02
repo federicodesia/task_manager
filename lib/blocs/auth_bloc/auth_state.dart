@@ -5,7 +5,6 @@ enum AuthStatus { loading, unauthenticated, waitingVerification, authenticated }
 @JsonSerializable()
 class AuthState {
 
-  @JsonKey(ignore: true)
   final AuthStatus status;
   @JsonKey(ignore: true)
   final AuthCredentials credentials;

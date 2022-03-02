@@ -188,7 +188,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
 
                                           // TODO: Add plans
                                           CircularPercentIndicator(
-                                            radius: 56.0,
+                                            radius: 32.0,
                                             lineWidth: cLineSize,
                                             animation: true,
                                             animateFromLastPercent: true,

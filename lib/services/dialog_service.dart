@@ -5,10 +5,14 @@ import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class DialogService {
-  final GlobalKey<NavigatorState> navigatoryKey = GlobalKey<NavigatorState>();
+
+  GlobalKey<NavigatorState>? _navigatorKey;
+  void init(GlobalKey<NavigatorState> key) => _navigatorKey = key;
+
+  BuildContext? get _getCurrentContext => _navigatorKey?.currentContext;
 
   void showNoInternetConnectionDialog() {
-    final context = navigatoryKey.currentContext;
+    final context = _getCurrentContext;
 
     if(context != null){
       final customTheme = Theme.of(context).customTheme;
@@ -36,7 +40,7 @@ class DialogService {
   }
 
   void showSomethingWentWrongDialog(){
-    final context = navigatoryKey.currentContext;
+    final context = _getCurrentContext;
 
     if(context != null){
       final customTheme = Theme.of(context).customTheme;

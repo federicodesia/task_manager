@@ -24,22 +24,19 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
-  late StreamSubscription firebaseMessagingTokenSubscription;
-  late StreamSubscription firebaseForegroundMessagesSubscription;
+  late StreamSubscription messagingTokenSubscription;
+  late StreamSubscription foregroundMessagesSubscription;
 
   AuthBloc({
     required this.authRepository,
     required this.userRepository
   }) : super(AuthState()){
 
-    firebaseMessagingTokenSubscription = firebaseMessaging.onTokenRefresh.listen((token) async {
-      if(state.credentials.isNotEmpty){
-        debugPrint("FirebaseMessagingTokenSubscription: $token");
-        await authRepository.setFirebaseMessagingToken(token: token);
-      }
+    messagingTokenSubscription = firebaseMessaging.onTokenRefresh.listen((token) async {
+      await authRepository.setFirebaseMessagingToken(token);
     });
     
-    firebaseForegroundMessagesSubscription = FirebaseMessaging.onMessage.listen((message) {
+    foregroundMessagesSubscription = FirebaseMessaging.onMessage.listen((message) {
       debugPrint('Got a message whilst in the foreground!');
       debugPrint('Message data: ${message.data}');
 
@@ -60,60 +57,38 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
         )
       ));
 
-      final credentials = state.credentials;
-      if(credentials.isNotEmpty){
-        
-        final response = await authRepository.accessToken(
-          authCredentials: credentials,
-          ignoreKeys: ["Unauthorized"]
-        );
-        if(response != null){
-          add(AuthCredentialsChanged(credentials: response));
-
-          await firebaseMessaging.getToken().then((token) async{
-            debugPrint("FirebaseMessagingToken: $token");
-            if(token != null) await authRepository.setFirebaseMessagingToken(token: token);
-          });
-        }
-        else {
-          add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
-        }
-      }
-      else {
-        Future.delayed(const Duration(seconds: 1), () {
-        add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
-      });
-      }
+      final credentials = await authRepository.accessToken(authCredentials: state.credentials);
+      if(credentials != null) add(AuthCredentialsChanged(credentials: credentials));
     });
     
     on<AuthCredentialsChanged>((event, emit) async{
+      final previousStatus = state.status;
       final credentials = event.credentials;
 
-      if(credentials.isEmpty) {
+      if(credentials.isEmpty || credentials.accessTokenType != TokenType.access){
+        // Unauthenticated
         secureStorage.deleteAll();
-      } else{
+        emit(AuthState(status: AuthStatus.unauthenticated));
+      }
+      else{
         secureStorage.write(key: "refreshToken", value: credentials.refreshToken);
         secureStorage.write(key: "accessToken", value: credentials.accessToken);
-      }
 
-      emit(state.copyWith(
-        credentials: credentials,
-        status: credentials.isNotEmpty
-          ? credentials.accessTokenType == TokenType.access
-            ? credentials.isVerified
-              ? AuthStatus.authenticated
-              : AuthStatus.waitingVerification
-            : AuthStatus.unauthenticated
-          : AuthStatus.unauthenticated
-      ));
+        emit(state.copyWith(
+          credentials: credentials,
+          status: credentials.isVerified
+            ? AuthStatus.authenticated
+            : AuthStatus.waitingVerification
+        ));
 
-      if(credentials.accessTokenType == TokenType.access && credentials.isVerified){
-        final response = await userRepository.getUser();
-        if(response != null) {
-          response.when(
-            left: (error) {},
-            right: (user) => emit(state.copyWith(user: user))
-          );
+        if(previousStatus != AuthStatus.authenticated
+          && state.status == AuthStatus.authenticated){
+          // Authenticated
+          final messagingToken = await firebaseMessaging.getToken();
+          if(messagingToken != null) await authRepository.setFirebaseMessagingToken(messagingToken);
+
+          final user = await userRepository.getUser();
+          if(user != null) emit(state.copyWith(user: user));
         }
       }
     });
@@ -159,8 +134,8 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
   @override
   Future<void> close() {
-    firebaseMessagingTokenSubscription.cancel();
-    firebaseForegroundMessagesSubscription.cancel();
+    messagingTokenSubscription.cancel();
+    foregroundMessagesSubscription.cancel();
     return super.close();
   }
 
@@ -182,6 +157,5 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     catch(error) {
       return null;
     }
-    
   }
 }

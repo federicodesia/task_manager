@@ -42,7 +42,7 @@ class AppRouter extends _i2.RootStackRouter {
   final Map<String, _i2.PageFactory> pagesMap = {
     SplashRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i1.SplashScreen());
+          routeData: routeData, child: const _i1.SplashScreen());
     },
     WelcomeRouter.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
@@ -50,77 +50,80 @@ class AppRouter extends _i2.RootStackRouter {
     },
     EmailVerificationRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i3.EmailVerificationScreen());
+          routeData: routeData, child: const _i3.EmailVerificationScreen());
     },
     MainRouter.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i4.MainRouteWrapper());
+          routeData: routeData, child: const _i4.MainRouteWrapper());
     },
     WelcomeRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i5.WelcomeScreen());
+          routeData: routeData, child: const _i5.WelcomeScreen());
     },
     LoginRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i6.LoginScreen());
+          routeData: routeData, child: const _i6.LoginScreen());
     },
     RegisterRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i7.RegisterScreen());
+          routeData: routeData, child: const _i7.RegisterScreen());
     },
     ForgotPasswordRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i8.ForgotPasswordScreen());
+          routeData: routeData, child: const _i8.ForgotPasswordScreen());
     },
     ForgotPasswordEmailVerificationRoute.name: (routeData) {
       final args = routeData.argsAs<ForgotPasswordEmailVerificationRouteArgs>();
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i9.ForgotPasswordEmailVerificationScreen(email: args.email));
+          child: _i9.ForgotPasswordEmailVerificationScreen(
+              key: args.key, email: args.email));
     },
     ForgotPasswordNewPasswordRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i10.ForgotPasswordNewPasswordScreen());
+          routeData: routeData,
+          child: const _i10.ForgotPasswordNewPasswordScreen());
     },
     MainRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i11.MainScreen());
+          routeData: routeData, child: const _i11.MainScreen());
     },
     SecurityRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i12.SecurityScreen());
+          routeData: routeData, child: const _i12.SecurityScreen());
     },
     ChangePasswordRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i13.ChangePasswordScreen());
+          routeData: routeData, child: const _i13.ChangePasswordScreen());
     },
     ChangeEmailRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i14.ChangeEmailScreen());
+          routeData: routeData, child: const _i14.ChangeEmailScreen());
     },
     ChangeEmailVerificationRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i15.ChangeEmailVerificationScreen());
+          routeData: routeData,
+          child: const _i15.ChangeEmailVerificationScreen());
     },
     NotificationsRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i16.NotificationsScreen());
+          routeData: routeData, child: const _i16.NotificationsScreen());
     },
     ProfileRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i17.ProfileScreen());
+          routeData: routeData, child: const _i17.ProfileScreen());
     },
     HomeRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i18.HomeScreen());
+          routeData: routeData, child: const _i18.HomeScreen());
     },
     CalendarRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i19.CalendarScreen());
+          routeData: routeData, child: const _i19.CalendarScreen());
     },
     SettingsRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i20.SettingsScreen());
+          routeData: routeData, child: const _i20.SettingsScreen());
     }
   };
 
@@ -252,22 +255,26 @@ class ForgotPasswordRoute extends _i2.PageRouteInfo<void> {
 /// [_i9.ForgotPasswordEmailVerificationScreen]
 class ForgotPasswordEmailVerificationRoute
     extends _i2.PageRouteInfo<ForgotPasswordEmailVerificationRouteArgs> {
-  ForgotPasswordEmailVerificationRoute({required String email})
+  ForgotPasswordEmailVerificationRoute({_i21.Key? key, required String email})
       : super(ForgotPasswordEmailVerificationRoute.name,
             path: 'forgot-password-email-verification-screen',
-            args: ForgotPasswordEmailVerificationRouteArgs(email: email));
+            args: ForgotPasswordEmailVerificationRouteArgs(
+                key: key, email: email));
 
   static const String name = 'ForgotPasswordEmailVerificationRoute';
 }
 
 class ForgotPasswordEmailVerificationRouteArgs {
-  const ForgotPasswordEmailVerificationRouteArgs({required this.email});
+  const ForgotPasswordEmailVerificationRouteArgs(
+      {this.key, required this.email});
+
+  final _i21.Key? key;
 
   final String email;
 
   @override
   String toString() {
-    return 'ForgotPasswordEmailVerificationRouteArgs{email: $email}';
+    return 'ForgotPasswordEmailVerificationRouteArgs{key: $key, email: $email}';
   }
 }
 

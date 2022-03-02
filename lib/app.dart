@@ -15,26 +15,8 @@ import 'package:task_manager/services/locator_service.dart';
 import 'package:task_manager/theme/theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final navigatoryKey = locator<DialogService>().navigatoryKey;
-  late final AppRouter _appRouter = AppRouter(navigatoryKey);
-
-  @override
-  void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((_){
-      final context = navigatoryKey.currentContext;
-      if(context != null) locator<ContextService>().setContext(context);
-    });
-    
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,48 +34,74 @@ class _MyAppState extends State<MyApp> {
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
               userRepository: context.read<UserRepository>()
-            )..add(AuthLoaded()),
+            ),
           ),
         ],
-        child: BlocBuilder<SettingsBloc, SettingsState>(
-          builder: (context, settings) {
-
-            return BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, authState) {
-
-                final authStatus = authState.status;
-
-                return MaterialApp.router(
-                  theme: lightThemeData,
-                  darkTheme: darkThemeData,
-                  themeMode: settings.themeMode,
-
-                  routerDelegate: AutoRouterDelegate.declarative(
-                    _appRouter,
-                    routes: (_) => [
-                      if(authStatus == AuthStatus.loading) const SplashRoute()
-                      else if(authStatus == AuthStatus.waitingVerification) const EmailVerificationRoute()
-                      else if(authStatus == AuthStatus.authenticated) const MainRouter()
-                      else const WelcomeRouter()
-                    ],
-                  ),
-                  routeInformationParser: _appRouter.defaultRouteParser(includePrefixMatches: true),
-                  debugShowCheckedModeBanner: false,
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    LocaleNamesLocalizationsDelegate(),
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  locale: settings.locale
-                );
-              },
-            );
-          }
-        ),
+        child: _MyApp()
       )
+    );
+  }
+}
+
+class _MyApp extends StatefulWidget {
+
+  @override
+  State<_MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<_MyApp>{
+
+  final navigatorKey = GlobalKey<NavigatorState>();
+  late final AppRouter appRouter = AppRouter(navigatorKey);
+
+  @override
+  void initState() {
+    locator<ContextService>().init(context);
+    locator<DialogService>().init(navigatorKey);
+    context.read<AuthBloc>().add(AuthLoaded());
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SettingsBloc, SettingsState>(
+      builder: (context, settings) {
+
+        return BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, authState) {
+
+            final authStatus = authState.status;
+
+            return MaterialApp.router(
+              theme: lightThemeData,
+              darkTheme: darkThemeData,
+              themeMode: settings.themeMode,
+
+              routerDelegate: AutoRouterDelegate.declarative(
+                appRouter,
+                routes: (_) => [
+                  if(authStatus == AuthStatus.loading) const SplashRoute()
+                  else if(authStatus == AuthStatus.waitingVerification) const EmailVerificationRoute()
+                  else if(authStatus == AuthStatus.authenticated) const MainRouter()
+                  else const WelcomeRouter()
+                ],
+              ),
+              routeInformationParser: appRouter.defaultRouteParser(includePrefixMatches: true),
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                LocaleNamesLocalizationsDelegate(),
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: settings.locale
+            );
+          },
+        );
+      }
     );
   }
 }

@@ -78,7 +78,7 @@ class ProgressSummary extends StatelessWidget{
             const SizedBox(width: 16.0),
 
             CircularPercentIndicator(
-              radius: 56.0,
+              radius: 32.0,
               lineWidth: cLineSize,
               animation: true,
               animateFromLastPercent: true,
