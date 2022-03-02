@@ -10,16 +10,16 @@ import 'package:task_manager/services/locator_service.dart';
 
 class BaseRepository{
 
-  late BaseOptions baseOptions = BaseOptions(
+  late final BaseOptions _baseOptions = BaseOptions(
     baseUrl: "https://yusuf007r.dev/task-manager/",
     connectTimeout: 5000,
     receiveTimeout: 3000,
   );
 
-  late FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  late final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
-  late AuthBloc? authBloc = getAuthBloc;
-  AuthBloc? get getAuthBloc{
+  late final AuthBloc? _authBloc = _getAuthBloc;
+  AuthBloc? get _getAuthBloc{
     try{
       final context = locator<ContextService>().context;
       if(context != null) return BlocProvider.of<AuthBloc>(context);
@@ -28,56 +28,73 @@ class BaseRepository{
     return null;
   }
 
-  Future<String?> getRefreshToken() async{
+  Future<String?> _getRefreshToken() async{
     try{
-      if(authBloc != null) return authBloc!.state.credentials.refreshToken;
-      return await secureStorage.read(key: "refreshToken");
+      if(_authBloc != null) return _authBloc?.state.credentials.refreshToken;
+      return await _secureStorage.read(key: "refreshToken");
     }
     catch(_){ }
     return null;
   }
 
-  Future<String?> getAccessToken() async{
+  Future<String?> _getAccessToken() async{
     try{
-      if(authBloc != null) return authBloc!.state.credentials.accessToken;
-      return await secureStorage.read(key: "accessToken");
+      if(_authBloc != null) return _authBloc?.state.credentials.accessToken;
+      return await _secureStorage.read(key: "accessToken");
     }
     catch(_){}
     return null;
   }
 
-  void onAuthCredentialsChanged(AuthCredentials credentials){
+  Future<String?> _getPasswordToken() async{
     try{
-      if(authBloc != null) {
-        authBloc!.add(AuthCredentialsChanged(credentials: credentials));
+      if(_authBloc != null) return _authBloc?.state.credentials.passwordToken;
+      return await _secureStorage.read(key: "passwordToken");
+    }
+    catch(_){}
+    return null;
+  }
+
+  void _onAuthCredentialsChanged(AuthCredentials credentials){
+    try{
+      if(_authBloc != null) {
+        _authBloc!.add(AuthCredentialsChanged(credentials: credentials));
       } else{
-        secureStorage.write(key: "refreshToken", value: credentials.refreshToken);
-        secureStorage.write(key: "accessToken", value: credentials.accessToken);
+        _secureStorage.write(key: "refreshToken", value: credentials.refreshToken);
+        _secureStorage.write(key: "accessToken", value: credentials.accessToken);
       }
     }
     catch(_){}
   }
   
-  late Dio dio = Dio(baseOptions);
+  late Dio dio = Dio(_baseOptions);
 
-  late final Dio _dioRefreshToken = Dio(baseOptions)..interceptors.add(RefreshTokenInterceptor(
-    onAuthCredentialsChanged: (credentials) => onAuthCredentialsChanged(credentials)
+  late final Dio _dioRefreshToken = Dio(_baseOptions)..interceptors.add(RefreshTokenInterceptor(
+    onAuthCredentialsChanged: (credentials) => _onAuthCredentialsChanged(credentials)
   ));
   Future<Dio> dioRefreshToken() async{
-    final _refreshToken = await getRefreshToken() ?? "";
+    final _refreshToken = await _getRefreshToken() ?? "";
     return _dioRefreshToken..options.headers = {
       "Authorization": "Bearer " + _refreshToken
     };
   }
 
-  late final Dio _dioAccessToken = Dio(baseOptions)..interceptors.add(AccessTokenInterceptor(
-    getRefreshToken: () => getRefreshToken(),
-    onAuthCredentialsChanged: (credentials) => onAuthCredentialsChanged(credentials)
+  late final Dio _dioAccessToken = Dio(_baseOptions)..interceptors.add(AccessTokenInterceptor(
+    getRefreshToken: () => _getRefreshToken(),
+    onAuthCredentialsChanged: (credentials) => _onAuthCredentialsChanged(credentials)
   ));
   Future<Dio> dioAccessToken() async{
-    final _accessToken = await getAccessToken() ?? "";
+    final _accessToken = await _getAccessToken() ?? "";
     return _dioAccessToken..options.headers = {
       "Authorization": "Bearer " + _accessToken
+    };
+  }
+
+  late final Dio _dioPasswordToken = Dio(_baseOptions);
+  Future<Dio> dioPasswordToken() async{
+    final _passwordToken = await _getPasswordToken() ?? "";
+    return _dioPasswordToken..options.headers = {
+      "Authorization": "Bearer " + _passwordToken
     };
   }
 }

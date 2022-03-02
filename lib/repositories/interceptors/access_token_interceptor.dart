@@ -31,7 +31,7 @@ class AccessTokenInterceptor extends Interceptor {
       catch(_) {}
 
       final token = _getAccessToken(options);
-      if(token != null){
+      if(token.isNotEmpty){
         final remainingTime = JwtDecoder.getRemainingTime(token);
         final timeout = options.sendTimeout + options.connectTimeout + options.receiveTimeout;
         if(remainingTime.inMilliseconds < timeout){
@@ -50,7 +50,7 @@ class AccessTokenInterceptor extends Interceptor {
     final options = err.requestOptions;
 
     try{
-      if(_getAccessToken(options) != null){
+      if(_getAccessToken(options).isNotEmpty){
         final statusCode = err.response?.statusCode;
         if(statusCode == 401 || statusCode == 403){
           final cloneRequest = await _retry(options);
@@ -62,14 +62,8 @@ class AccessTokenInterceptor extends Interceptor {
     return super.onError(err, handler);
   }
 
-  String? _getAccessToken(RequestOptions options){
-    try{
-      final token = options.headers["Authorization"].toString().split(" ").last;
-      final type = JwtDecoder.decode(token)["type"];
-      if(TokenType.values.byName(type) == TokenType.access) return token;
-    }
-    catch(_) {}
-    return null;
+  String _getAccessToken(RequestOptions options){
+    return options.headers["Authorization"].toString().split(" ").last;
   }
 
   Future<Response<dynamic>?> _retry(RequestOptions options) async{
@@ -85,8 +79,7 @@ class AccessTokenInterceptor extends Interceptor {
         })
       );
 
-      final authCredentials = AuthCredentials(
-        refreshToken: refreshToken,
+      final authCredentials = AuthCredentials.empty.copyWith(
         accessToken: response.data["accessToken"]
       );
 

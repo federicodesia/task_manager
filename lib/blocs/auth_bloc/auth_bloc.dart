@@ -46,26 +46,45 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     });
 
     on<AuthLoaded>((event, emit) async{
-
       final String? refreshToken = await secureStorage.read(key: "refreshToken");
       final String? accessToken = await secureStorage.read(key: "accessToken");
+      final String? passwordToken = await secureStorage.read(key: "passwordToken");
 
       emit(state.copyWith(
         credentials: state.credentials.copyWith(
           refreshToken: refreshToken,
-          accessToken: accessToken
+          accessToken: accessToken,
+          passwordToken: passwordToken
         )
       ));
 
-      final credentials = await authRepository.accessToken(authCredentials: state.credentials);
-      if(credentials != null) add(AuthCredentialsChanged(credentials: credentials));
+      final credentials = state.credentials;
+      if(credentials.isNotEmpty){
+
+        final response = await authRepository.accessToken(
+          authCredentials: credentials,
+          ignoreStatusCodes: [ 401, 403 ]
+        );
+        if(response != null) {
+          response.when(
+            left: (responseMessage) {
+              if(responseMessage.containsAnyStatusCodes([ 401, 403 ])){
+                add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+              }
+            },
+            right: (credentials) {
+              add(AuthCredentialsChanged(credentials: credentials));
+            }
+          );
+        }
+      }
     });
     
     on<AuthCredentialsChanged>((event, emit) async{
       final previousStatus = state.status;
       final credentials = event.credentials;
 
-      if(credentials.isEmpty || credentials.accessTokenType != TokenType.access){
+      if(credentials.isEmpty){
         // Unauthenticated
         secureStorage.deleteAll();
         emit(AuthState(status: AuthStatus.unauthenticated));
@@ -73,6 +92,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       else{
         secureStorage.write(key: "refreshToken", value: credentials.refreshToken);
         secureStorage.write(key: "accessToken", value: credentials.accessToken);
+        secureStorage.write(key: "passwordToken", value: credentials.passwordToken);
 
         emit(state.copyWith(
           credentials: credentials,

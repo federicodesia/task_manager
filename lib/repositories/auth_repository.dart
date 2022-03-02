@@ -61,20 +61,21 @@ class AuthRepository{
     }
   }
 
-  Future<AuthCredentials?> accessToken({
+  Future<Either<ResponseMessage, AuthCredentials>?> accessToken({
     required AuthCredentials authCredentials,
-    List<String>? ignoreKeys
+    List<int>? ignoreStatusCodes
   }) async {
 
     try{
       final dio = await base.dioRefreshToken();
       final response = await dio.get("/auth/access-token");
-      return authCredentials.copyWith(accessToken: response.data["accessToken"]);
+      return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
     }
     catch (error){
-      await ResponseError.validate(error, ignoreKeys);
+      final responseMessage = await ResponseError.validate(error, null, ignoreStatusCodes: ignoreStatusCodes);
+      if(responseMessage != null) return Left(responseMessage);
+      return null;
     }
-    return null;
   }
 
   Future<void> logout() async {
@@ -143,10 +144,21 @@ class AuthRepository{
 
       if(error is DioError){
         try{
-          final responseMessages = ResponseMessage(error.response?.data["message"]);
+          final responseMessages = ResponseMessage(
+            statusCode: error.response?.statusCode,
+            responseMessage: error.response?.data["message"]
+          );
+
           if(responseMessages.contains("user already verified")){
             final response = await accessToken(authCredentials: authCredentials);
-            if(response != null) return Right(authCredentials.copyWith(accessToken: response.accessToken));
+            if(response != null) {
+              response.when(
+                left: (responseMessage) {},
+                right: (credentials){
+                  return Right(authCredentials.copyWith(accessToken: credentials.accessToken));
+                }
+              );
+            }
           }
         }
         catch(_){}
@@ -194,9 +206,8 @@ class AuthRepository{
           "code": code
         },
       );
-      return Right(AuthCredentials(
-        refreshToken: "",
-        accessToken: response.data["accessToken"]
+      return Right(AuthCredentials.empty.copyWith(
+        passwordToken: response.data["accessToken"]
       ));
     }
     catch (error){
@@ -212,7 +223,7 @@ class AuthRepository{
   }) async {
 
     try{
-      final dio = await base.dioAccessToken();
+      final dio = await base.dioPasswordToken();
       await dio.post(
         "/auth/change-forgot-password",
         data: {

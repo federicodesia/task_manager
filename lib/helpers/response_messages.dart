@@ -3,8 +3,12 @@ import 'package:collection/collection.dart';
 class ResponseMessage{
   List<String> _messageList = [];
 
+  final int? statusCode;
   final dynamic responseMessage;
-  ResponseMessage(this.responseMessage){
+  ResponseMessage({
+    required this.responseMessage,
+    required this.statusCode
+  }){
 
     if(responseMessage is List<dynamic>){
       _messageList = responseMessage
@@ -27,4 +31,6 @@ class ResponseMessage{
     _messageList.firstWhereOrNull((m) => m.contains(key.toLowerCase()) && !m.contains(ignore.toLowerCase()));
 
   bool checkFunction(bool Function(String) function) => _messageList.any((m) => function(m));
+
+  bool containsAnyStatusCodes(List<int> statusCodes) => statusCodes.any((s) => statusCode == s);
 }

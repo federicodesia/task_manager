@@ -9,7 +9,10 @@ abstract class ResponseError{
   static Future<ResponseMessage?> validate(
     Object error,
     List<String>? ignoreKeys,
-    {bool Function(String)? ignoreFunction}
+    {
+      bool Function(String)? ignoreFunction,
+      List<int>? ignoreStatusCodes
+    }
   ) async{
 
     final connectivityResult = await Connectivity().checkConnectivity();
@@ -20,9 +23,14 @@ abstract class ResponseError{
 
     if(error is DioError){
       try{
-        final responseMessages = ResponseMessage(error.response?.data["message"]);
+        final responseMessages = ResponseMessage(
+          statusCode: error.response?.statusCode,
+          responseMessage: error.response?.data["message"]
+        );
+        
         if(ignoreKeys != null && ignoreKeys.any((key) => responseMessages.contains(key))) return responseMessages;
         if(ignoreFunction != null && responseMessages.checkFunction(ignoreFunction)) return responseMessages;
+        if(ignoreStatusCodes != null && responseMessages.containsAnyStatusCodes(ignoreStatusCodes)) return responseMessages;
       }
       // ignore: empty_catches
       catch(error){}
