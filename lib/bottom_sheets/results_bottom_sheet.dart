@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/category_screen_bloc/category_screen_bloc.dart';
+import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/components/animated_chip.dart';
 import 'package:task_manager/components/forms/form_input_header.dart';
 import 'package:task_manager/components/rounded_button.dart';
@@ -9,21 +10,37 @@ import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/task_filter.dart';
 import 'package:task_manager/theme/theme.dart';
 
-class ResultsBottomSheet extends StatefulWidget{
+class ResultsBottomSheet{
 
+  final BuildContext context;
   final CategoryScreenBloc categoryScreenBloc;
-  const ResultsBottomSheet({
-    Key? key,
-    required this.categoryScreenBloc
-  }) : super(key: key);
+
+  ResultsBottomSheet(
+    this.context,
+    {required this.categoryScreenBloc}
+  );
+
+  void show(){
+    ModalBottomSheet(
+      title: context.l10n.results, 
+      context: context, 
+      content: _ResultsBottomSheet(this)
+    ).show();
+  }
+}
+
+class _ResultsBottomSheet extends StatefulWidget{
+
+  final ResultsBottomSheet data;
+  const _ResultsBottomSheet(this.data);
 
   @override
   _ResultsBottomSheetState createState() => _ResultsBottomSheetState();
 }
 
-class _ResultsBottomSheetState extends State<ResultsBottomSheet>{
+class _ResultsBottomSheetState extends State<_ResultsBottomSheet>{
 
-  late CategoryScreenBloc categoryScreenBloc = widget.categoryScreenBloc;
+  late CategoryScreenBloc categoryScreenBloc = widget.data.categoryScreenBloc;
   late TaskFilter? taskFilter;
 
   @override

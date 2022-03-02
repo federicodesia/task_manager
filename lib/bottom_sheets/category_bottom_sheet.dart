@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
+import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/components/forms/form_input_header.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_button.dart';
@@ -25,22 +26,39 @@ List<Color> colors = [
   const Color(0xFF9295A2)
 ];
 
-class CategoryBottomSheet extends StatefulWidget{
-  
+class CategoryBottomSheet{
+
+  final BuildContext context;
   final Category? editCategory;
 
-  const CategoryBottomSheet({
-    Key? key,
-    this.editCategory
-  }) : super(key: key);
+  CategoryBottomSheet(
+    this.context,
+    {this.editCategory}
+  );
+
+  void show(){
+    ModalBottomSheet(
+      title: editCategory != null
+        ? context.l10n.bottomSheet_editCategory
+        : context.l10n.bottomSheet_createCategory,
+      context: context,
+      content: _CategoryBottomSheet(this)
+    ).show();
+  }
+}
+
+class _CategoryBottomSheet extends StatefulWidget{
+  
+  final CategoryBottomSheet data;
+  const _CategoryBottomSheet(this.data);
 
   @override
   _CategoryBottomSheetState createState() => _CategoryBottomSheetState();
 }
 
-class _CategoryBottomSheetState extends State<CategoryBottomSheet>{
+class _CategoryBottomSheetState extends State<_CategoryBottomSheet>{
 
-  late Category? editCategory = widget.editCategory;
+  late Category? editCategory = widget.data.editCategory;
 
   late String categoryName = editCategory != null ? editCategory!.name : "";
   late Color categoryColor = editCategory != null ? editCategory!.color : colors.first;

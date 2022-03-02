@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
-import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/category_card.dart';
@@ -91,13 +90,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
       floatingActionButton: AnimatedFloatingActionButton(
         visible: showFloatingActionButton,
-        onPressed: () {
-          ModalBottomSheet(
-            title: context.l10n.bottomSheet_createTask,
-            context: context,
-            content: const TaskBottomSheet(),
-          ).show();
-        },
+        onPressed: () => TaskBottomSheet(context).show()
       ),
 
       body: LayoutBuilder(
@@ -187,13 +180,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                             AspectRatio(
                                               aspectRatio: 1.0,
                                               child: ElevatedButton(
-                                                onPressed: () {
-                                                  ModalBottomSheet(
-                                                    title: context.l10n.bottomSheet_createCategory,
-                                                    context: context,
-                                                    content: const CategoryBottomSheet()
-                                                  ).show();
-                                                },
+                                                onPressed: () => CategoryBottomSheet(context).show(),
                                                 style: ElevatedButton.styleFrom(
                                                   primary: customTheme.backgroundColor,
                                                   padding: const EdgeInsets.all(8.0),

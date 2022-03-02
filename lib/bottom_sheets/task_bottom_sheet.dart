@@ -21,26 +21,45 @@ import 'package:task_manager/theme/theme.dart';
 
 import 'modal_bottom_sheet.dart';
 
-class TaskBottomSheet extends StatefulWidget{
-  
+class TaskBottomSheet{
+
+  final BuildContext context;
   final Task? editTask;
   final DateTime? initialDate;
   final String? initialcategoryId;
 
-  const TaskBottomSheet({
-    Key? key, 
-    this.editTask,
-    this.initialDate,
-    this.initialcategoryId
-  }) : super(key: key);
+  TaskBottomSheet(
+    this.context,
+    {
+      this.editTask,
+      this.initialDate,
+      this.initialcategoryId
+    }
+  );
+
+  void show(){
+    ModalBottomSheet(
+      title: editTask != null
+        ? context.l10n.bottomSheet_editTask
+        : context.l10n.bottomSheet_createTask, 
+      context: context, 
+      content: _TaskBottomSheet(this)
+    ).show();
+  }
+}
+
+class _TaskBottomSheet extends StatefulWidget{
+  
+  final TaskBottomSheet data;
+  const _TaskBottomSheet(this.data);
 
   @override
   _TaskBottomSheetState createState() => _TaskBottomSheetState();
 }
 
-class _TaskBottomSheetState extends State<TaskBottomSheet>{
+class _TaskBottomSheetState extends State<_TaskBottomSheet>{
 
-  late Task? editTask = widget.editTask;
+  late Task? editTask = widget.data.editTask;
 
   late String title = editTask != null ? editTask!.title : "";
   late String description = editTask != null ? editTask!.description : "";
@@ -109,13 +128,11 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                             expand: true,
                             onPressed: () {
                               FocusScope.of(context).requestFocus(FocusNode());
-                              ModalBottomSheet(
-                                context: context,
-                                title: context.l10n.bottomSheet_selectDate,
-                                content: DatePickerBottomSheet(
-                                  initialDate: date ?? DateTime.now(),
-                                  onDateChanged: (value) => date = value,
-                                )
+
+                              DatePickerBottomSheet(
+                                context,
+                                initialDate: date ?? DateTime.now(),
+                                onDateChanged: (value) => date = value,
                               ).show();
                             }
                           ),
@@ -136,18 +153,16 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                             expand: true,
                             onPressed: () {
                               FocusScope.of(context).requestFocus(FocusNode());
-                              ModalBottomSheet(
-                                context: context,
-                                title: context.l10n.bottomSheet_selectTime,
-                                content: TimePickerBottomSheet(
-                                  initialTime: Duration(
-                                    hours: time != null ? time!.hour : DateTime.now().hour,
-                                    minutes: time != null ? time!.minute : DateTime.now().minute,
-                                  ),
-                                  onTimeChanged: (duration) => time = DateTime.now().copyWith(
-                                    hour: duration.inHours,
-                                    minute: duration.inMinutes.remainder(60)
-                                  )
+
+                              TimePickerBottomSheet(
+                                context,
+                                initialTime: Duration(
+                                  hours: time != null ? time!.hour : DateTime.now().hour,
+                                  minutes: time != null ? time!.minute : DateTime.now().minute,
+                                ),
+                                onTimeChanged: (duration) => time = DateTime.now().copyWith(
+                                  hour: duration.inHours,
+                                  minute: duration.inMinutes.remainder(60)
                                 )
                               ).show();
                             }
@@ -210,13 +225,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet>{
                   OutlinedFormIconButton(
                     text: context.l10n.addNewCategory_button,
                     icon: Icons.add_rounded,
-                    onPressed: () {
-                      ModalBottomSheet(
-                        context: context,
-                        title: context.l10n.bottomSheet_createCategory,
-                        content: const CategoryBottomSheet()
-                      ).show();
-                    },
+                    onPressed: () => CategoryBottomSheet(context).show()
                   ),
                 ],
               ),

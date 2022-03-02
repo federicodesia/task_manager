@@ -5,7 +5,6 @@ import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/category_screen_bloc/category_screen_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
-import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/components/shimmer/shimmer_text.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/l10n/l10n.dart';
@@ -68,10 +67,9 @@ class CategoryCard extends StatelessWidget{
                 },
                 onLongPress: () {
                   if(!category.isGeneral) {
-                    ModalBottomSheet(
-                      title: context.l10n.bottomSheet_editCategory,
-                      context: context,
-                      content: CategoryBottomSheet(editCategory: category)
+                    CategoryBottomSheet(
+                      context,
+                      editCategory: category
                     ).show();
                   }
                 },

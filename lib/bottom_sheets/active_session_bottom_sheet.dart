@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
+import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/components/forms/form_input_header.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/constants.dart';
@@ -12,10 +13,31 @@ import 'package:task_manager/models/active_session.dart';
 import 'package:task_manager/theme/theme.dart';
 import 'package:latlong2/latlong.dart';
 
-class ActiveSessionBottomSheet extends StatelessWidget{
+class ActiveSessionBottomSheet{
 
+  final BuildContext context;
   final ActiveSession activeSession;
-  const ActiveSessionBottomSheet({Key? key, required this.activeSession}) : super(key: key);
+
+  ActiveSessionBottomSheet(
+    this.context,
+    {required this.activeSession}
+  );
+
+  void show(){
+    ModalBottomSheet(
+      title: context.l10n.bottomSheet_sessionInformation,
+      context: context,
+      content: _ActiveSessionBottomSheet(this)
+    ).show();
+  }
+}
+
+class _ActiveSessionBottomSheet extends StatelessWidget{
+
+  final ActiveSessionBottomSheet data;
+  _ActiveSessionBottomSheet(this.data);
+
+  late final activeSession = data.activeSession;
 
   @override
   Widget build(BuildContext context) {

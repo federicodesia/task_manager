@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/blocs/settings_bloc/settings_bloc.dart';
 import 'package:task_manager/bottom_sheets/language_bottom_sheet.dart';
-import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/components/lists/rounded_list_tile.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_button.dart';
@@ -135,13 +134,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                           icon: Icons.language_rounded,
                           color: const Color(0xFF6A69E0),
                           value: Localizations.localeOf(context).name,
-                          onTap: () {
-                            ModalBottomSheet(
-                              title: context.l10n.settings_selectLanguage,
-                              context: context,
-                              content: const LanguageBottomSheet()
-                            ).show();
-                          },
+                          onTap: () => LanguageBottomSheet(context).show()
                         ),
                         //Divider(),
                         

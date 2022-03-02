@@ -10,16 +10,12 @@ class AuthCredentials{
   final String passwordToken;
 
   const AuthCredentials({ 
-    required this.refreshToken,
-    required this.accessToken,
-    required this.passwordToken
+    this.refreshToken = "",
+    this.accessToken = "",
+    this.passwordToken = ""
   });
 
-  static const empty = AuthCredentials(
-    refreshToken: "",
-    accessToken: "",
-    passwordToken: ""
-  );
+  static const empty = AuthCredentials();
 
   bool get isEmpty =>
     refreshToken == ""

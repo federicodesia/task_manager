@@ -1,20 +1,39 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/theme/theme.dart';
 
 import '../constants.dart';
 
-class TimePickerBottomSheet extends StatelessWidget{
+class TimePickerBottomSheet{
+
+  final BuildContext context;
   final Duration initialTime;
   final Function(Duration) onTimeChanged;
 
-  const TimePickerBottomSheet({
-    Key? key, 
-    required this.onTimeChanged,
-    required this.initialTime
-  }) : super(key: key);
+  TimePickerBottomSheet(
+    this.context,
+    {
+      required this.initialTime,
+      required this.onTimeChanged
+    }
+  );
+
+  void show(){
+    ModalBottomSheet(
+      title: context.l10n.bottomSheet_selectTime,
+      context: context,
+      content: _TimePickerBottomSheet(this)
+    ).show();
+  }
+}
+
+class _TimePickerBottomSheet extends StatelessWidget{
+  
+  final TimePickerBottomSheet data;
+  const _TimePickerBottomSheet(this.data);
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +51,8 @@ class TimePickerBottomSheet extends StatelessWidget{
               padding: const EdgeInsets.symmetric(vertical: cPadding),
               child: CupertinoTimerPicker(
                 mode: CupertinoTimerPickerMode.hm,
-                initialTimerDuration: initialTime,
-                onTimerDurationChanged: onTimeChanged
+                initialTimerDuration: data.initialTime,
+                onTimerDurationChanged: data.onTimeChanged
               ),
             ),
             RoundedButton(

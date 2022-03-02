@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
-import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/calendar/calendar_task_list_item.dart';
 import 'package:task_manager/components/lists/rounded_dismissible.dart';
@@ -34,10 +33,9 @@ class TaskListItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    final Function() onPressed = ModalBottomSheet(
-      title: buildContext.l10n.bottomSheet_editTask,
-      context: buildContext,
-      content: TaskBottomSheet(editTask: task)
+    final Function() onPressed = TaskBottomSheet(
+      buildContext,
+      editTask: task
     ).show;
 
     final Widget item;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/bottom_sheets/active_session_bottom_sheet.dart';
-import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/active_session.dart';
@@ -22,12 +21,9 @@ class LoginActivityCard extends StatelessWidget {
     
     return InkWell(
       onTap: () {
-        ModalBottomSheet(
-          title: context.l10n.bottomSheet_sessionInformation, 
-          context: context,
-          content: ActiveSessionBottomSheet(
-            activeSession: activeSession
-          )
+        ActiveSessionBottomSheet(
+          context,
+          activeSession: activeSession
         ).show();
       },
       borderRadius: BorderRadius.circular(cBorderRadius),

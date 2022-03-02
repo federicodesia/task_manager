@@ -4,7 +4,6 @@ import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/category_screen_bloc/category_screen_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
-import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/results_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
@@ -72,12 +71,9 @@ class _CategoryScreenState extends State<_CategoryScreen>{
       floatingActionButton: AnimatedFloatingActionButton(
         visible: showFloatingActionButton,
         onPressed: () {
-          ModalBottomSheet(
-            title: context.l10n.bottomSheet_createTask,
-            context: context,
-            content: TaskBottomSheet(
-              initialcategoryId: widget.categoryId,
-            ),
+          TaskBottomSheet(
+            context,
+            initialcategoryId: widget.categoryId,
           ).show();
         },
       ),
@@ -189,15 +185,10 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                         Icons.tune_rounded,
                                         color: customTheme.lightColor
                                       ),
-                                      onPressed: () {
-                                        ModalBottomSheet(
-                                          title: context.l10n.results, 
-                                          context: context, 
-                                          content: ResultsBottomSheet(
-                                            categoryScreenBloc: context.read<CategoryScreenBloc>(),
-                                          )
-                                        ).show();
-                                      },
+                                      onPressed: () => ResultsBottomSheet(
+                                        context,
+                                        categoryScreenBloc: context.read<CategoryScreenBloc>()
+                                      ).show(),
                                     )
                                   ],
                                 ),
@@ -310,10 +301,9 @@ class _CategoryScreenPopupButton extends StatelessWidget{
       ],
       onSelected: (value){
         if(value == 0){
-          ModalBottomSheet(
-            title: context.l10n.bottomSheet_editCategory, 
-            context: context, 
-            content: CategoryBottomSheet(editCategory: category)
+          CategoryBottomSheet(
+            context,
+            editCategory: category
           ).show();
         }
         else if(value == 1){

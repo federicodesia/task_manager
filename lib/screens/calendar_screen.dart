@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
-import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/calendar/calendar_card.dart';
@@ -73,12 +72,10 @@ class _CalendarScreenState extends State<_CalendarScreen>{
         onPressed: () {
           CalendarState calendarState = BlocProvider.of<CalendarBloc>(context).state;
 
-          ModalBottomSheet(
-            title: context.l10n.bottomSheet_createTask,
-            context: context,
-            content: TaskBottomSheet(
-              initialDate: (calendarState is CalendarLoadSuccess) ? calendarState.selectedDay : null,
-            ),
+          TaskBottomSheet(
+            context,
+            initialDate: (calendarState is CalendarLoadSuccess)
+              ? calendarState.selectedDay : null,
           ).show();
         },
       ),
