@@ -3,29 +3,23 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AccessTokenInterceptor extends Interceptor {
 
-  final Future<String?> Function() getRefreshToken;
+  final Future<Dio> Function() getDioRefreshToken;
   final Function(String) onUpdateAccessToken; 
+  final Future<Dio> Function() getDioAccessToken;
 
   AccessTokenInterceptor({
-    required this.getRefreshToken,
-    required this.onUpdateAccessToken
+    required this.getDioRefreshToken,
+    required this.onUpdateAccessToken,
+    required this.getDioAccessToken
   });
-
-  late final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: "https://yusuf007r.dev/task-manager/auth",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-    )
-  );
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     try{
 
       try{
-        final validate = options.headers["ValidateAccessToken"];
-        if(!validate) return super.onRequest(options, handler);
+        final isRetry = options.headers["IsRetryRequest"] as bool?;
+        if(isRetry != null && isRetry) return super.onRequest(options, handler);
       }
       catch(_) {}
 
@@ -52,8 +46,12 @@ class AccessTokenInterceptor extends Interceptor {
       if(_getAccessToken(options).isNotEmpty){
         final statusCode = err.response?.statusCode;
         if(statusCode == 401 || statusCode == 403){
-          final cloneRequest = await _retry(options);
-          if(cloneRequest != null) return handler.resolve(cloneRequest);
+
+          final isRetry = options.headers["IsRetryRequest"] as bool?;
+          if(isRetry == null || isRetry){
+            final cloneRequest = await _retry(options);
+            if(cloneRequest != null) return handler.resolve(cloneRequest);
+          }
         }
       }
     }
@@ -67,25 +65,18 @@ class AccessTokenInterceptor extends Interceptor {
 
   Future<Response<dynamic>?> _retry(RequestOptions options) async{
     try{
-      final refreshToken = await getRefreshToken();
-      if(refreshToken == null) return null;
-
-      final response = await _dio.get(
-        "/access-token",
-        options: Options(headers: {
-          "Authorization": "Bearer " + refreshToken,
-          "ValidateAccessToken": false
-        })
-      );
-
-      final accessToken = response.data["accessToken"];
+      final dioRefreshToken = await getDioRefreshToken();
+      final response = await dioRefreshToken.get("/auth/access-token");
+      final accessToken = response.data["accessToken"] as String? ?? "";
       onUpdateAccessToken(accessToken);
 
-      options.headers["Authorization"] = "Bearer " + accessToken;
-      options.headers["ValidateAccessToken"] = false;
-
       try{
-        final cloneRequest = await _dio.fetch(options);
+        final dioAccessToken = await getDioAccessToken();
+
+        options.headers.addAll(dioAccessToken.options.headers);
+        options.headers.addAll({ "IsRetryRequest" : true });
+
+        final cloneRequest = await dioAccessToken.fetch(options);
         return Future.value(cloneRequest);
       }
       catch(_) {}

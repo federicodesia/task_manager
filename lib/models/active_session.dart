@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/geo_location.dart';
 import 'package:task_manager/models/serializers/datetime_serializer.dart';
 
@@ -16,6 +18,7 @@ class ActiveSession extends Equatable{
   @DateTimeSerializer()
   final DateTime createdAt;
   final GeoLocation? geoLocation;
+  final String deviceName;
   final bool isThisDevice;
 
   const ActiveSession({
@@ -25,6 +28,7 @@ class ActiveSession extends Equatable{
     required this.ipAddress,
     required this.createdAt,
     this.geoLocation,
+    required this.deviceName,
     this.isThisDevice = false
   });
 
@@ -38,6 +42,7 @@ class ActiveSession extends Equatable{
       ipAddress: ipAddress,
       createdAt: createdAt,
       geoLocation: geoLocation,
+      deviceName: deviceName,
       isThisDevice: isThisDevice ?? this.isThisDevice
     );
   }
@@ -46,8 +51,15 @@ class ActiveSession extends Equatable{
   Map<String, dynamic> toJson() => _$ActiveSessionToJson(this);
 
   @override
-  List<Object?> get props => [id, token, lastTimeOfUse, ipAddress, createdAt, geoLocation, isThisDevice];
+  List<Object?> get props => [id, token, lastTimeOfUse, ipAddress, createdAt, geoLocation, deviceName, isThisDevice];
 
   @override
   bool get stringify => true;
+}
+
+extension ActiveSessionExtension on ActiveSession{
+  String deviceNameLocalization(BuildContext context){
+    if(deviceName == "unknown") return context.l10n.unknownDeviceName;
+    return deviceName;
+  }
 }

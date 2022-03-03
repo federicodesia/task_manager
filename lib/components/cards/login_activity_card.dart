@@ -63,8 +63,8 @@ class LoginActivityCard extends StatelessWidget {
                           text: context.l10n.securitySettings_thisDevice + "  ",
                           style: customTheme.boldTextStyle.copyWith(color: Colors.green)
                         ),
-                        // TODO: Device name
-                        const TextSpan(text: "Device name"),
+                        
+                        TextSpan(text: activeSession.deviceNameLocalization(context)),
                       ],
                     ),
                     maxLines: 1,

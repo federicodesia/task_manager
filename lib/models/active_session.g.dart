@@ -18,6 +18,7 @@ ActiveSession _$ActiveSessionFromJson(Map<String, dynamic> json) =>
       geoLocation: json['geoLocation'] == null
           ? null
           : GeoLocation.fromJson(json['geoLocation'] as Map<String, dynamic>),
+      deviceName: json['deviceName'] as String,
       isThisDevice: json['isThisDevice'] as bool? ?? false,
     );
 
@@ -30,5 +31,6 @@ Map<String, dynamic> _$ActiveSessionToJson(ActiveSession instance) =>
       'ipAddress': instance.ipAddress,
       'createdAt': const DateTimeSerializer().toJson(instance.createdAt),
       'geoLocation': instance.geoLocation,
+      'deviceName': instance.deviceName,
       'isThisDevice': instance.isThisDevice,
     };

@@ -347,6 +347,8 @@
   "@textField_newPassword": {},
   "textField_password": "Contraseña",
   "@textField_password": {},
+  "unknownDeviceName": "Nombre de dispositivo desconocido",
+  "@unknownDeviceName": {},
   "upcomingTab_tasksInThisWeek": "Tareas de esta semana",
   "@upcomingTab_tasksInThisWeek": {},
   "upgradeToPro_button": "Actualizar a Pro",

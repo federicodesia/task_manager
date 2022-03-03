@@ -54,7 +54,7 @@ class _ActiveSessionBottomSheet extends StatelessWidget{
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
 
-          const FormInputHeader("Samsung Galaxy J2 Prime"),
+          FormInputHeader(activeSession.deviceNameLocalization(context)),
           const SizedBox(height: 4.0),
 
           Text(

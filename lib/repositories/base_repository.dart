@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
+import 'package:task_manager/helpers/string_helper.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
 import 'package:task_manager/repositories/interceptors/refresh_token_interceptor.dart';
@@ -10,22 +14,41 @@ import 'package:task_manager/services/locator_service.dart';
 
 class BaseRepository{
 
-  late final BaseOptions _baseOptions = BaseOptions(
-    baseUrl: "https://yusuf007r.dev/task-manager/",
-    connectTimeout: 5000,
-    receiveTimeout: 3000,
-  );
+  BaseRepository(){
+    _init();
+  }
+  
+  late BaseOptions _baseOptions;
+  late AuthBloc? _authBloc;
 
   late final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+  late final DeviceInfoPlugin _deviceInfoPlugin = DeviceInfoPlugin();
 
-  late final AuthBloc? _authBloc = _getAuthBloc;
-  AuthBloc? get _getAuthBloc{
+  void _init() async{
+
+    String? deviceName;
     try{
-      final context = locator<ContextService>().context;
-      if(context != null) return BlocProvider.of<AuthBloc>(context);
+      if(Platform.isAndroid){
+        final androidInfo = await _deviceInfoPlugin.androidInfo;
+        final androidDeviceName = [ (androidInfo.brand ?? "").capitalize, androidInfo.model ];
+        androidDeviceName.removeWhere((s) => s == null || s.isEmpty);
+        deviceName = androidDeviceName.join(" ");
+      }
     }
     catch(_){}
-    return null;
+
+    _baseOptions = BaseOptions(
+      baseUrl: "https://yusuf007r.dev/task-manager/",
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+      headers: { "device-name": deviceName }
+    );
+
+    try{
+      final context = locator<ContextService>().context;
+      if(context != null) _authBloc = context.read<AuthBloc>();
+    }
+    catch(_){}
   }
 
   Future<String?> _getRefreshToken() async{
@@ -73,14 +96,15 @@ class BaseRepository{
   );
   Future<Dio> dioRefreshToken() async{
     final _refreshToken = await _getRefreshToken() ?? "";
-    return _dioRefreshToken..options.headers = {
+    return _dioRefreshToken..options.headers.addAll({
       "Authorization": "Bearer " + _refreshToken
-    };
+    });
   }
 
   late final Dio _dioAccessToken = Dio(_baseOptions)..interceptors.add(
     AccessTokenInterceptor(
-      getRefreshToken: () => _getRefreshToken(),
+      getDioRefreshToken: dioRefreshToken,
+      getDioAccessToken: dioAccessToken,
       onUpdateAccessToken: (accessToken) {
         try{
           final _authBlocState = _authBloc?.state;
@@ -98,16 +122,16 @@ class BaseRepository{
   );
   Future<Dio> dioAccessToken() async{
     final _accessToken = await _getAccessToken() ?? "";
-    return _dioAccessToken..options.headers = {
-      "Authorization": "Bearer " + _accessToken
-    };
+    return _dioAccessToken..options.headers.addAll(
+      {"Authorization": "Bearer " + _accessToken}
+    );
   }
 
   late final Dio _dioPasswordToken = Dio(_baseOptions);
   Future<Dio> dioPasswordToken() async{
     final _passwordToken = await _getPasswordToken() ?? "";
-    return _dioPasswordToken..options.headers = {
-      "Authorization": "Bearer " + _passwordToken
-    };
+    return _dioPasswordToken..options.headers.addAll(
+      {"Authorization": "Bearer " + _passwordToken}
+    );
   }
 }
