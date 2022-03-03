@@ -24,7 +24,7 @@ abstract class BackgroundSync{
               syncRepository: SyncRepository(base: BaseRepository()),
               taskBloc: taskBloc,
               categoryBloc: CategoryBloc(taskBloc: taskBloc)
-            ).add(BackgroundSyncRequested());
+            ).add(HighPrioritySyncRequested());
           },
           storage: storage,
         );

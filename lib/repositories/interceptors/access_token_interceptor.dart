@@ -1,15 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:task_manager/models/auth_credentials.dart';
 
 class AccessTokenInterceptor extends Interceptor {
 
   final Future<String?> Function() getRefreshToken;
-  final Function(AuthCredentials) onAuthCredentialsChanged; 
+  final Function(String) onUpdateAccessToken; 
 
   AccessTokenInterceptor({
     required this.getRefreshToken,
-    required this.onAuthCredentialsChanged
+    required this.onUpdateAccessToken
   });
 
   late final Dio _dio = Dio(
@@ -79,12 +78,10 @@ class AccessTokenInterceptor extends Interceptor {
         })
       );
 
-      final authCredentials = AuthCredentials.empty.copyWith(
-        accessToken: response.data["accessToken"]
-      );
+      final accessToken = response.data["accessToken"];
+      onUpdateAccessToken(accessToken);
 
-      onAuthCredentialsChanged(authCredentials);
-      options.headers["Authorization"] = "Bearer " + authCredentials.accessToken;
+      options.headers["Authorization"] = "Bearer " + accessToken;
       options.headers["ValidateAccessToken"] = false;
 
       try{

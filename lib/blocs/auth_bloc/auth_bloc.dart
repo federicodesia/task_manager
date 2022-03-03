@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -37,12 +36,13 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     });
     
     foregroundMessagesSubscription = FirebaseMessaging.onMessage.listen((message) {
-      debugPrint('Got a message whilst in the foreground!');
-      debugPrint('Message data: ${message.data}');
-
-      if (message.notification != null) {
-        debugPrint('Message also contained a notification: ${message.notification}');
+      
+      final type = message.data["type"];
+      if(type == "logout"){
+        add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
       }
+      else if(type == "new-user-data"){}
+      else if(type == "new-session"){}
     });
 
     on<AuthLoaded>((event, emit) async{

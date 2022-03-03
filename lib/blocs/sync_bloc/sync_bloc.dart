@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -27,6 +28,8 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
 
   late StreamSubscription taskBlocSubscription;
   late StreamSubscription categoryBlocSubscription;
+
+  late StreamSubscription foregroundMessagesSubscription;
   
   SyncBloc({
     required this.syncRepository,
@@ -46,7 +49,12 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
       }
     });
 
-    on<BackgroundSyncRequested>((event, emit) => sync(event, emit),
+    foregroundMessagesSubscription = FirebaseMessaging.onMessage.listen((message) {
+      final type = message.data["type"];
+      if(type == "new-data") add(HighPrioritySyncRequested());
+    });
+
+    on<HighPrioritySyncRequested>((event, emit) => sync(event, emit),
     transformer: debounceTransformer(const Duration(seconds: 1)));
 
     on<SyncRequested>((event, emit) => sync(event, emit),
@@ -184,6 +192,7 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
   Future<void> close() {
     taskBlocSubscription.cancel();
     categoryBlocSubscription.cancel();
+    foregroundMessagesSubscription.cancel();
     return super.close();
   }
 

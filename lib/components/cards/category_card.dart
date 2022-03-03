@@ -162,6 +162,7 @@ class CategoryCardContent extends StatelessWidget{
             
             LinearPercentIndicator(
               lineHeight: cLineSize,
+              barRadius: const Radius.circular(cLineSize),
               padding: EdgeInsets.zero,
               progressColor: color,
               backgroundColor: isShimmer ? customTheme.shimmerColor : customTheme.extraLightColor,

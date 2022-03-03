@@ -5,7 +5,7 @@ abstract class SyncEvent {}
 
 class SyncRequested extends SyncEvent {}
 
-class BackgroundSyncRequested extends SyncEvent {}
+class HighPrioritySyncRequested extends SyncEvent {}
 
 class SyncReloadStateRequested extends SyncEvent {
   final Map<String, dynamic>? json;

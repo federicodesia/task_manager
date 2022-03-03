@@ -54,24 +54,23 @@ class BaseRepository{
     catch(_){}
     return null;
   }
-
-  void _onAuthCredentialsChanged(AuthCredentials credentials){
-    try{
-      if(_authBloc != null) {
-        _authBloc!.add(AuthCredentialsChanged(credentials: credentials));
-      } else{
-        _secureStorage.write(key: "refreshToken", value: credentials.refreshToken);
-        _secureStorage.write(key: "accessToken", value: credentials.accessToken);
-      }
-    }
-    catch(_){}
-  }
   
   late Dio dio = Dio(_baseOptions);
 
-  late final Dio _dioRefreshToken = Dio(_baseOptions)..interceptors.add(RefreshTokenInterceptor(
-    onAuthCredentialsChanged: (credentials) => _onAuthCredentialsChanged(credentials)
-  ));
+  late final Dio _dioRefreshToken = Dio(_baseOptions)..interceptors.add(
+    RefreshTokenInterceptor(
+      onClearAuthCredentials: () {
+        try{
+          if(_authBloc != null) {
+            _authBloc!.add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+          } else{
+            _secureStorage.deleteAll();
+          }
+        }
+        catch(_){}
+      }
+    )
+  );
   Future<Dio> dioRefreshToken() async{
     final _refreshToken = await _getRefreshToken() ?? "";
     return _dioRefreshToken..options.headers = {
@@ -79,10 +78,24 @@ class BaseRepository{
     };
   }
 
-  late final Dio _dioAccessToken = Dio(_baseOptions)..interceptors.add(AccessTokenInterceptor(
-    getRefreshToken: () => _getRefreshToken(),
-    onAuthCredentialsChanged: (credentials) => _onAuthCredentialsChanged(credentials)
-  ));
+  late final Dio _dioAccessToken = Dio(_baseOptions)..interceptors.add(
+    AccessTokenInterceptor(
+      getRefreshToken: () => _getRefreshToken(),
+      onUpdateAccessToken: (accessToken) {
+        try{
+          final _authBlocState = _authBloc?.state;
+          if(_authBloc != null && _authBlocState != null) {
+            _authBloc!.add(AuthCredentialsChanged(
+              credentials: _authBlocState.credentials.copyWith(accessToken: accessToken)
+            ));
+          } else{
+            _secureStorage.write(key: "accessToken", value: accessToken);
+          }
+        }
+        catch(_){}
+      }
+    )
+  );
   Future<Dio> dioAccessToken() async{
     final _accessToken = await _getAccessToken() ?? "";
     return _dioAccessToken..options.headers = {
