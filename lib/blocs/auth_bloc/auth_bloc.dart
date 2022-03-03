@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_manager/models/active_session.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/user.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
+import 'package:task_manager/repositories/secure_storage_repository.dart';
 import 'package:task_manager/repositories/user_repository.dart';
 
 part 'auth_event.dart';
@@ -20,7 +20,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
   final UserRepository userRepository;
 
-  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  SecureStorageRepository secureStorageRepository = SecureStorageRepository();
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   late StreamSubscription messagingTokenSubscription;
@@ -46,16 +46,10 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     });
 
     on<AuthLoaded>((event, emit) async{
-      final String? refreshToken = await secureStorage.read(key: "refreshToken");
-      final String? accessToken = await secureStorage.read(key: "accessToken");
-      final String? passwordToken = await secureStorage.read(key: "passwordToken");
+      final storedCredentials = await secureStorageRepository.read.authCredentials;
 
-      emit(state.copyWith(
-        credentials: state.credentials.copyWith(
-          refreshToken: refreshToken,
-          accessToken: accessToken,
-          passwordToken: passwordToken
-        )
+      emit(state.copyWith(credentials:
+        state.credentials.merge(storedCredentials)
       ));
 
       final credentials = state.credentials;
@@ -86,13 +80,11 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
       if(credentials.isEmpty){
         // Unauthenticated
-        secureStorage.deleteAll();
+        secureStorageRepository.delete.all();
         emit(AuthState(status: AuthStatus.unauthenticated));
       }
       else{
-        secureStorage.write(key: "refreshToken", value: credentials.refreshToken);
-        secureStorage.write(key: "accessToken", value: credentials.accessToken);
-        secureStorage.write(key: "passwordToken", value: credentials.passwordToken);
+        await secureStorageRepository.write.authCredentials(credentials);
 
         emit(state.copyWith(
           credentials: credentials,

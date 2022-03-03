@@ -49,3 +49,13 @@ class AuthCredentials{
     );
   }
 }
+
+extension AuthCredentialsExtension on AuthCredentials{
+  AuthCredentials merge(AuthCredentials? other){
+    return other != null ? AuthCredentials(
+      refreshToken: other.refreshToken.isNotEmpty ? other.refreshToken : refreshToken,
+      accessToken: other.accessToken.isNotEmpty ? other.accessToken : accessToken,
+      passwordToken: other.passwordToken.isNotEmpty ? other.passwordToken : passwordToken,
+    ) : this;
+  }
+}
