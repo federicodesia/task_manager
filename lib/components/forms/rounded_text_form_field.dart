@@ -22,6 +22,7 @@ class RoundedTextFormField extends StatefulWidget{
   final int? maxLength;
   final String? counterText;
   final TextAlign textAlign;
+  final Widget? prefixIcon;
   final bool enableObscureTextToggle;
   
   const RoundedTextFormField({
@@ -44,6 +45,7 @@ class RoundedTextFormField extends StatefulWidget{
     this.maxLength,
     this.counterText,
     this.textAlign = TextAlign.start,
+    this.prefixIcon,
     this.enableObscureTextToggle = false,
   }) : super(key: key);
 
@@ -111,6 +113,12 @@ class _RoundedTextFormFieldState extends State<RoundedTextFormField> {
           counterText: widget.counterText,
           errorText: widget.errorText,
           errorStyle: widget.errorStyle,
+
+          prefixIcon: widget.prefixIcon,
+          prefixIconConstraints: const BoxConstraints(
+            maxWidth: double.infinity,
+            maxHeight: 48.0
+          ),
 
           suffixIcon: widget.enableObscureTextToggle ? Padding(
             padding: const EdgeInsets.only(right: 8.0),

@@ -8,8 +8,8 @@ import 'package:task_manager/bottom_sheets/results_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/empty_space.dart';
+import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/components/lists/animated_dynamic_task_list.dart';
-import 'package:task_manager/components/lists/checkbox_task_list_item.dart';
 import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/components/main/center_app_bar.dart';
@@ -19,7 +19,6 @@ import 'package:task_manager/components/responsive/fill_remaining_list.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_alert_dialog.dart';
 import 'package:task_manager/components/rounded_button.dart';
-import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/l10n/l10n.dart';
@@ -59,154 +58,148 @@ class _CategoryScreen extends StatefulWidget{
 class _CategoryScreenState extends State<_CategoryScreen>{
 
   double appBarHeight = 500.0;
-
   bool showFloatingActionButton = true;
+
+  final searchTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context){
     final customTheme = Theme.of(context).customTheme;
 
-    return Scaffold(
-      backgroundColor: customTheme.backgroundColor,
-      floatingActionButton: AnimatedFloatingActionButton(
-        visible: showFloatingActionButton,
-        onPressed: () {
-          TaskBottomSheet(
-            context,
-            initialcategoryId: widget.categoryId,
-          ).show();
-        },
-      ),
-      
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (_, constraints) {
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        backgroundColor: customTheme.backgroundColor,
+        floatingActionButton: AnimatedFloatingActionButton(
+          visible: showFloatingActionButton,
+          onPressed: () {
+            TaskBottomSheet(
+              context,
+              initialcategoryId: widget.categoryId,
+            ).show();
+          },
+        ),
+        
+        body: SafeArea(
+          child: LayoutBuilder(
+            builder: (_, constraints) {
 
-            return AnimatedFloatingActionButtonScrollNotification(
-              currentState: showFloatingActionButton,
-              onChange: (value) => setState(() => showFloatingActionButton = value),
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics()
-                ),
-                slivers: [
-
-                  BlocBuilder<CategoryBloc, CategoryState>(
-                    buildWhen: (previousState, currentState){
-                      if(currentState is CategoryLoadSuccess){
-                        if(currentState.categories.firstWhereOrNull((c) => c.id == widget.categoryId) != null) return true;
-                        return false;
-                      }
-                      return true;
-                    },
-                    builder: (_, categoryState){
-
-                      Category category = (categoryState as CategoryLoadSuccess).categories
-                        .firstWhere((c) => c.id == widget.categoryId);
-
-                      return SliverAppBar(
-                        backgroundColor: Colors.transparent,
-                        automaticallyImplyLeading: false,
-                        toolbarHeight: appBarHeight,
-                        collapsedHeight: appBarHeight,
-
-                        flexibleSpace: WidgetSize(
-                          onChange: (Size size){
-                            setState(() => appBarHeight = size.height);
-                            BlocProvider.of<AvailableSpaceCubit>(context).setHeight(constraints.maxHeight - size.height);
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-
-                              CenterAppBar(
-                                center: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      height: 8.0,
-                                      width: 8.0,
-                                      decoration: BoxDecoration(
-                                        color: category.color,
-                                        borderRadius: const BorderRadius.all(Radius.circular(8.0))
-                                      )
-                                    ),
-                                    const SizedBox(width: 8.0),
-                                    Text(
-                                      category.name,
-                                      style: customTheme.subtitleTextStyle.copyWith(height: 1.0),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                                  ],
-                                ),
-                                actions: [
-                                  _CategoryScreenPopupButton(category: category)
-                                ],
-                              ),
-                             const  SizedBox(height: cPadding - 16.0),
-                              
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: cPadding),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(Radius.circular(cBorderRadius)),
-                                          color: customTheme.contentBackgroundColor
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.search_rounded,
-                                                color: customTheme.lightColor,
-                                              ),
-                                              const SizedBox(width: 12.0),
-                                              Text(
-                                                context.l10n.searchTask,
-                                                style: customTheme.lightTextStyle.copyWith(height: 1.0),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-
-                                    const SizedBox(width: 12.0),
-                                    RoundedButton(
-                                      width: 56.0,
-                                      height: 56.0,
-                                      color: customTheme.contentBackgroundColor,
-                                      child: Icon(
-                                        Icons.tune_rounded,
-                                        color: customTheme.lightColor
-                                      ),
-                                      onPressed: () => ResultsBottomSheet(
-                                        context,
-                                        categoryScreenBloc: context.read<CategoryScreenBloc>()
-                                      ).show(),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }
+              return AnimatedFloatingActionButtonScrollNotification(
+                currentState: showFloatingActionButton,
+                onChange: (value) => setState(() => showFloatingActionButton = value),
+                child: CustomScrollView(
+                  physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()
                   ),
+                  slivers: [
 
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: cPadding),
-                      child: BlocBuilder<CategoryScreenBloc, CategoryScreenState>(
-                        builder: (_, state){
+                    BlocBuilder<CategoryBloc, CategoryState>(
+                      buildWhen: (previousState, currentState){
+                        if(currentState is CategoryLoadSuccess){
+                          if(currentState.categories.firstWhereOrNull((c) => c.id == widget.categoryId) != null) return true;
+                          return false;
+                        }
+                        return true;
+                      },
+                      builder: (_, categoryState){
 
-                          if(state is CategoryScreenLoadSuccess){
+                        Category category = (categoryState as CategoryLoadSuccess).categories
+                          .firstWhere((c) => c.id == widget.categoryId);
+
+                        return SliverAppBar(
+                          backgroundColor: Colors.transparent,
+                          automaticallyImplyLeading: false,
+                          toolbarHeight: appBarHeight,
+                          collapsedHeight: appBarHeight,
+
+                          flexibleSpace: WidgetSize(
+                            onChange: (Size size){
+                              setState(() => appBarHeight = size.height);
+                              context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height);
+                            },
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+
+                                CenterAppBar(
+                                  center: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        height: 8.0,
+                                        width: 8.0,
+                                        decoration: BoxDecoration(
+                                          color: category.color,
+                                          borderRadius: const BorderRadius.all(Radius.circular(8.0))
+                                        )
+                                      ),
+                                      const SizedBox(width: 8.0),
+                                      Text(
+                                        category.name,
+                                        style: customTheme.subtitleTextStyle.copyWith(height: 1.0),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    ],
+                                  ),
+                                  actions: [
+                                    _CategoryScreenPopupButton(category: category)
+                                  ],
+                                ),
+                               const SizedBox(height: cPadding - 16.0),
+                                
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: cPadding),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: RoundedTextFormField(
+                                          controller: searchTextController,
+                                          hintText: context.l10n.searchTask,
+                                          textInputAction: TextInputAction.done,
+                                          prefixIcon: Padding(
+                                            padding: const EdgeInsets.only(left: 18.0, right: 12.0),
+                                            child: Icon(
+                                              Icons.search_rounded,
+                                              color: customTheme.lightColor,
+                                            ),
+                                          ),
+                                          onChanged: (searchText){
+                                            context.read<CategoryScreenBloc>().add(SearchTextChanged(searchText));
+                                          },
+                                        ),
+                                      ),
+
+                                      const SizedBox(width: 12.0),
+                                      RoundedButton(
+                                        width: 56.0,
+                                        height: 56.0,
+                                        color: customTheme.contentBackgroundColor,
+                                        child: Icon(
+                                          Icons.tune_rounded,
+                                          color: customTheme.lightColor
+                                        ),
+                                        onPressed: () => ResultsBottomSheet(
+                                          context,
+                                          categoryScreenBloc: context.read<CategoryScreenBloc>()
+                                        ).show(),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    ),
+
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: cPadding),
+                        child: BlocBuilder<CategoryScreenBloc, CategoryScreenState>(
+                          builder: (_, state){
 
                             return Padding(
                               padding: const EdgeInsets.only(top: cPadding - cListItemSpace),
@@ -227,36 +220,33 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                   }
                                 ) : FillRemainingList(
                                   availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
-                                  child: EmptySpace(
+                                  child: state.searchText.isEmpty ? EmptySpace(
                                     svgImage: "assets/svg/completed_tasks.svg",
                                     header: state.activeFilter == TaskFilter.all
                                       ? context.l10n.emptySpace_youHaventTasksInCategory
-                                      : context.l10n.emptySpace_youHaventTasksWithActiveFilter(state.activeFilter.nameLocalization(context).toLowerCase()),
+                                      : context.l10n.emptySpace_youHaventTasksWithActiveFilter(
+                                        state.activeFilter.nameLocalization(context).toLowerCase()
+                                      ),
                                     description: state.activeFilter == TaskFilter.all
                                       ? context.l10n.emptySpace_youHaventTasksInCategory_description
                                       : context.l10n.emptySpace_youHaventTasksWithActiveFilter_description,
+                                  ) : EmptySpace(
+                                    svgImage: "assets/svg/not_found.svg",
+                                    header: context.l10n.emptySpace_noResultsFound,
+                                    description: context.l10n.emptySpace_noResultsFound_description
                                   )
                                 )
                               ),
                             );
                           }
-
-                          return const Padding(
-                            padding: EdgeInsets.only(top: cPadding),
-                            child: ShimmerList(
-                              minItems: 3,
-                              maxItems: 5,
-                              child: CheckboxTaskListItem(isShimmer: true)
-                            ),
-                          );
-                        }
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            );
-          }
+                    )
+                  ],
+                ),
+              );
+            }
+          ),
         ),
       ),
     );

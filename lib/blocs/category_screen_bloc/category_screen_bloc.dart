@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
+import 'package:task_manager/blocs/transformers.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/task.dart';
@@ -18,53 +19,61 @@ class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> 
   CategoryScreenBloc({
     required this.taskBloc,
     required this.categoryId
-  }) : super(CategoryScreenLoadInProgress()){
+  }) : super(CategoryScreenState()){
 
-    todosSubscription = taskBloc.stream.listen((state) {
-      if(state is TaskLoadSuccess) {
-        add(TasksUpdated(state.tasks));
-      }
-    });
-
+    todosSubscription = taskBloc.stream.listen((state) => add(UpdateItemsRequested()));
+    
     on<CategoryScreenLoaded>((event, emit){
-      TaskState taskBlocState = taskBloc.state;
-      if(taskBlocState is TaskLoadSuccess){
-        emit(CategoryScreenLoadSuccess(
-          activeFilter: TaskFilter.all,
-          items: _getGroups(TaskFilter.all, taskBlocState.tasks)
-        ));
-      }
+      add(UpdateItemsRequested());
     });
 
-    on<CategoryScreenFilterUpdated>((event, emit){
-      TaskState taskBlocState = taskBloc.state;
-      if(taskBlocState is TaskLoadSuccess){
-        emit(CategoryScreenLoadSuccess(
-          activeFilter: event.filter,
-          items: _getGroups(event.filter, taskBlocState.tasks)
-        ));
-      }
+    on<SearchTextChanged>((event, emit){
+      add(UpdateItemsRequested(searchText: event.searchText));
+    },
+    transformer: debounceTransformer(const Duration(milliseconds: 500)));
+
+    on<FilterUpdated>((event, emit){
+      add(UpdateItemsRequested(taskFilter: event.taskFilter));
     });
 
-    on<TasksUpdated>((event, emit){
-      TaskState taskBlocState = taskBloc.state;
-      if(state is CategoryScreenLoadSuccess && taskBlocState is TaskLoadSuccess){
-        emit(CategoryScreenLoadSuccess(
-          activeFilter: (state as CategoryScreenLoadSuccess).activeFilter,
-          items: _getGroups((state as CategoryScreenLoadSuccess).activeFilter, event.tasks)
+    on<UpdateItemsRequested>((event, emit){
+      final taskBlocState = taskBloc.state;
+      if(taskBlocState is TaskLoadSuccess){
+        emit(state.copyWith(
+          searchText: event.searchText,
+          activeFilter: event.taskFilter,
+          items: _filter(
+            searchText: event.searchText ?? state.searchText,
+            taskFilter: event.taskFilter ?? state.activeFilter,
+            tasks: taskBlocState.tasks
+          )
         ));
       }
     });
   }
 
-  List<DynamicObject> _getGroups(TaskFilter filter, List<Task> tasks){
+  List<DynamicObject> _filter({
+    required String searchText,
+    required TaskFilter taskFilter,
+    required List<Task> tasks
+  }){
     List<DynamicObject> items = [];
 
     tasks = tasks.where((task) => task.categoryId == categoryId).toList();
-    if(filter == TaskFilter.completed) {
-      tasks = tasks.where((task) => task.isCompleted).toList();
-    } else if(filter == TaskFilter.remaining) {
-      tasks = tasks.where((task) => !task.isCompleted).toList();
+
+    if(taskFilter != TaskFilter.all){
+      final isCompletedFilter = taskFilter == TaskFilter.completed;
+      tasks = tasks.where((task) => task.isCompleted == isCompletedFilter).toList();
+    }
+
+    searchText = searchText.trim().toUpperCase();
+    if(searchText.isNotEmpty){
+
+      tasks = tasks.where((task){
+        if(task.title.toUpperCase().contains(searchText)) return true;
+        if(task.description.toUpperCase().contains(searchText)) return true;
+        return false;
+      }).toList();
     }
 
     if(tasks.isNotEmpty){

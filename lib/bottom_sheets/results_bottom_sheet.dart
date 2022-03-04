@@ -41,15 +41,7 @@ class _ResultsBottomSheet extends StatefulWidget{
 class _ResultsBottomSheetState extends State<_ResultsBottomSheet>{
 
   late CategoryScreenBloc categoryScreenBloc = widget.data.categoryScreenBloc;
-  late TaskFilter? taskFilter;
-
-  @override
-  void initState() {
-    CategoryScreenState state = categoryScreenBloc.state;
-    if(state is CategoryScreenLoadSuccess) taskFilter = state.activeFilter;
-
-    super.initState();
-  }
+  late TaskFilter taskFilter = categoryScreenBloc.state.activeFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +51,7 @@ class _ResultsBottomSheetState extends State<_ResultsBottomSheet>{
       bloc: categoryScreenBloc,
       builder: (_, state) {
 
-        return state is CategoryScreenLoadSuccess ? Column(
+        return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
 
@@ -102,13 +94,13 @@ class _ResultsBottomSheetState extends State<_ResultsBottomSheet>{
                   style: customTheme.primaryColorButtonTextStyle,
                 ),
                 onPressed: (){
-                  if(taskFilter != null) categoryScreenBloc.add(CategoryScreenFilterUpdated(filter: taskFilter!));
+                  categoryScreenBloc.add(FilterUpdated(taskFilter));
                   Navigator.pop(context);
                 }
               ),
             )
           ],
-        ) : Container();
+        );
       }
     );
   }

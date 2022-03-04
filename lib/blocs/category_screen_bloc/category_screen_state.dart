@@ -1,17 +1,25 @@
 part of 'category_screen_bloc.dart';
 
-abstract class CategoryScreenState {}
-
-class CategoryScreenLoadInProgress extends CategoryScreenState {}
-
-class CategoryScreenLoadSuccess extends CategoryScreenState {
+class CategoryScreenState {
+  final String searchText;
   final TaskFilter activeFilter;
   final List<DynamicObject> items;
 
-  CategoryScreenLoadSuccess({
-    required this.activeFilter,
-    required this.items
+  CategoryScreenState({
+    this.searchText = "",
+    this.activeFilter = TaskFilter.all,
+    this.items = const []
   });
-}
 
-class CategoryScreenLoadFailure extends CategoryScreenState {}
+  CategoryScreenState copyWith({
+    String? searchText,
+    TaskFilter? activeFilter,
+    List<DynamicObject>? items
+  }){
+    return CategoryScreenState(
+      searchText: searchText ?? this.searchText,
+      activeFilter: activeFilter ?? this.activeFilter,
+      items: items ?? this.items,
+    );
+  }
+}
