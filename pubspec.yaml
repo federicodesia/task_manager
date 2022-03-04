@@ -60,7 +60,8 @@ dev_dependencies:
   flutter_native_splash: ^2.0.5
 
 flutter_native_splash:
-  color: "#1E1F25"
+  color: "#F0F2F5"
+  color_dark: "#1F1D2C"
 
 flutter:
   generate: true
