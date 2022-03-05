@@ -65,7 +65,7 @@ class WeekBarChart extends StatelessWidget{
                     margin: 12.0,
                     getTextStyles: (context, value) => customTheme.lightTextStyle,
                     getTitles: (double value) => weekTasks.keys.elementAt(value.toInt())
-                      .formatLocalization(context, format: "E").substring(0, 1),
+                      .format(context, "E").substring(0, 1),
                   )
                 ),
 

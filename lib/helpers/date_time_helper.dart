@@ -37,7 +37,7 @@ extension DateTimeExtension on DateTime {
     return nextMonth.dateDifference(thisMonth);
   }
 
-  String formatLocalization(BuildContext context, {String? format}){
+  String format(BuildContext context, String format){
     final languageCode = Localizations.localeOf(context).languageCode;
     return DateFormat(format, languageCode).format(this).capitalize;
   }
@@ -48,7 +48,7 @@ extension DateTimeExtension on DateTime {
     if(difference == -1) return context.l10n.dateTime_yasterday;
     if(difference == 0) return context.l10n.dateTime_today;
     if(difference == 1) return context.l10n.dateTime_tomorrow;
-    if(year != now.year) return formatLocalization(context, format: "E, dd MMM y");
-    return formatLocalization(context, format: "E, dd MMM");
+    if(year != now.year) return format(context, "E, dd MMM y");
+    return format(context, "E, dd MMM");
   }
 }

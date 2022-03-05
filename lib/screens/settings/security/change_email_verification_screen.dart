@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/components/forms/resend_code_timer.dart';
 import 'package:task_manager/components/forms/verification_code.dart';
+import 'package:task_manager/components/rounded_snack_bar.dart';
 import 'package:task_manager/cubits/change_email_verification_cubit.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
@@ -63,7 +64,21 @@ class _ChangeEmailVerificationScreen extends StatelessWidget{
               );
 
               final nextState = await context.read<ChangeEmailVerificationCubit>().stream.first;
-              if(nextState.changed) AutoRouter.of(context).pop();
+              if(nextState.changed){
+                AutoRouter.of(context).pop();
+
+                final currentContext = AutoRouter.of(context).navigatorKey.currentContext; 
+                if(currentContext != null) {
+                  RoundedSnackBar(
+                    context: currentContext,
+                    text: context.l10n.snackBar_emailUpdated,
+                    action: SnackBarAction(
+                      label: "OK",
+                      onPressed: () {},
+                    )
+                  ).show();
+                }
+              }
             }
             catch(_){}
           },

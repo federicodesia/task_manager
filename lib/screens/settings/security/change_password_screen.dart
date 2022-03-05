@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
+import 'package:task_manager/components/rounded_snack_bar.dart';
 import 'package:task_manager/cubits/change_password_cubit.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
@@ -25,6 +26,8 @@ class _ChangePasswordScreen extends StatelessWidget{
 
   final currentPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
+
+  get cPrimaryColor => null;
 
   @override
   Widget build(BuildContext context){
@@ -64,7 +67,21 @@ class _ChangePasswordScreen extends StatelessWidget{
               );
 
               final nextState = await context.read<ChangePasswordCubit>().stream.first;
-              if(nextState.changed) AutoRouter.of(context).pop();
+              if(nextState.changed){
+                AutoRouter.of(context).pop();
+
+                final currentContext = AutoRouter.of(context).navigatorKey.currentContext; 
+                if(currentContext != null) {
+                  RoundedSnackBar(
+                    context: currentContext,
+                    text: context.l10n.snackBar_passwordUpdated,
+                    action: SnackBarAction(
+                      label: "OK",
+                      onPressed: () {},
+                    )
+                  ).show();
+                }
+              }
             }
             catch(_){}
           },

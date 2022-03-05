@@ -42,7 +42,8 @@ abstract class Validators{
 
   static String? validateCurrentPassword(BuildContext context, String currentPassword){
     if(currentPassword.isEmpty) return context.l10n.error_enterYourCurrentPassword;
-    return validatePassword(context, currentPassword);
+    if(validatePassword(context, currentPassword) != null)  return context.l10n.error_wrongPassword;
+    return null;
   }
 
   static String? validateNewPassword(BuildContext context, String currentPassword, String newPassword){

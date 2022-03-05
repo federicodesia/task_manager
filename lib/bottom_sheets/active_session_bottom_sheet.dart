@@ -65,14 +65,14 @@ class _ActiveSessionBottomSheet extends StatelessWidget{
           ),
 
           Text(
-            "${context.l10n.loginDate}: ${activeSession.createdAt.formatLocalization(context, format: "d MMM y HH:mm a")}",
+            "${context.l10n.loginDate}: ${activeSession.createdAt.format(context, "d MMM y HH:mm a")}",
             style: customTheme.lightTextStyle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
 
           Text(
-            "${context.l10n.lastActivity}: ${activeSession.lastTimeOfUse.formatLocalization(context, format: "d MMM y HH:mm a")}",
+            "${context.l10n.lastActivity}: ${activeSession.lastTimeOfUse.format(context, "d MMM y HH:mm a")}",
             style: customTheme.lightTextStyle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

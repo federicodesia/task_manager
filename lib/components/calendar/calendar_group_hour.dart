@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class CalendarGroupHour extends StatelessWidget{
@@ -22,7 +22,7 @@ class CalendarGroupHour extends StatelessWidget{
           children: [
             Stack(
               children: [
-                CalendarGroupHourText(text: DateFormat("HH:mm").format(dateTime).toLowerCase()),
+                CalendarGroupHourText(text: dateTime.format(context, "HH:mm")),
                 const CalendarGroupHourText(text: "12:00 ", visible: false)
               ],
             ),

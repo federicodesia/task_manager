@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
@@ -123,7 +122,9 @@ class _TaskBottomSheetState extends State<_TaskBottomSheet>{
                         child: FormValidator(
                           widget: (state) => OutlinedFormIconButton(
                             icon: Icons.event_rounded,
-                            text: date == null ? context.l10n.selectDate_button : DateFormat("dd/MM/yyyy").format(date!),
+                            text: date == null
+                              ? context.l10n.selectDate_button
+                              : date!.format(context, "dd/MM/yyyy"),
                             outlineColor: state.hasError ? themeData.errorColor : null,
                             expand: true,
                             onPressed: () {
@@ -148,7 +149,9 @@ class _TaskBottomSheetState extends State<_TaskBottomSheet>{
                         child: FormValidator(
                           widget: (state) => OutlinedFormIconButton(
                             icon: Icons.watch_later_rounded,
-                            text: time == null ? context.l10n.selectTime_button : DateFormat("HH:mm a").format(time!),
+                            text: time == null
+                              ? context.l10n.selectTime_button
+                              : time!.format(context, "HH:mm a"),
                             outlineColor: state.hasError ? themeData.errorColor : null,
                             expand: true,
                             onPressed: () {

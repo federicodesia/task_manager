@@ -85,18 +85,22 @@ class BaseRepository{
     AccessTokenInterceptor(
       getDioRefreshToken: dioRefreshToken,
       getDioAccessToken: dioAccessToken,
-      onUpdateAccessToken: (accessToken) {
+      onUpdateAccessToken: (accessToken) async{
         try{
-          final _authBlocState = _authBloc?.state;
-          if(_authBloc != null && _authBlocState != null) {
+          final state = _authBloc?.state;
+          if(_authBloc != null && state != null) {
             _authBloc!.add(AuthCredentialsChanged(
-              credentials: _authBlocState.credentials.copyWith(accessToken: accessToken)
+              credentials: state.credentials.copyWith(accessToken: accessToken)
             ));
-          } else{
-            _secureStorageRepository.write.accessToken(accessToken);
+            await _authBloc!.stream.first.then((_){
+              return true;
+            }).timeout(const Duration(seconds: 1));
           }
+          await _secureStorageRepository.write.accessToken(accessToken);
+          return true;
         }
         catch(_){}
+        return false;
       }
     )
   );

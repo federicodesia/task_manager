@@ -91,7 +91,7 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
-                      monthList[index].formatLocalization(context, format: "MMMM y"),
+                      monthList[index].format(context, "MMMM y"),
                       style: customTheme.boldTextStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/components/shimmer/shimmer_text.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
-import 'package:intl/intl.dart';
 import 'package:collection/collection.dart';
 import 'package:task_manager/theme/theme.dart';
 
@@ -140,7 +140,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                             const SizedBox(width: 12.0),
 
                             if(dateTime != null) Text(
-                              DateFormat("HH:mm a").format(dateTime!).toLowerCase(),
+                              dateTime!.format(context, "HH:mm a"),
                               style: customTheme.lightTextStyle
                             )
                           ],
