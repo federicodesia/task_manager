@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/either.dart';
@@ -22,6 +23,11 @@ class SyncRepository{
     required List<Category> categories
   }) async {
     try{
+
+      print("lastSync: $lastSync");
+      print("tasks: $tasks");
+      print("categories: $categories");
+
       final dio = await base.dioAccessToken();
       final response = await dio.post(
         "/sync",
@@ -38,6 +44,15 @@ class SyncRepository{
       ));
     }
     catch (error){
+      if(error is DioError){
+
+        final dioError = error.response?.data["message"];
+        print("dioError: $dioError");
+      }
+      else{
+        print("error: $error");
+      }
+
       final responseMessage = await ResponseError.validate(error, ["duplicated"]);
       if(responseMessage == null) return null;
 

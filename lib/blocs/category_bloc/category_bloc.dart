@@ -1,7 +1,7 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/material.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/sync_item_error.dart';
@@ -12,7 +12,7 @@ part 'category_state.dart';
 
 part 'category_bloc.g.dart';
 
-class CategoryBloc extends HydratedBloc<CategoryEvent, CategoryState> {
+class CategoryBloc extends DriftedBloc<CategoryEvent, CategoryState> {
   
   final TaskBloc taskBloc;
   CategoryBloc({required this.taskBloc}) : super(CategoryLoadSuccess.initial()){

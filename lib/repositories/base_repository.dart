@@ -19,8 +19,8 @@ class BaseRepository{
   }
   
   late BaseOptions _baseOptions;
-  late AuthBloc? _authBloc;
   late Dio dio;
+  AuthBloc? _authBloc;
 
   late final SecureStorageRepository _secureStorageRepository = SecureStorageRepository();
   late final DeviceInfoPlugin _deviceInfoPlugin = DeviceInfoPlugin();

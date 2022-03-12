@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
+import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
 import 'package:task_manager/blocs/sync_bloc/dynamic_functions.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/blocs/transformers.dart';
@@ -20,7 +21,7 @@ part 'sync_state.dart';
 
 part 'sync_bloc.g.dart';
 
-class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
+class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
 
   final SyncRepository syncRepository;
   final TaskBloc taskBloc;
@@ -91,6 +92,7 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
     );
 
     debugPrint("Sync | Enviando peticion a la API...");
+    
     await Future.delayed(const Duration(seconds: 2));
     final responseItems = await syncRepository.sync(
       lastSync: state.lastSync,
@@ -98,6 +100,7 @@ class SyncBloc extends HydratedBloc<SyncEvent, SyncState> {
       categories: updatedCategories
     );
     debugPrint("Sync | Respuesta de la API recibida...");
+    print(responseItems);
 
     if(responseItems != null){
 

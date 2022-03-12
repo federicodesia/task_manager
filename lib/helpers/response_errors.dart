@@ -32,11 +32,13 @@ abstract class ResponseError{
         if(ignoreFunction != null && responseMessages.checkFunction(ignoreFunction)) return responseMessages;
         if(ignoreStatusCodes != null && responseMessages.containsAnyStatusCodes(ignoreStatusCodes)) return responseMessages;
       }
-      // ignore: empty_catches
-      catch(error){}
+      catch(_){}
     }
     
-    locator<DialogService>().showSomethingWentWrongDialog();
+    try{
+      locator<DialogService>().showSomethingWentWrongDialog();
+    }
+    catch(_){}
     return null;
   }
 }

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
 import 'package:task_manager/models/active_session.dart';
 import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/models/user.dart';
@@ -15,7 +15,7 @@ part 'auth_state.dart';
 
 part 'auth_bloc.g.dart';
 
-class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
+class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
 
   final AuthRepository authRepository;
   final UserRepository userRepository;
@@ -46,6 +46,9 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     });
 
     on<AuthLoaded>((event, emit) async{
+      final messagingToken = await firebaseMessaging.getToken();
+      print("messagingToken: $messagingToken");
+
       final storedCredentials = await secureStorageRepository.read.authCredentials;
 
       emit(state.copyWith(credentials:
@@ -71,6 +74,9 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
             }
           );
         }
+      }
+      else {
+        add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
       }
     });
     
