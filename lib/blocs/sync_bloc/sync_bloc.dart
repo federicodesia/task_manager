@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,14 +59,6 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
 
     on<SyncRequested>((event, emit) => sync(event, emit),
     transformer: debounceTransformer(const Duration(seconds: 5)));
-
-    on<SyncReloadStateRequested>((event, emit) async{
-      final json = event.json;
-      if(json == null) return;
-      final syncState = fromJson(json);
-      if(syncState != null) emit(syncState);
-    },
-    transformer: restartable());
   }
 
   Future<void> sync(SyncEvent event, Emitter<SyncState> emit) async{

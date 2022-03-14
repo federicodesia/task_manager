@@ -70,14 +70,6 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
       emit(event.state);
     },
     transformer: restartable());
-
-    on<TaskReloadStateRequested>((event, emit) async{
-      final json = event.json;
-      if(json == null) return;
-      final taskState = fromJson(json);
-      if(taskState != null) emit(taskState);
-    },
-    transformer: restartable());
   }
 
   @override

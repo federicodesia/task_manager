@@ -64,14 +64,6 @@ class CategoryBloc extends DriftedBloc<CategoryEvent, CategoryState> {
       emit(event.state);
     },
     transformer: restartable());
-
-    on<CategoryReloadStateRequested>((event, emit) async{
-      final json = event.json;
-      if(json == null) return;
-      final categoryState = fromJson(json);
-      if(categoryState != null) emit(categoryState);
-    },
-    transformer: restartable());
   }
 
   @override

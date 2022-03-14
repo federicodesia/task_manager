@@ -32,8 +32,3 @@ class TaskStateUpdated extends TaskEvent {
   final TaskState state;
   TaskStateUpdated(this.state);
 }
-
-class TaskReloadStateRequested extends TaskEvent {
-  final Map<String, dynamic>? json;
-  TaskReloadStateRequested({required this.json});
-}
