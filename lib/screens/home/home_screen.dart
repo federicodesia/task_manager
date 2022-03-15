@@ -3,12 +3,12 @@ import 'package:boxy/flex.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/bottom_sheets/category_bottom_sheet.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/cards/category_card.dart';
+import 'package:task_manager/components/dot_tab_bar.dart';
 import 'package:task_manager/components/header.dart';
 import 'package:task_manager/components/lists/declarative_animated_list.dart';
 import 'package:task_manager/components/lists/list_item_animation.dart';
@@ -234,55 +234,19 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
                         const SizedBox(height: cPadding),
 
-                        // Tabs
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: cPadding),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Theme(
-                              data: Theme.of(context).copyWith(
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                              ),
-                              child: TabBar(
-                                controller: tabController,
-                                isScrollable: true,
-                                physics: const BouncingScrollPhysics(),
-
-                                indicatorSize: TabBarIndicatorSize.tab,
-                                indicatorWeight: 0.0,
-                                
-                                indicator: DotIndicator(
-                                  color: cPrimaryColor,
-                                  distanceFromCenter: 20.0
-                                ),
-                                labelPadding: const EdgeInsets.only(right: 32.0),
-                                indicatorPadding: const EdgeInsets.only(right: 32.0),
-
-                                /*indicator: TabIndicatorDecoration(),
-                                labelPadding: EdgeInsets.symmetric(horizontal: cPadding),*/
-                                
-                                labelStyle: customTheme.textStyle,
-                                labelColor: customTheme.textColor,
-                                unselectedLabelColor: customTheme.lightTextColor,
-
-                                tabs: List.generate(tabList.length, (index){
-                                  return Tab(
-                                    text: tabList[index].name
-                                  );
-                                }),
-                                onTap: (index){
-                                  pageController.animateToPage(
-                                    index,
-                                    duration: kTabScrollDuration,
-                                    curve: Curves.ease
-                                  );
-                                }
-                              ),
-                            ),
-                          ),
-                        ),
+                        DotTabBar(
+                          controller: tabController,
+                          tabs: List.generate(tabList.length, (index){
+                            return Tab(text: tabList[index].name);
+                          }),
+                          onTap: (index){
+                            pageController.animateToPage(
+                              index,
+                              duration: kTabScrollDuration,
+                              curve: Curves.ease
+                            );
+                          }
+                        )
                       ],
                     ),
                   ),

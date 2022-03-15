@@ -252,7 +252,7 @@
   "@notificationsSettings_taskReminders": {},
   "notificationsSettings_taskSchedule": "Task schedule",
   "@notificationsSettings_taskSchedule": {},
-  "notificationsSettings_taskSchedule_description": "Task schedule",
+  "notificationsSettings_taskSchedule_description": "Receive a notification the moment a task starts.",
   "@notificationsSettings_taskSchedule_description": {},
   "notificationsSettings_uncompletedTask": "Uncompleted task",
   "@notificationsSettings_uncompletedTask": {},

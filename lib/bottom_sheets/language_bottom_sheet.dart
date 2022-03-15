@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_manager/blocs/settings_bloc/settings_bloc.dart';
+import 'package:task_manager/blocs/settings_cubit/settings_cubit.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/components/lists/rounded_list_tile.dart';
 import 'package:task_manager/components/rounded_button.dart';
@@ -69,7 +69,7 @@ class _LanguageBottomSheetState extends State<_LanguageBottomSheet>{
               style: customTheme.primaryColorButtonTextStyle,
             ),
             onPressed: (){
-              context.read<SettingsBloc>().add(LocaleChangeRequested(selectedLocale));
+              context.read<SettingsCubit>().changeLocale(selectedLocale);
               Navigator.pop(context);
             }
           ),

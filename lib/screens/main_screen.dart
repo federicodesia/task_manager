@@ -29,7 +29,7 @@ class MainScreen extends StatelessWidget{
       routes: const [
         HomeRoute(),
         CalendarRoute(),
-        SettingsRoute(),
+        NotificationsRoute(),
         SettingsRoute()
       ],
       bottomNavigationBuilder: (_, tabsRouter) {

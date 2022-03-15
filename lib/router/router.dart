@@ -7,8 +7,9 @@ import 'package:task_manager/screens/forgot_password_new_password_screen.dart';
 import 'package:task_manager/screens/forgot_password_screen.dart';
 import 'package:task_manager/screens/home/home_screen.dart';
 import 'package:task_manager/screens/login_screen.dart';
+import 'package:task_manager/screens/notifications_screen.dart';
 import 'package:task_manager/screens/register_screen.dart';
-import 'package:task_manager/screens/settings/notifications_screen.dart';
+import 'package:task_manager/screens/settings/settings_notifications_screen.dart';
 import 'package:task_manager/screens/settings/security/change_email_screen.dart';
 import 'package:task_manager/screens/settings/security/change_email_verification_screen.dart';
 import 'package:task_manager/screens/settings/security/change_password_screen.dart';
@@ -50,6 +51,7 @@ import 'package:task_manager/screens/welcome_screen.dart';
           children: [
             AutoRoute(page: HomeScreen),
             AutoRoute(page: CalendarScreen),
+            AutoRoute(page: NotificationsScreen),
             AutoRoute(page: SettingsScreen),
           ]
         ),
@@ -59,7 +61,7 @@ import 'package:task_manager/screens/welcome_screen.dart';
         AutoRoute(page: ChangeEmailScreen),
         AutoRoute(page: ChangeEmailVerificationScreen),
 
-        AutoRoute(page: NotificationsScreen),
+        AutoRoute(page: SettingsNotificationsScreen),
         AutoRoute(page: ProfileScreen),
       ]
     ),

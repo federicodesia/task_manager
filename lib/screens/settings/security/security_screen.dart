@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
+import 'package:task_manager/blocs/settings_cubit/settings_cubit.dart';
 import 'package:task_manager/components/cards/login_activity_card.dart';
 import 'package:task_manager/components/lists/declarative_animated_list.dart';
 import 'package:task_manager/components/lists/list_header.dart';
@@ -94,9 +95,15 @@ class _SecurityScreenState extends State<SecurityScreen>{
 
                         const SizedBox(height: 8.0),
                         ListHeader(context.l10n.securitySettings_relatedNotifications),
-                        RoundedListTileSwitch(
-                          title: context.l10n.securitySettings_loginOnNewDevice,
-                          icon: Icons.smartphone_outlined
+                        BlocBuilder<SettingsCubit, SettingsState>(
+                          builder: (_, settingsState) {
+                            return RoundedListTileSwitch(
+                              title: context.l10n.securitySettings_loginOnNewDevice,
+                              icon: Icons.smartphone_outlined,
+                              value: settingsState.loginOnNewDeviceNotification,
+                              onSwitch: () => context.read<SettingsCubit>().toggleLoginOnNewDeviceNotification()
+                            );
+                          }
                         ),
 
                         const SizedBox(height: 8.0),

@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
-import 'package:task_manager/blocs/settings_bloc/settings_bloc.dart';
+import 'package:task_manager/blocs/settings_cubit/settings_cubit.dart';
 import 'package:task_manager/bottom_sheets/language_bottom_sheet.dart';
 import 'package:task_manager/components/lists/rounded_list_tile.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
@@ -126,7 +126,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                           title: context.l10n.settings_darkMode,
                           icon: Icons.dark_mode_rounded,
                           value: Theme.of(context).brightness == Brightness.dark,
-                          onSwitch: () => context.read<SettingsBloc>().add(ThemeModeToggled(context))
+                          onSwitch: () => context.read<SettingsCubit>().toggleThemeMode(context)
                         ),
 
                         RoundedListTile(
@@ -148,7 +148,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                           title: context.l10n.settings_notifications,
                           icon: Icons.notifications_rounded,
                           color: const Color(0xFFB548C5),
-                          onTap: () => AutoRouter.of(context).navigate(const NotificationsRoute()),
+                          onTap: () => AutoRouter.of(context).navigate(const SettingsNotificationsRoute()),
                         ),
 
                         const Divider(),

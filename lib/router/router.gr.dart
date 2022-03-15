@@ -11,7 +11,7 @@
 // ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i21;
+import 'package:flutter/material.dart' as _i22;
 
 import '../screens/calendar_screen.dart' as _i19;
 import '../screens/email_verification_screen.dart' as _i3;
@@ -21,21 +21,22 @@ import '../screens/forgot_password_screen.dart' as _i8;
 import '../screens/home/home_screen.dart' as _i18;
 import '../screens/login_screen.dart' as _i6;
 import '../screens/main_screen.dart' as _i11;
+import '../screens/notifications_screen.dart' as _i20;
 import '../screens/profile_screen.dart' as _i17;
 import '../screens/register_screen.dart' as _i7;
-import '../screens/settings/notifications_screen.dart' as _i16;
 import '../screens/settings/security/change_email_screen.dart' as _i14;
 import '../screens/settings/security/change_email_verification_screen.dart'
     as _i15;
 import '../screens/settings/security/change_password_screen.dart' as _i13;
 import '../screens/settings/security/security_screen.dart' as _i12;
-import '../screens/settings/settings_screen.dart' as _i20;
+import '../screens/settings/settings_notifications_screen.dart' as _i16;
+import '../screens/settings/settings_screen.dart' as _i21;
 import '../screens/splash_screen.dart' as _i1;
 import '../screens/welcome_screen.dart' as _i5;
 import 'wrappers/main_router_wrapper.dart' as _i4;
 
 class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i21.GlobalKey<_i21.NavigatorState>? navigatorKey])
+  AppRouter([_i22.GlobalKey<_i22.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -105,9 +106,10 @@ class AppRouter extends _i2.RootStackRouter {
           routeData: routeData,
           child: const _i15.ChangeEmailVerificationScreen());
     },
-    NotificationsRoute.name: (routeData) {
+    SettingsNotificationsRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i16.NotificationsScreen());
+          routeData: routeData,
+          child: const _i16.SettingsNotificationsScreen());
     },
     ProfileRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
@@ -121,9 +123,13 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i19.CalendarScreen());
     },
+    NotificationsRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i20.NotificationsScreen());
+    },
     SettingsRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i20.SettingsScreen());
+          routeData: routeData, child: const _i21.SettingsScreen());
     }
   };
 
@@ -161,6 +167,8 @@ class AppRouter extends _i2.RootStackRouter {
                         path: 'home-screen', parent: MainRoute.name),
                     _i2.RouteConfig(CalendarRoute.name,
                         path: 'calendar-screen', parent: MainRoute.name),
+                    _i2.RouteConfig(NotificationsRoute.name,
+                        path: 'notifications-screen', parent: MainRoute.name),
                     _i2.RouteConfig(SettingsRoute.name,
                         path: 'settings-screen', parent: MainRoute.name)
                   ]),
@@ -173,8 +181,9 @@ class AppRouter extends _i2.RootStackRouter {
               _i2.RouteConfig(ChangeEmailVerificationRoute.name,
                   path: 'change-email-verification-screen',
                   parent: MainRouter.name),
-              _i2.RouteConfig(NotificationsRoute.name,
-                  path: 'notifications-screen', parent: MainRouter.name),
+              _i2.RouteConfig(SettingsNotificationsRoute.name,
+                  path: 'settings-notifications-screen',
+                  parent: MainRouter.name),
               _i2.RouteConfig(ProfileRoute.name,
                   path: 'profile-screen', parent: MainRouter.name)
             ])
@@ -255,7 +264,7 @@ class ForgotPasswordRoute extends _i2.PageRouteInfo<void> {
 /// [_i9.ForgotPasswordEmailVerificationScreen]
 class ForgotPasswordEmailVerificationRoute
     extends _i2.PageRouteInfo<ForgotPasswordEmailVerificationRouteArgs> {
-  ForgotPasswordEmailVerificationRoute({_i21.Key? key, required String email})
+  ForgotPasswordEmailVerificationRoute({_i22.Key? key, required String email})
       : super(ForgotPasswordEmailVerificationRoute.name,
             path: 'forgot-password-email-verification-screen',
             args: ForgotPasswordEmailVerificationRouteArgs(
@@ -268,7 +277,7 @@ class ForgotPasswordEmailVerificationRouteArgs {
   const ForgotPasswordEmailVerificationRouteArgs(
       {this.key, required this.email});
 
-  final _i21.Key? key;
+  final _i22.Key? key;
 
   final String email;
 
@@ -334,12 +343,13 @@ class ChangeEmailVerificationRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i16.NotificationsScreen]
-class NotificationsRoute extends _i2.PageRouteInfo<void> {
-  const NotificationsRoute()
-      : super(NotificationsRoute.name, path: 'notifications-screen');
+/// [_i16.SettingsNotificationsScreen]
+class SettingsNotificationsRoute extends _i2.PageRouteInfo<void> {
+  const SettingsNotificationsRoute()
+      : super(SettingsNotificationsRoute.name,
+            path: 'settings-notifications-screen');
 
-  static const String name = 'NotificationsRoute';
+  static const String name = 'SettingsNotificationsRoute';
 }
 
 /// generated route for
@@ -367,7 +377,16 @@ class CalendarRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i20.SettingsScreen]
+/// [_i20.NotificationsScreen]
+class NotificationsRoute extends _i2.PageRouteInfo<void> {
+  const NotificationsRoute()
+      : super(NotificationsRoute.name, path: 'notifications-screen');
+
+  static const String name = 'NotificationsRoute';
+}
+
+/// generated route for
+/// [_i21.SettingsScreen]
 class SettingsRoute extends _i2.PageRouteInfo<void> {
   const SettingsRoute() : super(SettingsRoute.name, path: 'settings-screen');
 

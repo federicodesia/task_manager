@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
-import 'package:task_manager/blocs/settings_bloc/settings_bloc.dart';
+import 'package:task_manager/blocs/settings_cubit/settings_cubit.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/repositories/base_repository.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => SettingsBloc()),
+          BlocProvider(create: (context) => SettingsCubit()),
           BlocProvider(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
@@ -65,7 +65,7 @@ class _MyAppState extends State<_MyApp>{
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SettingsBloc, SettingsState>(
+    return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, settings) {
 
         return BlocBuilder<AuthBloc, AuthState>(
