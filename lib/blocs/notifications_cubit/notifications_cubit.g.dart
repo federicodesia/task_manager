@@ -8,10 +8,9 @@ part of 'notifications_cubit.dart';
 
 NotificationsState _$NotificationsStateFromJson(Map<String, dynamic> json) =>
     NotificationsState(
-      notifications: (json['notifications'] as List<dynamic>?)
-              ?.map((e) => NotificationData.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
+      notifications: (json['notifications'] as List<dynamic>)
+          .map((e) => NotificationData.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$NotificationsStateToJson(NotificationsState instance) =>

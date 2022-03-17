@@ -6,8 +6,12 @@ class NotificationsState{
   final List<NotificationData> notifications;
 
   NotificationsState({
-    this.notifications = const [],
+    required this.notifications,
   });
+
+  static NotificationsState get initial => NotificationsState(
+    notifications: []
+  );
 
   NotificationsState copyWith({
     List<NotificationData>? notifications

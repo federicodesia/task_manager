@@ -25,7 +25,7 @@ Map<String, dynamic> _$NotificationDataToJson(NotificationData instance) =>
     };
 
 const _$NotificationTypeEnumMap = {
+  NotificationType.general: 'general',
   NotificationType.reminder: 'reminder',
   NotificationType.security: 'security',
-  NotificationType.other: 'other',
 };

@@ -38,6 +38,7 @@ dependencies:
 
   firebase_core: ^1.13.1
   firebase_messaging: ^11.2.8
+  awesome_notifications: ^0.6.21
 
   flutter_svg: ^1.0.3
   flutter_map: ^0.14.0

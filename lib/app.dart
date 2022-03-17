@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
+import 'package:task_manager/blocs/notifications_cubit/notifications_cubit.dart';
 import 'package:task_manager/blocs/settings_cubit/settings_cubit.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
@@ -12,6 +13,7 @@ import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/services/context_service.dart';
 import 'package:task_manager/services/dialog_service.dart';
 import 'package:task_manager/services/locator_service.dart';
+import 'package:task_manager/services/notification_service.dart';
 import 'package:task_manager/theme/theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -30,6 +32,13 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => SettingsCubit()),
+          BlocProvider(
+            create: (context) => NotificationsCubit(
+              settingsCubit: context.read<SettingsCubit>(),
+              notificationService: locator<NotificationService>()
+            ),
+            lazy: false
+          ),
           BlocProvider(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),

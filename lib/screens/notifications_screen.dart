@@ -4,8 +4,8 @@ import 'package:task_manager/components/dot_tab_bar.dart';
 import 'package:task_manager/components/main/app_bar.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/constants.dart';
-import 'package:task_manager/helpers/string_helper.dart';
-import 'package:task_manager/models/notification_data.dart';
+import 'package:task_manager/l10n/l10n.dart';
+import 'package:task_manager/models/notification_type.dart';
 import 'package:task_manager/theme/theme.dart';
 
 class NotificationsScreen extends StatefulWidget{
@@ -17,7 +17,7 @@ class NotificationsScreen extends StatefulWidget{
 
 class _NotificationsScreenState extends State<NotificationsScreen> with TickerProviderStateMixin{
 
-  late List<String> tabList = NotificationTypeFilter.values.map((v) => v.name.capitalize).toList();
+  late int tabCount = NotificationTypeFilter.values.length;
   late PageController pageController;
   late TabController tabController;
   int currentTab = 0;
@@ -30,7 +30,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
     pageController = PageController();
 
     tabController = TabController(
-      length: tabList.length,
+      length: tabCount,
       vsync: this,
     );
 
@@ -61,8 +61,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
                       setState(() => appBarHeight = size.height);
                     },
                     child: MyAppBar(
-                      header: "Notificaciones",
-                      description: "Mantente al día!",
+                      header: context.l10n.notificationsScreen_title,
+                      description: context.l10n.notificationsScreen_description,
                       onButtonPressed: () {},
                     )
                   )
@@ -78,8 +78,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
                         },
                         child: DotTabBar(
                           controller: tabController,
-                          tabs: List.generate(tabList.length, (index){
-                            return Tab(text: tabList.elementAt(index));
+                          tabs: List.generate(tabCount, (index){
+                            return Tab(text: NotificationTypeFilter.values.elementAt(index).nameLocalization(context));
                           }),
                           onTap: (index){
                             pageController.animateToPage(
@@ -94,7 +94,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
                       ExpandablePageView.builder(
                         controller: pageController,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: tabList.length,
+                        itemCount: tabCount,
                         itemBuilder: (context, index){
                           
                           return ConstrainedBox(
