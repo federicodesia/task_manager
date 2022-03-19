@@ -1,10 +1,19 @@
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/blocs/notifications_cubit/notifications_cubit.dart';
 import 'package:task_manager/components/dot_tab_bar.dart';
+import 'package:task_manager/components/lists/declarative_animated_list.dart';
+import 'package:task_manager/components/lists/list_header.dart';
+import 'package:task_manager/components/lists/list_item_animation.dart';
+import 'package:task_manager/components/lists/notification_list_item.dart';
 import 'package:task_manager/components/main/app_bar.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/l10n/l10n.dart';
+import 'package:task_manager/models/dynamic_object.dart';
+import 'package:task_manager/models/notification_data.dart';
 import 'package:task_manager/models/notification_type.dart';
 import 'package:task_manager/theme/theme.dart';
 
@@ -63,7 +72,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
                     child: MyAppBar(
                       header: context.l10n.notificationsScreen_title,
                       description: context.l10n.notificationsScreen_description,
-                      onButtonPressed: () {},
+                      onButtonPressed: () {
+                        context.read<NotificationsCubit>().showTaskScheduleNotification("Prueba");
+                      },
                     )
                   )
                 ),
@@ -102,10 +113,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
                               minHeight: (constraints.maxHeight - appBarHeight - contentHeight)
                                 .clamp(0.0, constraints.maxHeight)
                             ),
-                            child: SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(),
-                              padding: const EdgeInsets.all(cPadding),
-                              child: Container()
+                            child: const SingleChildScrollView(
+                              physics: BouncingScrollPhysics(),
+                              padding: EdgeInsets.all(cPadding),
+                              child: NotificationsScreenTab()
                             ),
                           );
                         },
@@ -124,6 +135,38 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
           }
         ),
       )
+    );
+  }
+}
+
+class NotificationsScreenTab extends StatelessWidget{
+  const NotificationsScreenTab({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<NotificationsCubit, NotificationsState>(
+      builder: (_, state){
+        final now = DateTime.now();
+        final items = state.items;
+
+        return items != null ? DeclarativeAnimatedList(
+          items: items,
+          itemBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
+            final object = dynamicObject.object;
+
+            return ListItemAnimation(
+              animation: animation,
+              child: object is NotificationData
+                ? Padding(
+                  padding: const EdgeInsets.only(bottom: cListItemSpace),
+                  child: NotificationListItem(data: object),
+                ) : object is DateTime
+                  ? ListHeader(context.l10n.dateTime_daysAgo(now.dateDifference(object)))
+                  : Container()
+            );
+          }
+        ) : Container();
+      }
     );
   }
 }

@@ -66,6 +66,12 @@
   "@confirm": {},
   "continue_button": "Continue",
   "@continue_button": {},
+  "dateTime_daysAgo": "{count, plural, zero{Today} one{{count} day ago} other{{count} days ago}}",
+  "@dateTime_daysAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "dateTime_today": "Today",
   "@dateTime_today": {},
   "dateTime_tomorrow": "Tomorrow",

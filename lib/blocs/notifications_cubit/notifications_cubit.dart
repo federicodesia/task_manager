@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
 import 'package:task_manager/blocs/settings_cubit/settings_cubit.dart';
+import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/notification_data.dart';
 import 'package:task_manager/models/notification_type.dart';
 import 'package:task_manager/services/notification_service.dart';
@@ -20,7 +22,35 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
   NotificationsCubit({
     required this.settingsCubit,
     required this.notificationService
-  }) : super(NotificationsState.initial);
+  }) : super(NotificationsState.initial){
+    emit(state.copyWith(
+      items: _groupItems(state.notifications)
+    ));
+  }
+
+  List<DynamicObject> _groupItems(List<NotificationData> notifications){
+
+    List<DynamicObject> items = [];
+    notifications.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+    if(notifications.isNotEmpty){
+
+      DateTime lastDate = notifications.first.createdAt.ignoreTime;
+      items.add(DynamicObject(object: lastDate));
+
+      for (NotificationData notification in notifications){
+        if(notification.createdAt.dateDifference(lastDate) == 0) {
+          items.add(DynamicObject(object: notification));
+        }
+        else{
+          lastDate = notification.createdAt.ignoreTime;
+          items.add(DynamicObject(object: lastDate));
+          items.add(DynamicObject(object: notification));
+        }
+      }
+    }
+    return items;
+  }
 
   void _showNotification(NotificationData Function(AppLocalizations) notificationData) async {
     try{
@@ -34,7 +64,11 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
       final channelKey = notificationService.channels[data.type]?.channelKey;
       if(channelKey == null) return;
 
-      emit(state.copyWith(notifications: state.notifications..add(data)));
+      final notifications = state.notifications..add(data);
+      emit(state.copyWith(
+        notifications: notifications,
+        items: _groupItems(notifications)
+      ));
 
       await AwesomeNotifications().createNotification(
         content: NotificationContent(
@@ -106,6 +140,16 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
         );
       });
     }
+  }
+
+  @override
+  Future<void> close() {
+    // Delete notifications older than a week.
+    final now = DateTime.now();
+    emit(state.copyWith(notifications: state.notifications..removeWhere((n){
+      return now.dateDifference(n.createdAt) > 7;
+    })));
+    return super.close();
   }
 
   @override

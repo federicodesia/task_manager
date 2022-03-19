@@ -16,7 +16,6 @@ import 'package:task_manager/components/main/app_bar.dart';
 import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/category.dart';
-import 'package:task_manager/models/tab.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
@@ -26,6 +25,17 @@ import 'package:task_manager/screens/home/upcoming_tab.dart';
 import 'package:task_manager/theme/theme.dart';
 
 import '../../constants.dart';
+
+enum HomeTabs { todayTab, upcomingTab, previousTab }
+
+extension HomeTabsExtension on HomeTabs {
+  String nameLocalization(BuildContext context) {
+    if(this == HomeTabs.todayTab) return context.l10n.homeScreen_todayTab;
+    if(this == HomeTabs.upcomingTab) return context.l10n.homeScreen_upcomingTab;
+    if(this == HomeTabs.previousTab) return context.l10n.homeScreen_previousTab;
+    return "Unknown";
+  }
+}
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -37,10 +47,10 @@ class HomeScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => availableSpaceCubit,
       child: _HomeScreen(
-        tabList: [
-          MyTab(name: context.l10n.homeScreen_todayTab, content: TodayTab(availableSpaceCubit: availableSpaceCubit)),
-          MyTab(name: context.l10n.homeScreen_upcomingTab, content: UpcomingTab(availableSpaceCubit: availableSpaceCubit)),
-          MyTab(name: context.l10n.homeScreen_previousTab, content: Container()),
+        tabs: [
+          TodayTab(availableSpaceCubit: availableSpaceCubit),
+          UpcomingTab(availableSpaceCubit: availableSpaceCubit),
+          Container(),
         ]
       ),
     );
@@ -49,8 +59,8 @@ class HomeScreen extends StatelessWidget {
 
 class _HomeScreen extends StatefulWidget{
 
-  final List<MyTab> tabList;
-  const _HomeScreen({required this.tabList});
+  final List<Widget> tabs;
+  const _HomeScreen({required this.tabs});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -58,7 +68,7 @@ class _HomeScreen extends StatefulWidget{
 
 class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
-  late List<MyTab> tabList = widget.tabList;
+  late List<Widget> tabs = widget.tabs;
 
   late PageController pageController;
   late TabController tabController;
@@ -74,7 +84,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
     pageController = PageController();
 
     tabController = TabController(
-      length: tabList.length,
+      length: tabs.length,
       vsync: this,
     );
 
@@ -236,8 +246,8 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
 
                         DotTabBar(
                           controller: tabController,
-                          tabs: List.generate(tabList.length, (index){
-                            return Tab(text: tabList[index].name);
+                          tabs: List.generate(tabs.length, (index){
+                            return Tab(text: HomeTabs.values.elementAt(index).nameLocalization(context));
                           }),
                           onTap: (index){
                             pageController.animateToPage(
@@ -256,7 +266,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                   child: ExpandablePageView.builder(
                     controller: pageController,
                     physics: const BouncingScrollPhysics(),
-                    itemCount: tabList.length,
+                    itemCount: tabs.length,
                     itemBuilder: (context, index){
                       
                       return ConstrainedBox(
@@ -266,7 +276,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                         child: SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
                           padding: const EdgeInsets.all(cPadding),
-                          child: tabList[index].content
+                          child: tabs.elementAt(index)
                         ),
                       );
                     },

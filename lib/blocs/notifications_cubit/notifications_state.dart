@@ -4,20 +4,26 @@ part of 'notifications_cubit.dart';
 class NotificationsState{
 
   final List<NotificationData> notifications;
+  @JsonKey(ignore: true)
+  final List<DynamicObject>? items;
 
   NotificationsState({
     required this.notifications,
+    this.items
   });
 
   static NotificationsState get initial => NotificationsState(
-    notifications: []
+    notifications: [],
+    items: []
   );
 
   NotificationsState copyWith({
-    List<NotificationData>? notifications
+    List<NotificationData>? notifications,
+    List<DynamicObject>? items
   }){
     return NotificationsState(
-      notifications: notifications ?? this.notifications
+      notifications: notifications ?? this.notifications,
+      items: items ?? this.items
     );
   }
 

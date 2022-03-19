@@ -66,6 +66,12 @@
   "@confirm": {},
   "continue_button": "Continuar",
   "@continue_button": {},
+  "dateTime_daysAgo": "{count, plural, zero{Hoy} one{Hace {count} día} other{Hace {count} días}}",
+  "@dateTime_daysAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "dateTime_today": "Hoy",
   "@dateTime_today": {},
   "dateTime_tomorrow": "Mañana",
@@ -250,7 +256,7 @@
   "@notification_loginOnNewDevice_body": {},
   "notification_loginOnNewDevice_title": "Alerta de seguridad",
   "@notification_loginOnNewDevice_title": {},
-  "notificationsScreen_description": "¡Mantente al día! ",
+  "notificationsScreen_description": "Mantente al día! ",
   "@notificationsScreen_description": {},
   "notificationsScreen_title": "Notificaciones",
   "@notificationsScreen_title": {},
