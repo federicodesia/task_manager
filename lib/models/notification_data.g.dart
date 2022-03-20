@@ -28,4 +28,5 @@ const _$NotificationTypeEnumMap = {
   NotificationType.general: 'general',
   NotificationType.reminder: 'reminder',
   NotificationType.security: 'security',
+  NotificationType.advertisement: 'advertisement',
 };

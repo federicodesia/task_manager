@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/l10n/l10n.dart';
 
-enum NotificationType { general, reminder, security }
+enum NotificationType { general, reminder, security, advertisement }
 enum NotificationTypeFilter { all, reminders, advertisements }
 
 extension NotificationTypeFilterExtension on NotificationTypeFilter {

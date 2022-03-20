@@ -26,10 +26,14 @@ class NotificationsScreen extends StatefulWidget{
 
 class _NotificationsScreenState extends State<NotificationsScreen> with TickerProviderStateMixin{
 
-  late int tabCount = NotificationTypeFilter.values.length;
+  static const Map<NotificationTypeFilter, Widget> tabList = {
+    NotificationTypeFilter.all : NotificationsScreenTab(null),
+    NotificationTypeFilter.reminders : NotificationsScreenTab(NotificationType.reminder),
+    NotificationTypeFilter.advertisements : NotificationsScreenTab(NotificationType.advertisement)
+  };
+
   late PageController pageController;
   late TabController tabController;
-  int currentTab = 0;
 
   double appBarHeight = 500.0;
   double contentHeight = 0.0;
@@ -39,7 +43,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
     pageController = PageController();
 
     tabController = TabController(
-      length: tabCount,
+      length: tabList.length,
       vsync: this,
     );
 
@@ -89,8 +93,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
                         },
                         child: DotTabBar(
                           controller: tabController,
-                          tabs: List.generate(tabCount, (index){
-                            return Tab(text: NotificationTypeFilter.values.elementAt(index).nameLocalization(context));
+                          tabs: List.generate(tabList.length, (index){
+                            return Tab(text: tabList.keys.elementAt(index).nameLocalization(context));
                           }),
                           onTap: (index){
                             pageController.animateToPage(
@@ -105,7 +109,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
                       ExpandablePageView.builder(
                         controller: pageController,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: tabCount,
+                        itemCount: tabList.length,
                         itemBuilder: (context, index){
                           
                           return ConstrainedBox(
@@ -113,15 +117,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
                               minHeight: (constraints.maxHeight - appBarHeight - contentHeight)
                                 .clamp(0.0, constraints.maxHeight)
                             ),
-                            child: const SingleChildScrollView(
-                              physics: BouncingScrollPhysics(),
-                              padding: EdgeInsets.all(cPadding),
-                              child: NotificationsScreenTab()
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              padding: const EdgeInsets.all(cPadding),
+                              child: tabList.values.elementAt(index)
                             ),
                           );
                         },
                         onPageChanged: (index){
-                          setState(() => currentTab = index);
                           if(tabController.index != pageController.page){
                             tabController.animateTo(index);
                           }
@@ -140,17 +143,29 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
 }
 
 class NotificationsScreenTab extends StatelessWidget{
-  const NotificationsScreenTab({Key? key}) : super(key: key);
+  final NotificationType? typeFilter;
+
+  const NotificationsScreenTab(
+    this.typeFilter,
+    { Key? key }
+  ) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotificationsCubit, NotificationsState>(
       builder: (_, state){
-        final now = DateTime.now();
-        final items = state.items;
 
-        return items != null ? DeclarativeAnimatedList(
-          items: items,
+        final now = DateTime.now();
+        List<NotificationData> notifications = state.notifications;
+
+        if(typeFilter != null){
+          notifications = notifications.where((notification) {
+            return notification.type == typeFilter;
+          }).toList();
+        }
+
+        return DeclarativeAnimatedList(
+          items: notifications.groupByDay,
           itemBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
             final object = dynamicObject.object;
 
@@ -165,7 +180,7 @@ class NotificationsScreenTab extends StatelessWidget{
                   : Container()
             );
           }
-        ) : Container();
+        );
       }
     );
   }

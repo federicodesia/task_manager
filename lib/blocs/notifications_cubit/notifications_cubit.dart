@@ -22,35 +22,7 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
   NotificationsCubit({
     required this.settingsCubit,
     required this.notificationService
-  }) : super(NotificationsState.initial){
-    emit(state.copyWith(
-      items: _groupItems(state.notifications)
-    ));
-  }
-
-  List<DynamicObject> _groupItems(List<NotificationData> notifications){
-
-    List<DynamicObject> items = [];
-    notifications.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
-    if(notifications.isNotEmpty){
-
-      DateTime lastDate = notifications.first.createdAt.ignoreTime;
-      items.add(DynamicObject(object: lastDate));
-
-      for (NotificationData notification in notifications){
-        if(notification.createdAt.dateDifference(lastDate) == 0) {
-          items.add(DynamicObject(object: notification));
-        }
-        else{
-          lastDate = notification.createdAt.ignoreTime;
-          items.add(DynamicObject(object: lastDate));
-          items.add(DynamicObject(object: notification));
-        }
-      }
-    }
-    return items;
-  }
+  }) : super(NotificationsState.initial);
 
   void _showNotification(NotificationData Function(AppLocalizations) notificationData) async {
     try{
@@ -64,10 +36,8 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
       final channelKey = notificationService.channels[data.type]?.channelKey;
       if(channelKey == null) return;
 
-      final notifications = state.notifications..add(data);
       emit(state.copyWith(
-        notifications: notifications,
-        items: _groupItems(notifications)
+        notifications: state.notifications..add(data)
       ));
 
       await AwesomeNotifications().createNotification(
