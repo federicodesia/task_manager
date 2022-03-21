@@ -61,7 +61,7 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
           title: localization.notification_loginOnNewDevice_title,
           body: localization.notification_loginOnNewDevice_body,
           createdAt: DateTime.now(),
-          type: NotificationType.security
+          type: const NotificationType.security()
         );
       });
     }
@@ -76,7 +76,7 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
           title: taskTitle,
           body: localization.notification_beforeSchedule_body,
           createdAt: DateTime.now(),
-          type: NotificationType.reminder
+          type: const NotificationType.reminder()
         );
       });
     }
@@ -91,7 +91,7 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
           title: taskTitle,
           body: localization.notification_taskSchedule_body,
           createdAt: DateTime.now(),
-          type: NotificationType.reminder
+          type: const NotificationType.reminder()
         );
       });
     }
@@ -106,7 +106,7 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
           title: taskTitle,
           body: localization.notification_uncompletedTask_body,
           createdAt: DateTime.now(),
-          type: NotificationType.reminder
+          type: const NotificationType.reminder()
         );
       });
     }

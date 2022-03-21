@@ -12,7 +12,7 @@ NotificationData _$NotificationDataFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       body: json['body'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      type: $enumDecode(_$NotificationTypeEnumMap, json['type']),
+      type: NotificationType.fromJson(json['type'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$NotificationDataToJson(NotificationData instance) =>
@@ -21,12 +21,5 @@ Map<String, dynamic> _$NotificationDataToJson(NotificationData instance) =>
       'title': instance.title,
       'body': instance.body,
       'createdAt': instance.createdAt.toIso8601String(),
-      'type': _$NotificationTypeEnumMap[instance.type],
+      'type': instance.type,
     };
-
-const _$NotificationTypeEnumMap = {
-  NotificationType.general: 'general',
-  NotificationType.reminder: 'reminder',
-  NotificationType.security: 'security',
-  NotificationType.advertisement: 'advertisement',
-};

@@ -1,23 +1,32 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/string_helper.dart';
 import 'package:task_manager/models/notification_type.dart';
 
 class NotificationService{
 
-  Map<NotificationType, NotificationChannel> channels = {
-    for (var t in NotificationType.values) t : NotificationChannel(
-      channelKey: t.name.toLowerSnakeCase,
-      channelName: "${t.name.capitalize} notifications",
-      channelDescription: "Description not provided",
-      defaultColor: cPrimaryColor
-    )
+  late Map<NotificationType, NotificationChannel> channels = {
+    for (var type in [
+      const NotificationType.general(),
+      const NotificationType.reminder(),
+      const NotificationType.security(),
+      const NotificationType.advertisement()
+    ]) type : _channelFromType(type)
   };
+
+  NotificationChannel _channelFromType(NotificationType type){
+    final name = (type.toJson()["runtimeType"] as String?) ?? "basic";
+    return NotificationChannel(
+      channelKey: "$name channel".toLowerSnakeCase,
+      channelName: "${name.capitalize} notifications",
+      channelDescription: "Description not provided",
+      defaultColor: type.color
+    );
+  }
   
   NotificationService(){
     AwesomeNotifications().initialize(
       null,
-      channels.values.toList(),
+      channels.values.toSet().toList(),
       debug: true
     );
   }

@@ -40,9 +40,9 @@ class NotificationListItem extends StatelessWidget{
                   
                   Container(
                     width: cLineSize,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                      color: cPrimaryColor
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+                      color: data.type.color
                     )
                   ),
                   const SizedBox(width: 16.0),

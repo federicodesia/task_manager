@@ -44,8 +44,8 @@ class _NotificationsScreenState extends State<_NotificationsScreen> with TickerP
 
   static const List<NotificationsScreenTab> tabList = [
     NotificationsScreenTab(null),
-    NotificationsScreenTab(NotificationType.reminder),
-    NotificationsScreenTab(NotificationType.advertisement)
+    NotificationsScreenTab(NotificationType.reminder()),
+    NotificationsScreenTab(NotificationType.advertisement())
   ];
 
   late PageController pageController;
@@ -96,6 +96,7 @@ class _NotificationsScreenState extends State<_NotificationsScreen> with TickerP
                       onButtonPressed: () {
                         // TODO: Remove test notification
                         context.read<NotificationsCubit>().showTaskScheduleNotification("Prueba");
+                        context.read<NotificationsCubit>().showLoginOnNewDeviceNotification();
                       },
                     )
                   )
