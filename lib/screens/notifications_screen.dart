@@ -3,34 +3,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/notifications_cubit/notifications_cubit.dart';
 import 'package:task_manager/components/dot_tab_bar.dart';
+import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/declarative_animated_list.dart';
 import 'package:task_manager/components/lists/list_header.dart';
 import 'package:task_manager/components/lists/list_item_animation.dart';
 import 'package:task_manager/components/lists/notification_list_item.dart';
 import 'package:task_manager/components/main/app_bar.dart';
+import 'package:task_manager/components/responsive/fill_remaining_list.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/constants.dart';
+import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/helpers/string_helper.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/notification_data.dart';
 import 'package:task_manager/models/notification_type.dart';
 import 'package:task_manager/theme/theme.dart';
 
-class NotificationsScreen extends StatefulWidget{
+class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => AvailableSpaceCubit(),
+      child: const _NotificationsScreen(),
+    );
+  }
+}
+
+class _NotificationsScreen extends StatefulWidget{
+  const _NotificationsScreen({Key? key}) : super(key: key);
 
   @override
   _NotificationsScreenState createState() => _NotificationsScreenState();
 }
 
-class _NotificationsScreenState extends State<NotificationsScreen> with TickerProviderStateMixin{
+class _NotificationsScreenState extends State<_NotificationsScreen> with TickerProviderStateMixin{
 
-  static const Map<NotificationTypeFilter, Widget> tabList = {
-    NotificationTypeFilter.all : NotificationsScreenTab(null),
-    NotificationTypeFilter.reminders : NotificationsScreenTab(NotificationType.reminder),
-    NotificationTypeFilter.advertisements : NotificationsScreenTab(NotificationType.advertisement)
-  };
+  static const List<NotificationsScreenTab> tabList = [
+    NotificationsScreenTab(null),
+    NotificationsScreenTab(NotificationType.reminder),
+    NotificationsScreenTab(NotificationType.advertisement)
+  ];
 
   late PageController pageController;
   late TabController tabController;
@@ -72,11 +88,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
                   flexibleSpace: WidgetSize(
                     onChange: (Size size){
                       setState(() => appBarHeight = size.height);
+                      context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - contentHeight - size.height);
                     },
                     child: MyAppBar(
                       header: context.l10n.notificationsScreen_title,
                       description: context.l10n.notificationsScreen_description,
                       onButtonPressed: () {
+                        // TODO: Remove test notification
                         context.read<NotificationsCubit>().showTaskScheduleNotification("Prueba");
                       },
                     )
@@ -90,11 +108,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
                       WidgetSize(
                         onChange: (Size size){
                           setState(() => contentHeight = size.height);
+                          context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - appBarHeight - size.height);
                         },
                         child: DotTabBar(
                           controller: tabController,
                           tabs: List.generate(tabList.length, (index){
-                            return Tab(text: tabList.keys.elementAt(index).nameLocalization(context));
+                            return Tab(
+                              text: tabList.elementAt(index).typeFilter
+                                .nameLocalization(context, isPlural: true)
+                            );
                           }),
                           onTap: (index){
                             pageController.animateToPage(
@@ -120,7 +142,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> with TickerPr
                             child: SingleChildScrollView(
                               physics: const BouncingScrollPhysics(),
                               padding: const EdgeInsets.all(cPadding),
-                              child: tabList.values.elementAt(index)
+                              child: tabList.elementAt(index)
                             ),
                           );
                         },
@@ -164,22 +186,37 @@ class NotificationsScreenTab extends StatelessWidget{
           }).toList();
         }
 
-        return DeclarativeAnimatedList(
-          items: notifications.groupByDay,
-          itemBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
-            final object = dynamicObject.object;
+        if(notifications.isNotEmpty){
+          return DeclarativeAnimatedList(
+            items: notifications.groupByDay,
+            itemBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
+              final object = dynamicObject.object;
 
-            return ListItemAnimation(
-              animation: animation,
-              child: object is NotificationData
-                ? Padding(
-                  padding: const EdgeInsets.only(bottom: cListItemSpace),
-                  child: NotificationListItem(data: object),
-                ) : object is DateTime
-                  ? ListHeader(context.l10n.dateTime_daysAgo(now.dateDifference(object)))
-                  : Container()
-            );
-          }
+              return ListItemAnimation(
+                animation: animation,
+                child: object is NotificationData
+                  ? Padding(
+                    padding: const EdgeInsets.only(bottom: cListItemSpace),
+                    child: NotificationListItem(data: object),
+                  ) : object is DateTime
+                    ? ListHeader(context.l10n.dateTime_daysAgo(now.dateDifference(object)))
+                    : Container()
+              );
+            }
+          );
+        }
+
+        return FillRemainingList(
+          availableSpaceCubit: context.read<AvailableSpaceCubit>(),
+          child: EmptySpace(
+            svgImage: "assets/svg/personal_file.svg",
+            header: context.l10n.emptySpace_youDontHaveNotifications,
+            description: typeFilter != null
+              ? context.l10n.emptySpace_youDontHaveNotifications_description_type(
+                  typeFilter.nameLocalization(context)
+                ).capitalize
+              : context.l10n.emptySpace_youDontHaveNotifications_description_all
+          ),
         );
       }
     );

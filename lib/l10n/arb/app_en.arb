@@ -44,7 +44,7 @@
   "@category": {},
   "categoryCard_allDone_description": "All done!",
   "@categoryCard_allDone_description": {},
-  "categoryCard_taskCount_description": "{count, plural, zero{{count} tasks} one{{count} task} other{{count} tasks}}",
+  "categoryCard_taskCount_description": "{count, plural, =0{{count} tasks} =1{{count} task} other{{count} tasks}}",
   "@categoryCard_taskCount_description": {
     "placeholders": {
       "count": {}
@@ -66,7 +66,7 @@
   "@confirm": {},
   "continue_button": "Continue",
   "@continue_button": {},
-  "dateTime_daysAgo": "{count, plural, zero{Today} one{{count} day ago} other{{count} days ago}}",
+  "dateTime_daysAgo": "{count, plural, =0{Today} =1{{count} day ago} other{{count} days ago}}",
   "@dateTime_daysAgo": {
     "placeholders": {
       "count": {}
@@ -110,6 +110,16 @@
   "@emptySpace_verifyYourEmail": {},
   "emptySpace_verifyYourEmail_description": "Please enter the 4 character verification code sent to your email address.",
   "@emptySpace_verifyYourEmail_description": {},
+  "emptySpace_youDontHaveNotifications": "You don't have notifications",
+  "@emptySpace_youDontHaveNotifications": {},
+  "emptySpace_youDontHaveNotifications_description_all": "The history of all the notifications you received in the last week will appear here.",
+  "@emptySpace_youDontHaveNotifications_description_all": {},
+  "emptySpace_youDontHaveNotifications_description_type": "The history of the {type} notifications you received in the last week will appear here",
+  "@emptySpace_youDontHaveNotifications_description_type": {
+    "placeholders": {
+      "type": {}
+    }
+  },
   "emptySpace_youHaventTasksForLater": "You haven't tasks for later!",
   "@emptySpace_youHaventTasksForLater": {},
   "emptySpace_youHaventTasksForLater_description": "Add tasks to organize your day, optimize your time and receive reminders!",
@@ -134,12 +144,20 @@
   },
   "emptySpace_youHaventTasksWithActiveFilter_description": "There are no tasks with the current filter. Change it by pressing the button above.",
   "@emptySpace_youHaventTasksWithActiveFilter_description": {},
-  "enum_notificationTypeFilter_advertisements": "Advertisements",
-  "@enum_notificationTypeFilter_advertisements": {},
-  "enum_notificationTypeFilter_all": "All",
-  "@enum_notificationTypeFilter_all": {},
-  "enum_notificationTypeFilter_reminders": "Reminders",
-  "@enum_notificationTypeFilter_reminders": {},
+  "enum_notificationType_advertisement": "{count, plural, =0{Advertisements} =1{Advertisement} other{Advertisements}}",
+  "@enum_notificationType_advertisement": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "enum_notificationType_all": "All",
+  "@enum_notificationType_all": {},
+  "enum_notificationType_reminder": "{count, plural, =0{Reminders} =1{Reminder} other{Reminders}}",
+  "@enum_notificationType_reminder": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "enum_taskFilter_all": "All",
   "@enum_taskFilter_all": {},
   "enum_taskFilter_completed": "Completed",
@@ -184,13 +202,13 @@
   "@error_expiredCode": {},
   "error_invalidCode": "Invalid code",
   "@error_invalidCode": {},
-  "error_maxLength": "{count, plural, zero{Maximum {count} characters} one{Maximum {count} character} other{Maximum {count} characters}}",
+  "error_maxLength": "{count, plural, =0{Maximum {count} characters} =1{Maximum {count} character} other{Maximum {count} characters}}",
   "@error_maxLength": {
     "placeholders": {
       "count": {}
     }
   },
-  "error_minLength": "{count, plural, zero{Must contain at least {count} characters} one{Must contain at least {count} character} other{Must contain at least {count} characters}}",
+  "error_minLength": "{count, plural, =0{Must contain at least {count} characters} =1{Must contain at least {count} character} other{Must contain at least {count} characters}}",
   "@error_minLength": {
     "placeholders": {
       "count": {}
