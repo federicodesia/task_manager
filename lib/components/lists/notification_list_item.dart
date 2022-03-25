@@ -67,7 +67,7 @@ class NotificationListItem extends StatelessWidget{
                             const SizedBox(width: 12.0),
 
                             Text(
-                              data.createdAt.format(context, "HH:mm a"),
+                              (data.scheduledAt ?? data.createdAt).format(context, "HH:mm a"),
                               style: customTheme.lightTextStyle
                             )
                           ],

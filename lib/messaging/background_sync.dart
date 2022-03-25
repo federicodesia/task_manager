@@ -3,10 +3,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
 import 'package:task_manager/blocs/drifted_bloc/drifted_storage.dart';
+import 'package:task_manager/blocs/notifications_cubit/notifications_cubit.dart';
+import 'package:task_manager/blocs/settings_cubit/settings_cubit.dart';
 import 'package:task_manager/blocs/sync_bloc/sync_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/repositories/base_repository.dart';
 import 'package:task_manager/repositories/sync_repository.dart';
+import 'package:task_manager/services/notification_service.dart';
 
 abstract class BackgroundSync{
 
@@ -17,7 +20,12 @@ abstract class BackgroundSync{
       final storage = await DriftedStorage.build();
       DriftedBlocOverrides.runZoned(
         () async {
-          final taskBloc = TaskBloc();
+          final taskBloc = TaskBloc(
+            notificationsCubit: NotificationsCubit(
+              notificationService: NotificationService(),
+              settingsCubit: SettingsCubit()
+            )
+          );
           final syncBloc = SyncBloc(
             syncRepository: SyncRepository(base: BaseRepository()),
             taskBloc: taskBloc,

@@ -2,6 +2,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
+import 'package:task_manager/blocs/notifications_cubit/notifications_cubit.dart';
 import 'package:task_manager/models/sync_item_error.dart';
 import 'package:task_manager/models/sync_status.dart';
 import 'package:task_manager/models/task.dart';
@@ -13,7 +14,11 @@ part 'task_bloc.g.dart';
 
 class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
 
-  TaskBloc() : super(TaskLoadSuccess.initial()){
+  final NotificationsCubit notificationsCubit;
+
+  TaskBloc({
+    required this.notificationsCubit
+  }) : super(TaskLoadSuccess.initial()){
 
     on<TaskAdded>((event, emit) async{
       final taskState = state;
@@ -70,6 +75,16 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
       emit(event.state);
     },
     transformer: restartable());
+  }
+
+  @override
+  void onChange(change) async {
+    super.onChange(change);
+
+    final nextState = change.nextState;
+    if(nextState is TaskLoadSuccess){
+      notificationsCubit.scheduleTasksNotificatons(nextState.tasks);
+    }
   }
 
   @override

@@ -31,18 +31,23 @@ extension NotificationDataListExtension on List<NotificationData> {
     sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
     if(isNotEmpty){
+      final now = DateTime.now();
 
       DateTime lastDate = first.createdAt.ignoreTime;
       items.add(DynamicObject(object: lastDate));
 
       for (NotificationData notification in this){
-        if(notification.createdAt.dateDifference(lastDate) == 0) {
-          items.add(DynamicObject(object: notification));
-        }
-        else{
-          lastDate = notification.createdAt.ignoreTime;
-          items.add(DynamicObject(object: lastDate));
-          items.add(DynamicObject(object: notification));
+        final scheduledAt = notification.scheduledAt;
+        if(scheduledAt == null || scheduledAt.isBefore(now)){
+
+          if(notification.createdAt.dateDifference(lastDate) == 0) {
+            items.add(DynamicObject(object: notification));
+          }
+          else{
+            lastDate = notification.createdAt.ignoreTime;
+            items.add(DynamicObject(object: lastDate));
+            items.add(DynamicObject(object: notification));
+          }
         }
       }
     }

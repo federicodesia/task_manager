@@ -7,6 +7,7 @@ import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/notification_data.dart';
 import 'package:task_manager/models/notification_type.dart';
+import 'package:task_manager/models/task.dart';
 import 'package:task_manager/services/notification_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,14 +25,50 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
     required this.notificationService
   }) : super(NotificationsState.initial);
 
-  void _showNotification(NotificationData Function(AppLocalizations) notificationData) async {
+  void scheduleTasksNotificatons(List<Task> tasks) async {
+    final now = DateTime.now();
+    const reminderType = NotificationType.reminder();
+
+    final channelKey = notificationService.channels[reminderType]?.channelKey;
+    if(channelKey == null) return;
+    await AwesomeNotifications().cancelSchedulesByChannelKey(channelKey);
+
+    emit(state.copyWith(
+      notifications: state.notifications..removeWhere((notification){
+        if(notification.type == reminderType){
+          final scheduledAt = notification.scheduledAt;
+          if(scheduledAt != null && scheduledAt.isAfter(now)) return true;
+        }
+        return false;
+      })
+    ));
+
+    for (Task task in tasks) {
+      final beforeSchedule = task.date.subtract(const Duration(minutes: 15));
+      if(beforeSchedule.isAfter(now)){
+        _scheduleTaskBeforeScheduleNotification(beforeSchedule, task.title);
+      }
+
+      final taskSchedule = task.date;
+      if(taskSchedule.isAfter(now)){
+        _scheduleTaskScheduleNotification(taskSchedule, task.title);
+      }
+
+      final uncompletedSchedule = task.date.add(const Duration(hours: 1));
+      if(uncompletedSchedule.isAfter(now) && !task.isCompleted){
+        _scheduleUncompletedTaskNotification(uncompletedSchedule, task.title);
+      }
+    }
+  }
+
+  void _createNotification(Future<NotificationData> Function(AppLocalizations) notificationData) async {
     try{
       final locale = settingsCubit.state.locale
         ?? AppLocalizations.supportedLocales.firstOrNull;
       if(locale == null) return;
 
       final localization = lookupAppLocalizations(locale);
-      final data = notificationData(localization);
+      final data = await notificationData(localization);
 
       final channelKey = notificationService.channels[data.type]?.channelKey;
       if(channelKey == null) return;
@@ -40,6 +77,7 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
         notifications: state.notifications..add(data)
       ));
 
+      final scheduledAt = data.scheduledAt;
       await AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: data.id,
@@ -47,6 +85,7 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
           title: data.title,
           body: data.body
         ),
+        schedule: scheduledAt != null ? NotificationCalendar.fromDate(date: scheduledAt) : null
       );
     }
     catch(_){}
@@ -55,58 +94,53 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
   void showLoginOnNewDeviceNotification() async{
     if(settingsCubit.state.loginOnNewDeviceNotification){
 
-      _showNotification((localization){
-        return NotificationData(
-          id: state.notifications.length,
+      _createNotification((localization) async{
+        return await NotificationData.create(
           title: localization.notification_loginOnNewDevice_title,
           body: localization.notification_loginOnNewDevice_body,
-          createdAt: DateTime.now(),
           type: const NotificationType.security()
         );
       });
     }
   }
 
-  void showTaskBeforeScheduleNotification(String taskTitle) async{
+  void _scheduleTaskBeforeScheduleNotification(DateTime scheduleDate, String taskTitle) async{
     if(settingsCubit.state.beforeScheduleNotification){
 
-      _showNotification((localization){
-        return NotificationData(
-          id: state.notifications.length,
+      _createNotification((localization) async{
+        return await NotificationData.create(
           title: taskTitle,
           body: localization.notification_beforeSchedule_body,
-          createdAt: DateTime.now(),
-          type: const NotificationType.reminder()
+          type: const NotificationType.reminder(),
+          scheduledAt: scheduleDate
         );
       });
     }
   }
 
-  void showTaskScheduleNotification(String taskTitle) async{
+  void _scheduleTaskScheduleNotification(DateTime scheduleDate, String taskTitle) async{
     if(settingsCubit.state.taskScheduleNotification){
 
-      _showNotification((localization){
-        return NotificationData(
-          id: state.notifications.length,
+      _createNotification((localization) async{
+        return await NotificationData.create(
           title: taskTitle,
           body: localization.notification_taskSchedule_body,
-          createdAt: DateTime.now(),
-          type: const NotificationType.reminder()
+          type: const NotificationType.reminder(),
+          scheduledAt: scheduleDate
         );
       });
     }
   }
 
-  void showUncompletedTaskNotification(String taskTitle) async{
+  void _scheduleUncompletedTaskNotification(DateTime scheduleDate, String taskTitle) async{
     if(settingsCubit.state.uncompletedTaskNotification){
-      
-      _showNotification((localization){
-        return NotificationData(
-          id: state.notifications.length,
+
+      _createNotification((localization) async{
+        return await NotificationData.create(
           title: taskTitle,
           body: localization.notification_uncompletedTask_body,
-          createdAt: DateTime.now(),
-          type: const NotificationType.reminder()
+          type: const NotificationType.reminder(),
+          scheduledAt: scheduleDate
         );
       });
     }

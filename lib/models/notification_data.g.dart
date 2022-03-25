@@ -12,6 +12,9 @@ NotificationData _$NotificationDataFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       body: json['body'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
+      scheduledAt: json['scheduledAt'] == null
+          ? null
+          : DateTime.parse(json['scheduledAt'] as String),
       type: NotificationType.fromJson(json['type'] as Map<String, dynamic>),
     );
 
@@ -21,5 +24,6 @@ Map<String, dynamic> _$NotificationDataToJson(NotificationData instance) =>
       'title': instance.title,
       'body': instance.body,
       'createdAt': instance.createdAt.toIso8601String(),
+      'scheduledAt': instance.scheduledAt?.toIso8601String(),
       'type': instance.type,
     };

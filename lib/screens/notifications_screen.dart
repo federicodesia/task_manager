@@ -93,11 +93,7 @@ class _NotificationsScreenState extends State<_NotificationsScreen> with TickerP
                     child: MyAppBar(
                       header: context.l10n.notificationsScreen_title,
                       description: context.l10n.notificationsScreen_description,
-                      onButtonPressed: () {
-                        // TODO: Remove test notification
-                        context.read<NotificationsCubit>().showTaskScheduleNotification("Prueba");
-                        context.read<NotificationsCubit>().showLoginOnNewDeviceNotification();
-                      },
+                      onButtonPressed: () {},
                     )
                   )
                 ),
