@@ -13,8 +13,8 @@ class DeclarativeAnimatedList<T extends Object> extends StatelessWidget{
   final Duration insertDuration;
   final Duration removeDuration;
   final List<T> items;
-  final AnimatedItemBuilder<T> itemBuilder;
-  final AnimatedItemBuilder<T>? removeBuilder;
+  final Widget Function(BuildContext context, T item, int index, Animation<double> animation) itemBuilder;
+  final Widget? Function(BuildContext context, T item, int index, Animation<double> animation)? removeBuilder;
   final EqualityCheck<T>? equalityCheck;
   final Axis scrollDirection;
   final bool reverse;
@@ -42,7 +42,13 @@ class DeclarativeAnimatedList<T extends Object> extends StatelessWidget{
       removeDuration: removeDuration,
       items: items,
       itemBuilder: itemBuilder,
-      removeBuilder: removeBuilder ?? itemBuilder,
+      removeBuilder: (buildContext, T type, index, animation) {
+        if(removeBuilder != null){
+          final removeItem = removeBuilder!(buildContext, type, index, animation);
+          if(removeItem != null) return removeItem;
+        }
+        return itemBuilder(buildContext, type, index, animation);
+      },
       equalityCheck: equalityCheck,
       scrollDirection: scrollDirection,
       reverse: reverse,

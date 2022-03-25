@@ -28,26 +28,26 @@ class NotificationsState{
 extension NotificationDataListExtension on List<NotificationData> {
   List<DynamicObject> get groupByDay {
     List<DynamicObject> items = [];
+
+    final now = DateTime.now();
+    removeWhere((notification) {
+      final scheduledAt = notification.scheduledAt;
+      return scheduledAt != null && scheduledAt.isAfter(now);
+    });
     sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
     if(isNotEmpty){
-      final now = DateTime.now();
-
       DateTime lastDate = first.createdAt.ignoreTime;
       items.add(DynamicObject(object: lastDate));
 
       for (NotificationData notification in this){
-        final scheduledAt = notification.scheduledAt;
-        if(scheduledAt == null || scheduledAt.isBefore(now)){
-
-          if(notification.createdAt.dateDifference(lastDate) == 0) {
-            items.add(DynamicObject(object: notification));
-          }
-          else{
-            lastDate = notification.createdAt.ignoreTime;
-            items.add(DynamicObject(object: lastDate));
-            items.add(DynamicObject(object: notification));
-          }
+        if(notification.createdAt.dateDifference(lastDate) == 0) {
+          items.add(DynamicObject(object: notification));
+        }
+        else{
+          lastDate = notification.createdAt.ignoreTime;
+          items.add(DynamicObject(object: lastDate));
+          items.add(DynamicObject(object: notification));
         }
       }
     }

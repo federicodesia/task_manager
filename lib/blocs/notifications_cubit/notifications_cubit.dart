@@ -25,6 +25,19 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
     required this.notificationService
   }) : super(NotificationsState.initial);
 
+  void markAsRead(NotificationData notification){
+    emit(state.copyWith(
+      notifications: state.notifications
+        ..removeWhere((n) => n == notification)
+    ));
+  }
+
+  void undoMarkAsRead(NotificationData notification){
+    emit(state.copyWith(
+      notifications: state.notifications..add(notification)
+    ));
+  }
+
   void scheduleTasksNotificatons(List<Task> tasks) async {
     final now = DateTime.now();
     const reminderType = NotificationType.reminder();

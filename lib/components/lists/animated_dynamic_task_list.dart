@@ -6,6 +6,7 @@ import 'package:task_manager/components/lists/list_item_animation.dart';
 import 'package:task_manager/components/lists/task_list_item.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/task.dart';
+import 'package:collection/collection.dart';
 
 class AnimatedDynamicTaskList extends StatelessWidget{
   final List<DynamicObject> items;
@@ -28,13 +29,7 @@ class AnimatedDynamicTaskList extends StatelessWidget{
 
     return DeclarativeAnimatedList(
       items: items,
-      equalityCheck: (DynamicObject a, DynamicObject b){
-        final objectA = a.object;
-        final objectB = b.object;
-
-        //if(objectA is Task && objectB is Task) return objectA.id == objectB.id;
-        return objectA == objectB;
-      },
+      equalityCheck: (DynamicObject a, DynamicObject b) => a.object == b.object,
       itemBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
         final dynamic item = dynamicObject.object;
 
@@ -49,26 +44,17 @@ class AnimatedDynamicTaskList extends StatelessWidget{
         );
       },
       removeBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
-        final dynamic item = dynamicObject.object;
-        
-        return ListItemAnimation(
-          animation: animation,
-          child: item is Task ? BlocBuilder<TaskBloc, TaskState>(
-            builder: (_, state){
-              if(state is TaskLoadSuccess){
-                return state.tasks.where((t) => t.id == item.id).isNotEmpty ?
-                  TaskListItem(
-                    task: item,
-                    type: taskListItemType,
-                    buildContext: buildContext,
-                    onUndoDismissed: onUndoDismissed
-                  )
-                : Container();
-              }
+        final object = dynamicObject.object;
+
+        if(object is Task){
+          final taskState = buildContext.read<TaskBloc>().state;
+          if(taskState is TaskLoadSuccess){
+            if(taskState.deletedTasks.firstWhereOrNull((t) => t.id == object.id) != null){
               return Container();
             }
-          ) : objectBuilder(item)
-        );
+          }
+        }
+        return null;
       },
     );
   }

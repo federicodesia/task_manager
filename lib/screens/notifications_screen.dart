@@ -20,6 +20,7 @@ import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/notification_data.dart';
 import 'package:task_manager/models/notification_type.dart';
 import 'package:task_manager/theme/theme.dart';
+import 'package:collection/collection.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
@@ -186,20 +187,30 @@ class NotificationsScreenTab extends StatelessWidget{
         if(notifications.isNotEmpty){
           return DeclarativeAnimatedList(
             items: notifications.groupByDay,
+            equalityCheck: (DynamicObject a, DynamicObject b) => a.object == b.object,
             itemBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
               final object = dynamicObject.object;
 
               return ListItemAnimation(
                 animation: animation,
                 child: object is NotificationData
-                  ? Padding(
-                    padding: const EdgeInsets.only(bottom: cListItemSpace),
-                    child: NotificationListItem(data: object),
+                  ? NotificationListItem(
+                    data: object,
+                    buildContext: context,
                   ) : object is DateTime
                     ? ListHeader(context.l10n.dateTime_daysAgo(now.dateDifference(object)))
                     : Container()
               );
-            }
+            },
+            removeBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
+              final object = dynamicObject.object;
+              if(object is NotificationData){
+                if(state.notifications.firstWhereOrNull((n) => n == object) == null){
+                  return Container();
+                }
+              }
+              return null;
+            },
           );
         }
 
