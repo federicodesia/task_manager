@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -16,9 +18,14 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
 
   final NotificationsCubit notificationsCubit;
 
+  StreamSubscription<void>? taskNotificationsConfigChangeSubscription;
+
   TaskBloc({
     required this.notificationsCubit
   }) : super(TaskLoadSuccess.initial()){
+
+    taskNotificationsConfigChangeSubscription = notificationsCubit.settingsCubit
+      .taskNotificationsConfigChange.listen((_) => add(ScheduleTaskNotificationsRequested()));
 
     on<TaskAdded>((event, emit) async{
       final taskState = state;
@@ -75,16 +82,25 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
       emit(event.state);
     },
     transformer: restartable());
+
+    on<ScheduleTaskNotificationsRequested>((event, emit){
+      final taskState = state;
+      if(taskState is TaskLoadSuccess){
+        notificationsCubit.scheduleTasksNotificatons(taskState.tasks);
+      }
+    });
   }
 
   @override
   void onChange(change) async {
     super.onChange(change);
+    add(ScheduleTaskNotificationsRequested());
+  }
 
-    final nextState = change.nextState;
-    if(nextState is TaskLoadSuccess){
-      notificationsCubit.scheduleTasksNotificatons(nextState.tasks);
-    }
+  @override
+  Future<void> close() {
+    taskNotificationsConfigChangeSubscription?.cancel();
+    return super.close();
   }
 
   @override

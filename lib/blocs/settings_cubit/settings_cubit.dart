@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
@@ -8,6 +10,10 @@ part 'settings_state.dart';
 part 'settings_cubit.g.dart';
 
 class SettingsCubit extends DriftedCubit<SettingsState> {
+
+  final _taskNotificationsConfigChangeController = StreamController<void>.broadcast();
+  Stream<void> get taskNotificationsConfigChange => _taskNotificationsConfigChangeController.stream;
+  
   SettingsCubit() : super(SettingsState());
 
   void toggleThemeMode(BuildContext context){
@@ -24,14 +30,17 @@ class SettingsCubit extends DriftedCubit<SettingsState> {
 
   void toggleBeforeScheduleNotification(){
     emit(state.copyWith(beforeScheduleNotification: !state.beforeScheduleNotification));
+    _taskNotificationsConfigChangeController.add(null);
   }
 
   void toggleTaskScheduleNotification(){
     emit(state.copyWith(taskScheduleNotification: !state.taskScheduleNotification));
+    _taskNotificationsConfigChangeController.add(null);
   }
 
   void toggleUncompletedTaskNotification(){
     emit(state.copyWith(uncompletedTaskNotification: !state.uncompletedTaskNotification));
+    _taskNotificationsConfigChangeController.add(null);
   }
 
   void toggleNewUpdatesAvailableNotification(){

@@ -32,3 +32,5 @@ class TaskStateUpdated extends TaskEvent {
   final TaskState state;
   TaskStateUpdated(this.state);
 }
+
+class ScheduleTaskNotificationsRequested extends TaskEvent {}
