@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -20,10 +22,16 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
   final SettingsCubit settingsCubit;
   final NotificationService notificationService;
 
+  StreamSubscription<ReceivedNotification>? displayedNotificationsSubscription;
+
   NotificationsCubit({
     required this.settingsCubit,
     required this.notificationService
-  }) : super(NotificationsState.initial);
+  }) : super(NotificationsState.initial){
+
+    displayedNotificationsSubscription = notificationService.displayedStream
+      .listen((notification) => emit(state.copyWith()));
+  }
 
   void markAsRead(NotificationData notification){
     emit(state.copyWith(
@@ -161,6 +169,8 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
 
   @override
   Future<void> close() {
+    displayedNotificationsSubscription?.cancel();
+
     // Delete notifications older than a week.
     final now = DateTime.now();
     emit(state.copyWith(notifications: state.notifications..removeWhere((n){

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:task_manager/helpers/string_helper.dart';
 import 'package:task_manager/models/notification_type.dart';
@@ -22,12 +24,22 @@ class NotificationService{
       defaultColor: type.color
     );
   }
+
+  final displayedController = StreamController<ReceivedNotification>.broadcast();
+  Stream<ReceivedNotification> get displayedStream => displayedController.stream;
   
   NotificationService(){
-    AwesomeNotifications().initialize(
+    _init();
+  }
+
+  void _init() async {
+    await AwesomeNotifications().initialize(
       null,
       channels.values.toSet().toList(),
       debug: true
+    );
+    AwesomeNotifications().displayedStream.listen(
+      (notification) => displayedController.add(notification)
     );
   }
 }

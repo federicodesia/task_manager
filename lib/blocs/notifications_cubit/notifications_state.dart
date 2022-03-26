@@ -4,20 +4,25 @@ part of 'notifications_cubit.dart';
 class NotificationsState{
 
   final List<NotificationData> notifications;
+  @JsonKey(ignore: true)
+  final DateTime? updatedAt;
 
   NotificationsState({
-    required this.notifications
+    required this.notifications,
+    this.updatedAt
   });
 
   static NotificationsState get initial => NotificationsState(
-    notifications: []
+    notifications: [],
+    updatedAt: DateTime.now()
   );
 
   NotificationsState copyWith({
     List<NotificationData>? notifications
   }){
     return NotificationsState(
-      notifications: notifications ?? this.notifications
+      notifications: notifications ?? this.notifications,
+      updatedAt: DateTime.now()
     );
   }
 
@@ -30,17 +35,29 @@ extension NotificationDataListExtension on List<NotificationData> {
     List<DynamicObject> items = [];
 
     final now = DateTime.now();
-    removeWhere((notification) {
+    final notifications = where((notification) {
       final scheduledAt = notification.scheduledAt;
-      return scheduledAt != null && scheduledAt.isAfter(now);
-    });
-    sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      return scheduledAt == null || scheduledAt.isBefore(now);
+    }).toList();
 
-    if(isNotEmpty){
-      DateTime lastDate = first.createdAt.ignoreTime;
+    notifications.sort((a, b) {
+      final aScheduledAt = a.scheduledAt;
+      final bScheduledAt = b.scheduledAt;
+
+      if(aScheduledAt != null && bScheduledAt != null){
+        return bScheduledAt.compareTo(aScheduledAt);
+      }
+
+      if(aScheduledAt == null && bScheduledAt != null) return -1;
+      if(aScheduledAt != null && bScheduledAt == null) return 1;
+      return b.createdAt.compareTo(a.createdAt);
+    });
+
+    if(notifications.isNotEmpty){
+      DateTime lastDate = notifications.first.createdAt.ignoreTime;
       items.add(DynamicObject(object: lastDate));
 
-      for (NotificationData notification in this){
+      for (NotificationData notification in notifications){
         if(notification.createdAt.dateDifference(lastDate) == 0) {
           items.add(DynamicObject(object: notification));
         }
