@@ -98,8 +98,8 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
   }
 
   @override
-  Future<void> close() {
-    taskNotificationsConfigChangeSubscription?.cancel();
+  Future<void> close() async {
+    await taskNotificationsConfigChangeSubscription?.cancel();
     return super.close();
   }
 

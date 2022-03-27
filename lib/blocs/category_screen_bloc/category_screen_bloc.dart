@@ -97,8 +97,8 @@ class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> 
   }
 
   @override
-  Future<void> close() {
-    todosSubscription.cancel();
+  Future<void> close() async {
+    await todosSubscription.cancel();
     return super.close();
   }
 }

@@ -106,8 +106,8 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   }
 
   @override
-  Future<void> close() {
-    tasksSubscription.cancel();
+  Future<void> close() async {
+    await tasksSubscription.cancel();
     return super.close();
   }
 }

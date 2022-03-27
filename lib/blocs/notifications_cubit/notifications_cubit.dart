@@ -29,6 +29,12 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
     required this.notificationService
   }) : super(NotificationsState.initial){
 
+    // Delete notifications older than a week.
+    final now = DateTime.now();
+    emit(state.copyWith(notifications: state.notifications..removeWhere((n){
+      return now.dateDifference(n.createdAt) > 7;
+    })));
+
     displayedNotificationsSubscription = notificationService.displayedStream
       .listen((notification) => emit(state.copyWith()));
   }
@@ -168,14 +174,8 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
   }
 
   @override
-  Future<void> close() {
-    displayedNotificationsSubscription?.cancel();
-
-    // Delete notifications older than a week.
-    final now = DateTime.now();
-    emit(state.copyWith(notifications: state.notifications..removeWhere((n){
-      return now.dateDifference(n.createdAt) > 7;
-    })));
+  Future<void> close() async {
+    await displayedNotificationsSubscription?.cancel();
     return super.close();
   }
 

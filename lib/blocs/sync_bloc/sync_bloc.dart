@@ -54,8 +54,7 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
       if(type == "new-data") add(HighPrioritySyncRequested());
     });
 
-    on<HighPrioritySyncRequested>((event, emit) => sync(event, emit),
-    transformer: debounceTransformer(const Duration(seconds: 1)));
+    on<HighPrioritySyncRequested>((event, emit) => sync(event, emit));
 
     on<SyncRequested>((event, emit) => sync(event, emit),
     transformer: debounceTransformer(const Duration(seconds: 5)));
@@ -183,10 +182,10 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
   }
 
   @override
-  Future<void> close() {
-    taskBlocSubscription.cancel();
-    categoryBlocSubscription.cancel();
-    foregroundMessagesSubscription.cancel();
+  Future<void> close() async {
+    await taskBlocSubscription.cancel();
+    await categoryBlocSubscription.cancel();
+    await foregroundMessagesSubscription.cancel();
     return super.close();
   }
 

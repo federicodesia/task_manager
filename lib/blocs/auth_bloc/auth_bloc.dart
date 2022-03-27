@@ -153,9 +153,9 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
   }
 
   @override
-  Future<void> close() {
-    messagingTokenSubscription.cancel();
-    foregroundMessagesSubscription.cancel();
+  Future<void> close() async {
+    await messagingTokenSubscription.cancel();
+    await foregroundMessagesSubscription.cancel();
     return super.close();
   }
 
