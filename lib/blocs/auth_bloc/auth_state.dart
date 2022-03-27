@@ -12,11 +12,18 @@ class AuthState {
   final List<ActiveSession> activeSessions;
 
   AuthState({
-    this.status = AuthStatus.loading,
+    required this.status,
     this.credentials = AuthCredentials.empty,
-    this.user = User.empty,
-    this.activeSessions = const []
+    required this.user,
+    required this.activeSessions,
   });
+
+  static AuthState get initial => AuthState(
+    status: AuthStatus.loading,
+    credentials: AuthCredentials.empty,
+    user: User.empty,
+    activeSessions: []
+  );
 
   AuthState copyWith({
     AuthStatus? status,

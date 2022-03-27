@@ -15,7 +15,7 @@ part 'category_bloc.g.dart';
 class CategoryBloc extends DriftedBloc<CategoryEvent, CategoryState> {
   
   final TaskBloc taskBloc;
-  CategoryBloc({required this.taskBloc}) : super(CategoryLoadSuccess.initial()){
+  CategoryBloc({required this.taskBloc}) : super(CategoryLoadSuccess.initial){
 
     on<CategoryAdded>((event, emit){
       final categoryState = state;

@@ -1,38 +1,36 @@
 part of 'category_bloc.dart';
 
-@immutable
 abstract class CategoryState {}
 
 class CategoryLoadInProgress extends CategoryState {}
 
 @JsonSerializable()
 class CategoryLoadSuccess extends CategoryState {
+
   final SyncStatus syncPushStatus;
   final List<Category> categories;
   final List<Category> deletedCategories;
   final Map<String, SyncErrorType> failedCategories;
 
   CategoryLoadSuccess({
-    this.syncPushStatus = SyncStatus.idle,
+    required this.syncPushStatus,
     required this.categories,
     required this.deletedCategories,
     required this.failedCategories
   });
 
-  static CategoryLoadSuccess initial(){
-    return CategoryLoadSuccess(
-      syncPushStatus: SyncStatus.idle,
-      categories: [
-        Category.create(
-          isGeneral: true,
-          name: "General",
-          color: Colors.grey.withOpacity(0.65)
-        )
-      ],
-      deletedCategories: const [],
-      failedCategories: const {}
-    );
-  }
+  static CategoryLoadSuccess get initial => CategoryLoadSuccess(
+    syncPushStatus: SyncStatus.idle,
+    categories: [
+      Category.create(
+        isGeneral: true,
+        name: "General",
+        color: Colors.grey.withOpacity(0.65)
+      )
+    ],
+    deletedCategories: [],
+    failedCategories: {}
+  );
 
   CategoryLoadSuccess copyWith({
     SyncStatus? syncPushStatus,

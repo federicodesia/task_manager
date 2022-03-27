@@ -184,9 +184,10 @@ class NotificationsScreenTab extends StatelessWidget{
           }).toList();
         }
 
-        if(notifications.isNotEmpty){
+        final notificationGroups = notifications.groupByDay;
+        if(notificationGroups.isNotEmpty){
           return DeclarativeAnimatedList(
-            items: notifications.groupByDay,
+            items: notificationGroups,
             equalityCheck: (DynamicObject a, DynamicObject b) => a.object == b.object,
             itemBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
               final object = dynamicObject.object;

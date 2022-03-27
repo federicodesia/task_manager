@@ -25,21 +25,30 @@ class NotificationService{
     );
   }
 
-  final displayedController = StreamController<ReceivedNotification>.broadcast();
-  Stream<ReceivedNotification> get displayedStream => displayedController.stream;
+  final _displayedController = StreamController<ReceivedNotification>.broadcast();
+  Stream<ReceivedNotification> get displayedStream => _displayedController.stream;
   
   NotificationService(){
     _init();
   }
 
   void _init() async {
-    await AwesomeNotifications().initialize(
-      null,
-      channels.values.toSet().toList(),
-      debug: true
-    );
-    AwesomeNotifications().displayedStream.listen(
-      (notification) => displayedController.add(notification)
-    );
+    try{
+      await AwesomeNotifications().initialize(
+        null,
+        channels.values.toSet().toList(),
+        debug: true
+      );
+
+      AwesomeNotifications().displayedStream.listen(
+        (notification) {
+          print("HERE Listening notificaion in displayed stream");
+          _displayedController.add(notification);
+        }
+      );
+    }
+    catch(_){
+      print("NotificationService init error: $_");
+    }
   }
 }

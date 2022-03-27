@@ -1,6 +1,5 @@
 part of 'calendar_bloc.dart';
 
-@immutable
 abstract class CalendarState {}
 
 class CalendarLoadInProgress extends CalendarState {}

@@ -19,7 +19,7 @@ class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> 
   CategoryScreenBloc({
     required this.taskBloc,
     required this.categoryId
-  }) : super(CategoryScreenState()){
+  }) : super(CategoryScreenState.initial){
 
     todosSubscription = taskBloc.stream.listen((state) => add(UpdateItemsRequested()));
     

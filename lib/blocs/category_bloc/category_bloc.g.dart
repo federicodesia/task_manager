@@ -8,9 +8,7 @@ part of 'category_bloc.dart';
 
 CategoryLoadSuccess _$CategoryLoadSuccessFromJson(Map<String, dynamic> json) =>
     CategoryLoadSuccess(
-      syncPushStatus:
-          $enumDecodeNullable(_$SyncStatusEnumMap, json['syncPushStatus']) ??
-              SyncStatus.idle,
+      syncPushStatus: $enumDecode(_$SyncStatusEnumMap, json['syncPushStatus']),
       categories: (json['categories'] as List<dynamic>)
           .map((e) => Category.fromJson(e as Map<String, dynamic>))
           .toList(),

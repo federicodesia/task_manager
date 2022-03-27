@@ -67,22 +67,22 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
     for (Task task in tasks) {
       final beforeSchedule = task.date.subtract(const Duration(minutes: 15));
       if(beforeSchedule.isAfter(now)){
-        _scheduleTaskBeforeScheduleNotification(beforeSchedule, task.title);
+        await _scheduleTaskBeforeScheduleNotification(beforeSchedule, task.title);
       }
 
       final taskSchedule = task.date;
       if(taskSchedule.isAfter(now)){
-        _scheduleTaskScheduleNotification(taskSchedule, task.title);
+        await _scheduleTaskScheduleNotification(taskSchedule, task.title);
       }
 
       final uncompletedSchedule = task.date.add(const Duration(hours: 1));
       if(uncompletedSchedule.isAfter(now) && !task.isCompleted){
-        _scheduleUncompletedTaskNotification(uncompletedSchedule, task.title);
+        await _scheduleUncompletedTaskNotification(uncompletedSchedule, task.title);
       }
     }
   }
 
-  void _createNotification(Future<NotificationData> Function(AppLocalizations) notificationData) async {
+  Future<void> _createNotification(Future<NotificationData> Function(AppLocalizations) notificationData) async {
     try{
       final locale = settingsCubit.state.locale
         ?? AppLocalizations.supportedLocales.firstOrNull;
@@ -112,10 +112,10 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
     catch(_){}
   }
 
-  void showLoginOnNewDeviceNotification() async{
+  Future<void> showLoginOnNewDeviceNotification() async{
     if(settingsCubit.state.loginOnNewDeviceNotification){
 
-      _createNotification((localization) async{
+      await _createNotification((localization) async{
         return await NotificationData.create(
           title: localization.notification_loginOnNewDevice_title,
           body: localization.notification_loginOnNewDevice_body,
@@ -125,10 +125,10 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
     }
   }
 
-  void _scheduleTaskBeforeScheduleNotification(DateTime scheduleDate, String taskTitle) async{
+  Future<void> _scheduleTaskBeforeScheduleNotification(DateTime scheduleDate, String taskTitle) async{
     if(settingsCubit.state.beforeScheduleNotification){
 
-      _createNotification((localization) async{
+      await _createNotification((localization) async{
         return await NotificationData.create(
           title: taskTitle,
           body: localization.notification_beforeSchedule_body,
@@ -139,10 +139,10 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
     }
   }
 
-  void _scheduleTaskScheduleNotification(DateTime scheduleDate, String taskTitle) async{
+  Future<void> _scheduleTaskScheduleNotification(DateTime scheduleDate, String taskTitle) async{
     if(settingsCubit.state.taskScheduleNotification){
 
-      _createNotification((localization) async{
+      await _createNotification((localization) async{
         return await NotificationData.create(
           title: taskTitle,
           body: localization.notification_taskSchedule_body,
@@ -153,10 +153,10 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
     }
   }
 
-  void _scheduleUncompletedTaskNotification(DateTime scheduleDate, String taskTitle) async{
+  Future<void> _scheduleUncompletedTaskNotification(DateTime scheduleDate, String taskTitle) async{
     if(settingsCubit.state.uncompletedTaskNotification){
 
-      _createNotification((localization) async{
+      await _createNotification((localization) async{
         return await NotificationData.create(
           title: taskTitle,
           body: localization.notification_uncompletedTask_body,

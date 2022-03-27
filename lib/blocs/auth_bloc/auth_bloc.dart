@@ -29,7 +29,7 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
   AuthBloc({
     required this.authRepository,
     required this.userRepository
-  }) : super(AuthState()){
+  }) : super(AuthState.initial){
 
     messagingTokenSubscription = firebaseMessaging.onTokenRefresh.listen((token) async {
       await authRepository.setFirebaseMessagingToken(token);
@@ -87,7 +87,9 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
       if(credentials.isEmpty){
         // Unauthenticated
         secureStorageRepository.delete.all();
-        emit(AuthState(status: AuthStatus.unauthenticated));
+        emit(AuthState.initial.copyWith(
+          status: AuthStatus.unauthenticated
+        ));
       }
       else{
         await secureStorageRepository.write.authCredentials(credentials);

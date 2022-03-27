@@ -22,7 +22,7 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
 
   TaskBloc({
     required this.notificationsCubit
-  }) : super(TaskLoadSuccess.initial()){
+  }) : super(TaskLoadSuccess.initial){
 
     taskNotificationsConfigChangeSubscription = notificationsCubit.settingsCubit
       .taskNotificationsConfigChange.listen((_) => add(ScheduleTaskNotificationsRequested()));

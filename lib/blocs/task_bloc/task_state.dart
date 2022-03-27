@@ -1,6 +1,5 @@
 part of 'task_bloc.dart';
 
-@immutable
 abstract class TaskState {}
 
 class TaskLoadInProgress extends TaskState {}
@@ -14,20 +13,18 @@ class TaskLoadSuccess extends TaskState {
   final Map<String, SyncErrorType> failedTasks;
 
   TaskLoadSuccess({
-    this.syncPushStatus = SyncStatus.idle,
+    required this.syncPushStatus,
     required this.tasks,
     required this.deletedTasks,
     required this.failedTasks
   });
 
-  static TaskLoadSuccess initial(){
-    return TaskLoadSuccess(
-      syncPushStatus: SyncStatus.idle,
-      tasks: const [],
-      deletedTasks: const [],
-      failedTasks: const {}
-    );
-  }
+  static TaskLoadSuccess get initial => TaskLoadSuccess(
+    syncPushStatus: SyncStatus.idle,
+    tasks: [],
+    deletedTasks: [],
+    failedTasks: {}
+  );
 
   TaskLoadSuccess copyWith({
     SyncStatus? syncPushStatus,

@@ -8,9 +8,7 @@ part of 'task_bloc.dart';
 
 TaskLoadSuccess _$TaskLoadSuccessFromJson(Map<String, dynamic> json) =>
     TaskLoadSuccess(
-      syncPushStatus:
-          $enumDecodeNullable(_$SyncStatusEnumMap, json['syncPushStatus']) ??
-              SyncStatus.idle,
+      syncPushStatus: $enumDecode(_$SyncStatusEnumMap, json['syncPushStatus']),
       tasks: (json['tasks'] as List<dynamic>)
           .map((e) => Task.fromJson(e as Map<String, dynamic>))
           .toList(),

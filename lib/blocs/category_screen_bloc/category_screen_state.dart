@@ -6,10 +6,16 @@ class CategoryScreenState {
   final List<DynamicObject> items;
 
   CategoryScreenState({
-    this.searchText = "",
-    this.activeFilter = TaskFilter.all,
-    this.items = const []
+    required this.searchText,
+    required this.activeFilter,
+    required this.items
   });
+
+  static CategoryScreenState get initial => CategoryScreenState(
+    searchText: "",
+    activeFilter: TaskFilter.all,
+    items: []
+  );
 
   CategoryScreenState copyWith({
     String? searchText,
