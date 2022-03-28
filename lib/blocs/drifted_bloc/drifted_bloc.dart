@@ -94,11 +94,8 @@ mixin DriftedMixin<State> on BlocBase<State> {
 
             final a = jsonEncode(_toJson(state));
             final b = jsonEncode(driftedState.state);
-
-            if(a != b){
-              print("listen new state");
-              emit(newState);
-            }
+            
+            if(a != b) emit(newState);
           }
         }
       }

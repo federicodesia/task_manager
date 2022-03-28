@@ -2,6 +2,11 @@ part of 'auth_bloc.dart';
 
 abstract class AuthEvent {}
 
+class DataNotificationReceived extends AuthEvent {
+  final DataNotificationType? type;
+  DataNotificationReceived(this.type);
+}
+
 class AuthLoaded extends AuthEvent {}
 
 class AuthCredentialsChanged extends AuthEvent {
@@ -11,8 +16,9 @@ class AuthCredentialsChanged extends AuthEvent {
 
 class AuthUserChanged extends AuthEvent {
   final User user;
-  AuthUserChanged({required this.user});
+  AuthUserChanged(this.user);
 }
+class UpdateUserRequested extends AuthEvent {}
 
 class AuthLogoutRequested extends AuthEvent {}
 class AuthLogoutAllRequested extends AuthEvent {}
@@ -21,4 +27,5 @@ class AuthLogoutSessionRequested extends AuthEvent {
   AuthLogoutSessionRequested({required this.sessionId});
 }
 
+class NotifyNewSessionRequested extends AuthEvent {}
 class UpdateActiveSessionsRequested extends AuthEvent {}

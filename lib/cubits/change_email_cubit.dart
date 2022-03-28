@@ -22,6 +22,7 @@ class ChangeEmailCubit extends Cubit<ChangeEmailState> {
   
   final AuthRepository authRepository;
   final AuthBloc authBloc;
+  
   ChangeEmailCubit({
     required this.authRepository,
     required this.authBloc

@@ -13,12 +13,12 @@ class _ReadSecureStorage {
   final FlutterSecureStorage _secureStorage;
   _ReadSecureStorage(this._secureStorage);
 
-  Future<String?> get refreshToken => _secureStorage.read(key: "refreshToken");
-  Future<String?> get accessToken => _secureStorage.read(key: "accessToken");
-  Future<String?> get passwordToken => _secureStorage.read(key: "passwordToken");
+  Future<String> get refreshToken async => await _secureStorage.read(key: "refreshToken") ?? "";
+  Future<String> get accessToken async => await _secureStorage.read(key: "accessToken") ?? "";
+  Future<String> get passwordToken async => await _secureStorage.read(key: "passwordToken") ?? "";
 
-  Future<AuthCredentials?> get authCredentials async {
-    return AuthCredentials.empty.copyWith(
+  Future<AuthCredentials> get authCredentials async {
+    return AuthCredentials(
       refreshToken: await refreshToken,
       accessToken: await accessToken,
       passwordToken: await passwordToken

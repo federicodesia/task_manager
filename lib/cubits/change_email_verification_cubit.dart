@@ -52,7 +52,7 @@ class ChangeEmailVerificationCubit extends Cubit<ChangeEmailVerificationState> {
           },
 
           right: (user){
-            authBloc.add(AuthUserChanged(user: user));
+            authBloc.add(AuthUserChanged(user));
             emit(const ChangeEmailVerificationState(changed: true));
           }, 
         );

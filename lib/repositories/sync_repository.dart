@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:task_manager/helpers/response_errors.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/either.dart';
@@ -24,11 +25,7 @@ class SyncRepository{
   }) async {
     try{
 
-      print("lastSync: $lastSync");
-      print("tasks: $tasks");
-      print("categories: $categories");
-
-      final dio = await base.dioAccessToken();
+      final dio = await base.dioAccessToken;
       final response = await dio.post(
         "/sync",
         data: {
@@ -47,10 +44,10 @@ class SyncRepository{
       if(error is DioError){
 
         final dioError = error.response?.data["message"];
-        print("dioError: $dioError");
+        debugPrint("SyncRepository | DioError: $dioError");
       }
       else{
-        print("error: $error");
+        debugPrint("SyncRepository | Error: $error");
       }
 
       final responseMessage = await ResponseError.validate(error, ["duplicated"]);

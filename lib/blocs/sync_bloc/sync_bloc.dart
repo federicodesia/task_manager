@@ -9,6 +9,7 @@ import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
 import 'package:task_manager/blocs/sync_bloc/dynamic_functions.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/blocs/transformers.dart';
+import 'package:task_manager/messaging/data_notifications.dart';
 import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/serializers/datetime_serializer.dart';
 import 'package:task_manager/models/sync_status.dart';
@@ -50,11 +51,14 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
     });
 
     foregroundMessagesSubscription = FirebaseMessaging.onMessage.listen((message) {
-      final type = message.data["type"];
-      if(type == "new-data") add(HighPrioritySyncRequested());
+      final type = message.dataNotificationType;
+      if(type == DataNotificationType.newData) add(HighPrioritySyncRequested());
     });
 
-    on<HighPrioritySyncRequested>((event, emit) => sync(event, emit));
+    on<BackgroundSyncRequested>((event, emit) => sync(event, emit));
+
+    on<HighPrioritySyncRequested>((event, emit) => sync(event, emit),
+    transformer: debounceTransformer(const Duration(milliseconds: 1500)));
 
     on<SyncRequested>((event, emit) => sync(event, emit),
     transformer: debounceTransformer(const Duration(seconds: 5)));
@@ -90,7 +94,7 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
       categories: updatedCategories
     );
     debugPrint("Sync | Respuesta de la API recibida...");
-    print(responseItems);
+    debugPrint("Sync | Response: $responseItems");
 
     if(responseItems != null){
 
@@ -192,7 +196,7 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
   @override
   SyncState? fromJson(Map<String, dynamic> json) {
     try{
-      debugPrint("syncBloc fromJson");
+      debugPrint("SyncBloc fromJson");
       return SyncState.fromJson(json);
     }
     catch(error) {
@@ -203,7 +207,7 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
   @override
   Map<String, dynamic>? toJson(SyncState state) {
     try{
-      debugPrint("syncBloc toJson");
+      debugPrint("SyncBloc toJson");
       return state.toJson();
     }
     catch(error) {

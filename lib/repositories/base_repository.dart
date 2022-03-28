@@ -2,28 +2,25 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/helpers/string_helper.dart';
-import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
 import 'package:task_manager/repositories/interceptors/refresh_token_interceptor.dart';
-import 'package:task_manager/repositories/secure_storage_repository.dart';
-import 'package:task_manager/services/context_service.dart';
-import 'package:task_manager/services/locator_service.dart';
 
 class BaseRepository{
-
-  BaseRepository(){
+  final AuthBloc authBloc;
+  BaseRepository({required this.authBloc}){
     _init();
   }
+
+  late final DeviceInfoPlugin _deviceInfoPlugin = DeviceInfoPlugin();
   
   late BaseOptions _baseOptions;
-  late Dio dio;
-  AuthBloc? _authBloc;
 
-  late final SecureStorageRepository _secureStorageRepository = SecureStorageRepository();
-  late final DeviceInfoPlugin _deviceInfoPlugin = DeviceInfoPlugin();
+  late final Dio dio;
+  late final Dio _dioAccessToken;
+  late final Dio _dioRefreshToken;
+  late final Dio _dioPasswordToken;
 
   void _init() async{
 
@@ -46,87 +43,47 @@ class BaseRepository{
     );
     dio = Dio(_baseOptions);
 
-    try{
-      final context = locator<ContextService>().context;
-      if(context != null) _authBloc = context.read<AuthBloc>();
-    }
-    catch(_){}
+    _dioRefreshToken = Dio(_baseOptions)..interceptors.add(
+      RefreshTokenInterceptor(authBloc: authBloc)
+    );
+
+    _dioAccessToken = Dio(_baseOptions)..interceptors.add(
+      AccessTokenInterceptor(
+        authBloc: authBloc,
+        baseRepository: this
+      )
+    );
+
+    _dioPasswordToken = Dio(_baseOptions);
   }
 
-  late final Dio _dioRefreshToken = Dio(_baseOptions)..interceptors.add(
-    RefreshTokenInterceptor(
-      onClearAuthCredentials: () {
-        try{
-          if(_authBloc != null) {
-            _authBloc!.add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
-          } else{
-            _secureStorageRepository.delete.all();
-          }
-        }
-        catch(_){}
-      }
-    )
-  );
-  Future<Dio> dioRefreshToken() async{
+  Future<Dio> get dioRefreshToken async{
     try{
-      String _refreshToken = _authBloc != null
-        ? _authBloc!.state.credentials.refreshToken
-        :  await _secureStorageRepository.read.refreshToken as String;
-
+      final refreshToken = await authBloc.secureStorageRepository.read.refreshToken;
       return _dioRefreshToken..options.headers.addAll(
-        {"Authorization": "Bearer " + _refreshToken}
+        {"Authorization": "Bearer " + refreshToken}
       );
     }
     catch(_){}
     return _dioRefreshToken;
   }
 
-  late final Dio _dioAccessToken = Dio(_baseOptions)..interceptors.add(
-    AccessTokenInterceptor(
-      getDioRefreshToken: dioRefreshToken,
-      getDioAccessToken: dioAccessToken,
-      onUpdateAccessToken: (accessToken) async{
-        try{
-          final state = _authBloc?.state;
-          if(_authBloc != null && state != null) {
-            _authBloc!.add(AuthCredentialsChanged(
-              credentials: state.credentials.copyWith(accessToken: accessToken)
-            ));
-            await _authBloc!.stream.first.then((_){
-              return true;
-            }).timeout(const Duration(seconds: 1));
-          }
-          await _secureStorageRepository.write.accessToken(accessToken);
-          return true;
-        }
-        catch(_){}
-        return false;
-      }
-    )
-  );
-  Future<Dio> dioAccessToken() async{
+  Future<Dio> get dioAccessToken async{
     try{
-      String _accessToken = _authBloc != null
-        ? _authBloc!.state.credentials.accessToken
-        :  await _secureStorageRepository.read.accessToken as String;
-
+      final accessToken = await authBloc.secureStorageRepository.read.accessToken;
       return _dioAccessToken..options.headers.addAll(
-        {"Authorization": "Bearer " + _accessToken}
+        {"Authorization": "Bearer " + accessToken}
       );
     }
     catch(_){}
     return _dioAccessToken;
   }
 
-  late final Dio _dioPasswordToken = Dio(_baseOptions);
-  Future<Dio> dioPasswordToken() async{
+  Future<Dio> get dioPasswordToken async{
     try{
-      String _passwordToken = _authBloc != null
-        ? _authBloc!.state.credentials.passwordToken
-        :  await _secureStorageRepository.read.passwordToken as String;
-
+      final passwordToken = await authBloc.secureStorageRepository.read.passwordToken;
       return _dioPasswordToken..options.headers.addAll(
-        {"Authorization": "Bearer " + _passwordToken}
+        {"Authorization": "Bearer " + passwordToken}
       );
     }
     catch(_){}

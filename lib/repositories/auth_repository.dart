@@ -67,7 +67,7 @@ class AuthRepository{
   }) async {
 
     try{
-      final dio = await base.dioRefreshToken();
+      final dio = await base.dioRefreshToken;
       final response = await dio.get("/auth/access-token");
       return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
     }
@@ -80,7 +80,7 @@ class AuthRepository{
 
   Future<void> logout() async {
     try{
-      final dio = await base.dioRefreshToken();
+      final dio = await base.dioRefreshToken;
       await dio.post("/auth/logout");
     }
     catch (error){
@@ -90,7 +90,7 @@ class AuthRepository{
 
   Future<bool> logoutAll() async {
     try{
-      final dio = await base.dioRefreshToken();
+      final dio = await base.dioRefreshToken;
       await dio.post("/auth/logout/all");
       return true;
     }
@@ -104,7 +104,7 @@ class AuthRepository{
     required int sessionId
   }) async {
     try{
-      final dio = await base.dioAccessToken();
+      final dio = await base.dioAccessToken;
       await dio.post("/auth/logout-by-session-id/$sessionId");
       return true;
     }
@@ -116,7 +116,7 @@ class AuthRepository{
 
   Future<void> sendAccountVerificationCode() async {
     try{
-      final dio = await base.dioAccessToken();
+      final dio = await base.dioAccessToken;
       await dio.post("/auth/send-account-verification-code");
     }
     catch (error){
@@ -131,7 +131,7 @@ class AuthRepository{
   }) async {
 
     try{
-      final dio = await base.dioAccessToken();
+      final dio = await base.dioAccessToken;
       final response = await dio.post(
         "/auth/verify-account-code",
         data: {
@@ -223,7 +223,7 @@ class AuthRepository{
   }) async {
 
     try{
-      final dio = await base.dioPasswordToken();
+      final dio = await base.dioPasswordToken;
       await dio.post(
         "/auth/change-forgot-password",
         data: {
@@ -246,7 +246,7 @@ class AuthRepository{
   }) async {
 
     try{
-      final dio = await base.dioAccessToken();
+      final dio = await base.dioAccessToken;
       await dio.post(
         "/auth/change-password",
         data: {
@@ -270,7 +270,7 @@ class AuthRepository{
   }) async {
 
     try{
-      final dio = await base.dioAccessToken();
+      final dio = await base.dioAccessToken;
       await dio.post(
         "/auth/send-change-email-code",
         data: {
@@ -292,7 +292,7 @@ class AuthRepository{
   }) async {
 
     try{
-      final dio = await base.dioAccessToken();
+      final dio = await base.dioAccessToken;
       final response = await dio.post(
         "/auth/verify-change-email-code",
         data: {
@@ -310,7 +310,7 @@ class AuthRepository{
 
   Future<void> setFirebaseMessagingToken(String token) async {
     try{
-      final dio = await base.dioRefreshToken();
+      final dio = await base.dioRefreshToken;
       await dio.post("/auth/set-fcm-token/$token");
     }
     catch (error){
@@ -320,7 +320,7 @@ class AuthRepository{
 
   Future<List<ActiveSession>?> getActiveSessions() async {
     try{
-      final dio = await base.dioAccessToken();
+      final dio = await base.dioAccessToken;
       final response = await dio.get("/auth/get-active-sessions");
       return List<ActiveSession>.from(response.data
         .map((activeSession) => ActiveSession.fromJson(activeSession))

@@ -18,7 +18,9 @@ class ForgotPasswordState {
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   
   final AuthRepository authRepository;
-  ForgotPasswordCubit({required this.authRepository}) : super(const ForgotPasswordState());
+  ForgotPasswordCubit({
+    required this.authRepository
+  }) : super(const ForgotPasswordState());
 
   void submitted({
     required BuildContext context,

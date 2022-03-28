@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
+import 'package:task_manager/repositories/base_repository.dart';
 
 class AccessTokenInterceptor extends Interceptor {
 
-  final Future<Dio> Function() getDioRefreshToken;
-  final Future<bool> Function(String) onUpdateAccessToken; 
-  final Future<Dio> Function() getDioAccessToken;
+  final AuthBloc authBloc;
+  final BaseRepository baseRepository;
 
   AccessTokenInterceptor({
-    required this.getDioRefreshToken,
-    required this.onUpdateAccessToken,
-    required this.getDioAccessToken
+    required this.authBloc,
+    required this.baseRepository
   });
 
   @override
@@ -59,22 +59,27 @@ class AccessTokenInterceptor extends Interceptor {
 
   Future<Response<dynamic>?> _retry(RequestOptions options) async{
     try{
-      final dioRefreshToken = await getDioRefreshToken();
+      final dioRefreshToken = await baseRepository.dioRefreshToken;
       final response = await dioRefreshToken.get("/auth/access-token");
       final accessToken = response.data["accessToken"] as String? ?? "";
 
-      final updated = await onUpdateAccessToken(accessToken);
-      if(updated){
-        try{
-          final dioAccessToken = await getDioAccessToken();
+      final credentials = await authBloc.secureStorageRepository.read.authCredentials;
+      authBloc.add(AuthCredentialsChanged(
+        credentials: credentials.copyWith(accessToken: accessToken)
+      ));
+      
+      await authBloc.stream.first
+        .timeout(const Duration(seconds: 1));
 
-          options.headers.addAll(dioAccessToken.options.headers);
-          options.headers.addAll({ "IsRetryRequest" : true });
+      try{
+        final dioAccessToken = await baseRepository.dioAccessToken;
 
-          return await dioAccessToken.fetch(options);
-        }
-        catch(_) {}
+        options.headers.addAll(dioAccessToken.options.headers);
+        options.headers.addAll({ "IsRetryRequest" : true });
+
+        return await dioAccessToken.fetch(options);
       }
+      catch(_) {}
     }
     catch (_){}
     return null;

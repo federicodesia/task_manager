@@ -20,7 +20,9 @@ class ChangePasswordState {
 class ChangePasswordCubit extends Cubit<ChangePasswordState> {
   
   final AuthRepository authRepository;
-  ChangePasswordCubit({required this.authRepository}) : super(const ChangePasswordState());
+  ChangePasswordCubit({
+    required this.authRepository
+  }) : super(const ChangePasswordState());
 
   void submitted({
     required BuildContext context,

@@ -54,13 +54,6 @@ class CategoryBloc extends DriftedBloc<CategoryEvent, CategoryState> {
 
     on<CategoryStateUpdated>((event, emit){
       debugPrint("Actualizando CategoryState...");
-      final categoryState = event.state;
-      if(categoryState is CategoryLoadSuccess){
-        debugPrint("SyncPushStatus: " + categoryState.syncPushStatus.name);
-        debugPrint("Categories: ${categoryState.categories}");
-        debugPrint("DeletedCategories: ${categoryState.deletedCategories}");
-        debugPrint("FailedCategories: ${categoryState.failedCategories}");
-      }
       emit(event.state);
     },
     transformer: restartable());
@@ -69,7 +62,7 @@ class CategoryBloc extends DriftedBloc<CategoryEvent, CategoryState> {
   @override
   CategoryState? fromJson(Map<String, dynamic> json) {
     try{
-      debugPrint("categoryBloc fromJson");
+      debugPrint("CategoryBloc fromJson");
       return CategoryLoadSuccess.fromJson(json);
     }
     catch(error) {
@@ -80,7 +73,7 @@ class CategoryBloc extends DriftedBloc<CategoryEvent, CategoryState> {
   @override
   Map<String, dynamic>? toJson(CategoryState state) {
     try{
-      debugPrint("categoryBloc toJson");
+      debugPrint("CategoryBloc toJson");
       final categoryState = state;
       if(categoryState is CategoryLoadSuccess) return categoryState.toJson();
     }

@@ -72,13 +72,6 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
 
     on<TaskStateUpdated>((event, emit){
       debugPrint("Actualizando TaskState...");
-      final taskState = event.state;
-      if(taskState is TaskLoadSuccess){
-        debugPrint("SyncPushStatus: " + taskState.syncPushStatus.name);
-        debugPrint("Tasks: ${taskState.tasks}");
-        debugPrint("DeletedTasks: ${taskState.deletedTasks}");
-        debugPrint("FailedTasks: ${taskState.failedTasks}");
-      }
       emit(event.state);
     },
     transformer: restartable());
@@ -106,7 +99,7 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
   @override
   TaskState? fromJson(Map<String, dynamic> json) {
     try{
-      debugPrint("taskBloc fromJson");
+      debugPrint("TaskBloc fromJson");
       return TaskLoadSuccess.fromJson(json);
     }
     catch(error) {
@@ -117,7 +110,7 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
   @override
   Map<String, dynamic>? toJson(TaskState state) {
     try{
-      debugPrint("taskBloc toJson");
+      debugPrint("TaskBloc toJson");
       final taskState = state;
       if(taskState is TaskLoadSuccess) return taskState.toJson();
     }

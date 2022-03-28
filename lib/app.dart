@@ -6,9 +6,6 @@ import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/blocs/notifications_cubit/notifications_cubit.dart';
 import 'package:task_manager/blocs/settings_cubit/settings_cubit.dart';
 import 'package:task_manager/l10n/l10n.dart';
-import 'package:task_manager/repositories/auth_repository.dart';
-import 'package:task_manager/repositories/base_repository.dart';
-import 'package:task_manager/repositories/user_repository.dart';
 import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/services/context_service.dart';
 import 'package:task_manager/services/dialog_service.dart';
@@ -23,31 +20,32 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MultiRepositoryProvider(
+    return MultiBlocProvider(
       providers: [
-        RepositoryProvider(create: (context) => BaseRepository()),
-        RepositoryProvider(create: (context) => AuthRepository(base: context.read<BaseRepository>())),
-        RepositoryProvider(create: (context) => UserRepository(base: context.read<BaseRepository>())),
+        BlocProvider(create: (context) => SettingsCubit()),
+
+        BlocProvider(
+          create: (context) => NotificationsCubit(
+            settingsCubit: context.read<SettingsCubit>(),
+            notificationService: locator<NotificationService>()
+          ),
+          lazy: false
+        ),
+
+        BlocProvider(
+          create: (context) => AuthBloc(
+            notificationsCubit: context.read<NotificationsCubit>(),
+          )
+        ),
       ],
-      child: MultiBlocProvider(
+      child: MultiRepositoryProvider(
         providers: [
-          BlocProvider(create: (context) => SettingsCubit()),
-          BlocProvider(
-            create: (context) => NotificationsCubit(
-              settingsCubit: context.read<SettingsCubit>(),
-              notificationService: locator<NotificationService>()
-            ),
-            lazy: false
-          ),
-          BlocProvider(
-            create: (context) => AuthBloc(
-              authRepository: context.read<AuthRepository>(),
-              userRepository: context.read<UserRepository>()
-            ),
-          ),
+          RepositoryProvider(create: (context) => context.read<AuthBloc>().baseRepository),
+          RepositoryProvider(create: (context) => context.read<AuthBloc>().authRepository),
+          RepositoryProvider(create: (context) => context.read<AuthBloc>().userRepository),
         ],
         child: _MyApp()
-      )
+      ),
     );
   }
 }

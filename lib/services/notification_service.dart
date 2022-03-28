@@ -37,8 +37,7 @@ class NotificationService{
     try{
       await AwesomeNotifications().initialize(
         null,
-        channels.values.toSet().toList(),
-        debug: true
+        channels.values.toSet().toList()
       );
 
       _displayedSubscription = AwesomeNotifications().displayedStream.listen(

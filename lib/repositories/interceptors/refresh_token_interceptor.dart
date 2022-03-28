@@ -1,16 +1,20 @@
 import 'package:dio/dio.dart';
+import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
+import 'package:task_manager/models/auth_credentials.dart';
 
 class RefreshTokenInterceptor extends Interceptor {
 
-  final void Function() onClearAuthCredentials; 
-  RefreshTokenInterceptor({required this.onClearAuthCredentials});
+  final AuthBloc authBloc;
+  RefreshTokenInterceptor({required this.authBloc});
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
     try{
       final statusCode = err.response?.statusCode;
       if(statusCode == 401 || statusCode == 403){
-        onClearAuthCredentials();
+        authBloc.add(AuthCredentialsChanged(
+          credentials: AuthCredentials.empty
+        ));
       }
     }
     catch(_) {}
