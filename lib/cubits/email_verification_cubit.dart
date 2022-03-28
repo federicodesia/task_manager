@@ -52,7 +52,7 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
 
           right: (credentials){
             emit(const EmailVerificationState(isLoading: false));
-            authBloc.add(AuthCredentialsChanged(credentials: credentials));
+            authBloc.add(AuthCredentialsChanged(credentials));
           }, 
         );
       } else {

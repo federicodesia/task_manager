@@ -154,7 +154,7 @@ class _ActiveSessionBottomSheet extends StatelessWidget{
               style: customTheme.primaryColorButtonTextStyle,
             ),
             onPressed: (){
-              context.read<AuthBloc>().add(AuthLogoutSessionRequested(sessionId: activeSession.id));
+              context.read<AuthBloc>().add(AuthLogoutSessionRequested(activeSession.id));
               Navigator.pop(context);
             }
           )

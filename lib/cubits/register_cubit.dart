@@ -61,7 +61,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
           right: (authCredentials){
             emit(const RegisterState(isLoading: false));
-            authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
+            authBloc.add(AuthCredentialsChanged(authCredentials));
           }, 
         );
       } else {

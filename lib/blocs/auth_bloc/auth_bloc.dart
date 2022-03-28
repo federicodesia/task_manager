@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
 import 'package:task_manager/blocs/notifications_cubit/notifications_cubit.dart';
+import 'package:task_manager/blocs/transformers.dart';
 import 'package:task_manager/messaging/data_notifications.dart';
 import 'package:task_manager/models/active_session.dart';
 import 'package:task_manager/models/auth_credentials.dart';
@@ -37,7 +38,7 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
   }) : super(AuthState.initial){
 
     messagingTokenSubscription = firebaseMessaging.onTokenRefresh.listen((token) async {
-      await authRepository.setFirebaseMessagingToken(token);
+      add(UpdateFirebaseMessagingTokenRequested(token));
     });
     
     foregroundMessagesSubscription = FirebaseMessaging.onMessage.listen((message) {
@@ -47,7 +48,7 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
     on<DataNotificationReceived>((event, emit){
       final type = event.type;
       if(type == DataNotificationType.logout){
-        add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+        add(AuthCredentialsChanged(AuthCredentials.empty));
       }
       else if(type == DataNotificationType.newUserData){
         add(UpdateUserRequested());
@@ -57,32 +58,58 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
       }
     });
 
-    on<AuthLoaded>((event, emit) async{
-      final messagingToken = await firebaseMessaging.getToken();
-      debugPrint("MessagingToken: $messagingToken");
+    on<UpdateFirebaseMessagingTokenRequested>((event, emit) async {
+      final token = event.token ?? await firebaseMessaging.getToken();
+      if(token != null && token.isNotEmpty){
 
-      final storedCredentials = await secureStorageRepository.read.authCredentials;
-      if(storedCredentials.isNotEmpty){
+        debugPrint("UpdateFirebaseMessagingTokenRequested");
+        debugPrint(token);
+
+        final currentToken = await secureStorageRepository.read.firebaseMessagingToken;
+        if(currentToken != token){
+          final updated = await authRepository.setFirebaseMessagingToken(token);
+          if(updated) await secureStorageRepository.write.firebaseMessagingToken(token);
+        }
+      }
+    },
+    transformer: debounceTransformer(const Duration(seconds: 1)));
+
+    on<AuthLoaded>((event, emit) async{
+
+      final previousStatus = state.status;
+      emit(state.copyWith(
+        status: AuthStatus.loading
+      ));
+
+      final credentials = await secureStorageRepository.read.authCredentials;
+      if(credentials.isNotEmpty){
 
         final response = await authRepository.accessToken(
-          authCredentials: storedCredentials,
+          authCredentials: credentials,
           ignoreStatusCodes: [ 401, 403 ]
         );
+
         if(response != null) {
           response.when(
             left: (responseMessage) {
               if(responseMessage.containsAnyStatusCodes([ 401, 403 ])){
-                add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+                add(AuthCredentialsChanged(AuthCredentials.empty));
               }
             },
             right: (credentials) {
-              add(AuthCredentialsChanged(credentials: credentials));
+              add(AuthCredentialsChanged(credentials));
             }
           );
         }
+        else{
+          emit(state.copyWith(
+            status: previousStatus != AuthStatus.loading
+              ? previousStatus : AuthStatus.unauthenticated
+          ));
+        }
       }
       else {
-        add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+        add(AuthCredentialsChanged(AuthCredentials.empty));
       }
     });
     
@@ -109,9 +136,7 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
         if(previousStatus != AuthStatus.authenticated
           && state.status == AuthStatus.authenticated){
           // Authenticated
-          final messagingToken = await firebaseMessaging.getToken();
-          if(messagingToken != null) await authRepository.setFirebaseMessagingToken(messagingToken);
-
+          add(UpdateFirebaseMessagingTokenRequested(null));
           add(UpdateUserRequested());
         }
       }
@@ -128,12 +153,12 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
 
     on<AuthLogoutRequested>((event, emit){
       authRepository.logout();
-      add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+      add(AuthCredentialsChanged(AuthCredentials.empty));
     });
 
     on<AuthLogoutAllRequested>((event, emit) async{
       final response = await authRepository.logoutAll();
-      if(response) add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+      if(response) add(AuthCredentialsChanged(AuthCredentials.empty));
     });
 
     on<NotifyNewSessionRequested>((event, emit) async{

@@ -52,7 +52,7 @@ class ForgotPasswordNewPasswordCubit extends Cubit<ForgotPasswordNewPasswordStat
 
           right: (changed){
             emit(const ForgotPasswordNewPasswordState(changed: true));
-            authBloc.add(AuthCredentialsChanged(credentials: AuthCredentials.empty));
+            authBloc.add(AuthCredentialsChanged(AuthCredentials.empty));
           }, 
         );
       } else {

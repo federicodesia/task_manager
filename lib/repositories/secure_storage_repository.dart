@@ -13,9 +13,18 @@ class _ReadSecureStorage {
   final FlutterSecureStorage _secureStorage;
   _ReadSecureStorage(this._secureStorage);
 
-  Future<String> get refreshToken async => await _secureStorage.read(key: "refreshToken") ?? "";
-  Future<String> get accessToken async => await _secureStorage.read(key: "accessToken") ?? "";
-  Future<String> get passwordToken async => await _secureStorage.read(key: "passwordToken") ?? "";
+  Future<String> _read({required String key}) async{
+    try{
+      return await _secureStorage.read(key: key) ?? "";
+    }
+    catch(_) {
+      return "";
+    }
+  }
+
+  Future<String> get refreshToken => _read(key: "refreshToken");
+  Future<String> get accessToken => _read(key: "accessToken");
+  Future<String> get passwordToken => _read(key: "passwordToken");
 
   Future<AuthCredentials> get authCredentials async {
     return AuthCredentials(
@@ -24,29 +33,57 @@ class _ReadSecureStorage {
       passwordToken: await passwordToken
     );
   }
+
+  Future<String> get firebaseMessagingToken => _read(key: "firebaseMessagingToken");
 }
 
 class _WriteSecureStorage {
   final FlutterSecureStorage _secureStorage;
   _WriteSecureStorage(this._secureStorage);
 
-  Future<void> refreshToken(String value) => _secureStorage.write(key: "refreshToken", value: value);
-  Future<void> accessToken(String value) => _secureStorage.write(key: "accessToken", value: value);
-  Future<void> passwordToken(String value) => _secureStorage.write(key: "passwordToken", value: value);
+  Future<void> _write({
+    required String key,
+    required String value
+  }) async{
+    try{
+      await _secureStorage.write(key: key, value: value);
+    }
+    catch(_) {}
+  }
+
+  Future<void> refreshToken(String value) => _write(key: "refreshToken", value: value);
+  Future<void> accessToken(String value) => _write(key: "accessToken", value: value);
+  Future<void> passwordToken(String value) => _write(key: "passwordToken", value: value);
 
   Future<void> authCredentials(AuthCredentials credentials) async {
     await refreshToken(credentials.refreshToken);
     await accessToken(credentials.accessToken);
     await passwordToken(credentials.passwordToken);
   }
+
+  Future<void> firebaseMessagingToken(String value) => _write(key: "firebaseMessagingToken", value: value);
 }
 
 class _DeleteSecureStorage {
   final FlutterSecureStorage _secureStorage;
   _DeleteSecureStorage(this._secureStorage);
 
-  Future<void> all() => _secureStorage.deleteAll();
-  Future<void> refreshToken() => _secureStorage.delete(key: "refreshToken");
-  Future<void> accessToken() => _secureStorage.delete(key: "accessToken");
-  Future<void> passwordToken() => _secureStorage.delete(key: "passwordToken");
+  Future<void> _delete({required String key}) async{
+    try{
+      await _secureStorage.delete(key: key);
+    }
+    catch(_) {}
+  }
+  
+  Future<void> all() async{
+    try{
+      await _secureStorage.deleteAll();
+    }
+    catch(_) {}
+  }
+
+  Future<void> refreshToken() => _delete(key: "refreshToken");
+  Future<void> accessToken() => _delete(key: "accessToken");
+  Future<void> passwordToken() => _delete(key: "passwordToken");
+  Future<void> firebaseMessagingToken() => _delete(key: "firebaseMessagingToken");
 }

@@ -63,7 +63,8 @@ class AuthRepository{
 
   Future<Either<ResponseMessage, AuthCredentials>?> accessToken({
     required AuthCredentials authCredentials,
-    List<int>? ignoreStatusCodes
+    List<int>? ignoreStatusCodes,
+    bool ignoreAllErrors = false
   }) async {
 
     try{
@@ -72,6 +73,8 @@ class AuthRepository{
       return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
     }
     catch (error){
+      if(ignoreAllErrors) return null;
+      
       final responseMessage = await ResponseError.validate(error, null, ignoreStatusCodes: ignoreStatusCodes);
       if(responseMessage != null) return Left(responseMessage);
       return null;
@@ -308,13 +311,15 @@ class AuthRepository{
     }
   }
 
-  Future<void> setFirebaseMessagingToken(String token) async {
+  Future<bool> setFirebaseMessagingToken(String token) async {
     try{
       final dio = await base.dioRefreshToken;
       await dio.post("/auth/set-fcm-token/$token");
+      return true;
     }
     catch (error){
       await ResponseError.validate(error, null);
+      return false;
     }
   }
 

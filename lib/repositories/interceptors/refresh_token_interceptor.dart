@@ -12,9 +12,7 @@ class RefreshTokenInterceptor extends Interceptor {
     try{
       final statusCode = err.response?.statusCode;
       if(statusCode == 401 || statusCode == 403){
-        authBloc.add(AuthCredentialsChanged(
-          credentials: AuthCredentials.empty
-        ));
+        authBloc.add(AuthCredentialsChanged(AuthCredentials.empty));
       }
     }
     catch(_) {}

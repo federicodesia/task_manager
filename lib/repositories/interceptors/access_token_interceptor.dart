@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
+import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/repositories/base_repository.dart';
 
 class AccessTokenInterceptor extends Interceptor {
@@ -59,27 +62,41 @@ class AccessTokenInterceptor extends Interceptor {
 
   Future<Response<dynamic>?> _retry(RequestOptions options) async{
     try{
-      final dioRefreshToken = await baseRepository.dioRefreshToken;
-      final response = await dioRefreshToken.get("/auth/access-token");
-      final accessToken = response.data["accessToken"] as String? ?? "";
+      final authRepository = AuthRepository(base: baseRepository);
+      final currentCredentials = await authBloc.secureStorageRepository.read.authCredentials;
 
-      final credentials = await authBloc.secureStorageRepository.read.authCredentials;
-      authBloc.add(AuthCredentialsChanged(
-        credentials: credentials.copyWith(accessToken: accessToken)
-      ));
-      
-      await authBloc.stream.first
-        .timeout(const Duration(seconds: 1));
+      final response = await authRepository.accessToken(
+        authCredentials: currentCredentials,
+        ignoreAllErrors: true
+      );
 
-      try{
-        final dioAccessToken = await baseRepository.dioAccessToken;
+      if(response != null){
+        response.when(
+          left: (responseMessage) {},
+          right: (credentials) async{
 
-        options.headers.addAll(dioAccessToken.options.headers);
-        options.headers.addAll({ "IsRetryRequest" : true });
+            authBloc.add(AuthCredentialsChanged(credentials));
+            
+            return await authBloc.stream.first
+              .timeout(const Duration(seconds: 2), onTimeout: (){
+                throw TimeoutException("AuthBloc timeout");
+              })
+              .then((value) async{
 
-        return await dioAccessToken.fetch(options);
+                try{
+                  final dioAccessToken = await baseRepository.dioAccessToken;
+
+                  options.headers.addAll(dioAccessToken.options.headers);
+                  options.headers.addAll({ "IsRetryRequest" : true });
+
+                  return await dioAccessToken.fetch(options);
+                }
+                catch(_) {}
+              })
+              .onError((error, stackTrace) => null);
+          }
+        );
       }
-      catch(_) {}
     }
     catch (_){}
     return null;

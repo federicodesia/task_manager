@@ -54,7 +54,7 @@ class ForgotPasswordEmailVerificationCubit extends Cubit<ForgotPasswordEmailVeri
 
           right: (credentials){
             emit(const ForgotPasswordEmailVerificationState(verified: true));
-            authBloc.add(AuthCredentialsChanged(credentials: credentials));
+            authBloc.add(AuthCredentialsChanged(credentials));
           }, 
         );
       } else {

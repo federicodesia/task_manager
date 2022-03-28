@@ -58,7 +58,7 @@ class LoginCubit extends Cubit<LoginState> {
 
           right: (authCredentials){
             emit(const LoginState(isLoading: false));
-            authBloc.add(AuthCredentialsChanged(credentials: authCredentials));
+            authBloc.add(AuthCredentialsChanged(authCredentials));
           }, 
         );
       } else {
