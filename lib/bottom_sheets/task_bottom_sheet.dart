@@ -196,32 +196,29 @@ class _TaskBottomSheetState extends State<_TaskBottomSheet>{
 
                   BlocBuilder<CategoryBloc, CategoryState>(
                     builder: (_, categoryState){
-                      if(categoryState is CategoryLoadSuccess){
-                        final categories = categoryState.categories.where((category) => !category.isGeneral).toList();
+                      final categories = categoryState.categories.where((category) => !category.isGeneral).toList();
 
-                        return Row(
-                          children: List.generate(categories.length, (index){
-                            Category category = categories[index];
-                            bool isSelected = categoryId == category.id;
+                      return Row(
+                        children: List.generate(categories.length, (index){
+                          Category category = categories[index];
+                          bool isSelected = categoryId == category.id;
 
-                            return AnimatedChip(
-                              text: category.name,
-                              textColor: isSelected ? category.color : null,
-                              backgroundColor: isSelected ? Color.alphaBlend(
-                                category.color.withOpacity(0.1),
-                                customTheme.backgroundColor
-                              ) : null,
-                              isLastItem: false,
-                              onTap: () {
-                                setState(() {
-                                  categoryId = category.id == categoryId ? null : category.id;
-                                });
-                              }
-                            );
-                          }),
-                        );
-                      }
-                      return Container();
+                          return AnimatedChip(
+                            text: category.name,
+                            textColor: isSelected ? category.color : null,
+                            backgroundColor: isSelected ? Color.alphaBlend(
+                              category.color.withOpacity(0.1),
+                              customTheme.backgroundColor
+                            ) : null,
+                            isLastItem: false,
+                            onTap: () {
+                              setState(() {
+                                categoryId = category.id == categoryId ? null : category.id;
+                              });
+                            }
+                          );
+                        }),
+                      );
                     }
                   ),
 

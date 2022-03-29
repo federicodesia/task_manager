@@ -37,18 +37,15 @@ class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> 
     });
 
     on<UpdateItemsRequested>((event, emit){
-      final taskBlocState = taskBloc.state;
-      if(taskBlocState is TaskLoadSuccess){
-        emit(state.copyWith(
-          searchText: event.searchText,
-          activeFilter: event.taskFilter,
-          items: _filter(
-            searchText: event.searchText ?? state.searchText,
-            taskFilter: event.taskFilter ?? state.activeFilter,
-            tasks: taskBlocState.tasks
-          )
-        ));
-      }
+      emit(state.copyWith(
+        searchText: event.searchText,
+        activeFilter: event.taskFilter,
+        items: _filter(
+          searchText: event.searchText ?? state.searchText,
+          taskFilter: event.taskFilter ?? state.activeFilter,
+          tasks: taskBloc.state.tasks
+        )
+      ));
     });
   }
 

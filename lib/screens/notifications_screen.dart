@@ -2,6 +2,7 @@ import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/notifications_cubit/notifications_cubit.dart';
+import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/components/dot_tab_bar.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/components/lists/declarative_animated_list.dart';
@@ -93,8 +94,7 @@ class _NotificationsScreenState extends State<_NotificationsScreen> with TickerP
                     },
                     child: MyAppBar(
                       header: context.l10n.notificationsScreen_title,
-                      description: context.l10n.notificationsScreen_description,
-                      onButtonPressed: () {},
+                      description: context.l10n.notificationsScreen_description
                     )
                   )
                 ),
@@ -185,8 +185,9 @@ class NotificationsScreenTab extends StatelessWidget{
         }
 
         final notificationGroups = notifications.groupByDay;
-        if(notificationGroups.isNotEmpty){
-          return DeclarativeAnimatedList(
+
+        return AlignedAnimatedSwitcher(
+          child: notificationGroups.isNotEmpty ? DeclarativeAnimatedList(
             items: notificationGroups,
             equalityCheck: (DynamicObject a, DynamicObject b) => a.object == b.object,
             itemBuilder: (BuildContext buildContext, DynamicObject dynamicObject, int index, Animation<double> animation){
@@ -212,20 +213,18 @@ class NotificationsScreenTab extends StatelessWidget{
               }
               return null;
             },
-          );
-        }
-
-        return FillRemainingList(
-          availableSpaceCubit: context.read<AvailableSpaceCubit>(),
-          child: EmptySpace(
-            svgImage: "assets/svg/personal_file.svg",
-            header: context.l10n.emptySpace_youDontHaveNotifications,
-            description: typeFilter != null
-              ? context.l10n.emptySpace_youDontHaveNotifications_description_type(
-                  typeFilter.nameLocalization(context)
-                ).capitalize
-              : context.l10n.emptySpace_youDontHaveNotifications_description_all
-          ),
+          ) : FillRemainingList(
+            availableSpaceCubit: context.read<AvailableSpaceCubit>(),
+            child: EmptySpace(
+              svgImage: "assets/svg/personal_file.svg",
+              header: context.l10n.emptySpace_youDontHaveNotifications,
+              description: typeFilter != null
+                ? context.l10n.emptySpace_youDontHaveNotifications_description_type(
+                    typeFilter.nameLocalization(context)
+                  ).capitalize
+                : context.l10n.emptySpace_youDontHaveNotifications_description_all
+            ),
+          )
         );
       }
     );

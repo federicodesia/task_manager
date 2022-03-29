@@ -19,8 +19,13 @@ class MainRouteWrapper extends StatelessWidget {
       ),
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => TaskBloc(notificationsCubit: context.read<NotificationsCubit>())),
-          BlocProvider(create: (context) => CategoryBloc(taskBloc: context.read<TaskBloc>())),
+          BlocProvider(create: (context) => TaskBloc(
+            notificationsCubit: context.read<NotificationsCubit>()
+          )..add(TaskLoaded())),
+
+          BlocProvider(create: (context) => CategoryBloc(
+            taskBloc: context.read<TaskBloc>()
+          )..add(CategoryLoaded())),
 
           BlocProvider(create: (context) => SyncBloc(
             syncRepository: context.read<SyncRepository>(),

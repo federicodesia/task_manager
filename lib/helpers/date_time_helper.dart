@@ -37,6 +37,28 @@ extension DateTimeExtension on DateTime {
     return nextMonth.dateDifference(thisMonth);
   }
 
+  List<DateTime> monthsBefore(DateTime other){
+    List<DateTime> months = [];
+
+    final limit = DateTime(other.year, other.month);
+    DateTime iterator = DateTime(year, month);
+
+    while (iterator.isBefore(limit) || iterator.compareTo(limit) == 0)
+    {
+      months.add(DateTime(iterator.year, iterator.month));
+      iterator = DateTime(iterator.year, iterator.month + 1);
+    }
+    return months;
+  }
+
+  List<DateTime> get listDaysInMonth {
+    List<DateTime> days = [];
+    for(int i = 0; i < daysInMonth; i++){
+      days.add(DateTime(year, month, i + 1));
+    }
+    return days;
+  }
+
   String format(BuildContext context, String format){
     final languageCode = Localizations.localeOf(context).languageCode;
     return DateFormat(format, languageCode).format(this).capitalize;

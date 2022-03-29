@@ -2,6 +2,8 @@ part of 'category_bloc.dart';
 
 abstract class CategoryEvent {}
 
+class CategoryLoaded extends CategoryEvent {}
+
 class CategoryAdded extends CategoryEvent {
   final Category category;
   CategoryAdded(this.category);

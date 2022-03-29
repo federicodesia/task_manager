@@ -36,7 +36,7 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
   AuthBloc({
     required this.notificationsCubit,
   }) : super(AuthState.initial){
-
+    
     messagingTokenSubscription = firebaseMessaging.onTokenRefresh.listen((token) async {
       add(UpdateFirebaseMessagingTokenRequested(token));
     });

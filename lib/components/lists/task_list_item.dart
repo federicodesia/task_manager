@@ -51,7 +51,7 @@ class TaskListItem extends StatelessWidget{
         item = CheckboxTaskListItem(
           task: task,
           onPressed: onPressed,
-          onChanged: (value) => BlocProvider.of<TaskBloc>(buildContext).add(
+          onChanged: (value) => buildContext.read<TaskBloc>().add(
             TaskUpdated(task.copyWith(isCompleted: value))
           ),
         );
@@ -67,7 +67,7 @@ class TaskListItem extends StatelessWidget{
         child: item,
         onDismissed: (_) {
           Task tempTask = task;
-          BlocProvider.of<TaskBloc>(buildContext).add(TaskDeleted(task));
+          buildContext.read<TaskBloc>().add(TaskDeleted(task));
 
           RoundedSnackBar(
             context: buildContext,

@@ -48,10 +48,8 @@ class AnimatedDynamicTaskList extends StatelessWidget{
 
         if(object is Task){
           final taskState = buildContext.read<TaskBloc>().state;
-          if(taskState is TaskLoadSuccess){
-            if(taskState.deletedTasks.firstWhereOrNull((t) => t.id == object.id) != null){
-              return Container();
-            }
+          if(taskState.deletedTasks.firstWhereOrNull((t) => t.id == object.id) != null){
+            return Container();
           }
         }
         return null;

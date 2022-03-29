@@ -15,46 +15,49 @@ part 'category_bloc.g.dart';
 class CategoryBloc extends DriftedBloc<CategoryEvent, CategoryState> {
   
   final TaskBloc taskBloc;
-  CategoryBloc({required this.taskBloc}) : super(CategoryLoadSuccess.initial){
+  CategoryBloc({
+    required this.taskBloc
+  }) : super(CategoryState.initial){
+
+    on<CategoryLoaded>((event, emit) {
+      emit(state.copyWith(
+        isLoading: true,
+        syncStatus: SyncStatus.pending
+      ));
+    });
 
     on<CategoryAdded>((event, emit){
       final categoryState = state;
-      if(categoryState is CategoryLoadSuccess){
-        emit(categoryState.copyWith(categories: categoryState.categories..add(event.category)));
-      }
+      emit(categoryState.copyWith(
+        categories: categoryState.categories..add(event.category)
+      ));
     });
 
     on<CategoryUpdated>((event, emit){
       final categoryState = state;
-      if(categoryState is CategoryLoadSuccess){
-        emit(categoryState.copyWith(categories: categoryState.categories.map((category){
-          return category.id == event.category.id ? event.category : category;
-        }).toList()));
-      }
+      emit(categoryState.copyWith(categories: categoryState.categories.map((category){
+        return category.id == event.category.id ? event.category : category;
+      }).toList()));
     });
 
     on<CategoryDeleted>((event, emit){
       final categoryState = state;
-      if(categoryState is CategoryLoadSuccess){
-        emit(categoryState.copyWith(
-          categories: categoryState.categories..removeWhere((c) => c.id == event.category.id),
-          deletedCategories: categoryState.deletedCategories..add(event.category.copyWith(deletedAt: DateTime.now()))
-        ));
-        
-        final taskBlocState = taskBloc.state;
-        if(taskBlocState is TaskLoadSuccess){
-          taskBloc.add(TaskStateUpdated(taskBlocState.copyWith(
-            tasks: taskBlocState.tasks.map((task){
-              return task.categoryId == event.category.id ? task.copyWith(categoryId: null) : task;
-            }).toList()
-          )));
-        }
-      }
+      emit(categoryState.copyWith(
+        categories: categoryState.categories..removeWhere((c) => c.id == event.category.id),
+        deletedCategories: categoryState.deletedCategories..add(event.category.copyWith(deletedAt: DateTime.now()))
+      ));
+      
+      final taskBlocState = taskBloc.state;
+      taskBloc.add(TaskStateUpdated(taskBlocState.copyWith(
+        tasks: taskBlocState.tasks.map((task){
+          return task.categoryId == event.category.id ? task.copyWith(categoryId: null) : task;
+        }).toList()
+      )));
     });
 
     on<CategoryStateUpdated>((event, emit){
       debugPrint("Actualizando CategoryState...");
-      emit(event.state);
+      emit(event.state.copyWith(isLoading: false));
     },
     transformer: restartable());
   }
@@ -63,7 +66,7 @@ class CategoryBloc extends DriftedBloc<CategoryEvent, CategoryState> {
   CategoryState? fromJson(Map<String, dynamic> json) {
     try{
       debugPrint("CategoryBloc fromJson");
-      return CategoryLoadSuccess.fromJson(json);
+      return CategoryState.fromJson(json);
     }
     catch(error) {
       return null;
@@ -74,12 +77,10 @@ class CategoryBloc extends DriftedBloc<CategoryEvent, CategoryState> {
   Map<String, dynamic>? toJson(CategoryState state) {
     try{
       debugPrint("CategoryBloc toJson");
-      final categoryState = state;
-      if(categoryState is CategoryLoadSuccess) return categoryState.toJson();
+      return state.toJson();
     }
     catch(error) {
       return null;
     }
-    return null;
   }
 }

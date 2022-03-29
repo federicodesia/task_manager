@@ -17,7 +17,10 @@ abstract class ResponseError{
 
     final connectivityResult = await Connectivity().checkConnectivity();
     if(connectivityResult == ConnectivityResult.none){
-      locator<DialogService>().showNoInternetConnectionDialog();
+      try{
+        locator<DialogService>().showNoInternetConnectionDialog();
+      }
+      catch(_){}
       return null;
     }
 

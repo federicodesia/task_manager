@@ -6,9 +6,10 @@ part of 'category_bloc.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CategoryLoadSuccess _$CategoryLoadSuccessFromJson(Map<String, dynamic> json) =>
-    CategoryLoadSuccess(
-      syncPushStatus: $enumDecode(_$SyncStatusEnumMap, json['syncPushStatus']),
+CategoryState _$CategoryStateFromJson(Map<String, dynamic> json) =>
+    CategoryState(
+      isLoading: json['isLoading'] as bool,
+      syncStatus: $enumDecode(_$SyncStatusEnumMap, json['syncStatus']),
       categories: (json['categories'] as List<dynamic>)
           .map((e) => Category.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -20,10 +21,10 @@ CategoryLoadSuccess _$CategoryLoadSuccessFromJson(Map<String, dynamic> json) =>
       ),
     );
 
-Map<String, dynamic> _$CategoryLoadSuccessToJson(
-        CategoryLoadSuccess instance) =>
+Map<String, dynamic> _$CategoryStateToJson(CategoryState instance) =>
     <String, dynamic>{
-      'syncPushStatus': _$SyncStatusEnumMap[instance.syncPushStatus],
+      'isLoading': instance.isLoading,
+      'syncStatus': _$SyncStatusEnumMap[instance.syncStatus],
       'categories': instance.categories,
       'deletedCategories': instance.deletedCategories,
       'failedCategories': instance.failedCategories

@@ -160,12 +160,12 @@ class _CategoryBottomSheetState extends State<_CategoryBottomSheet>{
                   formKey.currentState!.save();
 
                   if(editCategory != null) {
-                    BlocProvider.of<CategoryBloc>(context).add(CategoryUpdated(editCategory!.copyWith(
+                    context.read<CategoryBloc>().add(CategoryUpdated(editCategory!.copyWith(
                       name: categoryName,
                       color: categoryColor
                     )));
                   } else {
-                    BlocProvider.of<CategoryBloc>(context).add(CategoryAdded(Category.create(
+                    context.read<CategoryBloc>().add(CategoryAdded(Category.create(
                       name: categoryName,
                       color: categoryColor
                     )));

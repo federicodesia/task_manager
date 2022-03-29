@@ -2,6 +2,8 @@ part of 'task_bloc.dart';
 
 abstract class TaskEvent {}
 
+class TaskLoaded extends TaskEvent {}
+
 class TaskAdded extends TaskEvent {
   final Task task;
   TaskAdded(this.task);

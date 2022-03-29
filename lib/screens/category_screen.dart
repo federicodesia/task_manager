@@ -95,15 +95,14 @@ class _CategoryScreenState extends State<_CategoryScreen>{
 
                     BlocBuilder<CategoryBloc, CategoryState>(
                       buildWhen: (previousState, currentState){
-                        if(currentState is CategoryLoadSuccess){
-                          if(currentState.categories.firstWhereOrNull((c) => c.id == widget.categoryId) != null) return true;
-                          return false;
+                        if(currentState.categories.firstWhereOrNull((c) => c.id == widget.categoryId) != null){
+                          return true;
                         }
-                        return true;
+                        return false;
                       },
                       builder: (_, categoryState){
 
-                        Category category = (categoryState as CategoryLoadSuccess).categories
+                        final category = categoryState.categories
                           .firstWhere((c) => c.id == widget.categoryId);
 
                         return SliverAppBar(
@@ -205,12 +204,11 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                               padding: const EdgeInsets.only(top: cPadding - cListItemSpace),
                               child: AlignedAnimatedSwitcher(
                                 alignment: Alignment.topCenter,
-                                duration: cTransitionDuration,
                                 child: state.items.isNotEmpty ? AnimatedDynamicTaskList(
                                   items: state.items,
                                   taskListItemType: TaskListItemType.checkbox,
                                   buildContext: context,
-                                  onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
+                                  onUndoDismissed: (task) => context.read<TaskBloc>().add(TaskUndoDeleted(task)),
                                   objectBuilder: (object){
                                     if(object is DateTime){
                                       final DateTime dateTime = object;
@@ -219,7 +217,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                     return Container();
                                   }
                                 ) : FillRemainingList(
-                                  availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
+                                  availableSpaceCubit: context.read<AvailableSpaceCubit>(),
                                   child: state.searchText.isEmpty ? EmptySpace(
                                     svgImage: "assets/svg/completed_tasks.svg",
                                     header: state.activeFilter == TaskFilter.all
@@ -308,7 +306,7 @@ class _CategoryScreenPopupButton extends StatelessWidget{
                 onPressed: (){
                   // Close AlertDialog
                   Navigator.of(context, rootNavigator: true).pop();
-                  BlocProvider.of<CategoryBloc>(context).add(CategoryDeleted(category));
+                  context.read<CategoryBloc>().add(CategoryDeleted(category));
                   // Close screen
                   Navigator.of(context).pop();
                 },

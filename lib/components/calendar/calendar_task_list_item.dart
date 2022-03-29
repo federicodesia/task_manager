@@ -4,7 +4,6 @@ import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/components/shimmer/shimmer_text.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
-import 'package:task_manager/models/category.dart';
 import 'package:task_manager/models/task.dart';
 import 'package:collection/collection.dart';
 import 'package:task_manager/theme/theme.dart';
@@ -41,21 +40,16 @@ class CalendarTaskListItem extends StatelessWidget{
       return BlocBuilder<CategoryBloc, CategoryState>(
         builder: (_, categoryState) {
 
-          if(categoryState is CategoryLoadSuccess){
-
-            Category? category = categoryState.categories.firstWhereOrNull((c) => c.id == task!.categoryId);
-            if(category != null) {
-              return CalendarTaskListItemContent(
-                onPressed: onPressed,
-                categoryColor: category.color,
-                categoryName: category.name,
-                dateTime: task!.date,
-                title: task!.title,
-                description: task!.description,
-              );
-            }
-
-            return Container();
+          final category = categoryState.categories.firstWhereOrNull((c) => c.id == task!.categoryId);
+          if(category != null) {
+            return CalendarTaskListItemContent(
+              onPressed: onPressed,
+              categoryColor: category.color,
+              categoryName: category.name,
+              dateTime: task!.date,
+              title: task!.title,
+              description: task!.description,
+            );
           }
           return Container();
         }

@@ -1,17 +1,16 @@
 part of 'calendar_bloc.dart';
 
-abstract class CalendarState {}
+class CalendarState {
 
-class CalendarLoadInProgress extends CalendarState {}
-
-class CalendarLoadSuccess extends CalendarState {
+  final bool isLoading;
   final DateTime selectedMonth;
   final List<DateTime> months;
   final DateTime selectedDay;
   final List<DateTime> days;
-  final List<DynamicObject>? items;
+  final List<DynamicObject> items;
   
-  CalendarLoadSuccess({
+  CalendarState({
+    required this.isLoading,
     required this.selectedMonth,
     required this.months,
     required this.selectedDay,
@@ -19,21 +18,34 @@ class CalendarLoadSuccess extends CalendarState {
     required this.items
   });
 
-  CalendarLoadSuccess copyWith({
+  static CalendarState get initial {
+    final now = DateTime.now().ignoreTime;
+    final start = DateTime(now.year, now.month - 1);
+    final end = DateTime(now.year, now.month + 1);
+
+    return CalendarState(
+      isLoading: true,
+      selectedMonth: now,
+      months: start.monthsBefore(end),
+      selectedDay: now,
+      days: now.listDaysInMonth,
+      items: []
+    );
+  }
+
+  CalendarState copyWith({
+    bool? isLoading,
     DateTime? selectedMonth,
-    List<DateTime>? months,
     DateTime? selectedDay,
-    List<DateTime>? days,
     List<DynamicObject>? items
   }){
-    return CalendarLoadSuccess(
+    return CalendarState(
+      isLoading: isLoading ?? this.isLoading,
       selectedMonth: selectedMonth ?? this.selectedMonth,
-      months: months ?? this.months,
+      months: months,
       selectedDay: selectedDay ?? this.selectedDay,
-      days: days ?? this.days,
+      days: selectedDay != null ? selectedDay.listDaysInMonth : days,
       items: items ?? this.items
     );
   }
 }
-
-class CalendarLoadFailure extends CalendarState {}

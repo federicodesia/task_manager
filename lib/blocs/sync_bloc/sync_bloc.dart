@@ -39,14 +39,22 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
   }) : super(SyncState()){
 
     taskBlocSubscription = taskBloc.stream.listen((taskState){
-      if(taskState is TaskLoadSuccess && taskState.syncPushStatus == SyncStatus.pending){
-        add(SyncRequested());
+      if(taskState.syncStatus == SyncStatus.pending){
+        if(taskState.isLoading) {
+          add(HighPrioritySyncRequested());
+        } else {
+          add(SyncRequested());
+        }
       }
     });
 
     categoryBlocSubscription = categoryBloc.stream.listen((categoryState){
-      if(categoryState is CategoryLoadSuccess && categoryState.syncPushStatus == SyncStatus.pending){
-        add(SyncRequested());
+      if(categoryState.syncStatus == SyncStatus.pending){
+        if(categoryState.isLoading) {
+          add(HighPrioritySyncRequested());
+        } else {
+          add(SyncRequested());
+        }
       }
     });
 
@@ -69,7 +77,6 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
 
     final taskState = taskBloc.state;
     final categoryState = categoryBloc.state;
-    if(taskState is! TaskLoadSuccess || categoryState is! CategoryLoadSuccess) return;
 
     final tempDate = DateTime.now();
 
@@ -100,7 +107,6 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
 
       final newTaskState = taskBloc.state;
       final newCategoryState = categoryBloc.state;
-      if(newTaskState is! TaskLoadSuccess || newCategoryState is! CategoryLoadSuccess) return;
 
       responseItems.when(
         left: (duplicated){
@@ -117,7 +123,7 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
             if(mergedDuplicatedId == null) return;
 
             taskBloc.add(TaskStateUpdated(newTaskState.copyWith(
-              syncPushStatus: SyncStatus.pending,
+              syncStatus: SyncStatus.pending,
               tasks: mergedDuplicatedId.item1,
               failedTasks: mergedDuplicatedId.item2
             )));
@@ -131,7 +137,7 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
             if(mergedDuplicatedId == null) return;
 
             categoryBloc.add(CategoryStateUpdated(newCategoryState.copyWith(
-              syncPushStatus: SyncStatus.pending,
+              syncStatus: SyncStatus.pending,
               categories: mergedDuplicatedId.item1,
               failedCategories: mergedDuplicatedId.item2
             )));
@@ -152,13 +158,18 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
             );
 
             if(mergedTasks != null) {
-              taskBloc.add(TaskStateUpdated(taskState.copyWith(
-                syncPushStatus: SyncStatus.idle,
+              taskBloc.add(TaskStateUpdated(newTaskState.copyWith(
+                syncStatus: SyncStatus.idle,
                 tasks: mergedTasks.item1,
                 deletedTasks: mergedTasks.item2,
                 failedTasks: mergedTasks.item3
               )));
             }
+          }
+          else{
+            taskBloc.add(TaskStateUpdated(newTaskState.copyWith(
+              syncStatus: SyncStatus.idle
+            )));
           }
 
           if(replaceCategories.isNotEmpty){
@@ -171,17 +182,30 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
 
             if(mergedCategories != null) {
               categoryBloc.add(CategoryStateUpdated(newCategoryState.copyWith(
-                syncPushStatus: SyncStatus.idle,
+                syncStatus: SyncStatus.idle,
                 categories: mergedCategories.item1,
                 deletedCategories: mergedCategories.item2,
                 failedCategories: mergedCategories.item3
               )));
             }
           }
+          else{
+            categoryBloc.add(CategoryStateUpdated(newCategoryState.copyWith(
+              syncStatus: SyncStatus.idle
+            )));
+          }
 
           emit(state.copyWith(lastSync: tempDate));
         }
       );
+    }
+    else{
+      taskBloc.add(TaskStateUpdated(taskBloc.state.copyWith(
+        syncStatus: SyncStatus.idle
+      )));
+      categoryBloc.add(CategoryStateUpdated(categoryBloc.state.copyWith(
+        syncStatus: SyncStatus.idle
+      )));
     }
   }
 

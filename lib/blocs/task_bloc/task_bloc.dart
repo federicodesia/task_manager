@@ -17,70 +17,62 @@ part 'task_bloc.g.dart';
 class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
 
   final NotificationsCubit notificationsCubit;
-
   StreamSubscription<void>? taskNotificationsConfigChangeSubscription;
 
   TaskBloc({
     required this.notificationsCubit
-  }) : super(TaskLoadSuccess.initial){
+  }) : super(TaskState.initial){
 
     taskNotificationsConfigChangeSubscription = notificationsCubit.settingsCubit
       .taskNotificationsConfigChange.listen((_) => add(ScheduleTaskNotificationsRequested()));
+    
+    on<TaskLoaded>((event, emit) {
+      emit(state.copyWith(
+        isLoading: true,
+        syncStatus: SyncStatus.pending
+      ));
+    });
 
     on<TaskAdded>((event, emit) async{
       final taskState = state;
-      if(taskState is TaskLoadSuccess){
-        emit(taskState.copyWith(tasks: taskState.tasks..add(event.task)));
-      }
+      emit(taskState.copyWith(tasks: taskState.tasks..add(event.task)));
     });
 
     on<TaskUpdated>((event, emit){
       final taskState = state;
-      if(taskState is TaskLoadSuccess){
-        emit(taskState.copyWith(tasks: taskState.tasks.map((task){
-          return task.id == event.task.id ? event.task : task;
-        }).toList()));
-      }
+      emit(taskState.copyWith(tasks: taskState.tasks.map((task){
+        return task.id == event.task.id ? event.task : task;
+      }).toList()));
     });
 
     on<TaskDeleted>((event, emit){
       final taskState = state;
-      if(taskState is TaskLoadSuccess){
-        emit(taskState.copyWith(
-          tasks: taskState.tasks..removeWhere((t) => t.id == event.task.id),
-          deletedTasks: taskState.deletedTasks..add(event.task.copyWith(deletedAt: DateTime.now()))
-        ));
-      }
+      emit(taskState.copyWith(
+        tasks: taskState.tasks..removeWhere((t) => t.id == event.task.id),
+        deletedTasks: taskState.deletedTasks..add(event.task.copyWith(deletedAt: DateTime.now()))
+      ));
     });
 
     on<TaskUndoDeleted>((event, emit){
       final taskState = state;
-      if(taskState is TaskLoadSuccess){
-        emit(taskState.copyWith(
-          tasks: taskState.tasks..add(event.task.copyWith(deletedAt: null)),
-          deletedTasks: taskState.deletedTasks..removeWhere((t) => t.id == event.task.id)
-        ));
-      }
+      emit(taskState.copyWith(
+        tasks: taskState.tasks..add(event.task.copyWith(deletedAt: null)),
+        deletedTasks: taskState.deletedTasks..removeWhere((t) => t.id == event.task.id)
+      ));
     });
     
     on<TasksUpdated>((event, emit){
-      final taskState = state;
-      if(taskState is TaskLoadSuccess){
-        emit(taskState.copyWith(tasks: event.tasks));
-      }
+      emit(state.copyWith(tasks: event.tasks));
     });
 
     on<TaskStateUpdated>((event, emit){
       debugPrint("Actualizando TaskState...");
-      emit(event.state);
+      emit(event.state.copyWith(isLoading: false));
     },
     transformer: restartable());
 
     on<ScheduleTaskNotificationsRequested>((event, emit){
-      final taskState = state;
-      if(taskState is TaskLoadSuccess){
-        notificationsCubit.scheduleTasksNotificatons(taskState.tasks);
-      }
+      notificationsCubit.scheduleTasksNotificatons(state.tasks);
     });
   }
 
@@ -100,7 +92,7 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
   TaskState? fromJson(Map<String, dynamic> json) {
     try{
       debugPrint("TaskBloc fromJson");
-      return TaskLoadSuccess.fromJson(json);
+      return TaskState.fromJson(json);
     }
     catch(error) {
       return null;
@@ -111,12 +103,10 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
   Map<String, dynamic>? toJson(TaskState state) {
     try{
       debugPrint("TaskBloc toJson");
-      final taskState = state;
-      if(taskState is TaskLoadSuccess) return taskState.toJson();
+      return state.toJson();
     }
     catch(error) {
       return null;
     }
-    return null;
   }
 }

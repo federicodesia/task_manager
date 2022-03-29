@@ -19,5 +19,3 @@ class UpcomingLoadSuccess extends UpcomingState {
     required this.items
   });
 }
-
-class UpcomingLoadFailure extends UpcomingState {}

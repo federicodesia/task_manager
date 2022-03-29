@@ -56,7 +56,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                   flexibleSpace: WidgetSize(
                     onChange: (Size size){
                       setState(() => appBarHeight = size.height);
-                      BlocProvider.of<AvailableSpaceCubit>(context).setHeight(constraints.maxHeight - size.height);
+                      context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height);
                     },
                     child: CenterAppBar(
                       center: Text(
@@ -127,11 +127,10 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                     BlocBuilder<TaskBloc, TaskState>(
                                       builder: (_, taskState) {
                                         int? tasksCount, completedCount, remainingCount;
-                                        if(taskState is TaskLoadSuccess){
-                                          tasksCount = taskState.tasks.length;
-                                          completedCount = taskState.tasks.where((t) => t.isCompleted).length;
-                                          remainingCount = tasksCount - completedCount;
-                                        }
+                                        
+                                        tasksCount = taskState.tasks.length;
+                                        completedCount = taskState.tasks.where((t) => t.isCompleted).length;
+                                        remainingCount = tasksCount - completedCount;
 
                                         return Row(
                                           mainAxisAlignment: MainAxisAlignment.center,

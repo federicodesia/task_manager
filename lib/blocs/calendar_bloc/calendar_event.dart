@@ -2,26 +2,14 @@ part of 'calendar_bloc.dart';
 
 abstract class CalendarEvent {}
 
-class CalendarLoaded extends CalendarEvent {
-  final DateTime startMonth;
-  final DateTime endMonth;
-  final DateTime selectedDate;
-
-  CalendarLoaded({
-    required this.startMonth,
-    required this.endMonth,
-    required this.selectedDate
-  });
+class CalendarSelectedMonthChanged extends CalendarEvent {
+  final DateTime selectedMonth;
+  CalendarSelectedMonthChanged(this.selectedMonth);
 }
 
-class CalendarMonthUpdated extends CalendarEvent {
-  final DateTime month;
-  CalendarMonthUpdated(this.month);
-}
-
-class CalendarDateUpdated extends CalendarEvent {
-  final DateTime date;
-  CalendarDateUpdated(this.date);
+class CalendarSelectedDayChanged extends CalendarEvent {
+  final DateTime selectedDay;
+  CalendarSelectedDayChanged(this.selectedDay);
 }
 
 class TasksUpdated extends CalendarEvent {

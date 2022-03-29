@@ -55,7 +55,7 @@ class _SettingsNotificationsScreenState extends State<_SettingsNotificationsScre
                   flexibleSpace: WidgetSize(
                     onChange: (Size size){
                       setState(() => appBarHeight = size.height);
-                      BlocProvider.of<AvailableSpaceCubit>(context).setHeight(constraints.maxHeight - size.height);
+                      context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height);
                     },
                     child: CenterAppBar(
                       center: Text(

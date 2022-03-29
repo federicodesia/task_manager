@@ -35,53 +35,49 @@ class CategoryCard extends StatelessWidget{
 
             if(isShimmer) return const CategoryCardContent(isShimmer: true);
 
-            if(taskState is TaskLoadSuccess && categoryState is CategoryLoadSuccess){
-              final category = categoryState.categories.firstWhereOrNull((c) => c.id == categoryId);
-              if(category == null) return Container();
+            final category = categoryState.categories.firstWhereOrNull((c) => c.id == categoryId);
+            if(category == null) return Container();
 
-              List<Task> categoryTasks = taskState.tasks.where((t) => t.categoryId == categoryId).toList();
+            List<Task> categoryTasks = taskState.tasks.where((t) => t.categoryId == categoryId).toList();
 
-              String description;
-              int tasksCount = categoryTasks.length;
-              int completedTasks = categoryTasks.where((task) => task.isCompleted).length;
-              if(tasksCount > 0 && tasksCount == completedTasks) {
-                description = context.l10n.categoryCard_allDone_description;
-              } else{
-                int remainingTasks = tasksCount - completedTasks;
-                description = context.l10n.categoryCard_taskCount_description(remainingTasks);
-              }
-
-              return CategoryCardContent(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context){
-                      return BlocProvider(
-                        create: (BuildContext context) => CategoryScreenBloc(
-                          taskBloc: BlocProvider.of<TaskBloc>(context),
-                          categoryId: categoryId
-                        )..add(CategoryScreenLoaded()),
-                        child: CategoryScreen(categoryId: categoryId),
-                      );
-                    })
-                  );
-                },
-                onLongPress: () {
-                  if(!category.isGeneral) {
-                    CategoryBottomSheet(
-                      context,
-                      editCategory: category
-                    ).show();
-                  }
-                },
-                name: category.name,
-                description: description,
-                color: category.color,
-                tasksCount: tasksCount,
-                completedTasks: completedTasks
-              );
+            String description;
+            int tasksCount = categoryTasks.length;
+            int completedTasks = categoryTasks.where((task) => task.isCompleted).length;
+            if(tasksCount > 0 && tasksCount == completedTasks) {
+              description = context.l10n.categoryCard_allDone_description;
+            } else{
+              int remainingTasks = tasksCount - completedTasks;
+              description = context.l10n.categoryCard_taskCount_description(remainingTasks);
             }
 
-            return Container();
+            return CategoryCardContent(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context){
+                    return BlocProvider(
+                      create: (BuildContext context) => CategoryScreenBloc(
+                        taskBloc: context.read<TaskBloc>(),
+                        categoryId: categoryId
+                      )..add(CategoryScreenLoaded()),
+                      child: CategoryScreen(categoryId: categoryId),
+                    );
+                  })
+                );
+              },
+              onLongPress: () {
+                if(!category.isGeneral) {
+                  CategoryBottomSheet(
+                    context,
+                    editCategory: category
+                  ).show();
+                }
+              },
+              name: category.name,
+              description: description,
+              color: category.color,
+              tasksCount: tasksCount,
+              completedTasks: completedTasks
+            );
           }
         );
       }

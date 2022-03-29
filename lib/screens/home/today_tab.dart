@@ -46,7 +46,7 @@ class _TodayTabState extends State<TodayTab>{
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (_, state){
 
-        if(state is TaskLoadSuccess){
+        if(!state.isLoading){
           List<Task> tasksList = state.tasks;
 
           if(tasksList.isEmpty){
@@ -97,7 +97,7 @@ class _TodayTabState extends State<TodayTab>{
                   items: items,
                   taskListItemType: TaskListItemType.checkbox,
                   buildContext: context,
-                  onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
+                  onUndoDismissed: (task) => context.read<TaskBloc>().add(TaskUndoDeleted(task)),
                   objectBuilder: (object){
                     return (object is String) ? ListHeader(object) : Container();
                   }

@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:boxy/flex.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ import 'package:task_manager/models/category.dart';
 import 'package:task_manager/components/main/floating_action_button.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
-import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/screens/home/today_tab.dart';
 import 'package:task_manager/screens/home/upcoming_tab.dart';
 import 'package:task_manager/theme/theme.dart';
@@ -124,8 +122,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                     },
                     child: MyAppBar(
                       header: context.l10n.homeScreen_header,
-                      description: context.l10n.homeScreen_description,
-                      onButtonPressed: () => AutoRouter.of(context).navigate(const ProfileRoute()),
+                      description: context.l10n.homeScreen_description
                     )
                   )
                 ),
@@ -165,8 +162,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                       ),
 
                                       AlignedAnimatedSwitcher(
-                                        duration: cTransitionDuration,
-                                        child: categoryState is CategoryLoadSuccess ? Row(
+                                        child: !categoryState.isLoading ? Row(
                                           children: [
                                             DeclarativeAnimatedList(
                                               scrollDirection: Axis.horizontal,

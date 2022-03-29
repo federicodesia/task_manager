@@ -20,7 +20,6 @@ import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/l10n/l10n.dart';
-import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/theme/theme.dart';
 
 import '../constants.dart';
@@ -33,11 +32,9 @@ class CalendarScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AvailableSpaceCubit()),
-        BlocProvider(create: (_) => CalendarBloc(taskBloc: context.read<TaskBloc>())..add(CalendarLoaded(
-          startMonth: DateTime(DateTime.now().year, DateTime.now().month - 1),
-          endMonth: DateTime(DateTime.now().year, DateTime.now().month + 2),
-          selectedDate: DateTime.now().ignoreTime
-        ))),
+        BlocProvider(create: (_) => CalendarBloc(
+          taskBloc: context.read<TaskBloc>()
+        )),
       ],
       child: _CalendarScreen()
     );
@@ -70,12 +67,9 @@ class _CalendarScreenState extends State<_CalendarScreen>{
       floatingActionButton: AnimatedFloatingActionButton(
         visible: showFloatingActionButton,
         onPressed: () {
-          CalendarState calendarState = BlocProvider.of<CalendarBloc>(context).state;
-
           TaskBottomSheet(
             context,
-            initialDate: (calendarState is CalendarLoadSuccess)
-              ? calendarState.selectedDay : null,
+            initialDate: context.read<CalendarBloc>().state.selectedDay
           ).show();
         },
       ),
@@ -83,49 +77,53 @@ class _CalendarScreenState extends State<_CalendarScreen>{
       body: LayoutBuilder(
         builder: (_, constraints){
           
-          return BlocBuilder<CalendarBloc, CalendarState>(
-            builder: (_, calendarState){
+          return AnimatedFloatingActionButtonScrollNotification(
+            currentState: showFloatingActionButton,
+            onChange: (value) => setState(() => showFloatingActionButton = value),
 
-              List<DynamicObject>? items = (calendarState is CalendarLoadSuccess) ? calendarState.items : null;
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()
+              ),
+              slivers: [
 
-              return AnimatedFloatingActionButtonScrollNotification(
-                currentState: showFloatingActionButton,
-                onChange: (value) => setState(() => showFloatingActionButton = value),
-                child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()
-                  ),
-                  slivers: [
+                SliverAppBar(
+                  backgroundColor: customTheme.backgroundColor,
+                  collapsedHeight: appBarHeight,
+                  flexibleSpace: WidgetSize(
+                    onChange: (Size size){
+                      setState(() => appBarHeight = size.height);
+                      context.read<AvailableSpaceCubit>().setHeight(
+                        constraints.maxHeight - size.height - contentHeight
+                      );
+                    },
+                    child: MyAppBar(
+                      header: context.l10n.calendarScreen_title,
+                      description: context.l10n.calendarScreen_description
+                    )
+                  )
+                ),
 
-                    SliverAppBar(
-                      backgroundColor: customTheme.backgroundColor,
-                      collapsedHeight: appBarHeight,
-                      flexibleSpace: WidgetSize(
-                        onChange: (Size size){
-                          setState(() => appBarHeight = size.height);
-                          context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height - contentHeight);
-                        },
-                        child: MyAppBar(
-                          header: context.l10n.calendarScreen_title,
-                          description: context.l10n.calendarScreen_description,
-                          onButtonPressed: () {},
-                        )
-                      )
-                    ),
+                SliverToBoxAdapter(
+                  child: BlocBuilder<CalendarBloc, CalendarState>(
+                    builder: (_, calendarState) {
+                      final items = calendarState.items;
 
-                    SliverToBoxAdapter(
-                      child: (calendarState is CalendarLoadSuccess) ? Column(
+                      return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
 
                           WidgetSize(
                             onChange: (Size size){
                               setState(() => contentHeight = size.height);
-                              context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - appBarHeight - size.height);
+                              context.read<AvailableSpaceCubit>().setHeight(
+                                constraints.maxHeight - appBarHeight - size.height
+                              );
                             },
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: cPadding),
                                   child: CalendarMonthPicker(
@@ -135,7 +133,8 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                       int previousIndex = scrollController.offset ~/ tabWidth!;
                                       int previousLenght = calendarState.days.length;
                                       int nowLenght = date.daysInMonth;
-                                      BlocProvider.of<CalendarBloc>(context).add(CalendarMonthUpdated(date));
+                                      
+                                      context.read<CalendarBloc>().add(CalendarSelectedMonthChanged(date));
                                       
                                       int index;
                                       if(previousIndex > previousLenght - 1) {
@@ -160,10 +159,13 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                   child: SingleChildScrollView(
                                     controller: scrollController,
                                     scrollDirection: Axis.horizontal,
-                                    padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 2 - (tabWidth ?? 100.0) / 2),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: MediaQuery.of(context).size.width / 2 - (tabWidth ?? 100.0) / 2
+                                    ),
                                     physics: tabWidth != null ? SnapBounceScrollPhysics(
                                       itemWidth: tabWidth!
                                     ) : const BouncingScrollPhysics(),
+
                                     child: Row(
                                       children: List.generate(calendarState.days.length, (index){
                                         DateTime day = calendarState.days[index];
@@ -182,7 +184,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                             dateTime: day,
                                             isSelected: day.compareTo(calendarState.selectedDay) == 0,
                                             onTap: () {
-                                              BlocProvider.of<CalendarBloc>(context).add(CalendarDateUpdated(day));
+                                              context.read<CalendarBloc>().add(CalendarSelectedDayChanged(day));
                                               scrollController.animateTo(
                                                 index * (tabWidth ?? 100),
                                                 duration: cAnimationDuration,
@@ -196,7 +198,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                   ),
                                   onNotification: (notification){
                                     DateTime day = calendarState.days[scrollController.position.pixels ~/ (tabWidth ?? 100)];
-                                    BlocProvider.of<CalendarBloc>(context).add(CalendarDateUpdated(day));
+                                    context.read<CalendarBloc>().add(CalendarSelectedDayChanged(day));
                                     return true;
                                   }
                                 ),
@@ -206,45 +208,44 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                             ),
                           ),
 
-                          Padding(
+                          !calendarState.isLoading ? Padding(
                             padding: const EdgeInsets.symmetric(horizontal: cPadding),
-                            child: items != null ? AlignedAnimatedSwitcher(
+                            child: AlignedAnimatedSwitcher(
                               alignment: Alignment.topCenter,
-                              duration: cTransitionDuration,
                               child: items.isNotEmpty ? AnimatedDynamicTaskList(
                                 items: items,
                                 taskListItemType: TaskListItemType.calendar,
                                 buildContext: context,
-                                onUndoDismissed: (task) => BlocProvider.of<TaskBloc>(context).add(TaskUndoDeleted(task)),
+                                onUndoDismissed: (task) => context.read<TaskBloc>().add(TaskUndoDeleted(task)),
                                 objectBuilder: (object){
                                   return (object is DateTime) ? CalendarGroupHour(dateTime: object) : Container();
                                 }
                               ) : FillRemainingList(
-                                availableSpaceCubit: BlocProvider.of<AvailableSpaceCubit>(context),
+                                availableSpaceCubit: context.read<AvailableSpaceCubit>(),
                                 child: EmptySpace(
                                   svgImage: "assets/svg/completed_tasks.svg",
                                   header: context.l10n.emptySpace_youHaventTasksOnThisDay,
                                   description: context.l10n.emptySpace_youHaventTasksOnThisDay_description,
                                 )
                               ),
-                            ) : const Padding(
-                              padding: EdgeInsets.only(top: cPadding),
-                              child: ShimmerList(
-                                minItems: 3,
-                                maxItems: 4,
-                                child: CalendarTaskListItem(isShimmer: true)
-                              ),
                             )
+                          ) : const Padding(
+                            padding: EdgeInsets.only(top: cPadding),
+                            child: ShimmerList(
+                              minItems: 3,
+                              maxItems: 4,
+                              child: CalendarTaskListItem(isShimmer: true)
+                            ),
                           ),
 
                           const SizedBox(height: cPadding),
                         ],
-                      ) : Container(),
-                    ),
-                  ]
+                      );
+                    }
+                  ),
                 ),
-              );
-            }
+              ]
+            ),
           );
         },
       ),

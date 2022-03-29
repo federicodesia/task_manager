@@ -6,9 +6,9 @@ part of 'task_bloc.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TaskLoadSuccess _$TaskLoadSuccessFromJson(Map<String, dynamic> json) =>
-    TaskLoadSuccess(
-      syncPushStatus: $enumDecode(_$SyncStatusEnumMap, json['syncPushStatus']),
+TaskState _$TaskStateFromJson(Map<String, dynamic> json) => TaskState(
+      isLoading: json['isLoading'] as bool,
+      syncStatus: $enumDecode(_$SyncStatusEnumMap, json['syncStatus']),
       tasks: (json['tasks'] as List<dynamic>)
           .map((e) => Task.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -20,9 +20,9 @@ TaskLoadSuccess _$TaskLoadSuccessFromJson(Map<String, dynamic> json) =>
       ),
     );
 
-Map<String, dynamic> _$TaskLoadSuccessToJson(TaskLoadSuccess instance) =>
-    <String, dynamic>{
-      'syncPushStatus': _$SyncStatusEnumMap[instance.syncPushStatus],
+Map<String, dynamic> _$TaskStateToJson(TaskState instance) => <String, dynamic>{
+      'isLoading': instance.isLoading,
+      'syncStatus': _$SyncStatusEnumMap[instance.syncStatus],
       'tasks': instance.tasks,
       'deletedTasks': instance.deletedTasks,
       'failedTasks': instance.failedTasks

@@ -17,32 +17,26 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
   UpcomingBloc({
     required this.taskBloc
   }) : super(UpcomingLoadInProgress()) {
+    
     todosSubscription = taskBloc.stream.listen((state) {
-      if(state is TaskLoadSuccess) {
-        add(TasksUpdated(state.tasks));
-      }
+      add(TasksUpdated(state.tasks));
     });
 
     on<UpcomingLoaded>((event, emit){
-      TaskState taskBlocState = taskBloc.state;
-      if(taskBlocState is TaskLoadSuccess){
-        add(TasksUpdated(taskBlocState.tasks));
-      }
+      add(TasksUpdated( taskBloc.state.tasks));
     });
 
     on<TasksUpdated>((event, emit){
-      TaskState taskBlocState = taskBloc.state;
-      if(taskBlocState is TaskLoadSuccess){
-        final weekData = _getWeekData(taskBlocState.tasks);
+      final tasks = taskBloc.state.tasks;
+      final data = weekData(tasks);
 
-        emit(UpcomingLoadSuccess(
-          weekCompletedTasksCount: weekData.item1,
-          weekRemainingTasksCount: weekData.item2,
-          weekTasks: weekData.item3,
-          weekCompletedTasks: weekData.item4,
-          items: _getGroups(taskBlocState.tasks)
-        ));
-      }
+      emit(UpcomingLoadSuccess(
+        weekCompletedTasksCount: data.item1,
+        weekRemainingTasksCount: data.item2,
+        weekTasks: data.item3,
+        weekCompletedTasks: data.item4,
+        items: groupByDate(tasks)
+      ));
     });
   }
 
@@ -51,7 +45,7 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
     int,
     Map<DateTime, int>,
     Map<DateTime, int>
-  > _getWeekData(List<Task> tasks){
+  > weekData(List<Task> tasks){
 
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1)).ignoreTime;
@@ -84,10 +78,10 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
     );
   }
 
-  List<DynamicObject> _getGroups(List<Task> tasks){
+  List<DynamicObject> groupByDate(List<Task> tasks){
     List<DynamicObject> items = [];
 
-    DateTime now = DateTime.now();
+    final now = DateTime.now();
     tasks = tasks.where((task) => task.date.dateDifference(now) >= 1).toList();
     tasks.sort((a, b) => a.date.compareTo(b.date));
 
@@ -97,8 +91,8 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
       DateTime lastDateTime = tasks.first.date.ignoreTime;
       items.add(DynamicObject(object: lastDateTime));
 
-      for(int i = 0; i < tasks.length; i++){
-        Task task = tasks[i];
+      for(Task task in tasks){
+
         if(task.date.dateDifference(lastDateTime) == 0) {
           items.add(DynamicObject(object: task));
         }

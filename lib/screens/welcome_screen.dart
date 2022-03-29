@@ -33,7 +33,7 @@ class _WelcomeScreen extends StatefulWidget{
 
 class _WelcomeScreenState extends State<_WelcomeScreen>{
 
-  late AvailableSpaceCubit availableSpaceCubit = BlocProvider.of<AvailableSpaceCubit>(context);
+  late AvailableSpaceCubit availableSpaceCubit = context.read<AvailableSpaceCubit>();
   int currentSlidingPage = 0;
 
   // TODO: Internationalize

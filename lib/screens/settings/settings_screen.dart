@@ -61,7 +61,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                   flexibleSpace: WidgetSize(
                     onChange: (Size size){
                       setState(() => appBarHeight = size.height);
-                      BlocProvider.of<AvailableSpaceCubit>(context).setHeight(constraints.maxHeight - size.height);
+                      context.read<AvailableSpaceCubit>().setHeight(constraints.maxHeight - size.height);
                     },
                     child: BlocBuilder<AuthBloc, AuthState>(
                       builder: (_, authState) {

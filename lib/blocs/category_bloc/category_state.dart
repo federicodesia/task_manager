@@ -1,26 +1,25 @@
 part of 'category_bloc.dart';
 
-abstract class CategoryState {}
-
-class CategoryLoadInProgress extends CategoryState {}
-
 @JsonSerializable()
-class CategoryLoadSuccess extends CategoryState {
+class CategoryState{
 
-  final SyncStatus syncPushStatus;
+  final bool isLoading;
+  final SyncStatus syncStatus;
   final List<Category> categories;
   final List<Category> deletedCategories;
   final Map<String, SyncErrorType> failedCategories;
 
-  CategoryLoadSuccess({
-    required this.syncPushStatus,
+  CategoryState({
+    required this.isLoading,
+    required this.syncStatus,
     required this.categories,
     required this.deletedCategories,
     required this.failedCategories
   });
 
-  static CategoryLoadSuccess get initial => CategoryLoadSuccess(
-    syncPushStatus: SyncStatus.idle,
+  static CategoryState get initial => CategoryState(
+    isLoading: true,
+    syncStatus: SyncStatus.idle,
     categories: [
       Category.create(
         isGeneral: true,
@@ -32,22 +31,22 @@ class CategoryLoadSuccess extends CategoryState {
     failedCategories: {}
   );
 
-  CategoryLoadSuccess copyWith({
-    SyncStatus? syncPushStatus,
+  CategoryState copyWith({
+    bool? isLoading,
+    SyncStatus? syncStatus,
     List<Category>? categories,
     List<Category>? deletedCategories,
     Map<String, SyncErrorType>? failedCategories
   }){
-    return CategoryLoadSuccess(
-      syncPushStatus: syncPushStatus ?? SyncStatus.pending,
+    return CategoryState(
+      isLoading: isLoading ?? this.isLoading,
+      syncStatus: syncStatus ?? SyncStatus.pending,
       categories: categories ?? this.categories,
       deletedCategories: deletedCategories ?? this.deletedCategories,
       failedCategories: failedCategories ?? this.failedCategories
     );
   }
 
-  factory CategoryLoadSuccess.fromJson(Map<String, dynamic> json) => _$CategoryLoadSuccessFromJson(json);
-  Map<String, dynamic> toJson() => _$CategoryLoadSuccessToJson(this);
+  factory CategoryState.fromJson(Map<String, dynamic> json) => _$CategoryStateFromJson(json);
+  Map<String, dynamic> toJson() => _$CategoryStateToJson(this);
 }
-
-class CategoryLoadFailure extends CategoryState {}

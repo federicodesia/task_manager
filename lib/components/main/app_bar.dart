@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/components/rounded_button.dart';
+import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/theme/theme.dart';
 
 import '../../constants.dart';
@@ -8,13 +10,11 @@ class MyAppBar extends StatelessWidget {
 
   final String header;
   final String description;
-  final Function() onButtonPressed;
   
   const MyAppBar({
     Key? key, 
     required this.header,
-    required this.description,
-    required this.onButtonPressed
+    required this.description
   }) : super(key: key);
 
   @override
@@ -57,7 +57,7 @@ class MyAppBar extends StatelessWidget {
                 child: Image.asset(
                   "assets/icons/profile.png"
                 ),
-                onPressed: onButtonPressed,
+                onPressed: () => AutoRouter.of(context).navigate(const ProfileRoute()),
               ),
             ],
           ),

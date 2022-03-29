@@ -10,99 +10,72 @@ part 'calendar_event.dart';
 part 'calendar_state.dart';
 
 class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
+  
   final TaskBloc taskBloc;
   late StreamSubscription tasksSubscription;
 
   CalendarBloc({
     required this.taskBloc,
-  }) : super(CalendarLoadInProgress()) {
+  }) : super(CalendarState.initial) {
+
     tasksSubscription = taskBloc.stream.listen((state) {
-      if(state is TaskLoadSuccess) {
-        add(TasksUpdated(state.tasks));
-      }
+      add(TasksUpdated(state.tasks));
     });
 
-    on<CalendarLoaded>((event, emit){
-      List<DateTime> months = [];
-      DateTime iterator;
-      DateTime limit;
+    on<CalendarSelectedMonthChanged>((event, emit){
+      emit(state.copyWith(selectedMonth: event.selectedMonth));
+    });
 
-      iterator = DateTime(event.startMonth.year, event.startMonth.month);
-      limit = event.endMonth;
-      
-      while (iterator.isBefore(limit))
-      {
-        months.add(DateTime(iterator.year, iterator.month));
-        iterator = DateTime(iterator.year, iterator.month + 1);
-      }
-
-      emit(
-        CalendarLoadSuccess(
-          months: months,
-          selectedMonth: event.selectedDate,
-          days: _getDaysOfMonth(event.selectedDate),
-          selectedDay: event.selectedDate,
-          items: null
+    on<CalendarSelectedDayChanged>((event, emit){
+      emit(state.copyWith(
+        selectedDay: event.selectedDay,
+        items: groupByHour(
+          tasks: taskBloc.state.tasks,
+          selectedDay: event.selectedDay
         )
-      );
-    });
-
-    on<CalendarMonthUpdated>((event, emit){
-      if(state is CalendarLoadSuccess){
-        emit((state as CalendarLoadSuccess).copyWith(
-          selectedMonth: event.month,
-          days: _getDaysOfMonth(event.month)
-        ));
-      }
-    });
-
-    on<CalendarDateUpdated>((event, emit){
-      TaskState taskBlocState = taskBloc.state;
-      if(state is CalendarLoadSuccess && taskBlocState is TaskLoadSuccess){
-        emit((state as CalendarLoadSuccess).copyWith(
-          selectedDay: event.date,
-          items: _getGroupsByDate(taskBlocState.tasks, event.date)
-        ));
-      }
+      ));
     });
 
     on<TasksUpdated>((event, emit){
-      TaskState taskBlocState = taskBloc.state;
-      if(state is CalendarLoadSuccess && taskBlocState is TaskLoadSuccess){
-        emit((state as CalendarLoadSuccess).copyWith(
-          items: _getGroupsByDate(event.tasks, (state as CalendarLoadSuccess).selectedDay)
-        ));
-      }
+      emit(state.copyWith(
+        items: groupByHour(
+          tasks: event.tasks,
+          selectedDay: state.selectedDay
+        )
+      ));
     });
   }
 
-  List<DynamicObject> _getGroupsByDate(List<Task> tasks, DateTime date){
-    List<Task> _tasks = tasks.where((task) => task.date.dateDifference(date) == 0).toList();
-    _tasks.sort((a, b) => a.date.compareTo(b.date));
+  List<DynamicObject> groupByHour({
+    required List<Task> tasks,
+    required DateTime selectedDay
+  }){
+    tasks = tasks.where((task) => task.date.dateDifference(selectedDay) == 0).toList();
+    tasks.sort((a, b) => a.date.compareTo(b.date));
 
-    List<DynamicObject> groups = [];
-    DateTime now = DateTime.now();
+    List<DynamicObject> items = [];
 
-    if(_tasks.isNotEmpty){
-      for(int i = _tasks.first.date.hour; i <= _tasks.last.date.hour; i++){
-        groups.add(DynamicObject(
-          object: DateTime(now.year, now.month, now.day, i)
-        ));
+    if(tasks.isNotEmpty){
+      final now = DateTime.now().ignoreTime;
 
-        _tasks.where((task) => task.date.hour == i).forEach((task) {
-          groups.add(DynamicObject(object: task));
-        });
+      DateTime lastHour = now.copyWith(hour: tasks.first.date.hour);
+      items.add(DynamicObject(object: lastHour));
+
+      for (Task task in tasks){
+        final hour = now.copyWith(hour: task.date.hour);
+
+        if(lastHour.isAtSameMomentAs(hour)) {
+          items.add(DynamicObject(object: task));
+        }
+        else{
+          lastHour = hour;
+          items.add(DynamicObject(object: lastHour));
+          items.add(DynamicObject(object: task));
+        }
       }
     }
-    return groups;
-  }
 
-  List<DateTime> _getDaysOfMonth(DateTime date){
-    List<DateTime> days = [];
-    for(int i = 0; i < date.daysInMonth; i++){
-      days.add(DateTime(date.year, date.month, i + 1));
-    }
-    return days;
+    return items;
   }
 
   @override
