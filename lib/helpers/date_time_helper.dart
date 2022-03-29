@@ -37,6 +37,8 @@ extension DateTimeExtension on DateTime {
     return nextMonth.dateDifference(thisMonth);
   }
 
+  DateTime get lastDayOfMonth => DateTime(year, month + 1, 0);
+
   List<DateTime> monthsBefore(DateTime other){
     List<DateTime> months = [];
 

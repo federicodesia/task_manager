@@ -20,8 +20,8 @@ class CalendarState {
 
   static CalendarState get initial {
     final now = DateTime.now().ignoreTime;
-    final start = DateTime(now.year, now.month - 1);
-    final end = DateTime(now.year, now.month + 1);
+    final start = DateTime(now.year - 1, now.month);
+    final end = DateTime(now.year + 1, now.month);
 
     return CalendarState(
       isLoading: true,

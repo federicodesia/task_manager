@@ -40,7 +40,7 @@ class CategoryState{
   }){
     return CategoryState(
       isLoading: isLoading ?? this.isLoading,
-      syncStatus: syncStatus ?? SyncStatus.pending,
+      syncStatus: syncStatus ?? this.syncStatus,
       categories: categories ?? this.categories,
       deletedCategories: deletedCategories ?? this.deletedCategories,
       failedCategories: failedCategories ?? this.failedCategories

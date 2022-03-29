@@ -12,6 +12,8 @@ class CalendarSelectedDayChanged extends CalendarEvent {
   CalendarSelectedDayChanged(this.selectedDay);
 }
 
+class UpdateLoadingRequested extends CalendarEvent {}
+
 class TasksUpdated extends CalendarEvent {
   final List<Task> tasks;
   TasksUpdated(this.tasks);

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/calendar_bloc/calendar_bloc.dart';
+import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/bottom_sheets/task_bottom_sheet.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
@@ -18,7 +21,6 @@ import 'package:task_manager/components/responsive/fill_remaining_list.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/shimmer/shimmer_list.dart';
 import 'package:task_manager/cubits/available_space_cubit.dart';
-import 'package:task_manager/helpers/date_time_helper.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/theme/theme.dart';
 
@@ -33,7 +35,8 @@ class CalendarScreen extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => AvailableSpaceCubit()),
         BlocProvider(create: (_) => CalendarBloc(
-          taskBloc: context.read<TaskBloc>()
+          taskBloc: context.read<TaskBloc>(),
+          categoryBloc: context.read<CategoryBloc>()
         )),
       ],
       child: _CalendarScreen()
@@ -58,6 +61,29 @@ class _CalendarScreenState extends State<_CalendarScreen>{
 
   bool showFloatingActionButton = true;
 
+  late CalendarBloc calendarBloc = context.read<CalendarBloc>();
+  late StreamSubscription calendarSubscription;
+
+  @override
+  void initState() {
+    calendarSubscription = calendarBloc.stream.listen((calendarState) {
+      if(tabWidth != null){
+        scrollController.animateTo(
+          (calendarState.selectedDay.day - 1) * tabWidth!,
+          duration: cAnimationDuration,
+          curve: Curves.ease
+        );
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() async {
+    await calendarSubscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context){
     final customTheme = Theme.of(context).customTheme;
@@ -69,7 +95,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
         onPressed: () {
           TaskBottomSheet(
             context,
-            initialDate: context.read<CalendarBloc>().state.selectedDay
+            initialDate: calendarBloc.state.selectedDay
           ).show();
         },
       ),
@@ -129,27 +155,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                   child: CalendarMonthPicker(
                                     months: calendarState.months,
                                     initialMonth: DateTime.now(),
-                                    onChanged: (date){
-                                      int previousIndex = scrollController.offset ~/ tabWidth!;
-                                      int previousLenght = calendarState.days.length;
-                                      int nowLenght = date.daysInMonth;
-                                      
-                                      context.read<CalendarBloc>().add(CalendarSelectedMonthChanged(date));
-                                      
-                                      int index;
-                                      if(previousIndex > previousLenght - 1) {
-                                        index = nowLenght - 1;
-                                      }
-                                      else {
-                                        index = previousIndex.clamp(0, nowLenght - 1);
-                                      }
-
-                                      scrollController.animateTo(
-                                        index * tabWidth! - 0.001,
-                                        duration: cAnimationDuration,
-                                        curve: Curves.ease
-                                      );
-                                    },
+                                    onChanged: (date) => calendarBloc.add(CalendarSelectedMonthChanged(date))
                                   ),
                                 ),
 
@@ -159,9 +165,9 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                   child: SingleChildScrollView(
                                     controller: scrollController,
                                     scrollDirection: Axis.horizontal,
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: MediaQuery.of(context).size.width / 2 - (tabWidth ?? 100.0) / 2
-                                    ),
+                                    padding: tabWidth != null ? EdgeInsets.symmetric(
+                                      horizontal: MediaQuery.of(context).size.width / 2 - tabWidth! / 2
+                                    ) : null,
                                     physics: tabWidth != null ? SnapBounceScrollPhysics(
                                       itemWidth: tabWidth!
                                     ) : const BouncingScrollPhysics(),
@@ -182,23 +188,20 @@ class _CalendarScreenState extends State<_CalendarScreen>{
                                           },
                                           child: CalendarCard(
                                             dateTime: day,
-                                            isSelected: day.compareTo(calendarState.selectedDay) == 0,
-                                            onTap: () {
-                                              context.read<CalendarBloc>().add(CalendarSelectedDayChanged(day));
-                                              scrollController.animateTo(
-                                                index * (tabWidth ?? 100),
-                                                duration: cAnimationDuration,
-                                                curve: Curves.ease
-                                              );
-                                            },
+                                            isSelected: day == calendarState.selectedDay,
+                                            onTap: () => calendarBloc.add(CalendarSelectedDayChanged(day))
                                           ),
                                         );
                                       }),
                                     ),
                                   ),
                                   onNotification: (notification){
-                                    DateTime day = calendarState.days[scrollController.position.pixels ~/ (tabWidth ?? 100)];
-                                    context.read<CalendarBloc>().add(CalendarSelectedDayChanged(day));
+                                    if(tabWidth != null){
+                                      final day = calendarState.days[scrollController.position.pixels ~/ tabWidth!];
+                                      if(day != calendarBloc.state.selectedDay){
+                                        calendarBloc.add(CalendarSelectedDayChanged(day));
+                                      }
+                                    }
                                     return true;
                                   }
                                 ),
