@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
     // Delete notifications older than a week.
     final now = DateTime.now();
     emit(state.copyWith(notifications: state.notifications..removeWhere((n){
-      return now.dateDifference(n.createdAt) > 7;
+      return now.differenceInDays(n.createdAt) > 7;
     })));
 
     displayedNotificationsSubscription = notificationService.displayedStream
@@ -90,11 +91,17 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
 
   Future<void> _createNotification(Future<NotificationData> Function(AppLocalizations) notificationData) async {
     try{
-      final locale = settingsCubit.state.locale
-        ?? AppLocalizations.supportedLocales.firstOrNull;
-      if(locale == null) return;
+      AppLocalizations? localization;
+      try{
+        final locale = settingsCubit.state.locale ?? Locale(Platform.localeName.split("_").first);
+        localization = lookupAppLocalizations(locale);
+      }
+      catch(_){
+        final locale = AppLocalizations.supportedLocales.firstOrNull;
+        if(locale != null) localization = lookupAppLocalizations(locale);
+      }
 
-      final localization = lookupAppLocalizations(locale);
+      if(localization == null) return;
       final data = await notificationData(localization);
 
       final channelKey = notificationService.channels[data.type]?.channelKey;

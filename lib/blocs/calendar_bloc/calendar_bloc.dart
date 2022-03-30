@@ -91,7 +91,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     required List<Task> tasks,
     required DateTime selectedDate
   }){
-    tasks = tasks.where((task) => task.date.dateDifference(selectedDate) == 0).toList();
+    tasks = tasks.where((task) => task.date.differenceInDays(selectedDate) == 0).toList();
     tasks.sort((a, b) => a.date.compareTo(b.date));
 
     List<DynamicObject> items = [];

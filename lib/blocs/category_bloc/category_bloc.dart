@@ -57,7 +57,10 @@ class CategoryBloc extends DriftedBloc<CategoryEvent, CategoryState> {
 
     on<CategoryStateUpdated>((event, emit){
       debugPrint("Actualizando CategoryState...");
-      emit(event.state.copyWith(isLoading: false));
+      emit(event.state.copyWith(
+        isLoading: false,
+        syncStatus: event.state.syncStatus
+      ));
     },
     transformer: restartable());
   }

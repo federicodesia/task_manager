@@ -34,7 +34,7 @@ class TaskState {
   }){
     return TaskState(
       isLoading: isLoading ?? this.isLoading,
-      syncStatus: syncStatus ?? this.syncStatus,
+      syncStatus: syncStatus ?? SyncStatus.pending,
       tasks: tasks ?? this.tasks,
       deletedTasks: deletedTasks ?? this.deletedTasks,
       failedTasks: failedTasks ?? this.failedTasks

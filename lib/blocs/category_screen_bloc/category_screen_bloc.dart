@@ -81,7 +81,7 @@ class CategoryScreenBloc extends Bloc<CategoryScreenEvent, CategoryScreenState> 
 
       for(int i = 0; i < tasks.length; i++){
         Task task = tasks[i];
-        if(task.date.dateDifference(lastDateTime) == 0) {
+        if(task.date.differenceInDays(lastDateTime) == 0) {
           items.add(DynamicObject(object: task));
         } else{
           lastDateTime = task.date.ignoreTime;

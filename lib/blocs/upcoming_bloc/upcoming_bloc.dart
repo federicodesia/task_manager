@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/helpers/date_time_helper.dart';
+import 'package:task_manager/helpers/map_helper.dart';
 import 'package:task_manager/models/dynamic_object.dart';
 import 'package:task_manager/models/task.dart';
-import 'package:tuple/tuple.dart';
 
 part 'upcoming_event.dart';
 part 'upcoming_state.dart';
@@ -19,70 +19,61 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
   }) : super(UpcomingLoadInProgress()) {
     
     todosSubscription = taskBloc.stream.listen((state) {
-      add(TasksUpdated(state.tasks));
+      if(!state.isLoading) add(TasksUpdated(state.tasks));
     });
 
+    // TODO: Remove event
     on<UpcomingLoaded>((event, emit){
-      add(TasksUpdated( taskBloc.state.tasks));
+      final taskBlocState = taskBloc.state;
+      if(!taskBlocState.isLoading) add(TasksUpdated(taskBlocState.tasks));
     });
 
     on<TasksUpdated>((event, emit){
       final tasks = taskBloc.state.tasks;
-      final data = weekData(tasks);
+
+      final now = DateTime.now();
+      final startOfWeek = now.startOfWeek;
+      final endOfWeek = now.endOfWeek;
+
+      final weekdays = startOfWeek.daysBefore(endOfWeek);
+      Map<DateTime, int> weekTasks = { for (DateTime day in weekdays) day : 0 };
+      Map<DateTime, int> weekCompletedTasks = { for (DateTime day in weekdays) day : 0 };
+
+      int weekTasksCount = 0;
+      int weekCompletedTasksCount = 0;
+
+      for(Task task in tasks){
+        final taskDate = task.date.ignoreTime;
+        if(taskDate.isBetween(startOfWeek, endOfWeek)){
+
+          weekTasks.increment(taskDate);
+          weekTasksCount++;
+
+          if(task.isCompleted){
+            weekCompletedTasks.increment(taskDate);
+            weekCompletedTasksCount++;
+          }
+        }
+      }
+      
+      final weekRemainingTasksCount = weekTasksCount - weekCompletedTasksCount;
 
       emit(UpcomingLoadSuccess(
-        weekCompletedTasksCount: data.item1,
-        weekRemainingTasksCount: data.item2,
-        weekTasks: data.item3,
-        weekCompletedTasks: data.item4,
+        
+        weekTasks: weekTasks,
+        weekCompletedTasks: weekCompletedTasks,
+        weekCompletedTasksCount: weekCompletedTasksCount,
+        weekRemainingTasksCount: weekRemainingTasksCount,
         items: groupByDate(tasks)
       ));
     });
   }
 
-  Tuple4<
-    int,
-    int,
-    Map<DateTime, int>,
-    Map<DateTime, int>
-  > weekData(List<Task> tasks){
-
-    final now = DateTime.now();
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1)).ignoreTime;
-    
-    int weekCompletedTasksCount = 0;
-    int weekRemainingTasksCount = 0;
-    Map<DateTime, int> weekTasks = {};
-    Map<DateTime, int> completedWeekTasks = {};
-
-    for(int i = 0; i < DateTime.daysPerWeek; i++){
-      final weekday = startOfWeek.add(Duration(days: i)).ignoreTime;
-      final weekdayTasks = tasks.where((task) => task.date.dateDifference(weekday) == 0);
-      final weekdayTasksCount = weekdayTasks.length;
-
-      final weekdayCompletedTasks = weekdayTasks.where((task) => task.isCompleted);
-      final weekdayCompletedTasksCount = weekdayCompletedTasks.length;
-
-      weekCompletedTasksCount += weekdayCompletedTasksCount;
-      weekRemainingTasksCount += weekdayTasksCount - weekdayCompletedTasksCount;
-
-      weekTasks[weekday] = weekdayTasksCount;
-      completedWeekTasks[weekday] = weekdayCompletedTasksCount;
-    }
-
-    return Tuple4(
-      weekCompletedTasksCount,
-      weekRemainingTasksCount,
-      weekTasks.values.any((count) => count > 0) ? weekTasks : {},
-      completedWeekTasks
-    );
-  }
-
   List<DynamicObject> groupByDate(List<Task> tasks){
     List<DynamicObject> items = [];
 
-    final now = DateTime.now();
-    tasks = tasks.where((task) => task.date.dateDifference(now) >= 1).toList();
+    final now = DateTime.now().ignoreTime;
+    tasks = tasks.where((task) => task.date.differenceInDays(now) >= 1).toList();
     tasks.sort((a, b) => a.date.compareTo(b.date));
 
     if(tasks.isNotEmpty){
@@ -93,7 +84,7 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
 
       for(Task task in tasks){
 
-        if(task.date.dateDifference(lastDateTime) == 0) {
+        if(task.date.differenceInDays(lastDateTime) == 0) {
           items.add(DynamicObject(object: task));
         }
         else if(dateTimeCount == 3) {

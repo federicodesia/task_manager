@@ -67,7 +67,10 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
 
     on<TaskStateUpdated>((event, emit){
       debugPrint("Actualizando TaskState...");
-      emit(event.state.copyWith(isLoading: false));
+      emit(event.state.copyWith(
+        isLoading: false,
+        syncStatus: event.state.syncStatus
+      ));
     },
     transformer: restartable());
 

@@ -200,7 +200,7 @@ class NotificationsScreenTab extends StatelessWidget{
                     data: object,
                     buildContext: context,
                   ) : object is DateTime
-                    ? ListHeader(context.l10n.dateTime_daysAgo(now.dateDifference(object)))
+                    ? ListHeader(context.l10n.dateTime_daysAgo(now.differenceInDays(object)))
                     : Container()
               );
             },

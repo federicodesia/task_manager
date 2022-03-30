@@ -29,12 +29,24 @@ extension DateTimeExtension on DateTime {
 
   DateTime get ignoreTime => DateTime(year, month, day);
 
-  int dateDifference(DateTime other) => ignoreTime.difference(other.ignoreTime).inDays;
+  int differenceInDays(DateTime other) => ignoreTime.difference(other.ignoreTime).inDays;
+
+  bool isAfterOrEqualTo(DateTime other) {
+    return isAfter(other) || isAtSameMomentAs(other);
+  }
+
+  bool isBeforeOrEqualTo(DateTime other) {
+    return isBefore(other) || isAtSameMomentAs(other);
+  }
+
+  DateTime get startOfWeek => subtract(Duration(days: weekday - 1)).ignoreTime;
+  DateTime get endOfWeek => add(Duration(days: DateTime.daysPerWeek - weekday)).ignoreTime;
+  bool isBetween(DateTime from, DateTime to) => isAfterOrEqualTo(from) && isBeforeOrEqualTo(to);
   
   int get daysInMonth{
     DateTime thisMonth = DateTime(year, month, 0);
     DateTime nextMonth = DateTime(year, month + 1, 0);
-    return nextMonth.dateDifference(thisMonth);
+    return nextMonth.differenceInDays(thisMonth);
   }
 
   DateTime get lastDayOfMonth => DateTime(year, month + 1, 0);
@@ -45,7 +57,7 @@ extension DateTimeExtension on DateTime {
     final limit = DateTime(other.year, other.month);
     DateTime iterator = DateTime(year, month);
 
-    while (iterator.isBefore(limit) || iterator.compareTo(limit) == 0)
+    while (iterator.isBeforeOrEqualTo(limit))
     {
       months.add(DateTime(iterator.year, iterator.month));
       iterator = DateTime(iterator.year, iterator.month + 1);
@@ -61,6 +73,20 @@ extension DateTimeExtension on DateTime {
     return days;
   }
 
+  List<DateTime> daysBefore(DateTime other) {
+    List<DateTime> days = [];
+
+    other = other.ignoreTime;
+    DateTime iterator = ignoreTime;
+    while(iterator.isBeforeOrEqualTo(other)){
+      days.add(iterator);
+      iterator = iterator.copyWith(day: iterator.day + 1);
+    }
+    return days;
+  }
+}
+
+extension DateTimeFormat on DateTime{
   String format(BuildContext context, String format){
     final languageCode = Localizations.localeOf(context).languageCode;
     return DateFormat(format, languageCode).format(this).capitalize;
@@ -68,7 +94,7 @@ extension DateTimeExtension on DateTime {
 
   String humanFormat(BuildContext context){
     final now = DateTime.now();
-    final difference = dateDifference(now);
+    final difference = differenceInDays(now);
     if(difference == -1) return context.l10n.dateTime_yasterday;
     if(difference == 0) return context.l10n.dateTime_today;
     if(difference == 1) return context.l10n.dateTime_tomorrow;

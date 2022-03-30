@@ -58,7 +58,7 @@ extension NotificationDataListExtension on List<NotificationData> {
       items.add(DynamicObject(object: lastDate));
 
       for (NotificationData notification in notifications){
-        if(notification.createdAt.dateDifference(lastDate) == 0) {
+        if(notification.createdAt.differenceInDays(lastDate) == 0) {
           items.add(DynamicObject(object: notification));
         }
         else{
