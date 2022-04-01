@@ -70,7 +70,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         backgroundColor: customTheme.backgroundColor,
-        floatingActionButton: AnimatedFloatingActionButton(
+        floatingActionButton: TaskFloatingActionButton(
           visible: showFloatingActionButton,
           onPressed: () {
             TaskBottomSheet(

@@ -90,7 +90,7 @@ class _CalendarScreenState extends State<_CalendarScreen>{
 
     return Scaffold(
       backgroundColor: customTheme.backgroundColor,
-      floatingActionButton: AnimatedFloatingActionButton(
+      floatingActionButton: TaskFloatingActionButton(
         visible: showFloatingActionButton,
         onPressed: () {
           TaskBottomSheet(

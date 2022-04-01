@@ -96,7 +96,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
     return Scaffold(
       backgroundColor: customTheme.backgroundColor,
 
-      floatingActionButton: AnimatedFloatingActionButton(
+      floatingActionButton: TaskFloatingActionButton(
         visible: showFloatingActionButton,
         onPressed: () => TaskBottomSheet(context).show()
       ),

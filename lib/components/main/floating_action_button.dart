@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
 import 'package:task_manager/theme/theme.dart';
 
@@ -92,6 +94,31 @@ class AnimatedFloatingActionButton extends StatelessWidget {
           heroTag: null,
         ),
       ) : Container(),
+    );
+  }
+}
+
+class TaskFloatingActionButton extends StatelessWidget {
+
+  final bool visible;
+  final void Function()? onPressed;
+
+  const TaskFloatingActionButton({
+    Key? key, 
+    this.visible = true,
+    this.onPressed
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    
+    return BlocBuilder<TaskBloc, TaskState>(
+      builder: (_, state) {
+        return AnimatedFloatingActionButton(
+          visible: !state.isLoading && visible,
+          onPressed: onPressed,
+        );
+      }
     );
   }
 }

@@ -41,16 +41,9 @@ extension NotificationDataListExtension on List<NotificationData> {
     }).toList();
 
     notifications.sort((a, b) {
-      final aScheduledAt = a.scheduledAt;
-      final bScheduledAt = b.scheduledAt;
-
-      if(aScheduledAt != null && bScheduledAt != null){
-        return bScheduledAt.compareTo(aScheduledAt);
-      }
-
-      if(aScheduledAt == null && bScheduledAt != null) return -1;
-      if(aScheduledAt != null && bScheduledAt == null) return 1;
-      return b.createdAt.compareTo(a.createdAt);
+      final dateA = a.scheduledAt ?? a.createdAt;
+      final dateB = b.scheduledAt ?? b.createdAt;
+      return dateB.compareTo(dateA);
     });
 
     if(notifications.isNotEmpty){
