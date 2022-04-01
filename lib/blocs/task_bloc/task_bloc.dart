@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
 import 'package:task_manager/blocs/notifications_cubit/notifications_cubit.dart';
 import 'package:task_manager/models/sync_item_error.dart';
@@ -16,10 +17,15 @@ part 'task_bloc.g.dart';
 
 class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
 
+  final bool inBackground;
+  final AuthBloc authBloc;
   final NotificationsCubit notificationsCubit;
+
   StreamSubscription<void>? taskNotificationsConfigChangeSubscription;
 
   TaskBloc({
+    required this.inBackground,
+    required this.authBloc,
     required this.notificationsCubit
   }) : super(TaskState.initial){
 
@@ -27,11 +33,24 @@ class TaskBloc extends DriftedBloc<TaskEvent, TaskState> {
       .taskNotificationsConfigChange.listen((_) => add(ScheduleTaskNotificationsRequested()));
     
     on<TaskLoaded>((event, emit) {
-      emit(state.copyWith(
-        isLoading: true,
-        syncStatus: SyncStatus.pending
-      ));
+
+      final currentUserId = authBloc.state.user?.id;
+      if(state.userId != currentUserId){
+        emit(TaskState.initial.copyWith(
+          isLoading: false,
+          userId: currentUserId,
+          syncStatus: SyncStatus.idle
+        ));
+      }
+
+      if(!inBackground){
+        emit(state.copyWith(
+          isLoading: true,
+          syncStatus: SyncStatus.pending
+        ));
+      }
     });
+    add(TaskLoaded());
 
     on<TaskAdded>((event, emit) async{
       final taskState = state;

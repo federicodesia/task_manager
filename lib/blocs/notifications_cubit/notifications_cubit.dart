@@ -53,6 +53,11 @@ class NotificationsCubit extends DriftedCubit<NotificationsState> {
     ));
   }
 
+  void cancelAll() async {
+    await AwesomeNotifications().cancelAll();
+    emit(NotificationsState.initial);
+  }
+
   void scheduleTasksNotificatons(List<Task> tasks) async {
     final now = DateTime.now();
     const reminderType = NotificationType.reminder();

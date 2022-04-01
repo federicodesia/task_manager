@@ -63,7 +63,6 @@ class AuthRepository{
 
   Future<Either<ResponseMessage, AuthCredentials>?> accessToken({
     required AuthCredentials authCredentials,
-    List<int>? ignoreStatusCodes,
     bool ignoreAllErrors = false
   }) async {
 
@@ -75,7 +74,7 @@ class AuthRepository{
     catch (error){
       if(ignoreAllErrors) return null;
       
-      final responseMessage = await ResponseError.validate(error, null, ignoreStatusCodes: ignoreStatusCodes);
+      final responseMessage = await ResponseError.validate(error, null);
       if(responseMessage != null) return Left(responseMessage);
       return null;
     }

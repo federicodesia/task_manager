@@ -108,7 +108,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                    const  SizedBox(height: 32.0),
 
                                     Text(
-                                      authState.user.name,
+                                      authState.user?.name ?? "",
                                       style: customTheme.titleTextStyle,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -116,7 +116,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                     const SizedBox(height: 4.0),
 
                                     Text(
-                                      authState.user.email,
+                                      authState.user?.email ?? "",
                                       style: customTheme.lightTextStyle,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,

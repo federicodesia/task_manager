@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
+import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/repositories/base_repository.dart';
 
@@ -50,7 +51,11 @@ class AccessTokenInterceptor extends Interceptor {
       if(statusCode == 401 || statusCode == 403){
 
         final isRetry = options.headers["IsRetryRequest"] as bool?;
-        if(isRetry == null || !isRetry){
+        if(isRetry == true){
+          authBloc.add(AuthCredentialsChanged(AuthCredentials.empty));
+          return super.onError(err, handler);
+        }
+        else{
           final cloneRequest = await _retry(options);
           if(cloneRequest != null) return handler.resolve(cloneRequest);
         }

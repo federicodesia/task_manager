@@ -30,15 +30,27 @@ abstract class BackgroundSync{
           );
 
           final authBloc = AuthBloc(notificationsCubit: notificationsCubit);
-          final taskBloc = TaskBloc(notificationsCubit: notificationsCubit);
-          final categoryBloc = CategoryBloc(taskBloc: taskBloc);
+
+          final taskBloc = TaskBloc(
+            inBackground: true,
+            authBloc: authBloc,
+            notificationsCubit: notificationsCubit
+          );
+
+          final categoryBloc = CategoryBloc(
+            inBackground: true,
+            authBloc: authBloc,
+            taskBloc: taskBloc
+          );
 
           final syncBloc = SyncBloc(
+            inBackground: true,
+            authBloc: authBloc,
+            taskBloc: taskBloc,
+            categoryBloc: categoryBloc,
             syncRepository: SyncRepository(
               base: authBloc.baseRepository
             ),
-            taskBloc: taskBloc,
-            categoryBloc: categoryBloc
           );
           
           syncBloc.add(BackgroundSyncRequested());

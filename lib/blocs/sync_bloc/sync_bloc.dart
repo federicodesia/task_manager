@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/blocs/category_bloc/category_bloc.dart';
 import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
 import 'package:task_manager/blocs/sync_bloc/dynamic_functions.dart';
@@ -23,9 +24,11 @@ part 'sync_bloc.g.dart';
 
 class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
 
-  final SyncRepository syncRepository;
+  final bool inBackground;
+  final AuthBloc authBloc;
   final TaskBloc taskBloc;
   final CategoryBloc categoryBloc;
+  final SyncRepository syncRepository;
 
   late StreamSubscription taskBlocSubscription;
   late StreamSubscription categoryBlocSubscription;
@@ -33,10 +36,12 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
   late StreamSubscription foregroundMessagesSubscription;
   
   SyncBloc({
-    required this.syncRepository,
+    required this.inBackground,
+    required this.authBloc,
     required this.taskBloc,
-    required this.categoryBloc
-  }) : super(SyncState()){
+    required this.categoryBloc,
+    required this.syncRepository,
+  }) : super(SyncState.initial){
 
     taskBlocSubscription = taskBloc.stream.listen((taskState){
       if(taskState.syncStatus == SyncStatus.pending){
@@ -62,6 +67,16 @@ class SyncBloc extends DriftedBloc<SyncEvent, SyncState> {
       final type = message.dataNotificationType;
       if(type == DataNotificationType.newData) add(HighPrioritySyncRequested());
     });
+
+    on<SyncLoaded>((event, emit) {
+      final currentUserId = authBloc.state.user?.id;
+      if(state.userId != currentUserId){
+        emit(SyncState.initial.copyWith(
+          userId: currentUserId
+        ));
+      }
+    });
+    add(SyncLoaded());
 
     on<BackgroundSyncRequested>((event, emit) => sync(event, emit));
 

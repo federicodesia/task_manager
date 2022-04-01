@@ -4,6 +4,7 @@ part of 'category_bloc.dart';
 class CategoryState{
 
   final bool isLoading;
+  final String? userId;
   final SyncStatus syncStatus;
   final List<Category> categories;
   final List<Category> deletedCategories;
@@ -11,6 +12,7 @@ class CategoryState{
 
   CategoryState({
     required this.isLoading,
+    required this.userId,
     required this.syncStatus,
     required this.categories,
     required this.deletedCategories,
@@ -19,6 +21,7 @@ class CategoryState{
 
   static CategoryState get initial => CategoryState(
     isLoading: true,
+    userId: null,
     syncStatus: SyncStatus.idle,
     categories: [
       Category.create(
@@ -33,6 +36,7 @@ class CategoryState{
 
   CategoryState copyWith({
     bool? isLoading,
+    String? userId,
     SyncStatus? syncStatus,
     List<Category>? categories,
     List<Category>? deletedCategories,
@@ -40,6 +44,7 @@ class CategoryState{
   }){
     return CategoryState(
       isLoading: isLoading ?? this.isLoading,
+      userId: userId ?? this.userId,
       syncStatus: syncStatus ?? SyncStatus.pending,
       categories: categories ?? this.categories,
       deletedCategories: deletedCategories ?? this.deletedCategories,

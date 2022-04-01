@@ -8,7 +8,9 @@ part of 'auth_bloc.dart';
 
 AuthState _$AuthStateFromJson(Map<String, dynamic> json) => AuthState(
       status: $enumDecode(_$AuthStatusEnumMap, json['status']),
-      user: User.fromJson(json['user'] as Map<String, dynamic>),
+      user: json['user'] == null
+          ? null
+          : User.fromJson(json['user'] as Map<String, dynamic>),
       activeSessions: (json['activeSessions'] as List<dynamic>)
           .map((e) => ActiveSession.fromJson(e as Map<String, dynamic>))
           .toList(),

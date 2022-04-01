@@ -9,6 +9,7 @@ part of 'category_bloc.dart';
 CategoryState _$CategoryStateFromJson(Map<String, dynamic> json) =>
     CategoryState(
       isLoading: json['isLoading'] as bool,
+      userId: json['userId'] as String?,
       syncStatus: $enumDecode(_$SyncStatusEnumMap, json['syncStatus']),
       categories: (json['categories'] as List<dynamic>)
           .map((e) => Category.fromJson(e as Map<String, dynamic>))
@@ -24,6 +25,7 @@ CategoryState _$CategoryStateFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CategoryStateToJson(CategoryState instance) =>
     <String, dynamic>{
       'isLoading': instance.isLoading,
+      'userId': instance.userId,
       'syncStatus': _$SyncStatusEnumMap[instance.syncStatus],
       'categories': instance.categories,
       'deletedCategories': instance.deletedCategories,

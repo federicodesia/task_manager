@@ -6,7 +6,7 @@ enum AuthStatus { loading, unauthenticated, waitingVerification, authenticated }
 class AuthState {
 
   final AuthStatus status;
-  final User user;
+  final User? user;
   final List<ActiveSession> activeSessions;
 
   AuthState({
@@ -17,7 +17,7 @@ class AuthState {
 
   static AuthState get initial => AuthState(
     status: AuthStatus.loading,
-    user: User.empty,
+    user: null,
     activeSessions: []
   );
 

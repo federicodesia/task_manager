@@ -90,7 +90,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        authState.user.name,
+                                        authState.user?.name ?? "",
                                         style: customTheme.subtitleTextStyle,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -98,7 +98,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                                       const SizedBox(height: 2.0),
 
                                       Text(
-                                        authState.user.email,
+                                        authState.user?.email ?? "",
                                         style: customTheme.lightTextStyle,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,

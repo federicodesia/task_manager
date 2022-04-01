@@ -1,6 +1,7 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/blocs/drifted_bloc/drifted_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/models/category.dart';
@@ -14,17 +15,34 @@ part 'category_bloc.g.dart';
 
 class CategoryBloc extends DriftedBloc<CategoryEvent, CategoryState> {
   
+  final bool inBackground;
+  final AuthBloc authBloc;
   final TaskBloc taskBloc;
+
   CategoryBloc({
+    required this.inBackground,
+    required this.authBloc,
     required this.taskBloc
   }) : super(CategoryState.initial){
 
     on<CategoryLoaded>((event, emit) {
-      emit(state.copyWith(
-        isLoading: true,
-        syncStatus: SyncStatus.pending
-      ));
+      final currentUserId = authBloc.state.user?.id;
+      if(state.userId != currentUserId){
+        emit(CategoryState.initial.copyWith(
+          isLoading: false,
+          userId: currentUserId,
+          syncStatus: SyncStatus.idle
+        ));
+      }
+
+      if(!inBackground){
+        emit(state.copyWith(
+          isLoading: true,
+          syncStatus: SyncStatus.pending
+        ));
+      }
     });
+    add(CategoryLoaded());
 
     on<CategoryAdded>((event, emit){
       final categoryState = state;

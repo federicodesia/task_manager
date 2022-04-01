@@ -20,17 +20,23 @@ class MainRouteWrapper extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => TaskBloc(
+            inBackground: false,
+            authBloc: context.read<AuthBloc>(),
             notificationsCubit: context.read<NotificationsCubit>()
-          )..add(TaskLoaded())),
+          )),
 
           BlocProvider(create: (context) => CategoryBloc(
+            inBackground: false,
+            authBloc: context.read<AuthBloc>(),
             taskBloc: context.read<TaskBloc>()
-          )..add(CategoryLoaded())),
+          )),
 
           BlocProvider(create: (context) => SyncBloc(
-            syncRepository: context.read<SyncRepository>(),
+            inBackground: false,
+            authBloc: context.read<AuthBloc>(),
             taskBloc: context.read<TaskBloc>(),
-            categoryBloc: context.read<CategoryBloc>()
+            categoryBloc: context.read<CategoryBloc>(),
+            syncRepository: context.read<SyncRepository>(),
           ), lazy: false),
         ],
         child: const AutoRouter(),

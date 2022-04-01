@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:task_manager/models/serializers/datetime_serializer.dart';
 
 part 'user.g.dart';
 
@@ -8,8 +9,10 @@ class User{
   final String email;
   final String name;
   final String? imageUrl;
-  final String createdAt;
-  final String updatedAt;
+  @DateTimeSerializer()
+  final DateTime createdAt;
+  @DateTimeSerializer()
+  final DateTime updatedAt;
   final bool verified;
 
   const User({
@@ -21,26 +24,6 @@ class User{
     required this.updatedAt,
     required this.verified,
   });
-
-  static const empty = User(
-    id: "",
-    email: "",
-    name: "",
-    createdAt: "",
-    updatedAt: "",
-    verified: false
-  );
-
-  bool get isEmpty =>
-    id == ""
-    && email == ""
-    && name == ""
-    && imageUrl == null
-    && createdAt == ""
-    && updatedAt == ""
-    && verified == false;
-
-  bool get isNotEmpty => !isEmpty;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);

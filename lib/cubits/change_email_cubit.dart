@@ -34,49 +34,52 @@ class ChangeEmailCubit extends Cubit<ChangeEmailState> {
     required String emailConfirmation
   }) async{
 
-    final currentEmail = authBloc.state.user.email;
-    final emailError = Validators.validateNewEmail(context, email, currentEmail);
-    final emailConfirmationError = Validators.validateNewEmail(context, emailConfirmation, currentEmail)
-     ?? Validators.validateEqualEmails(context, email, emailConfirmation);
+    final currentEmail = authBloc.state.user?.email;
+    if(currentEmail != null){
 
-    if(emailError == null && emailConfirmationError == null){
-      emit(const ChangeEmailState(isLoading: true));
+      final emailError = Validators.validateNewEmail(context, email, currentEmail);
+      final emailConfirmationError = Validators.validateNewEmail(context, emailConfirmation, currentEmail)
+      ?? Validators.validateEqualEmails(context, email, emailConfirmation);
 
-      final response = await authRepository.sendChangeEmailCode(
-        email: email,
-        ignoreKeys: ["email"],
-        ignoreFunction: (m) => DateTime.tryParse(m.toUpperCase()) != null
-      );
+      if(emailError == null && emailConfirmationError == null){
+        emit(const ChangeEmailState(isLoading: true));
 
-      if(response != null) {
-        response.when(
-          left: (responseMessage){
-            final dateTime = DateTime.tryParse(responseMessage.first.toUpperCase());
-            if(dateTime != null) {
-              emit(const ChangeEmailState(emailSent: true));
-            } else{
-              emit(ChangeEmailState(
-                isLoading: false,
-                emailError: Validators.validateEmailResponse(context, responseMessage)
-                  ?? responseMessage.get("email"),
-              ));
-            }
-          },
-
-          right: (sent){
-            emit(const ChangeEmailState(emailSent: true));
-          }, 
+        final response = await authRepository.sendChangeEmailCode(
+          email: email,
+          ignoreKeys: ["email"],
+          ignoreFunction: (m) => DateTime.tryParse(m.toUpperCase()) != null
         );
-      } else {
-        emit(const ChangeEmailState(isLoading: false));
+
+        if(response != null) {
+          response.when(
+            left: (responseMessage){
+              final dateTime = DateTime.tryParse(responseMessage.first.toUpperCase());
+              if(dateTime != null) {
+                emit(const ChangeEmailState(emailSent: true));
+              } else{
+                emit(ChangeEmailState(
+                  isLoading: false,
+                  emailError: Validators.validateEmailResponse(context, responseMessage)
+                    ?? responseMessage.get("email"),
+                ));
+              }
+            },
+
+            right: (sent){
+              emit(const ChangeEmailState(emailSent: true));
+            }, 
+          );
+        } else {
+          emit(const ChangeEmailState(isLoading: false));
+        }
       }
-    }
-    else{
-      emit(ChangeEmailState(
-        isLoading: false,
-        emailError: emailError,
-        emailConfirmationError: emailConfirmationError
-      ));
+      else{
+        emit(ChangeEmailState(
+          isLoading: false,
+          emailError: emailError,
+          emailConfirmationError: emailConfirmationError
+        ));
+      }
     }
   }
 }

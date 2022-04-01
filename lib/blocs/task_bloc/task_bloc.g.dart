@@ -8,6 +8,7 @@ part of 'task_bloc.dart';
 
 TaskState _$TaskStateFromJson(Map<String, dynamic> json) => TaskState(
       isLoading: json['isLoading'] as bool,
+      userId: json['userId'] as String?,
       syncStatus: $enumDecode(_$SyncStatusEnumMap, json['syncStatus']),
       tasks: (json['tasks'] as List<dynamic>)
           .map((e) => Task.fromJson(e as Map<String, dynamic>))
@@ -22,6 +23,7 @@ TaskState _$TaskStateFromJson(Map<String, dynamic> json) => TaskState(
 
 Map<String, dynamic> _$TaskStateToJson(TaskState instance) => <String, dynamic>{
       'isLoading': instance.isLoading,
+      'userId': instance.userId,
       'syncStatus': _$SyncStatusEnumMap[instance.syncStatus],
       'tasks': instance.tasks,
       'deletedTasks': instance.deletedTasks,

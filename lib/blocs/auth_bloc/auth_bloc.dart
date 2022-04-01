@@ -59,16 +59,18 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
     });
 
     on<UpdateFirebaseMessagingTokenRequested>((event, emit) async {
-      final token = event.token ?? await firebaseMessaging.getToken();
-      if(token != null && token.isNotEmpty){
+      if(state.status == AuthStatus.authenticated){
+        final token = event.token ?? await firebaseMessaging.getToken();
+        if(token != null && token.isNotEmpty){
 
-        debugPrint("UpdateFirebaseMessagingTokenRequested");
-        debugPrint(token);
+          debugPrint("UpdateFirebaseMessagingTokenRequested");
+          debugPrint(token);
 
-        final currentToken = await secureStorageRepository.read.firebaseMessagingToken;
-        if(currentToken != token){
-          final updated = await authRepository.setFirebaseMessagingToken(token);
-          if(updated) await secureStorageRepository.write.firebaseMessagingToken(token);
+          final currentToken = await secureStorageRepository.read.firebaseMessagingToken;
+          if(currentToken != token){
+            final updated = await authRepository.setFirebaseMessagingToken(token);
+            if(updated) await secureStorageRepository.write.firebaseMessagingToken(token);
+          }
         }
       }
     },
@@ -77,34 +79,21 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
     on<AuthLoaded>((event, emit) async{
 
       final previousStatus = state.status;
-      emit(state.copyWith(
-        status: AuthStatus.loading
-      ));
+      emit(state.copyWith(status: AuthStatus.loading));
 
       final credentials = await secureStorageRepository.read.authCredentials;
       if(credentials.isNotEmpty){
 
-        final response = await authRepository.accessToken(
-          authCredentials: credentials,
-          ignoreStatusCodes: [ 401, 403 ]
-        );
-
-        if(response != null) {
-          response.when(
-            left: (responseMessage) {
-              if(responseMessage.containsAnyStatusCodes([ 401, 403 ])){
-                add(AuthCredentialsChanged(AuthCredentials.empty));
-              }
-            },
-            right: (credentials) {
-              add(AuthCredentialsChanged(credentials));
-            }
-          );
+        final user = await userRepository.getUser();
+        if(user != null) {
+          emit(state.copyWith(user: user));
+          final newCredentials = await secureStorageRepository.read.authCredentials;
+          add(AuthCredentialsChanged(newCredentials));
         }
         else{
           emit(state.copyWith(
-            status: previousStatus != AuthStatus.loading
-              ? previousStatus : AuthStatus.unauthenticated
+            status: previousStatus == AuthStatus.loading
+              ? AuthStatus.unauthenticated : previousStatus
           ));
         }
       }
@@ -123,6 +112,7 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
         emit(AuthState.initial.copyWith(
           status: AuthStatus.unauthenticated
         ));
+        notificationsCubit.cancelAll();
       }
       else{
         await secureStorageRepository.write.authCredentials(credentials);

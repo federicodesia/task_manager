@@ -4,6 +4,7 @@ part of 'task_bloc.dart';
 class TaskState {
 
   final bool isLoading;
+  final String? userId;
   final SyncStatus syncStatus;
   final List<Task> tasks;
   final List<Task> deletedTasks;
@@ -11,6 +12,7 @@ class TaskState {
 
   TaskState({
     required this.isLoading,
+    required this.userId,
     required this.syncStatus,
     required this.tasks,
     required this.deletedTasks,
@@ -19,6 +21,7 @@ class TaskState {
 
   static TaskState get initial => TaskState(
     isLoading: true,
+    userId: null,
     syncStatus: SyncStatus.idle,
     tasks: [],
     deletedTasks: [],
@@ -27,6 +30,7 @@ class TaskState {
 
   TaskState copyWith({
     bool? isLoading,
+    String? userId,
     SyncStatus? syncStatus,
     List<Task>? tasks,
     List<Task>? deletedTasks,
@@ -34,6 +38,7 @@ class TaskState {
   }){
     return TaskState(
       isLoading: isLoading ?? this.isLoading,
+      userId: userId ?? this.userId,
       syncStatus: syncStatus ?? SyncStatus.pending,
       tasks: tasks ?? this.tasks,
       deletedTasks: deletedTasks ?? this.deletedTasks,
