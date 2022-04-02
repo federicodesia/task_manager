@@ -10,7 +10,8 @@ abstract class ResponseError{
     Object error,
     List<String>? ignoreKeys,
     {
-      bool Function(String)? ignoreFunction
+      bool Function(String)? ignoreFunction,
+      List<int>? ignoreStatusCodes
     }
   ) async{
 
@@ -25,16 +26,14 @@ abstract class ResponseError{
 
     if(error is DioError){
       try{
-        final statusCode = error.response?.statusCode;
-        if(statusCode == 401 || statusCode == 403) return null;
-
         final responseMessages = ResponseMessage(
-          statusCode: statusCode,
+          statusCode: error.response?.statusCode,
           responseMessage: error.response?.data["message"]
         );
-        
+
         if(ignoreKeys != null && ignoreKeys.any((key) => responseMessages.contains(key))) return responseMessages;
         if(ignoreFunction != null && responseMessages.checkFunction(ignoreFunction)) return responseMessages;
+        if(ignoreStatusCodes != null && responseMessages.containsAnyStatusCodes(ignoreStatusCodes)) return responseMessages;
       }
       catch(_){}
     }

@@ -79,8 +79,8 @@ class _CalendarScreenState extends State<_CalendarScreen>{
   }
 
   @override
-  void dispose() async {
-    await calendarSubscription.cancel();
+  void dispose() {
+    calendarSubscription.cancel();
     super.dispose();
   }
 

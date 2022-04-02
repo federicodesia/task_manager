@@ -68,6 +68,8 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
   }
 
   void sendAccountVerificationCode(){
-    authRepository.sendAccountVerificationCode();
+    authRepository.sendAccountVerificationCode(
+      ignoreFunction: (m) => DateTime.tryParse(m.toUpperCase()) != null
+    );
   }
 }

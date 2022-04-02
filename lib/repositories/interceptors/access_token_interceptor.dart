@@ -52,7 +52,9 @@ class AccessTokenInterceptor extends Interceptor {
 
         final isRetry = options.headers["IsRetryRequest"] as bool?;
         if(isRetry == true){
-          authBloc.add(AuthCredentialsChanged(AuthCredentials.empty));
+          if(authBloc.state.status == AuthStatus.authenticated){
+            authBloc.add(AuthCredentialsChanged(AuthCredentials.empty));
+          }
           return super.onError(err, handler);
         }
         else{
@@ -70,37 +72,30 @@ class AccessTokenInterceptor extends Interceptor {
       final authRepository = AuthRepository(base: baseRepository);
       final currentCredentials = await authBloc.secureStorageRepository.read.authCredentials;
 
-      final response = await authRepository.accessToken(
-        authCredentials: currentCredentials,
-        ignoreAllErrors: true
+      final credentials = await authRepository.accessToken(
+        authCredentials: currentCredentials
       );
 
-      if(response != null){
-        response.when(
-          left: (responseMessage) {},
-          right: (credentials) async{
+      if(credentials != null){
+        authBloc.add(AuthCredentialsChanged(credentials));
+        
+        return await authBloc.stream.first
+          .timeout(const Duration(seconds: 2), onTimeout: (){
+            throw TimeoutException("AuthBloc timeout");
+          })
+          .then((value) async{
 
-            authBloc.add(AuthCredentialsChanged(credentials));
-            
-            return await authBloc.stream.first
-              .timeout(const Duration(seconds: 2), onTimeout: (){
-                throw TimeoutException("AuthBloc timeout");
-              })
-              .then((value) async{
+            try{
+              final dioAccessToken = await baseRepository.dioAccessToken;
 
-                try{
-                  final dioAccessToken = await baseRepository.dioAccessToken;
+              options.headers.addAll(dioAccessToken.options.headers);
+              options.headers.addAll({ "IsRetryRequest" : true });
 
-                  options.headers.addAll(dioAccessToken.options.headers);
-                  options.headers.addAll({ "IsRetryRequest" : true });
-
-                  return await dioAccessToken.fetch(options);
-                }
-                catch(_) {}
-              })
-              .onError((error, stackTrace) => null);
-          }
-        );
+              return await dioAccessToken.fetch(options);
+            }
+            catch(_) {}
+          })
+          .onError((error, stackTrace) => null);
       }
     }
     catch (_){}

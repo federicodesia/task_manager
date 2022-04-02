@@ -61,21 +61,16 @@ class AuthRepository{
     }
   }
 
-  Future<Either<ResponseMessage, AuthCredentials>?> accessToken({
-    required AuthCredentials authCredentials,
-    bool ignoreAllErrors = false
+  Future<AuthCredentials?> accessToken({
+    required AuthCredentials authCredentials
   }) async {
 
     try{
       final dio = await base.dioRefreshToken;
       final response = await dio.get("/auth/access-token");
-      return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
+      return authCredentials.copyWith(accessToken: response.data["accessToken"]);
     }
     catch (error){
-      if(ignoreAllErrors) return null;
-      
-      final responseMessage = await ResponseError.validate(error, null);
-      if(responseMessage != null) return Left(responseMessage);
       return null;
     }
   }
@@ -116,13 +111,18 @@ class AuthRepository{
     }
   }
 
-  Future<void> sendAccountVerificationCode() async {
+  Future<Either<ResponseMessage, void>?> sendAccountVerificationCode({
+    bool Function(String)? ignoreFunction
+  }) async {
     try{
       final dio = await base.dioAccessToken;
       await dio.post("/auth/send-account-verification-code");
+      return const Right(null);
     }
     catch (error){
-      await ResponseError.validate(error, null);
+      final responseMessage = await ResponseError.validate(error, null, ignoreFunction: ignoreFunction);
+      if(responseMessage != null) return Left(responseMessage);
+      return null;
     }
   }
 
@@ -152,14 +152,11 @@ class AuthRepository{
           );
 
           if(responseMessages.contains("user already verified")){
-            final response = await accessToken(authCredentials: authCredentials);
-            if(response != null) {
-              response.when(
-                left: (responseMessage) {},
-                right: (credentials){
-                  return Right(authCredentials.copyWith(accessToken: credentials.accessToken));
-                }
-              );
+            final credentials = await accessToken(authCredentials: authCredentials);
+            if(credentials != null) {
+              return Right(authCredentials.copyWith(
+                accessToken: credentials.accessToken
+              ));
             }
           }
         }

@@ -81,19 +81,20 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
       final previousStatus = state.status;
       emit(state.copyWith(status: AuthStatus.loading));
 
-      final credentials = await secureStorageRepository.read.authCredentials;
-      if(credentials.isNotEmpty){
+      final currentCredentials = await secureStorageRepository.read.authCredentials;
+      if(currentCredentials.isNotEmpty){
 
-        final user = await userRepository.getUser();
-        if(user != null) {
-          emit(state.copyWith(user: user));
-          final newCredentials = await secureStorageRepository.read.authCredentials;
-          add(AuthCredentialsChanged(newCredentials));
+        final credentials = await authRepository.accessToken(
+          authCredentials: currentCredentials
+        );
+
+        if(credentials != null) {
+          add(AuthCredentialsChanged(credentials));
         }
         else{
           emit(state.copyWith(
-            status: previousStatus == AuthStatus.loading
-              ? AuthStatus.unauthenticated : previousStatus
+            status: previousStatus != AuthStatus.loading
+              ? previousStatus : AuthStatus.unauthenticated
           ));
         }
       }
@@ -109,25 +110,34 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
       if(credentials.isEmpty){
         // Unauthenticated
         secureStorageRepository.delete.all();
+        notificationsCubit.cancelAll();
+        
         emit(AuthState.initial.copyWith(
           status: AuthStatus.unauthenticated
         ));
-        notificationsCubit.cancelAll();
       }
       else{
         await secureStorageRepository.write.authCredentials(credentials);
 
-        emit(state.copyWith(
-          status: credentials.isVerified
-            ? AuthStatus.authenticated
-            : AuthStatus.waitingVerification
-        ));
+        if(credentials.isVerified){
+          if(previousStatus != AuthStatus.authenticated){
 
-        if(previousStatus != AuthStatus.authenticated
-          && state.status == AuthStatus.authenticated){
-          // Authenticated
-          add(UpdateFirebaseMessagingTokenRequested(null));
-          add(UpdateUserRequested());
+            //await firebaseMessaging.deleteToken();
+            final user = await userRepository.getUser();
+            if(user != null){
+              emit(state.copyWith(
+                user: user,
+                status: AuthStatus.authenticated
+              ));
+              
+              add(UpdateFirebaseMessagingTokenRequested(null));
+            }
+          }
+        }
+        else{
+          emit(state.copyWith(
+            status: AuthStatus.waitingVerification
+          ));
         }
       }
     });
