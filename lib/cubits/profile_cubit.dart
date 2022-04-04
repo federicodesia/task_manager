@@ -46,21 +46,15 @@ class ProfileCubit extends Cubit<ProfileState> {
           nameError: null
         ));
 
-        final response = await authBloc.userRepository.updateUser(name: name);
-        if(response != null){
-
-          response.when(
-            left: (responseMessage) {
-              emit(state.copyWith(
-                nameStatus: FieldStatus.editable
-              ));
-            },
-
-            right: (user) {
-              emit(state.copyWith(nameStatus: FieldStatus.editable));
-              authBloc.add(AuthUserChanged(user));
-            }, 
-          );
+        final updatedUser = await authBloc.userRepository.updateUser(name: name);
+        if(updatedUser != null){
+          emit(state.copyWith(nameStatus: FieldStatus.editable));
+          authBloc.add(AuthUserChanged(updatedUser));
+        }
+        else{
+          emit(state.copyWith(
+            nameStatus: FieldStatus.editable,
+          ));
         }
       }
       else{

@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:task_manager/helpers/response_errors.dart';
-import 'package:task_manager/helpers/response_messages.dart';
-import 'package:task_manager/models/either.dart';
 import 'package:task_manager/models/user.dart';
 import 'package:task_manager/repositories/base_repository.dart';
 
@@ -24,7 +22,7 @@ class UserRepository {
     }
   }
 
-  Future<Either<ResponseMessage, User>?> updateUser({
+  Future<User?> updateUser({
     String? name,
     String? imageUrl
   }) async {
@@ -38,11 +36,10 @@ class UserRepository {
           if(imageUrl != null) "imageUrl": imageUrl
         }
       );
-      return Right(User.fromJson(response.data));
+      return User.fromJson(response.data);
     }
     catch (error){
-      final responseMessage = await ResponseError.validate(error, null);
-      if(responseMessage != null) return Left(responseMessage);
+      await ResponseError.validate(error, null);
       return null;
     }
   }

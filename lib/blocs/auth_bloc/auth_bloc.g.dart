@@ -11,6 +11,7 @@ AuthState _$AuthStateFromJson(Map<String, dynamic> json) => AuthState(
       user: json['user'] == null
           ? null
           : User.fromJson(json['user'] as Map<String, dynamic>),
+      shouldUpdateUser: json['shouldUpdateUser'] as bool,
       activeSessions: (json['activeSessions'] as List<dynamic>)
           .map((e) => ActiveSession.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -19,6 +20,7 @@ AuthState _$AuthStateFromJson(Map<String, dynamic> json) => AuthState(
 Map<String, dynamic> _$AuthStateToJson(AuthState instance) => <String, dynamic>{
       'status': _$AuthStatusEnumMap[instance.status],
       'user': instance.user,
+      'shouldUpdateUser': instance.shouldUpdateUser,
       'activeSessions': instance.activeSessions,
     };
 

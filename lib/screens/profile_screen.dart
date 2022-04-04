@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -36,6 +38,34 @@ class _ProfileScreen extends StatefulWidget{
 class _ProfileScreenState extends State<_ProfileScreen>{
 
   double appBarHeight = 500.0;
+
+  late AuthBloc authBloc = context.read<AuthBloc>();
+  late StreamSubscription authSuscription;
+  
+  late TextEditingController nameController;
+  late TextEditingController emailController;
+
+  @override
+  void initState() {
+    nameController = TextEditingController(text: authBloc.state.user?.name);
+    emailController = TextEditingController(text: authBloc.state.user?.email);
+
+    authSuscription = authBloc.stream.listen((authState) {
+      final name = authState.user?.name;
+      if(name != null) nameController.text = name;
+
+      final email = authState.user?.email;
+      if(email != null) emailController.text = email;
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    authSuscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context){
@@ -145,8 +175,10 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                       children:  [
                                         const FormInputHeader("Display name"),
                                         ProfileField(
+                                          controller: nameController,
                                           enabled: profileState.nameStatus == FieldStatus.saveable,
                                           text: user.name,
+                                          errorText: profileState.nameError,
                                           suffixKey: Key("DisplayName: ${profileState.nameStatus.name}"),
                                           suffixText: profileState.nameStatus == FieldStatus.editable ? "Edit"
                                             : profileState.nameStatus == FieldStatus.saveable ? "Save" : "Saving...",
@@ -168,21 +200,22 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                             ),
                                           ),
 
-                                          onTap: (text) => context.read<ProfileCubit>().namePressed(
+                                          onTap: () => context.read<ProfileCubit>().namePressed(
                                             context: context,
-                                            name: text
+                                            name: nameController.text.trim()
                                           ),
                                         ),
 
                                         const FormInputHeader("Email"),
                                         ProfileField(
+                                          controller: emailController,
                                           text: user.email,
                                           suffixText: "Change",
                                           suffixWidget: Icon(
                                             Icons.chevron_right_rounded,
                                             color: customTheme.lightColor,
                                           ),
-                                          onTap: (_) {},
+                                          onTap: () {},
                                         ),
 
                                         const FormInputHeader("Password"),
@@ -193,7 +226,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                             Icons.chevron_right_rounded,
                                             color: customTheme.lightColor,
                                           ),
-                                          onTap: (_) {},
+                                          onTap: () {},
                                         ),
                                       ],
                                     );
@@ -368,19 +401,24 @@ class ProfileItem extends StatelessWidget{
   }
 }
 
-class ProfileField extends StatefulWidget{
+class ProfileField extends StatelessWidget {
+
+  final TextEditingController? controller;
   final bool enabled;
   final String text;
+  final String? errorText;
   final Key? suffixKey;
   final Widget suffixWidget;
   final double suffixPadding;
   final String suffixText;
-  final Function(String) onTap;
+  final Function()? onTap;
 
   const ProfileField({
     Key? key,
+    this.controller,
     this.enabled = false,
     required this.text,
+    this.errorText,
     this.suffixKey,
     required this.suffixWidget,
     this.suffixPadding = 0.0,
@@ -389,58 +427,65 @@ class ProfileField extends StatefulWidget{
   }) : super(key: key);
 
   @override
-  State<ProfileField> createState() => _ProfileFieldState();
-}
-
-class _ProfileFieldState extends State<ProfileField> {
-
-  late TextEditingController controller = TextEditingController(text: widget.text);
-
-  @override
   Widget build(BuildContext context) {
     final customTheme = Theme.of(context).customTheme;
-
-    controller.text = widget.text;
-    controller.selection = TextSelection.fromPosition(
-        TextPosition(offset: controller.text.length),
-    );
 
     final suffix = AlignedAnimatedSwitcher(
       duration: cFastAnimationDuration,
       alignment: Alignment.centerRight,
       child: Row(
-        key: widget.suffixKey,
+        key: suffixKey,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            widget.suffixText,
+            suffixText,
             style: customTheme.lightTextStyle,
           ),
-          SizedBox(width: widget.suffixPadding),
-          widget.suffixWidget
+          SizedBox(width: suffixPadding),
+          suffixWidget
         ],
       ),
     );
 
     return Stack(
-      alignment: Alignment.centerRight,
+      alignment: Alignment.topRight,
       children: [
         RoundedTextFormField(
           controller: controller,
-          enabled: widget.enabled,
+          initialValue: controller == null ? text : null,
+          enabled: enabled,
+          errorText: errorText,
           suffixIcon: Opacity(
             opacity: 0,
             child: suffix,
-          )
-        ),
-
-        GestureDetector(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 12.0, right: 18.0),
-            child: suffix,
           ),
-          onTap: () => widget.onTap(controller.text.trim())
-        )
+          textInputAction: TextInputAction.done,
+        ),
+        
+        GestureDetector(
+          child: IntrinsicHeight(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Avoid center alignment change when
+                // there is an error in the text field.
+                const SizedBox(
+                  width: double.minPositive,
+                  child: Opacity(
+                    opacity: 0,
+                    child: RoundedTextFormField()
+                  )
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(left: 12.0, right: 18.0),
+                  child: suffix,
+                )
+              ],
+            ),
+          ),
+          onTap: onTap
+        ),
       ],
     );
   }
