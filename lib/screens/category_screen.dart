@@ -157,12 +157,9 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                           controller: searchTextController,
                                           hintText: context.l10n.searchTask,
                                           textInputAction: TextInputAction.done,
-                                          prefixIcon: Padding(
-                                            padding: const EdgeInsets.only(left: 18.0, right: 12.0),
-                                            child: Icon(
-                                              Icons.search_rounded,
-                                              color: customTheme.lightColor,
-                                            ),
+                                          prefixIcon: Icon(
+                                            Icons.search_rounded,
+                                            color: customTheme.lightColor,
                                           ),
                                           onChanged: (searchText){
                                             context.read<CategoryScreenBloc>().add(SearchTextChanged(searchText));

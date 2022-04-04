@@ -5,6 +5,7 @@ import 'package:task_manager/theme/theme.dart';
 class RoundedTextFormField extends StatefulWidget{
 
   final TextEditingController? controller;
+  final bool? enabled;
   final FocusNode? focusNode;
   final String? labelText;
   final String? hintText;
@@ -23,11 +24,13 @@ class RoundedTextFormField extends StatefulWidget{
   final String? counterText;
   final TextAlign textAlign;
   final Widget? prefixIcon;
+  final Widget? suffixIcon;
   final bool enableObscureTextToggle;
   
   const RoundedTextFormField({
     Key? key, 
     this.controller,
+    this.enabled,
     this.focusNode,
     this.labelText,
     this.hintText,
@@ -46,6 +49,7 @@ class RoundedTextFormField extends StatefulWidget{
     this.counterText,
     this.textAlign = TextAlign.start,
     this.prefixIcon,
+    this.suffixIcon,
     this.enableObscureTextToggle = false,
   }) : super(key: key);
 
@@ -66,6 +70,8 @@ class _RoundedTextFormFieldState extends State<RoundedTextFormField> {
       elevation: customTheme.elevation,
       shadowColor: customTheme.shadowColor,
       child: TextFormField(
+        enabled: widget.enabled,
+        
         controller: widget.controller,
         focusNode: widget.focusNode,
 
@@ -102,6 +108,10 @@ class _RoundedTextFormFieldState extends State<RoundedTextFormField> {
             borderRadius: BorderRadius.circular(cBorderRadius),
             borderSide: const BorderSide(style: BorderStyle.none),
           ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(cBorderRadius),
+            borderSide: const BorderSide(style: BorderStyle.none),
+          ),
           
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 24.0,
@@ -114,7 +124,10 @@ class _RoundedTextFormFieldState extends State<RoundedTextFormField> {
           errorText: widget.errorText,
           errorStyle: widget.errorStyle,
 
-          prefixIcon: widget.prefixIcon,
+          prefixIcon: widget.prefixIcon != null ? Padding(
+            padding: const EdgeInsets.only(left: 18.0, right: 12.0),
+            child: widget.prefixIcon,
+          ) : null,
           prefixIconConstraints: const BoxConstraints(
             maxWidth: double.infinity,
             maxHeight: 48.0
@@ -137,7 +150,10 @@ class _RoundedTextFormFieldState extends State<RoundedTextFormField> {
                 onPressed: () => setState(() => obscuringText = !obscuringText)
               ),
             ),
-          ) : null
+          ) : widget.suffixIcon != null ? Padding(
+            padding: const EdgeInsets.only(left: 12.0, right: 18.0),
+            child: widget.suffixIcon,
+          ) : null,
         ),
       ),
     );
