@@ -23,7 +23,7 @@ class AccessTokenInterceptor extends Interceptor {
 
       try{
         final isRetry = options.headers["IsRetryRequest"] as bool?;
-        if(isRetry != null && isRetry) return super.onRequest(options, handler);
+        if(isRetry == true) return super.onRequest(options, handler);
       }
       catch(_) {}
 
@@ -78,24 +78,17 @@ class AccessTokenInterceptor extends Interceptor {
 
       if(credentials != null){
         authBloc.add(AuthCredentialsChanged(credentials));
-        
-        return await authBloc.stream.first
-          .timeout(const Duration(seconds: 2), onTimeout: (){
-            throw TimeoutException("AuthBloc timeout");
-          })
-          .then((value) async{
 
-            try{
-              final dioAccessToken = await baseRepository.dioAccessToken;
+        try{
+          final dioAccessToken = await baseRepository.dioAccessToken;
 
-              options.headers.addAll(dioAccessToken.options.headers);
-              options.headers.addAll({ "IsRetryRequest" : true });
+          options.headers.addAll(dioAccessToken.options.headers);
+          options.headers.addAll({ "Authorization": "Bearer " + credentials.accessToken });
+          options.headers.addAll({ "IsRetryRequest" : true });
 
-              return await dioAccessToken.fetch(options);
-            }
-            catch(_) {}
-          })
-          .onError((error, stackTrace) => null);
+          return await dioAccessToken.fetch(options);
+        }
+        catch(_) {}
       }
     }
     catch (_){}

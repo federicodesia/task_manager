@@ -46,7 +46,7 @@
   "@category": {},
   "categoryCard_allDone_description": "¡Todo listo!",
   "@categoryCard_allDone_description": {},
-  "categoryCard_taskCount_description": "{count, plural, 0={{count} tareas} 1={{count} tarea} other{{count} tareas}}",
+  "categoryCard_taskCount_description": "{count, plural, =0{{count} tareas} =1{{count} tarea} other{{count} tareas}}",
   "@categoryCard_taskCount_description": {
     "placeholders": {
       "count": {}
@@ -70,7 +70,7 @@
   "@confirm": {},
   "continue_button": "Continuar",
   "@continue_button": {},
-  "dateTime_daysAgo": "{count, plural, 0={Hoy} 1={Hace {count} día} other{Hace {count} días}}",
+  "dateTime_daysAgo": "{count, plural, =0{Hoy} =1{Hace {count} día} other{Hace {count} días}}",
   "@dateTime_daysAgo": {
     "placeholders": {
       "count": {}
@@ -148,7 +148,7 @@
   },
   "emptySpace_youHaventTasksWithActiveFilter_description": "No hay tareas con el filtro actual. Cámbialo desde la parte superior.",
   "@emptySpace_youHaventTasksWithActiveFilter_description": {},
-  "enum_notificationType_advertisement": "{count, plural, 0={Anuncios} 1={Anuncio} other{Anuncios}}",
+  "enum_notificationType_advertisement": "{count, plural, =0{Anuncios} =1{Anuncio} other{Anuncios}}",
   "@enum_notificationType_advertisement": {
     "placeholders": {
       "count": {}
@@ -156,7 +156,7 @@
   },
   "enum_notificationType_all": "Todas",
   "@enum_notificationType_all": {},
-  "enum_notificationType_reminder": "{count, plural, 0={Recordatorios} 1={Recordatorio} other{Recordatorios}}",
+  "enum_notificationType_reminder": "{count, plural, =0{Recordatorios} =1{Recordatorio} other{Recordatorios}}",
   "@enum_notificationType_reminder": {
     "placeholders": {
       "count": {}
@@ -206,13 +206,13 @@
   "@error_expiredCode": {},
   "error_invalidCode": "Código inválido",
   "@error_invalidCode": {},
-  "error_maxLength": "{count, plural, 0={Máximo {count} caracteres} 1={Máximo {count} carácter} other{Máximo {count} caracteres}}",
+  "error_maxLength": "{count, plural, =0{Máximo {count} caracteres} =1{Máximo {count} carácter} other{Máximo {count} caracteres}}",
   "@error_maxLength": {
     "placeholders": {
       "count": {}
     }
   },
-  "error_minLength": "{count, plural, 0={Debe contener al menos {count} caracteres} 1={Debe contener al menos {count} carácter} other{Debe contener al menos {count} caracteres}}",
+  "error_minLength": "{count, plural, =0{Debe contener al menos {count} caracteres} =1{Debe contener al menos {count} carácter} other{Debe contener al menos {count} caracteres}}",
   "@error_minLength": {
     "placeholders": {
       "count": {}
