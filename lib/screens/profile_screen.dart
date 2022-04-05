@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -13,6 +14,7 @@ import 'package:task_manager/components/responsive/widget_size.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/profile_cubit.dart';
 import 'package:task_manager/l10n/l10n.dart';
+import 'package:task_manager/router/router.gr.dart';
 import 'package:task_manager/theme/theme.dart';
 import '../constants.dart';
 
@@ -42,6 +44,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
   late AuthBloc authBloc = context.read<AuthBloc>();
   late StreamSubscription authSuscription;
   
+  FocusNode nameFocusNode = FocusNode();
   late TextEditingController nameController;
   late TextEditingController emailController;
 
@@ -107,7 +110,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                     children: [
 
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: cPadding),
+                        padding: const EdgeInsets.all(cPadding),
                         child: BlocBuilder<AuthBloc, AuthState>(
                           builder: (_, authState) {
                             final user = authState.user;
@@ -169,27 +172,31 @@ class _ProfileScreenState extends State<_ProfileScreen>{
 
                                 if(user != null) BlocBuilder<ProfileCubit, ProfileState>(
                                   builder: (_, profileState) {
+                                    final nameStatus = profileState.nameStatus;
 
                                     return Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
-                                      children:  [
-                                        const FormInputHeader("Display name"),
+                                      children: [
+
+                                        FormInputHeader(context.l10n.accountDetails),
+                                        const SizedBox(height: 16.0),
                                         ProfileField(
                                           controller: nameController,
-                                          enabled: profileState.nameStatus == FieldStatus.saveable,
-                                          text: user.name,
+                                          focusNode: nameFocusNode,
+                                          enabled: nameStatus == FieldStatus.saveable,
+                                          hintText: context.l10n.textField_name,
                                           errorText: profileState.nameError,
-                                          suffixKey: Key("DisplayName: ${profileState.nameStatus.name}"),
-                                          suffixText: profileState.nameStatus == FieldStatus.editable ? "Edit"
-                                            : profileState.nameStatus == FieldStatus.saveable ? "Save" : "Saving...",
+                                          suffixKey: Key("DisplayName: ${nameStatus.name}"),
+                                          suffixText: nameStatus == FieldStatus.editable ? context.l10n.edit
+                                            : nameStatus == FieldStatus.saveable ? context.l10n.save : context.l10n.saving,
 
                                           suffixPadding: 8.0,
 
-                                          suffixWidget: profileState.nameStatus == FieldStatus.editable ? Icon(
+                                          suffixWidget: nameStatus == FieldStatus.editable ? Icon(
                                             Icons.edit_rounded,
                                             size: 20.0,
                                             color: customTheme.lightColor,
-                                          ) : profileState.nameStatus == FieldStatus.saveable ? Icon(
+                                          ) : nameStatus == FieldStatus.saveable ? Icon(
                                             Icons.done_rounded,
                                             color: customTheme.lightColor,
                                           ) : const SizedBox(
@@ -200,33 +207,44 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                             ),
                                           ),
 
-                                          onTap: () => context.read<ProfileCubit>().namePressed(
+                                          onTap: () async {
+                                            nameStatus == FieldStatus.editable
+                                              ? nameFocusNode.requestFocus()
+                                              : nameFocusNode.unfocus();
+
+                                            context.read<ProfileCubit>().namePressed(
+                                              context: context,
+                                              name: nameController.text.trim()
+                                            );
+                                          },
+                                          onSubmitted: (_) => context.read<ProfileCubit>().namePressed(
                                             context: context,
                                             name: nameController.text.trim()
                                           ),
                                         ),
 
-                                        const FormInputHeader("Email"),
+                                        const SizedBox(height: 16.0),
                                         ProfileField(
                                           controller: emailController,
-                                          text: user.email,
-                                          suffixText: "Change",
+                                          hintText: context.l10n.textField_email,
+                                          suffixText: context.l10n.change,
                                           suffixWidget: Icon(
                                             Icons.chevron_right_rounded,
                                             color: customTheme.lightColor,
                                           ),
-                                          onTap: () {},
+                                          onTap: () => AutoRouter.of(context).navigate(const ChangeEmailRoute()),
                                         ),
-
-                                        const FormInputHeader("Password"),
+                                        
+                                        const SizedBox(height: 16.0),
                                         ProfileField(
+                                          hintText: context.l10n.textField_password,
                                           text: "••••••••••••",
-                                          suffixText: "Change",
+                                          suffixText: context.l10n.change,
                                           suffixWidget: Icon(
                                             Icons.chevron_right_rounded,
                                             color: customTheme.lightColor,
                                           ),
-                                          onTap: () {},
+                                          onTap: () => AutoRouter.of(context).navigate(const ChangePasswordRoute()),
                                         ),
                                       ],
                                     );
@@ -404,26 +422,32 @@ class ProfileItem extends StatelessWidget{
 class ProfileField extends StatelessWidget {
 
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final bool enabled;
-  final String text;
+  final String? text;
+  final String? hintText;
   final String? errorText;
   final Key? suffixKey;
   final Widget suffixWidget;
   final double suffixPadding;
   final String suffixText;
-  final Function()? onTap;
+  final void Function()? onTap;
+  final void Function(String)? onSubmitted;
 
   const ProfileField({
     Key? key,
     this.controller,
+    this.focusNode,
     this.enabled = false,
-    required this.text,
+    this.text,
+    this.hintText,
     this.errorText,
     this.suffixKey,
     required this.suffixWidget,
     this.suffixPadding = 0.0,
     required this.suffixText,
-    required this.onTap
+    required this.onTap,
+    this.onSubmitted
   }) : super(key: key);
 
   @override
@@ -450,38 +474,46 @@ class ProfileField extends StatelessWidget {
     return Stack(
       alignment: Alignment.topRight,
       children: [
-        RoundedTextFormField(
-          controller: controller,
-          initialValue: controller == null ? text : null,
-          enabled: enabled,
-          errorText: errorText,
-          suffixIcon: Opacity(
-            opacity: 0,
-            child: suffix,
+        IgnorePointer(
+          ignoring: !enabled,
+          child: RoundedTextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            initialValue: controller == null ? text : null,
+            hintText: hintText,
+            errorText: errorText,
+            suffixIcon: Opacity(
+              opacity: 0,
+              child: suffix,
+            ),
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: onSubmitted
           ),
-          textInputAction: TextInputAction.done,
         ),
         
         GestureDetector(
-          child: IntrinsicHeight(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Avoid center alignment change when
-                // there is an error in the text field.
-                const SizedBox(
-                  width: double.minPositive,
-                  child: Opacity(
-                    opacity: 0,
-                    child: RoundedTextFormField()
-                  )
-                ),
+          child: Material(
+            color: Colors.transparent,
+            child: IntrinsicHeight(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Avoid alignment change when
+                  // there is an error in the text field.
+                  const SizedBox(
+                    width: double.minPositive,
+                    child: Opacity(
+                      opacity: 0,
+                      child: RoundedTextFormField()
+                    )
+                  ),
 
-                Padding(
-                  padding: const EdgeInsets.only(left: 12.0, right: 18.0),
-                  child: suffix,
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0, right: 18.0),
+                    child: suffix,
+                  )
+                ],
+              ),
             ),
           ),
           onTap: onTap

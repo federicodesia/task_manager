@@ -45,17 +45,15 @@ class ProfileCubit extends Cubit<ProfileState> {
           nameStatus: FieldStatus.saving,
           nameError: null
         ));
+        
+        await Future.delayed(const Duration(milliseconds: 800));
 
-        final updatedUser = await authBloc.userRepository.updateUser(name: name);
-        if(updatedUser != null){
-          emit(state.copyWith(nameStatus: FieldStatus.editable));
-          authBloc.add(AuthUserChanged(updatedUser));
+        if(name != authBloc.state.user?.name){
+          final updatedUser = await authBloc.userRepository.updateUser(name: name);
+          if(updatedUser != null) authBloc.add(AuthUserChanged(updatedUser));
         }
-        else{
-          emit(state.copyWith(
-            nameStatus: FieldStatus.editable,
-          ));
-        }
+        
+        emit(state.copyWith(nameStatus: FieldStatus.editable));
       }
       else{
         emit(state.copyWith(

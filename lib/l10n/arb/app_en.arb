@@ -1,5 +1,7 @@
 {
   "@@locale": "en",
+  "accountDetails": "Account details",
+  "@accountDetails": {},
   "addNewCategory_button": "Add new",
   "@addNewCategory_button": {},
   "alertDialog_deleteCategory": "Delete this category?",
@@ -44,12 +46,14 @@
   "@category": {},
   "categoryCard_allDone_description": "All done!",
   "@categoryCard_allDone_description": {},
-  "categoryCard_taskCount_description": "{count, plural, =0{{count} tasks} =1{{count} task} other{{count} tasks}}",
+  "categoryCard_taskCount_description": "{count, plural, 0={{count} tasks} 1={{count} task} other{{count} tasks}}",
   "@categoryCard_taskCount_description": {
     "placeholders": {
       "count": {}
     }
   },
+  "change": "Change",
+  "@change": {},
   "changeMyEmail": "Change my email",
   "@changeMyEmail": {},
   "changeMyEmail_description": "It is very simple! Enter your new email to request a verification code.",
@@ -66,7 +70,7 @@
   "@confirm": {},
   "continue_button": "Continue",
   "@continue_button": {},
-  "dateTime_daysAgo": "{count, plural, =0{Today} =1{{count} day ago} other{{count} days ago}}",
+  "dateTime_daysAgo": "{count, plural, 0={Today} 1={{count} day ago} other{{count} days ago}}",
   "@dateTime_daysAgo": {
     "placeholders": {
       "count": {}
@@ -144,7 +148,7 @@
   },
   "emptySpace_youHaventTasksWithActiveFilter_description": "There are no tasks with the current filter. Change it by pressing the button above.",
   "@emptySpace_youHaventTasksWithActiveFilter_description": {},
-  "enum_notificationType_advertisement": "{count, plural, =0{Advertisements} =1{Advertisement} other{Advertisements}}",
+  "enum_notificationType_advertisement": "{count, plural, 0={Advertisements} 1={Advertisement} other{Advertisements}}",
   "@enum_notificationType_advertisement": {
     "placeholders": {
       "count": {}
@@ -152,7 +156,7 @@
   },
   "enum_notificationType_all": "All",
   "@enum_notificationType_all": {},
-  "enum_notificationType_reminder": "{count, plural, =0{Reminders} =1{Reminder} other{Reminders}}",
+  "enum_notificationType_reminder": "{count, plural, 0={Reminders} 1={Reminder} other{Reminders}}",
   "@enum_notificationType_reminder": {
     "placeholders": {
       "count": {}
@@ -202,13 +206,13 @@
   "@error_expiredCode": {},
   "error_invalidCode": "Invalid code",
   "@error_invalidCode": {},
-  "error_maxLength": "{count, plural, =0{Maximum {count} characters} =1{Maximum {count} character} other{Maximum {count} characters}}",
+  "error_maxLength": "{count, plural, 0={Maximum {count} characters} 1={Maximum {count} character} other{Maximum {count} characters}}",
   "@error_maxLength": {
     "placeholders": {
       "count": {}
     }
   },
-  "error_minLength": "{count, plural, =0{Must contain at least {count} characters} =1{Must contain at least {count} character} other{Must contain at least {count} characters}}",
+  "error_minLength": "{count, plural, 0={Must contain at least {count} characters} 1={Must contain at least {count} character} other{Must contain at least {count} characters}}",
   "@error_minLength": {
     "placeholders": {
       "count": {}
@@ -331,6 +335,10 @@
   "@registerScreen_title": {},
   "results": "Results",
   "@results": {},
+  "save": "Save",
+  "@save": {},
+  "saving": "Saving...",
+  "@saving": {},
   "searchTask": "Search task...",
   "@searchTask": {},
   "securitySettings_changeEmail": "Change email",
