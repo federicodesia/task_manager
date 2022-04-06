@@ -61,14 +61,11 @@ class AuthRepository{
     }
   }
 
-  Future<AuthCredentials?> accessToken({
-    required AuthCredentials authCredentials
-  }) async {
-
+  Future<String?> accessToken() async {
     try{
       final dio = await base.dioRefreshToken;
       final response = await dio.get("/auth/access-token");
-      return authCredentials.copyWith(accessToken: response.data["accessToken"]);
+      return response.data["accessToken"] as String;
     }
     catch (error){
       return null;
@@ -126,8 +123,7 @@ class AuthRepository{
     }
   }
 
-  Future<Either<ResponseMessage, AuthCredentials>?> verifyAccountCode({
-    required AuthCredentials authCredentials,
+  Future<Either<ResponseMessage, String>?> verifyAccountCode({
     required String code,
     List<String>? ignoreKeys
   }) async {
@@ -140,7 +136,7 @@ class AuthRepository{
           "code": code
         },
       );
-      return Right(authCredentials.copyWith(accessToken: response.data["accessToken"]));
+      return Right(response.data["accessToken"] as String);
     }
     catch(error){
 
@@ -152,12 +148,8 @@ class AuthRepository{
           );
 
           if(responseMessages.contains("user already verified")){
-            final credentials = await accessToken(authCredentials: authCredentials);
-            if(credentials != null) {
-              return Right(authCredentials.copyWith(
-                accessToken: credentials.accessToken
-              ));
-            }
+            final newAccessToken = await accessToken();
+            if(newAccessToken != null) return Right(newAccessToken);
           }
         }
         catch(_){}

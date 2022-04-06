@@ -37,7 +37,6 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
       emit(const EmailVerificationState(isLoading: true));
 
       final response = await authRepository.verifyAccountCode(
-        authCredentials: await authBloc.secureStorageRepository.read.authCredentials,
         code: code,
         ignoreKeys: ["code"]
       );
@@ -50,9 +49,10 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
               ?? responseMessage.get("code"),
           )),
 
-          right: (credentials){
+          right: (accessToken) async {
             emit(const EmailVerificationState(isLoading: false));
-            authBloc.add(AuthCredentialsChanged(credentials));
+            final currentCredentials = await authBloc.secureStorageRepository.read.authCredentials;
+            authBloc.add(AuthCredentialsChanged(currentCredentials.copyWith(accessToken: accessToken)));
           }, 
         );
       } else {

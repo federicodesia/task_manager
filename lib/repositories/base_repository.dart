@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/helpers/string_helper.dart';
 import 'package:task_manager/repositories/interceptors/access_token_interceptor.dart';
-import 'package:task_manager/repositories/interceptors/refresh_token_interceptor.dart';
+import 'package:task_manager/repositories/interceptors/unauthorized_interceptor.dart';
 
 class BaseRepository{
   final AuthBloc authBloc;
@@ -44,7 +44,7 @@ class BaseRepository{
     dio = Dio(_baseOptions);
 
     _dioRefreshToken = Dio(_baseOptions)..interceptors.add(
-      RefreshTokenInterceptor(authBloc: authBloc)
+      UnauthorizedInterceptor(authBloc: authBloc)
     );
 
     _dioAccessToken = Dio(_baseOptions)..interceptors.add(

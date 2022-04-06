@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
-import 'package:task_manager/models/auth_credentials.dart';
 import 'package:task_manager/repositories/auth_repository.dart';
 import 'package:task_manager/repositories/base_repository.dart';
+import 'package:task_manager/repositories/interceptors/unauthorized_interceptor.dart';
 
 class AccessTokenInterceptor extends Interceptor {
 
@@ -20,14 +20,7 @@ class AccessTokenInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     try{
-
-      try{
-        final isRetry = options.headers["IsRetryRequest"] as bool?;
-        if(isRetry == true) return super.onRequest(options, handler);
-      }
-      catch(_) {}
-
-      final token = options.headers["Authorization"].toString().split(" ").last;
+      final token = (options.headers["Authorization"] as String).split(" ").last;
       if(token.isNotEmpty){
         final remainingTime = JwtDecoder.getRemainingTime(token);
         final timeout = options.sendTimeout + options.connectTimeout + options.receiveTimeout;
@@ -44,23 +37,12 @@ class AccessTokenInterceptor extends Interceptor {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
-    final options = err.requestOptions;
-
     try{
       final statusCode = err.response?.statusCode;
       if(statusCode == 401 || statusCode == 403){
 
-        final isRetry = options.headers["IsRetryRequest"] as bool?;
-        if(isRetry == true){
-          if(authBloc.state.status == AuthStatus.authenticated){
-            authBloc.add(AuthCredentialsChanged(AuthCredentials.empty));
-          }
-          return super.onError(err, handler);
-        }
-        else{
-          final cloneRequest = await _retry(options);
-          if(cloneRequest != null) return handler.resolve(cloneRequest);
-        }
+        final cloneRequest = await _retry(err.requestOptions);
+        if(cloneRequest != null) return handler.resolve(cloneRequest);
       }
     }
     catch(_) {}
@@ -70,25 +52,16 @@ class AccessTokenInterceptor extends Interceptor {
   Future<Response<dynamic>?> _retry(RequestOptions options) async{
     try{
       final authRepository = AuthRepository(base: baseRepository);
-      final currentCredentials = await authBloc.secureStorageRepository.read.authCredentials;
+      final accessToken = await authRepository.accessToken();
 
-      final credentials = await authRepository.accessToken(
-        authCredentials: currentCredentials
-      );
+      if(accessToken != null){
+        final currentCredentials = await authBloc.secureStorageRepository.read.authCredentials;
+        authBloc.add(AuthCredentialsChanged(currentCredentials.copyWith(accessToken: accessToken)));
 
-      if(credentials != null){
-        authBloc.add(AuthCredentialsChanged(credentials));
+        final dioAccessToken = baseRepository.dio..interceptors.add(UnauthorizedInterceptor(authBloc: authBloc));
+        options.headers.addAll({ "Authorization": "Bearer " + accessToken });
 
-        try{
-          final dioAccessToken = await baseRepository.dioAccessToken;
-
-          options.headers.addAll(dioAccessToken.options.headers);
-          options.headers.addAll({ "Authorization": "Bearer " + credentials.accessToken });
-          options.headers.addAll({ "IsRetryRequest" : true });
-
-          return await dioAccessToken.fetch(options);
-        }
-        catch(_) {}
+        return await dioAccessToken.fetch(options);
       }
     }
     catch (_){}

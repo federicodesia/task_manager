@@ -77,19 +77,17 @@ class AuthBloc extends DriftedBloc<AuthEvent, AuthState> {
     transformer: debounceTransformer(const Duration(seconds: 1)));
 
     on<AuthLoaded>((event, emit) async{
-
       final previousStatus = state.status;
       emit(state.copyWith(status: AuthStatus.loading));
 
       final currentCredentials = await secureStorageRepository.read.authCredentials;
       if(currentCredentials.isNotEmpty){
 
-        final credentials = await authRepository.accessToken(
-          authCredentials: currentCredentials
-        );
-
-        if(credentials != null) {
-          add(AuthCredentialsChanged(credentials));
+        final accessToken = await authRepository.accessToken();
+        if(accessToken != null) {
+          add(AuthCredentialsChanged(currentCredentials.copyWith(
+            accessToken: accessToken
+          )));
         }
         else{
           emit(state.copyWith(
