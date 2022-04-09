@@ -56,6 +56,7 @@ class LoginActivityCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RichText(
+                    textScaleFactor: MediaQuery.of(context).textScaleFactor,
                     text: TextSpan(
                       style: customTheme.textStyle,
                       children: <TextSpan>[
@@ -67,8 +68,7 @@ class LoginActivityCard extends StatelessWidget {
                         TextSpan(text: activeSession.deviceNameLocalization(context)),
                       ],
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis
+                    maxLines: 1
                   ),
                   const SizedBox(height: 2.0),
                   Text(
@@ -77,8 +77,7 @@ class LoginActivityCard extends StatelessWidget {
                       location: activeSession.geoLocation
                     ),
                     style: customTheme.smallLightTextStyle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1
                   )
                 ],
               ),

@@ -87,12 +87,8 @@ class _ResultsBottomSheetState extends State<_ResultsBottomSheet>{
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: cPadding),
-              child: RoundedButton(
-                width: double.infinity,
-                child: Text(
-                  context.l10n.done_button,
-                  style: customTheme.primaryColorButtonTextStyle,
-                ),
+              child: RoundedTextButton(
+                text: context.l10n.done_button,
                 onPressed: (){
                   categoryScreenBloc.add(FilterUpdated(taskFilter));
                   Navigator.pop(context);

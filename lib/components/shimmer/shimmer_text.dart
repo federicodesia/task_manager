@@ -13,7 +13,6 @@ class ShimmerText extends StatelessWidget{
   final String? text;
   final TextStyle? style;
   final int? maxLines;
-  final TextOverflow? overflow;
   final Alignment alignment;
 
   const ShimmerText({
@@ -26,7 +25,6 @@ class ShimmerText extends StatelessWidget{
     required this.text,
     this.style,
     this.maxLines,
-    this.overflow,
     this.alignment = Alignment.centerLeft
   }) : super(key: key);
 
@@ -38,8 +36,7 @@ class ShimmerText extends StatelessWidget{
       return Text(
         text ?? "",
         style: style,
-        maxLines: maxLines,
-        overflow: overflow,
+        maxLines: maxLines
       );
     }
 
@@ -51,8 +48,7 @@ class ShimmerText extends StatelessWidget{
         Text(
           "",
           style: style,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          maxLines: 1
         ),
 
         Container(
@@ -63,10 +59,9 @@ class ShimmerText extends StatelessWidget{
           child: Opacity(
             opacity: 0,
             child: Text(
-              (List.generate(shimmerMinTextLenght + Random().nextInt(shimmerMaxTextLenght - shimmerMinTextLenght),(_) => " ").join()),
+              (List.generate(shimmerMinTextLenght + Random().nextInt(shimmerMaxTextLenght - shimmerMinTextLenght), (_) => " ").join()),
               style: style != null ? style!.copyWith(height: shimmerTextHeight) : null,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis
+              maxLines: 1
             ),
           ),
         )

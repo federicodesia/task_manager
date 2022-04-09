@@ -148,12 +148,8 @@ class _CategoryBottomSheetState extends State<_CategoryBottomSheet>{
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: cPadding),
-            child: RoundedButton(
-              width: double.infinity,
-              child: Text(
-                context.l10n.done_button,
-                style: customTheme.primaryColorButtonTextStyle,
-              ),
+            child: RoundedTextButton(
+              text: context.l10n.done_button,
               onPressed: (){
                 setState(() => formValidated = true);
                 if (formKey.currentState!.validate()){

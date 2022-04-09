@@ -137,8 +137,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                       Text(
                                         category.name,
                                         style: customTheme.subtitleTextStyle.copyWith(height: 1.0),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1
                                       )
                                     ],
                                   ),
@@ -169,6 +168,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
 
                                       const SizedBox(width: 12.0),
                                       RoundedButton(
+                                        expandWidth: false,
                                         width: 56.0,
                                         height: 56.0,
                                         color: customTheme.contentBackgroundColor,

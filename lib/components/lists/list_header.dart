@@ -18,7 +18,8 @@ class ListHeader extends StatelessWidget{
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Text(
         text,
-        style: customTheme.boldTextStyle
+        style: customTheme.boldTextStyle,
+        maxLines: 1,
       ),
     );
   }

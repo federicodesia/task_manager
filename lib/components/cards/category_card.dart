@@ -137,8 +137,7 @@ class CategoryCardContent extends StatelessWidget{
               shimmerMaxTextLenght: 25,
               text: name,
               style: customTheme.boldTextStyle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              maxLines: 1
             ),
 
             const SizedBox(height: 2.0),
@@ -150,8 +149,7 @@ class CategoryCardContent extends StatelessWidget{
               shimmerMaxTextLenght: 22,
               text: description,
               style: customTheme.lightTextStyle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              maxLines: 1
             ),
             
             const SizedBox(height: 10.0),

@@ -61,6 +61,7 @@ class _SecurityScreenState extends State<SecurityScreen>{
                       center: Text(
                         context.l10n.settings_security,
                         style: customTheme.subtitleTextStyle,
+                        maxLines: 1,
                       )
                     ),
                   )

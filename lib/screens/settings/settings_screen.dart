@@ -75,6 +75,7 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                             child: Row(
                               children: [
                                 RoundedButton(
+                                  expandWidth: false,
                                   width: cButtonSize,
                                   color: customTheme.contentBackgroundColor,
                                   child: Image.asset(
@@ -92,16 +93,14 @@ class _SettingsScreenState extends State<_SettingsScreen>{
                                       Text(
                                         authState.user?.name ?? "",
                                         style: customTheme.subtitleTextStyle,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1
                                       ),
                                       const SizedBox(height: 2.0),
 
                                       Text(
                                         authState.user?.email ?? "",
                                         style: customTheme.lightTextStyle,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1
                                       ),
                                     ],
                                   ),

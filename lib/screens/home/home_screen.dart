@@ -212,8 +212,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                                       context.l10n.addNewCategory_button,
                                                       style: customTheme.lightTextStyle,
                                                       textAlign: TextAlign.center,
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow.ellipsis,
+                                                      maxLines: 1
                                                     ),
                                                     const SizedBox(height: 2.0),
                                                   ],

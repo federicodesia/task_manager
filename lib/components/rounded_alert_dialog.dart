@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/theme/theme.dart';
 
@@ -34,74 +35,46 @@ class RoundedAlertDialog{
       builder: (_) => Center(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Card(
-                  color: customTheme.backgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(cBorderRadius),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 32.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Card(
+              color: customTheme.backgroundColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(cBorderRadius),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 32.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
 
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                          child: Column(
-                            children: [
-                              if(svgImage != null) Container(
-                                height: MediaQuery.of(buildContext).orientation == Orientation.portrait
-                                  ? MediaQuery.of(buildContext).size.width * svgScale
-                                  : MediaQuery.of(buildContext).size.height * svgScale,
-                                margin: EdgeInsets.only(bottom: svgBottomSpace),
-                                child: SvgPicture.asset(svgImage!)
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(
-                                  title,
-                                  style: customTheme.subtitleTextStyle,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              const SizedBox(height: 24.0),
-
-                              Text(
-                                description,
-                                style: customTheme.lightTextStyle,
-                                textAlign: TextAlign.center,
-                                maxLines: 4,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        if(actions != null) Padding(
-                          padding: const EdgeInsets.only(top: 32.0),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            physics: const BouncingScrollPhysics(),
-                            child: Row(
-                              mainAxisAlignment: actionsAlignment,
-                              children: actions!,
-                            ),
-                          ),
-                        )
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                      child: EmptySpace(
+                        svgImage: svgImage,
+                        svgScale: svgScale,
+                        svgBottomSpace: svgBottomSpace,
+                        header: title,
+                        description: description
+                      ),
                     ),
-                  ),
+
+                    if(actions != null) Padding(
+                      padding: const EdgeInsets.only(top: 32.0),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        child: Row(
+                          mainAxisAlignment: actionsAlignment,
+                          children: actions!,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
+              ),
+            ),
           ),
         ),
       )
@@ -131,6 +104,7 @@ class RoundedAlertDialogButton extends StatelessWidget{
         style: customTheme.lightTextStyle.copyWith(
           color: backgroundColor != null ? Colors.white : null
         ),
+        maxLines: 1,
       ),
       onPressed: onPressed,
       style: TextButton.styleFrom(

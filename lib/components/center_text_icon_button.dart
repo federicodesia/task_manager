@@ -22,7 +22,6 @@ class CenterTextIconButton extends StatelessWidget{
     final customTheme = Theme.of(context).customTheme;
     
     return RoundedButton(
-      width: double.infinity,
       color: customTheme.contentBackgroundColor,
       child: Padding(
         padding: padding,
@@ -36,7 +35,6 @@ class CenterTextIconButton extends StatelessWidget{
             text,
             style: customTheme.boldTextStyle.copyWith(fontSize: 13.5),
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
         )
       ),

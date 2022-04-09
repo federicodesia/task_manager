@@ -74,16 +74,14 @@ class _LoginScreenState extends State<_LoginScreen>{
                                   Text(
                                     context.l10n.loginScreen_title,
                                     style: customTheme.titleTextStyle,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2
                                   ),
                                   const SizedBox(height: 8.0),
 
                                   Text(
                                     context.l10n.loginScreen_description,
                                     style: customTheme.lightTextStyle,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2
                                   ),
                                   const SizedBox(height: cPadding * 2),
 
@@ -110,8 +108,7 @@ class _LoginScreenState extends State<_LoginScreen>{
                                         child: Text(
                                           context.l10n.loginScreen_forgotPassword,
                                           style: customTheme.smallLightTextStyle,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1
                                         ),
                                         onTap: () {
                                           AutoRouter.of(context).navigate(const ForgotPasswordRoute());
@@ -134,12 +131,8 @@ class _LoginScreenState extends State<_LoginScreen>{
                                     child: CircularProgressIndicator(),
                                   ),
 
-                                  RoundedButton(
-                                    width: double.infinity,
-                                    child: Text(
-                                      context.l10n.signIn_button,
-                                      style: customTheme.primaryColorButtonTextStyle,
-                                    ),
+                                  RoundedTextButton(
+                                    text: context.l10n.signIn_button,
                                     onPressed: () {
                                       context.read<LoginCubit>().submitted(
                                         context: context,
@@ -152,6 +145,7 @@ class _LoginScreenState extends State<_LoginScreen>{
 
                                   GestureDetector(
                                     child: RichText(
+                                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
                                       text: TextSpan(
                                         style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
@@ -162,7 +156,6 @@ class _LoginScreenState extends State<_LoginScreen>{
                                         ],
                                       ),
                                       maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
                                     ),
                                     onTap: () {

@@ -126,8 +126,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                                 shimmerMaxTextLenght: 25,
                                 text: categoryName,
                                 style: customTheme.smallLightTextStyle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1
                               ),
                             ),
 
@@ -135,7 +134,8 @@ class CalendarTaskListItemContent extends StatelessWidget{
 
                             if(dateTime != null) Text(
                               dateTime!.format(context, "HH:mm a"),
-                              style: customTheme.lightTextStyle
+                              style: customTheme.lightTextStyle,
+                              maxLines: 1,
                             )
                           ],
                         ),
@@ -148,7 +148,6 @@ class CalendarTaskListItemContent extends StatelessWidget{
                           shimmerMaxTextLenght: 40,
                           text: title,
                           style: customTheme.boldTextStyle,
-                          overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                         ),
 
@@ -158,8 +157,7 @@ class CalendarTaskListItemContent extends StatelessWidget{
                           child: Text(
                             description!,
                             style: customTheme.lightTextStyle,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3
                           ),
                         )
                       ],

@@ -60,22 +60,19 @@ class _ActiveSessionBottomSheet extends StatelessWidget{
           Text(
             "${context.l10n.ipAdress}: ${activeSession.ipAddress}",
             style: customTheme.lightTextStyle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            maxLines: 1
           ),
 
           Text(
             "${context.l10n.loginDate}: ${activeSession.createdAt.format(context, "d MMM y HH:mm a")}",
             style: customTheme.lightTextStyle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            maxLines: 1
           ),
 
           Text(
             "${context.l10n.lastActivity}: ${activeSession.lastTimeOfUse.format(context, "d MMM y HH:mm a")}",
             style: customTheme.lightTextStyle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            maxLines: 1
           ),
 
           if(locationPoint != null) Container(
@@ -114,7 +111,8 @@ class _ActiveSessionBottomSheet extends StatelessWidget{
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "© OpenStreetMap contributors ",
-                          style: customTheme.smallLightTextStyle
+                          style: customTheme.smallLightTextStyle,
+                          maxLines: 1,
                         ),
                       );
                     },
@@ -147,12 +145,8 @@ class _ActiveSessionBottomSheet extends StatelessWidget{
 
           const SizedBox(height: 32.0),
 
-          RoundedButton(
-            width: double.infinity,
-            child: Text(
-              context.l10n.logout_button,
-              style: customTheme.primaryColorButtonTextStyle,
-            ),
+          RoundedTextButton(
+            text: context.l10n.logout_button,
             onPressed: (){
               context.read<AuthBloc>().add(AuthLogoutSessionRequested(activeSession.id));
               Navigator.pop(context);

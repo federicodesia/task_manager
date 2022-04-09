@@ -66,7 +66,7 @@ class _FormValidatorState extends State<FormValidator> {
                       (widget.errorText ?? state.errorText) ?? "",
                       style: themeData.textTheme.caption!.copyWith(color: themeData.errorColor),
                       textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     )
                   ],
                 ),

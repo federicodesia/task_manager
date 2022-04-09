@@ -94,7 +94,6 @@ class _CalendarMonthPickerState extends State<CalendarMonthPicker>{
                       monthList[index].format(context, "MMMM y"),
                       style: customTheme.boldTextStyle,
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                     ),
                   ),

@@ -236,12 +236,8 @@ class _TaskBottomSheetState extends State<_TaskBottomSheet>{
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: cPadding),
-            child: RoundedButton(
-              width: double.infinity,
-              child: Text(
-                context.l10n.done_button,
-                style: customTheme.primaryColorButtonTextStyle,
-              ),
+            child: RoundedTextButton(
+              text: context.l10n.done_button,
               onPressed: (){
 
                 if(formKey.currentState!.validate()){

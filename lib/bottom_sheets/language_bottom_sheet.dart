@@ -62,12 +62,8 @@ class _LanguageBottomSheetState extends State<_LanguageBottomSheet>{
 
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: cPadding),
-          child: RoundedButton(
-            width: double.infinity,
-            child: Text(
-              context.l10n.done_button,
-              style: customTheme.primaryColorButtonTextStyle,
-            ),
+          child: RoundedTextButton(
+            text: context.l10n.done_button,
             onPressed: (){
               context.read<SettingsCubit>().changeLocale(selectedLocale);
               Navigator.pop(context);

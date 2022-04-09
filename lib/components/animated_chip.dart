@@ -36,7 +36,8 @@ class AnimatedChip extends StatelessWidget{
 
         child: Text(
           text,
-          style: customTheme.smallTextStyle.copyWith(color: textColor)
+          style: customTheme.smallTextStyle.copyWith(color: textColor),
+          maxLines: 1,
         )
       ),
       onTap: onTap,

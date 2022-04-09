@@ -29,7 +29,8 @@ class CustomThemeData {
     fontSize: 14.0,
     fontFamily: "Poppins",
     fontWeight: FontWeight.w400,
-    color: textColor
+    color: textColor,
+    overflow: TextOverflow.ellipsis,
   );
 
   TextStyle get headerTextStyle => textStyle.copyWith(fontSize: 20.0, fontWeight: FontWeight.w600);
@@ -47,7 +48,7 @@ class CustomThemeData {
   
   TextStyle get extraLightTextStyle => lightTextStyle.copyWith(fontWeight: FontWeight.w300);
   TextStyle get smallLightTextStyle => lightTextStyle.copyWith(fontSize: 13.0);
-  TextStyle get smallTextButtonStyle => smallLightTextStyle.copyWith(color: cTextButtonColor, fontWeight: FontWeight.w500);
+  TextStyle get smallTextButtonStyle => smallLightTextStyle.copyWith(color: cTextButtonColor, fontWeight: FontWeight.w400);
 
   Color get extraLightTextColor => textColor.withOpacity(0.5);
 

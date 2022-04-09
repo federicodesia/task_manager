@@ -140,7 +140,6 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                               context.l10n.welcomeScreen_agreeTerms,
                               style: customTheme.smallLightTextStyle.copyWith(color: customTheme.extraLightTextColor),
                               maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
                             ),
                           )

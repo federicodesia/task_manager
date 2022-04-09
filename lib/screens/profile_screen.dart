@@ -97,8 +97,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                       center: Text(
                         context.l10n.profile,
                         style: customTheme.subtitleTextStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1
                       )
                     ),
                   )
@@ -146,24 +145,28 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                     completedCount = taskState.tasks.where((t) => t.isCompleted).length;
                                     remainingCount = tasksCount - completedCount;
 
-                                    return Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        ProfileItem(
-                                          count: tasksCount,
-                                          name: context.l10n.tasks,
-                                        ),
+                                    return FractionallySizedBox(
+                                      widthFactor: MediaQuery.of(context).orientation == Orientation.landscape ? 0.85 : null,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          ProfileItem(
+                                            count: tasksCount,
+                                            name: context.l10n.tasks,
+                                          ),
 
-                                        ProfileItem(
-                                          count: completedCount,
-                                          name: context.l10n.enum_taskFilter_completed,
-                                        ),
+                                          ProfileItem(
+                                            count: completedCount,
+                                            name: context.l10n.enum_taskFilter_completed,
+                                          ),
 
-                                        ProfileItem(
-                                          count: remainingCount,
-                                          name: context.l10n.enum_taskFilter_remaining,
-                                        )
-                                      ],
+                                          ProfileItem(
+                                            count: remainingCount,
+                                            name: context.l10n.enum_taskFilter_remaining,
+                                          )
+                                        ],
+                                      ),
                                     );
                                   }
                                 ),
@@ -292,6 +295,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                         center: Text(
                                           "57%",
                                           style: customTheme.textStyle,
+                                          maxLines: 1
                                         ),
                                         circularStrokeCap: CircularStrokeCap.round,
                                         backgroundColor: cGoldenColor.withOpacity(customTheme.isDark ? 0.15 : 0.4),
@@ -307,16 +311,14 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                             Text(
                                               context.l10n.upgradeToPro_title,
                                               style: customTheme.boldTextStyle,
-                                              maxLines: 3,
-                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 3
                                             ),
                                             const SizedBox(height: 8.0),
 
                                             Text(
                                               context.l10n.upgradeToPro_description,
                                               style: customTheme.lightTextStyle,
-                                              maxLines: 3,
-                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 3
                                             ),
                                           ],
                                         ),
@@ -338,8 +340,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                         child: Text(
                                           context.l10n.plansAndBenefits_button,
                                           style: customTheme.textStyle.copyWith(color: CustomThemeData.dark.textColor),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1
                                         ),
                                       ),
 
@@ -353,8 +354,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                           child: Text(
                                             context.l10n.upgradeToPro_button,
                                             style: customTheme.boldTextStyle.copyWith(color: CustomThemeData.light.textColor),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1
                                           ),
                                         ),
                                         onPressed: () {}
@@ -402,15 +402,13 @@ class ProfileItem extends StatelessWidget{
             Text(
               count != null ? count.toString() : "-",
               style: customTheme.subtitleTextStyle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              maxLines: 1
             ),
             const SizedBox(height: 4.0),
             Text(
               name,
               style: customTheme.lightTextStyle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              maxLines: 1
             )
           ],
         ),
@@ -464,6 +462,7 @@ class ProfileField extends StatelessWidget {
           Text(
             suffixText,
             style: customTheme.lightTextStyle,
+            maxLines: 1,
           ),
           SizedBox(width: suffixPadding),
           suffixWidget

@@ -55,8 +55,7 @@ class ProgressSummary extends StatelessWidget{
                   Text(
                     header,
                     style: customTheme.boldTextStyle,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3
                   ),
                   const SizedBox(height: 8.0),
 
@@ -66,8 +65,7 @@ class ProgressSummary extends StatelessWidget{
                         _description,
                         key: Key(_description),
                         style: customTheme.lightTextStyle,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3
                       ),
                     ),
                   ),
@@ -87,6 +85,7 @@ class ProgressSummary extends StatelessWidget{
               center: Text(
                 "${(_percent * 100).toStringAsFixed(0)}%",
                 style: customTheme.textStyle,
+                maxLines: 1,
               ),
               circularStrokeCap: CircularStrokeCap.round,
               backgroundColor: cChartBackgroundColor,

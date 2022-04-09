@@ -53,6 +53,7 @@ class ModalBottomSheet{
                 Text(
                   title,
                   style: customTheme.titleTextStyle,
+                  maxLines: 1,
                 ),
 
                 content,

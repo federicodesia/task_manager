@@ -37,21 +37,20 @@ class MyAppBar extends StatelessWidget {
                   Text(
                     header,
                     style: customTheme.headerTextStyle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1
                   ),
 
                   Text(
                     description,
                     style: customTheme.textStyle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1
                   ),
                 ],
               ),
 
               // Profile
               RoundedButton(
+                expandWidth: false,
                 width: cButtonSize,
                 color: customTheme.contentBackgroundColor,
                 child: Image.asset(

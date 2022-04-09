@@ -85,12 +85,8 @@ class SmallFormSvg extends StatelessWidget {
                                 child: CircularProgressIndicator(),
                               ),
 
-                              RoundedButton(
-                                width: double.infinity,
-                                child: Text(
-                                  buttonText,
-                                  style: customTheme.primaryColorButtonTextStyle,
-                                ),
+                              RoundedTextButton(
+                                text: buttonText,
                                 onPressed: onButtonPressed,
                               ),
 

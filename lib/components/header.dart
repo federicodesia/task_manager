@@ -25,16 +25,14 @@ class Header extends StatelessWidget{
             child: Text(
               text,
               style: customTheme.boldTextStyle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              maxLines: 1
             ),
           ),
 
           Text(
             rightText ?? "",
             style: customTheme.lightTextStyle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            maxLines: 1
           )
         ],
       ),

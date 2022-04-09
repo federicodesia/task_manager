@@ -56,8 +56,7 @@ class EmptySpace extends StatelessWidget{
                   header.fillLines(headerFillLines ? headerMaxLines : 0),
                   textAlign: TextAlign.center,
                   style: customTheme.titleTextStyle,
-                  maxLines: headerMaxLines,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: headerMaxLines
                 ),
 
                 const SizedBox(height: 16.0),
@@ -65,8 +64,7 @@ class EmptySpace extends StatelessWidget{
                   description.fillLines(descriptionFillLines ? descriptionMaxLines : 0),
                   textAlign: TextAlign.center,
                   style: customTheme.lightTextStyle,
-                  maxLines: descriptionMaxLines,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: descriptionMaxLines
                 ),
               ],
             )

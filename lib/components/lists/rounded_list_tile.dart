@@ -69,8 +69,7 @@ class RoundedListTile extends StatelessWidget {
                         child: Text(
                           title,
                           style: customTheme.textStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1
                         ),
                       )
                     ],
@@ -85,8 +84,7 @@ class RoundedListTile extends StatelessWidget {
                         child: Text(
                           description!,
                           style: customTheme.lightTextStyle,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3
                         ),
                       ),
                     ],
@@ -102,8 +100,7 @@ class RoundedListTile extends StatelessWidget {
               child: Text(
                 value ?? "",
                 style: customTheme.lightTextStyle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                maxLines: 1
               ),
             ),
 
@@ -120,8 +117,7 @@ class RoundedListTile extends StatelessWidget {
                 counter ?? "",
                 textAlign: TextAlign.center,
                 style: customTheme.smallLightTextStyle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                maxLines: 1
               )
             ),
 

@@ -15,23 +15,16 @@ class DialogService {
     final context = _getCurrentContext;
 
     if(context != null){
-      final customTheme = Theme.of(context).customTheme;
-
       RoundedAlertDialog(
         buildContext: context,
         svgImage: "assets/svg/stars.svg",
         title: context.l10n.alertDialog_noInternetConnection,
         description: context.l10n.alertDialog_noInternetConnection_description,
         actions: [
-          RoundedButton(
-            autoWidth: true,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Text(
-                context.l10n.gotIt_button,
-                style: customTheme.primaryColorButtonTextStyle
-              ),
-            ),
+          RoundedTextButton(
+            expandWidth: false,
+            textPadding: const EdgeInsets.symmetric(horizontal: 32.0),
+            text: context.l10n.gotIt_button,
             onPressed: () => Navigator.of(context, rootNavigator: true).pop()
           ),
         ],
@@ -43,23 +36,16 @@ class DialogService {
     final context = _getCurrentContext;
 
     if(context != null){
-      final customTheme = Theme.of(context).customTheme;
-
       RoundedAlertDialog(
         buildContext: context,
         svgImage: "assets/svg/stars.svg",
         title: context.l10n.alertDialog_somethingWentWrong,
         description: context.l10n.alertDialog_somethingWentWrong_description,
         actions: [
-          RoundedButton(
-            autoWidth: true,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Text(
-                context.l10n.gotIt_button,
-                style: customTheme.primaryColorButtonTextStyle
-              ),
-            ),
+          RoundedTextButton(
+            expandWidth: false,
+            textPadding: const EdgeInsets.symmetric(horizontal: 32.0),
+            text: context.l10n.gotIt_button,
             onPressed: () => Navigator.of(context, rootNavigator: true).pop()
           ),
         ],

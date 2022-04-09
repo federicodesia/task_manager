@@ -31,7 +31,6 @@ class RoundedSnackBar{
           text,
           style: customTheme.smallTextStyle.copyWith(height: 1.0),
           maxLines: 1,
-          overflow: TextOverflow.ellipsis
         ),
         action: action,
       )

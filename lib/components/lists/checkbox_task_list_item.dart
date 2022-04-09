@@ -121,7 +121,6 @@ class CheckboxTaskListItemContent extends StatelessWidget{
                         text: title,
                         style: customTheme.boldTextStyle,
                         maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
                         alignment: Alignment.bottomLeft,
                       ),
                     ),
@@ -130,7 +129,8 @@ class CheckboxTaskListItemContent extends StatelessWidget{
 
                     if(dateTime != null) Text(
                       dateTime!.format(context, "HH:mm a"),
-                      style: customTheme.lightTextStyle
+                      style: customTheme.lightTextStyle,
+                      maxLines: 1,
                     )
                   ],
                 ),
@@ -146,8 +146,7 @@ class CheckboxTaskListItemContent extends StatelessWidget{
                     shimmerProbability: 0.5,
                     text: description,
                     style: customTheme.lightTextStyle,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3
                   ),
                 ),
               ],

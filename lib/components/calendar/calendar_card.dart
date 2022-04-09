@@ -39,6 +39,7 @@ class CalendarCard extends StatelessWidget{
               style: customTheme.subtitleTextStyle.copyWith(
                 color: isSelected ? Colors.white : customTheme.lightTextColor
               ),
+              maxLines: 1,
             ),
             const SizedBox(height: 4.0),
 
@@ -51,6 +52,7 @@ class CalendarCard extends StatelessWidget{
                   child: Text(
                     "aaaa",
                     style: customTheme.smallLightTextStyle,
+                    maxLines: 1,
                   ),
                 ),
 
@@ -59,6 +61,7 @@ class CalendarCard extends StatelessWidget{
                   style: customTheme.smallLightTextStyle.copyWith(
                     color: isSelected ? Colors.white : customTheme.lightTextColor
                   ),
+                  maxLines: 1,
                 )
               ],
             ),

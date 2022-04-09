@@ -26,6 +26,7 @@ class PopupMenuIconItem extends StatelessWidget{
         Text(
           text,
           style: customTheme.lightTextStyle,
+          maxLines: 1,
         )
       ],
     );

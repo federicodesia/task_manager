@@ -67,7 +67,6 @@ class NotificationListItem extends StatelessWidget{
                               child: Text(
                                 data.title,
                                 style: customTheme.boldTextStyle,
-                                overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                             ),
@@ -76,7 +75,8 @@ class NotificationListItem extends StatelessWidget{
 
                             Text(
                               (data.scheduledAt ?? data.createdAt).format(buildContext, "HH:mm a"),
-                              style: customTheme.lightTextStyle
+                              style: customTheme.lightTextStyle,
+                              maxLines: 1,
                             )
                           ],
                         ),
@@ -86,8 +86,7 @@ class NotificationListItem extends StatelessWidget{
                         Text(
                           data.body,
                           style: customTheme.lightTextStyle,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3
                         )
                       ],
                     ),

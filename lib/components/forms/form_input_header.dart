@@ -20,7 +20,8 @@ class FormInputHeader extends StatelessWidget{
       ),
       child: Text(
         text,
-        style: customTheme.boldTextStyle
+        style: customTheme.boldTextStyle,
+        maxLines: 1,
       ),
     );
   }

@@ -42,8 +42,7 @@ class WeekBarChart extends StatelessWidget{
           Text(
             header,
             style: customTheme.lightTextStyle,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+            maxLines: 2
           ),
           const SizedBox(height: 12.0),
 
@@ -93,8 +92,7 @@ class WeekBarChart extends StatelessWidget{
                       "$weekCompletedTasksCount ${context.l10n.enum_taskFilter_completed}",
                       key: Key("$weekCompletedTasksCount Completed"),
                       style: customTheme.boldTextStyle.copyWith(color: cPrimaryColor),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1
                     )
                   )
                 ],
@@ -109,8 +107,7 @@ class WeekBarChart extends StatelessWidget{
                     child: Text(
                       "100 " + context.l10n.enum_taskFilter_completed,
                       style: customTheme.boldTextStyle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1
                     ),
                   ),
 
@@ -122,8 +119,7 @@ class WeekBarChart extends StatelessWidget{
                         "$weekRemainingTasksCount ${context.l10n.enum_taskFilter_remaining}",
                         key: Key("$weekRemainingTasksCount Remaining"),
                         style: customTheme.boldTextStyle.copyWith(color: cChartBackgroundColor),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1
                       ),
                     ),
                   ),

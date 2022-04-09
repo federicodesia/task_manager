@@ -55,15 +55,9 @@ class _TimePickerBottomSheet extends StatelessWidget{
                 onTimerDurationChanged: data.onTimeChanged
               ),
             ),
-            RoundedButton(
-              width: double.infinity,
-              child: Text(
-                context.l10n.select_button,
-                style: customTheme.primaryColorButtonTextStyle,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+            RoundedTextButton(
+              text: context.l10n.select_button,
+              onPressed: () => Navigator.of(context).pop()
             )
           ],
         ),

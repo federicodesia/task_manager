@@ -61,6 +61,7 @@ class _SettingsNotificationsScreenState extends State<_SettingsNotificationsScre
                       center: Text(
                         context.l10n.settings_notifications,
                         style: customTheme.subtitleTextStyle,
+                        maxLines: 1,
                       )
                     ),
                   )

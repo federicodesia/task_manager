@@ -75,16 +75,14 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                   Text(
                                     context.l10n.registerScreen_title,
                                     style: customTheme.titleTextStyle,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2
                                   ),
                                   const SizedBox(height: 8.0),
 
                                   Text(
                                     context.l10n.registerScreen_description,
                                     style: customTheme.lightTextStyle,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2
                                   ),
                                   const SizedBox(height: cPadding * 2),
 
@@ -124,12 +122,8 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                     child: CircularProgressIndicator(),
                                   ),
 
-                                  RoundedButton(
-                                    width: double.infinity,
-                                    child: Text(
-                                      context.l10n.signUp_button,
-                                      style: customTheme.primaryColorButtonTextStyle,
-                                    ),
+                                  RoundedTextButton(
+                                    text: context.l10n.signUp_button,
                                     onPressed: (){
 
                                       context.read<RegisterCubit>().submitted(
@@ -144,6 +138,7 @@ class _RegisterScreenState extends State<_RegisterScreen>{
 
                                   GestureDetector(
                                     child: RichText(
+                                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
                                       text: TextSpan(
                                         style: customTheme.smallLightTextStyle,
                                         children: <TextSpan>[
@@ -154,7 +149,6 @@ class _RegisterScreenState extends State<_RegisterScreen>{
                                         ],
                                       ),
                                       maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
                                     ),
                                     onTap: () {

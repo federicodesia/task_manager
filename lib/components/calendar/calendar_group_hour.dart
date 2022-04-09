@@ -58,8 +58,7 @@ class CalendarGroupHourText extends StatelessWidget{
         child: Text(
           text,
           style: customTheme.lightTextStyle,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          maxLines: 1
         ),
       ),
     );

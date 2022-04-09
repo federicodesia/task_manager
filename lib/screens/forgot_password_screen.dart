@@ -66,6 +66,7 @@ class _ForgotPasswordScreen extends StatelessWidget{
           },
           bottomWidget: GestureDetector(
             child: RichText(
+              textScaleFactor: MediaQuery.of(context).textScaleFactor,
               text: TextSpan(
                 style: customTheme.smallLightTextStyle,
                 children: [
@@ -77,7 +78,6 @@ class _ForgotPasswordScreen extends StatelessWidget{
                 ],
               ),
               maxLines: 2,
-              overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
             ),
             onTap: () => AutoRouter.of(context).navigate(const LoginRoute())

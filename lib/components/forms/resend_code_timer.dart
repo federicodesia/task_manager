@@ -28,13 +28,13 @@ class ResendCodeTimer extends StatelessWidget{
           context.l10n.emailVerification_resendCodeIn("${time.minutes}:${time.seconds}\n"),
           style: customTheme.smallLightTextStyle,
           maxLines: 2,
-          overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
         );
       },
       stateBuilder: (time, state) {
         return GestureDetector(
           child: RichText(
+            textScaleFactor: MediaQuery.of(context).textScaleFactor,
             text: TextSpan(
               style: customTheme.smallLightTextStyle,
               children: [
@@ -46,7 +46,6 @@ class ResendCodeTimer extends StatelessWidget{
               ],
             ),
             maxLines: 2,
-            overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
           ),
           onTap: onResend,

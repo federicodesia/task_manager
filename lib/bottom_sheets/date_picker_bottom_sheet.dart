@@ -51,15 +51,9 @@ class _DatePickerBottomSheet extends StatelessWidget{
               onDateChanged: data.onDateChanged
             ),
           ),
-          RoundedButton(
-            width: double.infinity,
-            child: Text(
-              context.l10n.select_button,
-              style: customTheme.primaryColorButtonTextStyle,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+          RoundedTextButton(
+            text: context.l10n.select_button,
+            onPressed: () => Navigator.of(context).pop()
           )
         ],
       ),

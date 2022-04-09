@@ -40,8 +40,7 @@ class OutlinedFormIconButton extends StatelessWidget{
               text,
               style: customTheme.smallTextStyle,
               textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              maxLines: 1
             ),
           )
         ],

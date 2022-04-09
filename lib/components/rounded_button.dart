@@ -6,9 +6,9 @@ class RoundedButton extends StatelessWidget{
 
   final Widget child;
   final Color color;
-  final double width;
+  final bool expandWidth;
+  final double? width;
   final double height;
-  final bool autoWidth;
   final double borderRadius;
   final EdgeInsets padding;
   final void Function()? onPressed;
@@ -17,9 +17,9 @@ class RoundedButton extends StatelessWidget{
     Key? key, 
     required this.child,
     this.color = cPrimaryColor,
-    this.width = cButtonSize,
+    this.expandWidth = true,
+    this.width,
     this.height = cButtonSize,
-    this.autoWidth = false,
     this.borderRadius = cBorderRadius,
     this.padding = const EdgeInsets.all(cButtonPadding),
     required this.onPressed
@@ -30,7 +30,7 @@ class RoundedButton extends StatelessWidget{
     final customTheme = Theme.of(context).customTheme;
     
     return SizedBox(
-      width: !autoWidth ? width : null,
+      width: expandWidth ? double.infinity : width,
       height: height,
       child: ElevatedButton(
         onPressed: onPressed,
@@ -45,6 +45,40 @@ class RoundedButton extends StatelessWidget{
           shadowColor: customTheme.shadowColor,
         ),
       ),
+    );
+  }
+}
+
+class RoundedTextButton extends StatelessWidget{
+
+  final String text;
+  final EdgeInsets textPadding;
+  final bool expandWidth;
+  final void Function()? onPressed;
+
+  const RoundedTextButton({
+    Key? key, 
+    required this.text,
+    this.textPadding = EdgeInsets.zero,
+    this.expandWidth = true,
+    required this.onPressed
+  }) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context) {
+    final customTheme = Theme.of(context).customTheme;
+    
+    return RoundedButton(
+      expandWidth: expandWidth,
+      child: Padding(
+        padding: textPadding,
+        child: Text(
+          text,
+          style: customTheme.primaryColorButtonTextStyle,
+          maxLines: 1,
+        ),
+      ),
+      onPressed: onPressed
     );
   }
 }
