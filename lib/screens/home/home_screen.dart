@@ -143,11 +143,13 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                           builder: (_, categoryState){
                             return WidgetSize(
                               onChange: (Size size) => setState(() {}),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
+                              child: SizedBox(
+                                width: constraints.maxWidth,
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
-                                  physics: const BouncingScrollPhysics(),
+                                  physics: const BouncingScrollPhysics(
+                                    parent: AlwaysScrollableScrollPhysics()
+                                  ),
                                   padding: const EdgeInsets.symmetric(horizontal: cPadding),
                                   child: BoxyRow(
                                     children: [
@@ -232,7 +234,7 @@ class _HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin{
                                       )
                                     ],
                                   ),
-                                )
+                                ),
                               ),
                             );
                           },

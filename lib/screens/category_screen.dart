@@ -202,6 +202,7 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                               child: AlignedAnimatedSwitcher(
                                 alignment: Alignment.topCenter,
                                 child: state.items.isNotEmpty ? AnimatedDynamicTaskList(
+                                  key: const Key("AnimatedDynamicTaskList"),
                                   items: state.items,
                                   taskListItemType: TaskListItemType.checkbox,
                                   buildContext: context,
@@ -214,6 +215,10 @@ class _CategoryScreenState extends State<_CategoryScreen>{
                                     return Container();
                                   }
                                 ) : FillRemainingList(
+                                  key: Key(state.searchText.isEmpty
+                                    ? "EmptySpace ${state.activeFilter}"
+                                    : "EmptySpace NotFound"
+                                  ),
                                   availableSpaceCubit: context.read<AvailableSpaceCubit>(),
                                   child: state.searchText.isEmpty ? EmptySpace(
                                     svgImage: "assets/svg/completed_tasks.svg",

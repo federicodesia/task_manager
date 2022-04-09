@@ -91,7 +91,6 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                         description: slidingPage.description,
                         descriptionMaxLines: 3,
                         descriptionFillLines: true,
-                        descriptionWidthFactor: MediaQuery.of(context).orientation == Orientation.portrait ? 0.9 : 0.55
                       );
                     }),
                   ),

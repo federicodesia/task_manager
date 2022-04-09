@@ -4,4 +4,6 @@ extension StringExtension on String {
   }
 
   String get toLowerSnakeCase => toLowerCase().replaceAll(" ", "_");
+
+  String fillLines(int lines) => this + List.generate(lines, (_) => "\n").join();
 }
