@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/bottom_sheets/modal_bottom_sheet.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/l10n/l10n.dart';
-import 'package:task_manager/theme/theme.dart';
 
 import '../constants.dart';
 
@@ -36,7 +35,6 @@ class _DatePickerBottomSheet extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    final customTheme = Theme.of(context).customTheme;
     
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: cPadding),

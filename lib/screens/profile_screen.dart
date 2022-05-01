@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:task_manager/blocs/auth_bloc/auth_bloc.dart';
 import 'package:task_manager/blocs/task_bloc/task_bloc.dart';
 import 'package:task_manager/components/aligned_animated_switcher.dart';
@@ -11,7 +10,6 @@ import 'package:task_manager/components/forms/form_input_header.dart';
 import 'package:task_manager/components/forms/rounded_text_form_field.dart';
 import 'package:task_manager/components/main/center_app_bar.dart';
 import 'package:task_manager/components/responsive/widget_size.dart';
-import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/cubits/profile_cubit.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/router/router.gr.dart';
@@ -283,8 +281,7 @@ class _ProfileScreenState extends State<_ProfileScreen>{
                                   padding: const EdgeInsets.all(cPadding),
                                   child: Row(
                                     children: [
-
-                                      // TODO: Add plans
+                                      
                                       CircularPercentIndicator(
                                         radius: 32.0,
                                         lineWidth: cLineSize,

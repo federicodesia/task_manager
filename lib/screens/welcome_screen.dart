@@ -31,29 +31,26 @@ class _WelcomeScreen extends StatefulWidget{
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
+extension SlidingPagesExtension on BuildContext {
+  
+  List<SlidingPage> get slidingPages => [
+    SlidingPage(
+      header: l10n.welcomeScreen_firstSlidingPage,
+      description: l10n.welcomeScreen_firstSlidingPage_description,
+      svg: "assets/svg/personal_file.svg",
+    ),
+    SlidingPage(
+      header: l10n.welcomeScreen_secondSlidingPage,
+      description: l10n.welcomeScreen_secondSlidingPage_description,
+      svg: "assets/svg/going_offline.svg",
+    ),
+  ];
+}
+
 class _WelcomeScreenState extends State<_WelcomeScreen>{
 
   late AvailableSpaceCubit availableSpaceCubit = context.read<AvailableSpaceCubit>();
   int currentSlidingPage = 0;
-
-  // TODO: Internationalize
-  List<SlidingPage> slidingPages = [
-    SlidingPage(
-      header: "Organize your works",
-      description: "Let's organize your works with priority and do everything without stress.",
-      svg: "assets/svg/completed_tasks.svg",
-    ),
-    SlidingPage(
-      header: "Keep everything in one place",
-      description: "Access your account from anywhere, all your tasks are in the cloud!",
-      svg: "assets/svg/going_offline.svg",
-    ),
-    SlidingPage(
-      header: "Receive notifications",
-      description: "Don't forget your work anymore! Receive reminders without Internet.",
-      svg: "assets/svg/to_do.svg",
-    ),
-  ];
 
   @override
   Widget build(BuildContext context){
@@ -78,9 +75,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                       setState(() => currentSlidingPage = index);
                     },
                     physics: const BouncingScrollPhysics(),
-                    children: List.generate(slidingPages.length, (index){
-                      SlidingPage slidingPage = slidingPages[index];
-
+                    children: context.slidingPages.map((slidingPage){
                       return EmptySpace(
                         padding: const EdgeInsets.all(cPadding),
                         svgImage: slidingPage.svg,
@@ -92,7 +87,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                         descriptionMaxLines: 3,
                         descriptionFillLines: true,
                       );
-                    }),
+                    }).toList()
                   ),
 
                   WidgetSize(
@@ -106,7 +101,7 @@ class _WelcomeScreenState extends State<_WelcomeScreen>{
                         children: [
 
                           DotIndicatorList(
-                            count: slidingPages.length,
+                            count: context.slidingPages.length,
                             selectedIndex: currentSlidingPage,
                           ),
                           const SizedBox(height: cPadding),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/components/rounded_alert_dialog.dart';
 import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/l10n/l10n.dart';
-import 'package:task_manager/theme/theme.dart';
 
 class DialogService {
 

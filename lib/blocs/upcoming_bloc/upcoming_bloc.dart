@@ -21,12 +21,12 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
     todosSubscription = taskBloc.stream.listen((state) {
       if(!state.isLoading) add(TasksUpdated(state.tasks));
     });
-
-    // TODO: Remove event
+    
     on<UpcomingLoaded>((event, emit){
       final taskBlocState = taskBloc.state;
       if(!taskBlocState.isLoading) add(TasksUpdated(taskBlocState.tasks));
     });
+    add(UpcomingLoaded());
 
     on<TasksUpdated>((event, emit){
       final tasks = taskBloc.state.tasks;

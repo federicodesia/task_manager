@@ -430,5 +430,13 @@
     "placeholders": {
       "method": {}
     }
-  }
+  },
+  "welcomeScreen_firstSlidingPage": "Keep everything in one place",
+  "@welcomeScreen_firstSlidingPage": {},
+  "welcomeScreen_firstSlidingPage_description": "Access your account from any device, all your tasks are synchronized in the cloud!",
+  "@welcomeScreen_firstSlidingPage_description": {},
+  "welcomeScreen_secondSlidingPage": "Offline mode available",
+  "@welcomeScreen_secondSlidingPage": {},
+  "welcomeScreen_secondSlidingPage_description": "Don't forget your work anymore! Access your tasks and receive notifications without internet connection.",
+  "@welcomeScreen_secondSlidingPage_description": {}
 }

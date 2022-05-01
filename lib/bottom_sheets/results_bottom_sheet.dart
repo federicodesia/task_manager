@@ -8,7 +8,6 @@ import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/l10n/l10n.dart';
 import 'package:task_manager/models/task_filter.dart';
-import 'package:task_manager/theme/theme.dart';
 
 class ResultsBottomSheet{
 
@@ -45,8 +44,7 @@ class _ResultsBottomSheetState extends State<_ResultsBottomSheet>{
 
   @override
   Widget build(BuildContext context) {
-    final customTheme = Theme.of(context).customTheme;
-
+    
     return BlocBuilder<CategoryScreenBloc, CategoryScreenState>(
       bloc: categoryScreenBloc,
       builder: (_, state) {

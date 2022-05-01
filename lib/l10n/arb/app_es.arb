@@ -430,5 +430,13 @@
     "placeholders": {
       "method": {}
     }
-  }
+  },
+  "welcomeScreen_firstSlidingPage": "Todo en un solo lugar",
+  "@welcomeScreen_firstSlidingPage": {},
+  "welcomeScreen_firstSlidingPage_description": "Accede a tu cuenta desde cualquier dispositivo, ¡todas tus tareas se sincronizan en la nube!",
+  "@welcomeScreen_firstSlidingPage_description": {},
+  "welcomeScreen_secondSlidingPage": "Disponible sin conexión",
+  "@welcomeScreen_secondSlidingPage": {},
+  "welcomeScreen_secondSlidingPage_description": "¡No pierdas más tu trabajo! Accede a tus tareas y recibe notificaciones sin conexión a internet.",
+  "@welcomeScreen_secondSlidingPage_description": {}
 }

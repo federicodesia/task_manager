@@ -28,7 +28,7 @@ class UpcomingTab extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => UpcomingBloc(taskBloc: context.read<TaskBloc>())..add(UpcomingLoaded()),
+      create: (_) => UpcomingBloc(taskBloc: context.read<TaskBloc>()),
       child: _UpcomingTab(availableSpaceCubit: availableSpaceCubit),
     );
   }

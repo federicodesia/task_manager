@@ -7,7 +7,6 @@ import 'package:task_manager/components/rounded_button.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/helpers/locale_helper.dart';
 import 'package:task_manager/l10n/l10n.dart';
-import 'package:task_manager/theme/theme.dart';
 
 class LanguageBottomSheet{
 
@@ -35,7 +34,6 @@ class _LanguageBottomSheetState extends State<_LanguageBottomSheet>{
 
   @override
   Widget build(BuildContext context) {
-    final customTheme = Theme.of(context).customTheme;
     final supportedLocales = context.findAncestorWidgetOfExactType<MaterialApp>()?.supportedLocales.toList();
 
     return Column(

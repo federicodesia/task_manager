@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:task_manager/components/empty_space.dart';
 import 'package:task_manager/constants.dart';
 import 'package:task_manager/theme/theme.dart';
